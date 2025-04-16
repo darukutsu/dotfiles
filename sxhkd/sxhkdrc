@@ -45,20 +45,22 @@ XF86Audio{Play,Next,Prev}
 	playerctl {play-pause,next,previous}
 
 # dropdown terminal/scratchpad (square mid)
+# set currently marked node as drop-down window
+# if already set then toggle it instead
 F20
-        "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh kitty-f20
+        "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh dropdown-f20
 
 F21                      
-        "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh kitty-f21
+        "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh dropdown-f21
 
 F22                      
-        "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh kitty-f22
+        "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh dropdown-f22
 
 F23                      
-        "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh kitty-f23
+        "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh dropdown-f23
 
 F24                      
-        "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh kitty-f24
+        "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh dropdown-f24
 
 #super + F11
 F11
@@ -282,9 +284,11 @@ super + {1-9,0}
 # PRESELECT
 #
 
-# mark node
+# toggle mark node
 super + shift + m
-	bspc node -g marked=on
+        bspc query -N focused.marked && \
+        bspc node -g marked=off || \
+        bspc node -g marked=on 
 
 super + p
         echo "mode_preselect" >"$SXHKD_MODE_FILE"; \
