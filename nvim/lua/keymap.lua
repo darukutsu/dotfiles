@@ -78,15 +78,6 @@ map({ "o", "x" }, "iu", function()
   require("various-textobjs").url()
 end)
 
--- COQ these mappings are coq recommended mappings unrelated to nvim-autopairs
--- doesn't work with lazyvim for some reason
---map('i', '<esc>', [[pumvisible() ? "<c-k><esc>" : "<esc>"]], { expr = true, noremap = true })
---map('i', '<c-c>', [[pumvisible() ? "<c-k><c-c>" : "<c-c>"]], { expr = true, noremap = true })
---map('i', '<tab>', [[pumvisible() ? "<c-j>" : "<tab>"]], { expr = true, noremap = true })
---map('i', '<s-tab>', [[pumvisible() ? "<c-p>" : "<bs>"]], { expr = true, noremap = true })
---map('i', '<cr>', [[pumvisible() ? (complete_info().selected != -1 ? "<c-y><esc>" : "<c-k><cr>") : "<cr>"]],
---  { expr = true, noremap = true })
-
 -- Flash.nvim
 -- TODO: fix this/implement
 -- selects text puts it into cword
@@ -237,6 +228,9 @@ map({ "n" }, "<leader><leader>m", ":MarkdownPreviewToggle<cr>", { desc = "markdo
 -- Neogit
 map({ "n" }, "<leader>G", ":Neogit<cr>", { desc = "neogit" })
 
+-- dadbod database ui toggle
+map({ "n" }, "<leader>D", ":DBUIToggle<cr>", { desc = "neogit" })
+
 -- Gitsigns
 map({ "n" }, "<leader>gu", function()
   Snacks.gitbrowse()
@@ -289,6 +283,18 @@ map({ "n" }, "K", "i<CR><Esc>g;", {})
 --map({ "v" }, "<leader>P", paste_mul(), {})
 
 -- Navigation
+map({ "n" }, "gep", function()
+  vim.diagnostic.jump({ count = -1, float = true })
+end, {})
+map({ "n" }, "gen", function()
+  vim.diagnostic.jump({ count = 1, float = true })
+end, {})
+map({ "n" }, "ge[", function()
+  vim.diagnostic.jump({ count = -1, float = true })
+end, {})
+map({ "n" }, "ge]", function()
+  vim.diagnostic.jump({ count = 1, float = true })
+end, {})
 map({ "n" }, "dp", function()
   vim.diagnostic.jump({ count = -1, float = true })
 end, {})
@@ -297,16 +303,26 @@ map({ "n" }, "dn", function()
 end, {})
 map({ "n" }, "gw", "<C-]>", { desc = "in help follow word definition" })
 map({ "n" }, "gd", function()
-  vim.lsp.buf.definition()
+  --vim.lsp.buf.definition()
+  require("telescope.builtin").lsp_definitions()
 end, {})
 map({ "n" }, "gm", function()
-  vim.lsp.buf.implementation()
+  --vim.lsp.buf.implementation()
+  require("telescope.builtin").lsp_implementations()
 end, {})
 map({ "n" }, "gp", function()
-  vim.lsp.buf.document_symbol()
+  --vim.lsp.buf.document_symbol()
+  require("telescope.builtin").lsp_document_symbols()
 end, {})
+
+unmap({ "n" }, "grn")
+unmap({ "n" }, "grr")
+unmap({ "n" }, "gri")
+unmap({ "n", "v" }, "gra")
 map({ "n" }, "gr", function()
-  vim.lsp.buf.references()
+  --vim.lsp.buf.references()
+  --vim.lsp.buf.references(nil, { on_list = require("telescope.builtin").lsp_references })
+  require("telescope.builtin").lsp_references()
 end, {})
 map({ "n" }, "]]", function()
   Snacks.words.jump(vim.v.count1)
@@ -356,8 +372,8 @@ map({ "n" }, "X", '"bX', {})
 --xnoremap <leader>k \"_dP
 
 -- Telescope shortcut
-map({ "n" }, "<leader>:", ":")
-map({ "n" }, ":", ":Telescope cmdline<cr>")
+--map({ "n" }, "<leader>:", ":")
+map({ "n" }, "<leader>:", ":Telescope cmdline<cr>")
 map({ "n" }, "<leader>f", function()
   vim.find_files_from_project_git_root()
 end, { desc = "jump files" })
@@ -602,25 +618,25 @@ function! MoveAndFoldLeft()
     let line = getpos('.')[1]
     let col  = getpos('.')[2]
 
-    if l:col ==# 1 && foldlevel(l:line)
+    if l:col ==# 1 && foldlevel(l:line) && v:count1 == 1
         execute "foldclose"
     else
-        execute "normal! h"
+        execute "normal! " . v:count1 . "h"
     endif
 endfunction
 
 function! MoveAndFoldRight()
     let line = getpos('.')[1]
 
-    if foldlevel(line) && foldclosed(line) != -1
+    if foldlevel(line) && foldclosed(line) != -1 && v:count1 == 1
         execute "foldopen"
     else
-        execute "normal! l"
+        execute "normal! " . v:count1 . "l"
     endif
 endfunction
 
-nnoremap <silent> <Left>  :call MoveAndFoldLeft()<cr>
-nnoremap <silent> h       :call MoveAndFoldLeft()<cr>
-nnoremap <silent> <Right> :call MoveAndFoldRight()<cr>
-nnoremap <silent> l       :call MoveAndFoldRight()<cr>
+nnoremap <silent> <Left>  :<C-u>call MoveAndFoldLeft()<cr>
+nnoremap <silent> h       :<C-u>call MoveAndFoldLeft()<cr>
+nnoremap <silent> <Right> :<C-u>call MoveAndFoldRight()<cr>
+nnoremap <silent> l       :<C-u>call MoveAndFoldRight()<cr>
 ]])

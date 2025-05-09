@@ -96,14 +96,13 @@ local textobjects = {
       ["[o"] = { query = "@loop.outer", desc = "prev loop" },
       ["[l"] = { query = "@loop.outer", desc = "prev loop" },
       ["[r"] = { query = "@return.outer", desc = "prev return" },
-    }
+    },
   },
-
 }
 
 -- colorize text depending on language
-local ts = require 'nvim-treesitter.configs'
-ts.setup {
+local ts = require("nvim-treesitter.configs")
+ts.setup({
   -- A list of parser names, or "all"
   ensure_installed = {
     "bash",
@@ -151,20 +150,34 @@ ts.setup {
   autotag = {
     enable = true,
   },
-}
+})
 
 if package.loaded["nvim-next"] then
-  ts.setup {
+  ts.setup({
     nvim_next = {
       enable = true,
       textobjects = textobjects,
     },
-  }
+  })
 else
-  ts.setup {
+  ts.setup({
     textobjects = textobjects,
-  }
+  })
 end
+
+vim.api.nvim_create_user_command("TSStart", function(args)
+  local buf = tonumber(args.fargs[1]) or bufnr
+  local lang = args.fargs[1]
+  if buf then
+    lang = args.fargs[2]
+  end
+  vim.treesitter.start(buf, lang)
+end, { nargs = "+" })
+
+vim.api.nvim_create_user_command("TSStop", function(args)
+  local buf = tonumber(args.fargs[1]) or bufnr
+  vim.treesitter.stop(buf)
+end, { nargs = "?" })
 
 --local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
 

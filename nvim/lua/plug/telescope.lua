@@ -182,6 +182,20 @@ local function dynamic_ivy()
           --end
           -- means that preview content is probably empty
           if picker.preview_title == nil then
+            if height < 40 then
+              height = math.floor(height / 2.2)
+            else
+              height = math.floor(height / 2.8)
+            end
+
+            picker.layout_config = {
+              vertical = {
+                size = {
+                  width = "100%",
+                  height = height,
+                },
+              },
+            }
             box_kind = "minimal"
           end
         end
@@ -325,6 +339,6 @@ end
 tel.load_extension("undo")
 tel.load_extension("dap")
 --tel.load_extension("ui-select") -- probably using snacks instead of this
-tel.load_extension("lsp_handlers")
+--tel.load_extension("lsp_handlers") -- FIX: nvim 0.11 not working
 tel.load_extension("cmdline")
 --tel.load_extension("macros") -- using nvim-recorder instead

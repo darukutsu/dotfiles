@@ -83,10 +83,9 @@ vim.opt.termguicolors = true
 
 require("ccc").setup({
   highlighter = {
-    auto_enable = true
+    auto_enable = true,
   },
   inputs = {
     RgbHslCmykInput,
   },
-
 })

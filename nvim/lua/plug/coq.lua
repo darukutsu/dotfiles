@@ -1,20 +1,78 @@
 -- COQ setup
 local coq = require("coq")
 local map = vim.api.nvim_set_keymap
---vim.g.coq_settings = {
---  auto_start = "shut-up",
---  keymap = { recommended = false },
---}
+vim.g.coq_settings = {
+  auto_start = "shut-up",
+  keymap = {
+    recommended = false,
+    --eval_snips = "<leader>e",
+    bigger_preview = "<c-w>",
+    jump_to_mark = "<c-h>",
+  },
+}
 
-require("coq_3p") {
+--vim.diagnostic.config({ virtual_lines = { current_line = true } })
+vim.diagnostic.config({ virtual_text = false })
+
+require("coq_3p")({
+  {
+    -- works only if enclosed in `!foo`
+    src = "repl",
+    sh = "bash",
+    shell = { pl = "perl", n = "node", py = "python" },
+    max_lines = 100,
+    deadline = 2000,
+    short_name = "RUNSH",
+    unsafe = { "rm", "mv", "poweroff", "reboot", "sudo" },
+  },
   {
     src = "figlet",
     short_name = "BIG",
     trigger = "!big",
-    fonts = { "/usr/share/figlet/fonts/standard.flf" }
+    fonts = { "/usr/share/figlet/fonts/standard.flf" },
   },
-  { src = "bc", short_name = "MATH", precision = 6 },
-}
+  {
+    -- works only after = at end
+    src = "bc",
+    short_name = "MATH",
+    precision = 6,
+  },
+  { src = "vim_dadbod_completion", short_name = "DB" },
+  --{ src = "copilot", short_name = "COP", accept_key = "<c-f>" },
+  --{ src = "codeium", short_name = "COD" },
+  -- free self-hosted
+  --{ src = "tabby", short_name = "TAB" },
+  --{ src = "vimtex", short_name = "vTEX" },
+  { src = "nvimlua", short_name = "nLUA", conf_only = true },
+
+  --{ src = "dap" },
+})
+
+-- COQ these mappings are coq recommended mappings unrelated to nvim-autopairs
+--map('i', '<esc>', [[pumvisible() ? "<c-k><esc>" : "<esc>"]], { expr = true, noremap = true })
+--map('i', '<c-c>', [[pumvisible() ? "<c-k><c-c>" : "<c-c>"]], { expr = true, noremap = true })
+map("i", "<tab>", [[pumvisible() ? "<Down>" : "<tab>"]], { expr = true, noremap = true })
+map("i", "<s-tab>", [[pumvisible() ? "<Up>" : "<bs>"]], { expr = true, noremap = true })
+map(
+  "i",
+  "<cr>",
+  [[pumvisible() ? (complete_info().selected != -1 ? "<c-y>" : "<c-k><esc><cr>") : "<c-k><esc><cr>"]],
+  { expr = true, noremap = true }
+)
+
+local keys = "?!@#$%^&*+-=`\"',./\\:;<>()[]{} "
+for i = 1, #keys do
+  local keymap = keys:sub(i, i)
+  local key = keymap
+  if key == "\\" then
+    key = "\\\\"
+  elseif key == '"' then
+    key = '\\"'
+  end
+
+  local pumstring = string.format('(pumvisible() && complete_info().selected != -1) ? "<c-y>%s"  : "%s"', key, key)
+  map("i", keymap, pumstring, { expr = true, noremap = true })
+end
 
 -- autopair + COQ setup
 --local npairs = require('nvim-autopairs')

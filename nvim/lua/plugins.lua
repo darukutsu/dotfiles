@@ -10,6 +10,24 @@ return {
   --
   "tpope/vim-sleuth", -- heuristic shiftwidth
 
+  {
+    "kristijanhusak/vim-dadbod-ui",
+    dependencies = {
+      { "tpope/vim-dadbod", lazy = true },
+      { "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true },
+    },
+    cmd = {
+      "DBUI",
+      "DBUIToggle",
+      "DBUIAddConnection",
+      "DBUIFindBuffer",
+    },
+    init = function()
+      -- Your DBUI configuration
+      vim.g.db_ui_use_nerd_fonts = 1
+    end,
+  },
+
   { -- COQ
     "ms-jpq/coq_nvim",
     branch = "coq",
@@ -41,12 +59,57 @@ return {
       { "nvim-telescope/telescope-dap.nvim" },
       { "nvim-telescope/telescope-ui-select.nvim" },
       { "jonarrien/telescope-cmdline.nvim" },
-      { "gbrlsnchs/telescope-lsp-handlers.nvim" },
+      --{ "gbrlsnchs/telescope-lsp-handlers.nvim" }, -- FIX: deprecated
     },
     config = function()
       require("plug/telescope")
     end,
   },
+
+  --{
+  --  " huantrinh1802/m_taskwarrior_d.nvim ",
+  --  dependencies = {
+  --    { "MunifTanjim/nui.nvim" },
+  --    { " jakewvincent/mkdnflow.nvim " },
+  --    {
+  --      "MeanderingProgrammer/render-markdown.nvim",
+  --      dependencies = { "nvim-treesitter/nvim-treesitter", "echasnovski/mini.nvim" }, -- if you use the mini.nvim suite
+  --      -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+  --      ---@module 'render-markdown'
+  --      ---@type render.md.UserConfig
+  --      opts = {},
+  --    },
+  --    {
+  --      "epwalsh/obsidian.nvim",
+  --      version = "*",
+  --      lazy = true,
+  --      ft = "markdown",
+  --      -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
+  --      -- event = {
+  --      --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
+  --      --   -- E.g. "BufReadPre " .. vim.fn.expand "~" .. "/my-vault/*.md"
+  --      --   -- refer to `:h file-pattern` for more examples
+  --      --   "BufReadPre path/to/my-vault/*.md",
+  --      --   "BufNewFile path/to/my-vault/*.md",
+  --      -- },
+  --      dependencies = {
+  --        "nvim-lua/plenary.nvim",
+  --      },
+  --      opts = {
+  --        workspaces = {
+  --          {
+  --            name = "personal",
+  --            path = "~/vaults/personal",
+  --          },
+  --          {
+  --            name = "work",
+  --            path = "~/vaults/work",
+  --          },
+  --        },
+  --      },
+  --    },
+  --  },
+  --},
 
   {
     "iamcco/markdown-preview.nvim",
@@ -215,6 +278,18 @@ return {
   --
   "lervag/vimtex", -- latex thingi...
   --'folke/trouble.nvim'                  -- diagnostics haven't tried yet
+
+  --{
+  --  "TabbyML/vim-tabby",
+  --  lazy = false,
+  --  dependencies = {
+  --    "neovim/nvim-lspconfig",
+  --  },
+  --  init = function()
+  --    vim.g.tabby_agent_start_command = { "npx", "tabby-agent", "--stdio" }
+  --    vim.g.tabby_inline_completion_trigger = "auto"
+  --  end,
+  --},
 
   {
     "mfussenegger/nvim-jdtls", -- java
