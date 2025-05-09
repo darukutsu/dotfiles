@@ -1,4 +1,4 @@
-require("lspconfig").pyright.setup {
+vim.lsp.config("pyright", {
   -- AUTOFORMATTING
   --on_attach = function(client, bufnr)
   --  if client.supports_method("textDocument/formatting") then
@@ -17,4 +17,4 @@ require("lspconfig").pyright.setup {
   --end,
   ----capabilities = capabilities,
   --filetypes = { "python" },
-}
+})

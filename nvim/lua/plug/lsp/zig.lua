@@ -1,4 +1,4 @@
-require("lspconfig").zls.setup {
+vim.lsp.config("zig", {
   settings = {
     zig = {
       zls = {
@@ -11,4 +11,4 @@ require("lspconfig").zls.setup {
       },
     },
   },
-}
+})

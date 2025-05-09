@@ -1,11 +1,3 @@
---local lsp_zero = require('lsp-zero')
---
---lsp_zero.on_attach(function(client, bufnr)
---  -- see :help lsp-zero-keybindings
---  -- to learn the available actions
---  lsp_zero.default_keymaps({ buffer = bufnr })
---end)
-
 -- :Mason shows below windows unlike :Lazy which shows above all even telescope
 require("mason").setup({
   ui = {
@@ -19,15 +11,23 @@ require("mason").setup({
     },
 
     keymaps = {
-      -- disable this until Telescope stops destroying Mason in dynamic_ivy()
+      -- disable this until Telescope stops destroying Mason in dynamic_ivy(), or use snacks
       apply_language_filter = "/",
     },
+    --install_root_dir=,
+    --PATH=,
+    --log_level=,
+    --max_concurent_installers=,
+    --registries=,
+    --providers=,
+    --github=,
+    --pip=,
   },
 })
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 local function autoformat_quit(client, bufnr)
-  if client.supports_method("textDocument/formatting") then
+  if client:supports_method("textDocument/formatting") then
     vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
     vim.api.nvim_create_autocmd("BufWritePre", {
       group = augroup,
@@ -40,56 +40,41 @@ local function autoformat_quit(client, bufnr)
 end
 
 --https://github.com/neovim/nvim-lspconfig/wiki/Understanding-setup-%7B%7D
-local lsp_handlers = {
-  -- The first entry (without a key) will be the default handler
-  -- and will be called for each installed server that doesn't have
-  -- a dedicated handler.
-  function(server_name) -- default handler (optional)
-    require("lspconfig")[server_name].setup({ require("coq").lsp_ensure_capabilities({}) })
-  end,
-
-  -- Next, you can provide a dedicated handler for specific servers.
-  ["lua_ls"] = function()
-    require("plug/lsp/lua_ls")
-  end,
-  --["pyright"] = function()
-  --  require("plug/lsp/pyright")
-  --end,
-  --["pylyzer"] = function()
-  --  require("plug/lsp/pylyzer")
-  --end,
-  ["zls"] = function()
-    require("plug/lsp/zig")
-  end,
-  ["jdtls"] = function()
-    require("plug/lsp/jdtls")
-  end,
-  ["clangd"] = function()
-    require("plug/lsp/clangd")
-  end,
-  ["rust_analyzer"] = function()
-    require("plug/lsp/rust-tools")
-  end,
-  --["matlab_ls"] = function()
-  --  require("plug/lsp/matlab")
-  --end,
-  ["ltex"] = function()
-    require("plug/lsp/ltex")
-  end,
-}
+-- lsphandlers were disabled in nvim0.11+ use vim.lsp.config() instead
+require("plug/lsp/lua_ls")
+--  require("plug/lsp/pyright")
+--  require("plug/lsp/pylyzer")
+require("plug/lsp/zig")
+require("plug/lsp/jdtls")
+require("plug/lsp/clangd")
+require("plug/lsp/rust-tools")
+--  require("plug/lsp/matlab")
+require("plug/lsp/ltex")
 
 require("mason-lspconfig").setup({
   ensure_installed = {
-    --"lua_ls",
-    --"yamlls",
-    --"bashls",
+    -- LSP
+    "arduino_language_server",
+    "bashls",
+    "biome",
+    "dockerls",
+    "gopls",
+    "gradle_ls",
+    "html",
+    "intelephense",
+    "kotlin_language_server",
+    "lemminx",
+    "ltex",
+    "lua_ls",
+    "ruff",
+    "rust_analyzer",
+    "sqlls",
+    "texlab",
+    "yamlls",
+    "zls",
   },
-  --handlers = {
-  --  lsp_zero.default_setup,
-  --  jdtls = lsp_zero.noop,
-  --},
-  handlers = lsp_handlers,
-  --automatic_installation=true,
+  automatic_installation = false,
+  automatic_enable = true,
 })
 
 local dap_handlers = {
@@ -114,19 +99,41 @@ local dap_handlers = {
   --  }
   --end,
 }
+
 require("mason-nvim-dap").setup({
-  automatic_installation = true,
-  --handlers = {},
+  ensure_installed = {
+    "codelldb",
+    "delve",
+    "java-debug-adapter",
+    "java-test",
+  },
+  automatic_installation = false,
   handlers = dap_handlers,
 })
 
 local mason_null = require("mason-null-ls")
 mason_null.setup({
   ensure_installed = {
+    -- Linter
+    "actionlint",
+    "codespell",
+    "markdownlint",
+    -- Formater
+    "asmfmt",
+    "bibtex_tidy",
+    "cbfmt",
+    "clang_format",
+    "lua_ls",
+    "isort",
+    "latexindent",
+    "phpcsfixer",
+    "prettier",
     "shfmt",
+    "sqlfmt",
+    "stylua",
   },
-  --automatic_installation = true,
-  automatic_setup = true,
+
+  automatic_installation = false,
   --methods = {
   --  diagnostics = false,
   --  formatting = true,
@@ -134,15 +141,11 @@ mason_null.setup({
   --  completion = false,
   --  hover = false,
   --},
+
   --handlers = null_handlers,
-  handlers = {
-    --  --["shfmt"] = function(source_name, methods)
-    --  --  mason_null.default_setup(source_name, methods) -- to maintain default behavior
-    --  --    --register(null_ls.builtins.formatting.shfmt.with({
-    --  --    --extra_args = { "-i", "2" },
-    --  --    --}))
-    --  --end,
-  },
+
+  -- implicit automatic setup
+  handlers = {},
 })
 
 --https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#formatting

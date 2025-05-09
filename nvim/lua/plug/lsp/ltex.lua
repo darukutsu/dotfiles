@@ -7,8 +7,7 @@ for word in io.open(spell_tech, "r"):lines() do
   table.insert(words, word)
 end
 
-require("lspconfig").ltex.setup {
-  on_attach = on_attach,
+vim.lsp.config("ltex", {
   filetypes = { "bib", "gitcommit", "markdown", "org", "rst", "rnoweb", "tex" },
   settings = {
     ltex = {
@@ -20,4 +19,4 @@ require("lspconfig").ltex.setup {
       },
     },
   },
-}
+})
