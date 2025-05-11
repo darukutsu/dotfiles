@@ -163,6 +163,13 @@ ctrl + shift + q
 #super + y
 #	bspc node newest.marked.local -n newest.!automatic.local
 
+# session manager
+super + z
+        "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh session-load
+
+super + shift + z
+        "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh session-save
+
 #
 # state/flags
 #

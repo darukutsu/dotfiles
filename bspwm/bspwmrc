@@ -51,7 +51,7 @@ bspc config focused_border_color "#6181FF"
 #killall -r border_color.sh
 #"$XDG_CONFIG_HOME/bspwm/border_color.sh" &
 
-bspc config window_gap 12
+#bspc config window_gap 12
 
 bspc config split_ratio 0.5
 bspc config borderless_monocle false
@@ -92,8 +92,10 @@ gpaste-client start &
 #         X11 GUI SETUP         #
 #################################
 #killall kitty
-killall -r unmap-kitty.sh
+killall -r unmap.sh
 "$XDG_CONFIG_HOME/sxhkd/dropdown.sh"
+killall -r single-tiled.sh
+"$XDG_CONFIG_HOME/sxhkd/single-tiled.sh"
 killall "picom"
 picom &
 #killall "compfy"
@@ -127,7 +129,7 @@ bspc rule -a "fcitx" layer=above
 bspc rule -a "Yad" manage=off
 #bspc rule -a Screenkey manage=off
 
-# workspace/desktop assigment
+# workspace/desktop assignment
 bspc rule -a "kdenlive" desktop='^4'
 bspc rule -a "Gimp" desktop='^5'
 bspc rule -a "gimp-3.0" desktop='^5'

@@ -17,3 +17,13 @@ a
 u
         xdotool key Escape; \
         $XDG_CONFIG_HOME/sxhkd/rofi_launcher.sh hidden-window
+
+# with OBS xcomposite, because bspwm unmaps workspaces on lost focus
+b
+	xdotool key Escape; \
+	bspc node -l below -g sticky=on
+
+# disables OBS below effect
+f
+	xdotool key Escape; \
+	bspc node any.below -l normal -g sticky=off -f
