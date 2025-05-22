@@ -1,12 +1,14 @@
 #!/bin/bash
 
+# focus newly added node, multimonitor i guess forgot what this does
 bspc subscribe node_add |
-while IFS=' ' read -r _ _ d _ n; do
-  #bspc query -T -n "$n"
-  if [ "$d" = "$(bspc query -D -d .focused)" ]; then
-    bspc node -f "$n"
-  fi
-done
+  while IFS=' ' read -r _ _ d _ n; do
+    #bspc query -T -n "$n"
+    if [ "$d" = "$(bspc query -D -d .focused)" ]; then
+      bspc node -f "$n"
+    fi
+  done
+
 #done |
 #jq --unbuffered -r '
 #    [

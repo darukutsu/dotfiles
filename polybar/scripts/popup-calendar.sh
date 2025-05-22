@@ -9,7 +9,8 @@ DATE="$(date +"%A, %Y-%m-%d %H:%M")"
 case "$1" in
 --calcure)
   #exec kitty --class kitty-float bash -c "source /home/daru/.bashrc; calcure" &
-  exec kitty --class kitty-float calcure &
+  # using rules to tile and focus this window in WM
+  exec kitty --class kitty-cal calcure &
   ;;
 --popup)
   if [ "$(xdotool getwindowfocus getwindowname)" = "yad-calendar" ]; then

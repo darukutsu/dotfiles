@@ -29,7 +29,7 @@ else
   follow="follow=on"
 fi
 
-if [[ "$class" =~ gcr-prompter ]]; then
+if [[ "$class" =~ gcr-prompter ]] || [[ "$class" =~ pinentry-gtk ]]; then
   xprop -id "$wid" \
     -f _NET_WM_WINDOW_TYPE 32a \
     -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_DIALOG
@@ -65,6 +65,11 @@ if [[ "$class" =~ kitty\-.* ]]; then
   xprop -id "$wid" \
     -f _NET_WM_WINDOW_TYPE 32a \
     -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_DROPDOWN_MENU
+fi
+
+if [[ "$class" =~ kitty\-cal ]]; then
+  echo center=off
+  echo rectangle=200x190+856+20
 fi
 
 # rofi set _NET_WM_WINDOW_TYPE
