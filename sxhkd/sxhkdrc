@@ -21,6 +21,10 @@ super + slash
 
 # screenshot
 @Print
+        rofi-applet-screenshot --opt1
+
+# screenshot rofi
+super + @Print
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh screenshot
 
 # poweroff menu
@@ -99,6 +103,9 @@ super + c
         "$XDG_CONFIG_HOME"/sxhkd/history_notify.sh show; \
         echo "mode_control_panel" >"$SXHKD_MODE_FILE"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_control_panel
+#
+# cmd mode or something else eg cal polybar widgets...
+#super + C
 
 # doesn't work
 #
@@ -109,12 +116,16 @@ ctrl + alt + e
 super + x
         warpd --hint2 --oneshot --click 1
 
+# warpd rightclick
+super + alt + x
+        warpd --hint2 --oneshot --click 3
+
 # warpd drag
 super + shift + x
         warpd --hint --drag
 
 # warpd normal mouse move
-super + alt + x
+super + ctrl + x
         warpd --normal
 
 #

@@ -90,7 +90,9 @@ confirm_run() {
 run_cmd() {
   if [[ "$1" == '--opt1' ]]; then
     if [ $XDG_SESSION_TYPE = x11 ]; then
-      bslock &
+      dunstctl set-paused true
+      bslock
+      dunstctl set-paused false
     else
       #waylock &
 
