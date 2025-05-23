@@ -100,8 +100,10 @@ killall "picom"
 picom &
 #killall "compfy"
 #compfy &
-#killall "$XDG_CONFIG_HOME"/bspwm/floating_dialogs
-#"$XDG_CONFIG_HOME"/bspwm/floating_dialogs &
+killall "$XDG_CONFIG_HOME"/bspwm/browser_left
+"$XDG_CONFIG_HOME"/bspwm/browser_left &
+killall "$XDG_CONFIG_HOME"/bspwm/floating_dialogs
+"$XDG_CONFIG_HOME"/bspwm/floating_dialogs &
 killall "polybar"
 polybar &
 sleep 2

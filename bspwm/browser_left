@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# on each browser browser should be on left
+bspc subscribe node_add |
+  while IFS=' ' read -r _ _ d _ n; do
+    tiled_nodes_on_desktop=$(bspc query -N -d "$d" -n .tiled | wc -l)
+    if
+      [ "$tiled_nodes_on_desktop" = 2 ] && [ \
+        "$(xprop -id "$(bspc query -N -n newest)" WM_CLASS |
+          sed -E 's/.*"(.*)"/\1/')" = "qutebrowser" \
+        ]
+    then
+      bspc node newest -s "@$d:/first"
+    fi
+  done

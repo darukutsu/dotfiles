@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# focus newly added node, multimonitor i guess forgot what this does
+# focus newly added node, multimonitor i guess
+# I mainly created this because not every node is automatically focused
+# for example moonlight
 bspc subscribe node_add |
   while IFS=' ' read -r _ _ d _ n; do
     #bspc query -T -n "$n"
