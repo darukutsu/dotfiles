@@ -38,7 +38,7 @@ if [ -n "$entry" ]; then
     echo "$command" >>"$hist_file"
 
     if [ -s "$selection" ]; then
-      xargs -0 -I{} $command <"$selection"
+      xargs -0 $command <"$selection"
       # Clear selection
       printf "-" >"$NNN_PIPE"
     else
