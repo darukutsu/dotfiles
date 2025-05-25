@@ -6,7 +6,7 @@ shopt -u globstar
 
 #ble/debug/profiler/start a
 ## Add this code after "source ble.sh ..."
-## debuging ble.sh debug.txt
+## debugging ble.sh debug.txt
 #function debug/complete-load-hook {
 #  filename_debug_log=debug.txt
 #  function timestamp-args.advice {
@@ -59,21 +59,27 @@ fi
 
 export SYSTEMD_PAGERSECURE=true
 if command -v page >/dev/null; then
-  export PAGER="page -wWC -q 90000 -z 90000"
+  # if different layout use above version
+  #export PAGER="page -q 90000 -z 90000"
+  export PAGER="page -WC"
+  export MANPAGER="page -WC -t man"
   export SYSTEMD_PAGER="$PAGER"
+elif command -v nvimpager >/dev/null; then
+  export PAGER="nvimpager"
+  export MANPAGER="nvimpager"
+  export SYSTEMD_PAGER="nvimpager"
 else
   export PAGER="nvim -R -c BaleiaColorize"
+  export MANPAGER="nvim +Man! -R"
   export SYSTEMD_PAGER="$PAGER"
 fi
 
-export MANPAGER="$PAGER -t man"
-
 h() {
-  help "$1" 2>/dev/null ||
+  (help "$1" 2>/dev/null ||
     $1 --help 2>/dev/null ||
     $1 -h 2>/dev/null ||
     $1 help ||
-    echo "No help entry for $1"
+    echo "No help entry for $1") | bat -pplhelp
 }
 
 # Alternatively, to pick a bit better `man` highlighting:
@@ -86,7 +92,6 @@ man() {
         $PAGER man://"$1"
       fi
     else
-      export MANPAGER="nvim +Man!"
       /usr/bin/man "$2" "$1"
     fi
   else
@@ -134,9 +139,9 @@ else
 fi
 #shopt -s progcomp_alias
 complete -F _complete_alias SS
+complete -F _complete_alias SU
 complete -F _complete_alias saj
 complete -r oscap
-#complete -F _man man
 
 # Enhanced file path completion in bash - https://github.com/sio/bash-complete-partial-path
 #if [ -s "$XDG_CONFIG_HOME/bash-complete-partial-path/bash_completion" ]
@@ -177,7 +182,82 @@ source "$XDG_CONFIG_HOME/bash/nnn"
 eval "$(zoxide init bash)"
 
 ## Terminal Coloring
-source "$XDG_CONFIG_HOME/zaje/zaje_functions.rc"
+#source "$XDG_CONFIG_HOME/zaje/zaje_functions.rc"
+GRC_ALIASES=true
+[[ -s "/etc/profile.d/grc.sh" ]] && source /etc/profile.d/grc.sh
+
+## PREEXEC functions
+#source /usr/share/bash-preexec/bash-preexec.sh
+preexec() {
+  #content_type=$(ble/fd#alloc _ble_util_fd_cmd_stdout "> >(file -b - | cut -f1 -d' ')" overwrite)
+  #content_type=$(ble/fd#alloc _ble_util_fd_cmd_stdout "> >(mimetype --file-compat --output-format %d --stdin| cut -f1 -d' ')" overwrite)
+  #pts_before=$(ps -t "$(tty)" | wc -l)
+
+  #for cmd in $(ls /usr/share/grc | cut -f2 -d'.'); do
+  #  # grc does it's thing
+  #  if [[ $1 = "$cmd" ]]; then
+  #    ble/fd#alloc _ble_util_fd_cmd_stdout ">/dev/tty" overwrite
+  #  fi
+  #done
+
+  if [[ "$*" =~ --help|"help "|" -h" ]] && ! [[ "$*" =~ --colou?rs? ]]; then
+    ble/fd#alloc _ble_util_fd_cmd_stdout ">/tmp/blesh-stdout" overwrite
+    ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
+    ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
+    ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
+  fi
+
+  #if [[ -z $_ble_util_fd_cmd_stdout ]]; then
+  #  ble/fd#alloc _ble_util_fd_cmd_stdout ">/tmp/blesh-stdout" overwrite
+  #fi
+  #tty=$(tty)
+  #( (
+  #  sleep 0.3                         # approx. time needed for pts allocation, delays TUI apps by this time
+  #  pts_after=$(ps -t "$tty" | wc -l) # FIX: every command creates entry in pts
+  #  #pts_after=$(stty -a | grep '\-icanon')
+  #  if [[ $pts_after -gt $((pts_before + 1)) ]]; then
+  #    # creates stdout for new application
+  #    ble/fd#alloc _ble_util_fd_cmd_stdout ">/dev/tty" overwrite
+  #    ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
+  #    ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
+  #    ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
+  #  fi
+  #) &)
+  #ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
+  #ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
+  #ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
+}
+
+precmd() {
+  :
+}
+
+postexec() {
+  # $ script -qeO /tmp/blesh-stdout -c "ls -la aroise"
+  # $ cat foo.c|highlight --syntax c --out-format=truecolor
+  #if [[ -e /tmp/blesh-stdout ]]; then
+  #  content_type=$(file -b /tmp/blesh-stdout | cut -f1 -d' ')
+  #  content_type=${content_type:-empty}
+  #fi
+
+  #if [[ "$*" =~ --help|help|-h ]]; then
+  #  bat -pplhelp /tmp/blesh-stdout
+  #elif [[ "$content_type" != "empty" ]]; then
+  #  language=$(BAT_PAGER='' bat --list-languages | grep -i -m1 "$content_type" | cut -f1 -d':')
+  #  # if not exact match then longest
+  #  #BAT_PAGER='' bat --list-languages | grep -i --color -o -E "B?o?u?r?n?e?-?A?g?a?i?n?" | awk '{print length " " $0}'| sort -n | tail -1
+  #  #language=$(BAT_PAGER='' bat --list-languages | grep -i -m1 -e "$content_type" -e "\[$content_type\]" | cut -f1 -d':')
+  #  bat -ppl"${language:-Plain Text}" /tmp/blesh-stdout
+  #fi
+  if [[ "$*" =~ --help|"help "|" -h" ]] && ! [[ "$*" =~ --colou?rs? ]]; then
+    bat -pplhelp /tmp/blesh-stdout
+    ble/fd#alloc _ble_util_fd_cmd_stdout '>/dev/tty' overwrite
+    ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
+    ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
+    ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
+    rm -f /tmp/blesh-stdout
+  fi
+}
 
 if [[ ${BLE_VERSION-} ]]; then
   #source "$_ble_base/lib/vim-surround.sh"
@@ -189,6 +269,15 @@ if [[ ${BLE_VERSION-} ]]; then
   ble-import contrib/integration/bash-completion
   #ble-import contrib/airline/*
   ble-import -f integration/zoxide
+  #ble-import integration/bash-preexec
+
+  blehook POSTEXEC!=postexec
+  #blehook ATTACH=
+  #blehook DETACH=
+  #blehook PREEXEC=
+  #blehook PRECMD=
+  #blehook POSTEXEC=
+
   #bleopt term_true_colors=
   #bleopt colorglass_gamma=-50
   #bleopt colorglass_contrast=70
@@ -214,6 +303,21 @@ if [[ ${BLE_VERSION-} ]]; then
   bleopt complete_auto_history=
   bleopt history_share=1
   #bleopt complete_ambiguous=1
+  # turn off if typing hangs
+  #bleopt complete_auto_complete=
+  function blerc/disable-progcomp-for-auto-complete.advice {
+    if [[ $BLE_ATTACHED && :$comp_type: == *:auto:* ]]; then
+      return 0
+    fi
+    ble/function#advice/do
+  }
+  ble-import core-complete -C '
+    # <func> or <cmd>
+    ble/function#advice around _man blerc/disable-progcomp-for-auto-complete.advice
+    ble/function#advice around man blerc/disable-progcomp-for-auto-complete.advice
+    ble/function#advice around pacman blerc/disable-progcomp-for-auto-complete.advice
+    ble/function#advice around systemctl blerc/disable-progcomp-for-auto-complete.advice
+  '
 
   ## we could bind this to enter
   function ble/widget/daru/nnn_complete() {
