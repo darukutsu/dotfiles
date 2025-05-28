@@ -38,8 +38,16 @@ else
   #option_5=""
   #option_4=""
   #option_5=""
-  option_4=""
-  option_5=""
+  #option_4=""
+  #option_5=""
+  #option_4=""
+  #option_4=""
+  #option_4=""
+  option_4=""
+  #option_4=" "
+  #option_5=""
+  #option_5=""
+  option_5=""
 fi
 
 # Rofi CMD
@@ -142,7 +150,18 @@ shotarea() {
     cd ${dir} && maim -u -f png -s -k -b 2 | copy_shot && notify_view
     #cd ${dir} && maim -u -f png -s -k -b 2 -c 0.35,0.55,0.85,0.25 | copy_shot && notify_view
   else
-    cd ${dir} && sleep 0.5 && slurp | grim -g - - | copy_shot && notify_view
+    cd ${dir} && grim -g "$(slurp)" - - | copy_shot && notify_view
+  fi
+}
+
+shottesseract() {
+  clipboard_icon=/usr/share/icons/Papirus/16x16/panel/clipboard.svg
+  if [ $XDG_SESSION_TYPE = x11 ]; then
+    maim -u -f png -s -k -b 2 | tesseract stdin stdout | xclip -selection clipboard
+    notify-send -i "$clipboard_icon" "Copied to clipboard" "$(xclip -selection clipboard -o)"
+  else
+    grim -t png -g "$(slurp)" - | tesseract stdin stdout | wl-copy
+    notify-send -i "$clipboard_icon" "Copied to clipboard" "$(wl-paste)"
   fi
 }
 
@@ -157,7 +176,8 @@ run_cmd() {
   elif [[ "$1" == '--opt4' ]]; then
     recordmon
   elif [[ "$1" == '--opt5' ]]; then
-    recordwin
+    shottesseract
+    #recordwin
   fi
 }
 
