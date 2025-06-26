@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# JS: [userscript:_qute_js:1323] Refused to apply inline style because it violates the following Content Security Policy directive: "style-src 'self' https://assets.braintreegateway.com https://*.paypal.com 'sha256-or0p3LaHetJ4FRq+flVORVFFNsOjQGWrDvX8Jf7ACWg=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=' 'sha256-JVRXyYPueLWdwGwY9m/7u4QlZ1xeQdqUj2t8OVIzZE4=' 'sha256-Oca9ZYU1dwNscIhdNV7tFBsr4oqagBhZx9/p4w8GOcg=' 'sha256-VZTcMoTEw3nbAHejvqlyyRm1Mdx+DVNgyKANjpWw0qg='". Either the 'unsafe-inline' keyword, a hash ('sha256-4IjBmK5Lspt03QosPr8CiLRZvDtNPbJobG9srTDEA/8='), or a nonce ('nonce-...') is required to enable inline execution.
-
 import html
 import os
 import re
