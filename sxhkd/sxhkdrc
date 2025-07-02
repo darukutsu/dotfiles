@@ -151,12 +151,13 @@ super + control + q
 
 # make sxhkd reload its configuration files:
 super + Escape
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Restarting sxhkd"; \
+        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-desktop-keyboard-shortcuts "sxhkd" "Restarting sxhkd"; \
 	killall "sxhkd"; xmodmap "$XDG_CONFIG_HOME/bspwm/Xmodmap"; sxhkd &
 
 # quit/restart bspwm
 super + shift + Escape
-	bspc wm -r
+	notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-system-windows "sxhkd" "Restarting bspwm"; \
+        bspc wm -r 
 #super + {_,shift +}h
 #	bspc {quit,wm -r}
 
@@ -348,6 +349,7 @@ super + w
 super + button9
         bspc node -f pointed; bspc node -t ~fullscreen
 
+# cursor zoom/colorpicker
 super + @button2
         "$XDG_CONFIG_HOME"/sxhkd/colorpicker.sh
 

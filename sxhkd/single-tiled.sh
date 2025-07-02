@@ -1,8 +1,8 @@
 #!/bin/sh
-#set -x
+set -x
 
 is_multiple=1
-bspc subscribe node_geometry | while read -r _; do
+bspc subscribe node_geometry desktop_focus | while read -r _; do
   if [ "$(bspc query -N -n .local.tiled | wc -l)" = 1 ]; then
     #bspc config border_width 0
     bspc config window_gap 0
