@@ -13,6 +13,7 @@ alias clam='freshclam && clamscan --recursive --bell'
 alias clamstop='sudo systemctl stop clamav-clamonacc && sudo systemctl stop clamav-daemon'
 alias clamstart='sudo systemctl start clamav-clamonacc && sudo systemctl start clamav-daemon'
 alias emacs='emacs -nw'
+alias find-cursor='sxcs'
 alias firefox='firefox-developer-edition'
 alias fr='firefox-developer-edition'
 alias gpt='python3 -m revChatGPT.V3 --api_key $OPENAI_API_KEY'
@@ -26,10 +27,20 @@ alias iploc='ip addr | grep 192.168 | sed "s/\/.*//;s/inet//;s/ //g"'
 alias killj='kill -9 $(jobs -p)'
 alias lsp='ls /usr/bin|fzf'
 alias ll='ls --color=auto -la'
+alias blk='colourify lsblk -o "NAME,SIZE,FSTYPE,FSAVAIL,FSUSED,FSUSE%,MOUNTPOINTS"'
 alias lapt0='xinput set-prop "AT Translated Set 2 keyboard" "Device Enabled" 0'
 alias lapt1='xinput set-prop "AT Translated Set 2 keyboard" "Device Enabled" 1'
 #alias mt='neomutt'
 alias nf='$XDG_CONFIG_HOME/neofetch/rand-pic.sh && neofetch'
+#alias micsend="pactl load-module module-tunnel-sink server=tcp:$(iploc):10111"
+alias micsend="
+pactl load-module module-native-protocol-tcp listen=$(iploc);
+pactl load-module module-zeroconf-publish
+"
+alias micrecv="
+pactl load-module module-zeroconf-discover; 
+pactl load-module module-native-protocol-tcp port=$1 listen=$2 auth-anonymous=1
+"
 alias mov='mov-cli -s films'
 #alias mirror='xrandr --output HDMI-1 --auto; mons -m'
 alias mirror='mons -ma'
@@ -39,6 +50,7 @@ alias mirror='mons -ma'
 alias pingg='ping google.com'
 alias pc='pacseek -u'
 alias rollback='downgrade'
+#alias rsyn='rsync -AaPhxz --size-only'
 alias rsyn='rsync -aPh --size-only'
 alias shazam='$XDG_CONFIG_HOME/bash/songrec-fix.sh'
 alias sk='
@@ -60,6 +72,7 @@ alias yt='yt-dlp'
 alias p='poweroff'
 alias r='reboot'
 alias rgg='grep -rniI --color=always * -e'
+alias record-fast='gpu-screen-recorder -w screen -f 60 -k h264 -c mp4 -o ~/Videos'
 alias yayu='sudo pacman  -Rns $(pacman -Qdtq)'
 alias yayr='yay -Rns'
 alias yays='yay -Sc'

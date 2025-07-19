@@ -1,5 +1,7 @@
 #!/bin/bash
-# for syntax highlighting
+#set -x
+## list all files that are sourced
+# /bin/bash -lixc exit 2>&1 | sed -n 's/^+* \(source\|\.\) //p'
 
 [[ $- == *i* ]] && source /usr/share/blesh/ble.sh --noattach
 shopt -u globstar
@@ -48,11 +50,6 @@ if [ -n "$KITTY_REMOTE_SHELL" ]; then
   export XDG_STATE_HOME=${REMOTE_HOME}/.local/state
   export XDG_CACHE_HOME=${REMOTE_HOME}/.cache
   export XDG_DOWNLOAD_DIR=${REMOTE_HOME}/Downloads
-
-  #curl https://raw.githubusercontent.com/jessp01/zaje/master/install_zaje.sh > install_zaje.sh
-  #chmod +x install_zaje.sh
-  #./install_zaje.sh
-  # rm ./install_zaje.sh
 
   echo "files were sourced successfully"
 fi
@@ -109,39 +106,40 @@ HISTIGNORE='?:??:stty*'
 shopt -s histappend
 # After each command, append to the history file and reread it
 #PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
-eval "$(atuin init bash --disable-up-arrow)"
 
 ## FZF readline search replacement
-#source "$XDG_CONFIG_HOME/bash/fzf.bash"
+#[[ -s "$XDG_CONFIG_HOME/bash/fzf.bash" ]] && source "$XDG_CONFIG_HOME/bash/fzf.bash"
 #bind -f $XDG_CONFIG_HOME/bash/inputrc.fzf
+eval "$(atuin init bash --disable-up-arrow)"
 
+## No idea what's this for
 #export SESSION_SWITCH="dbus-run-session -- gnome-shell --display-server --wayland"
 
 PS1='[\u@\h \W]\$ '
 set -o vi
 
 ## nmtui NEWT_COLORS
-source "$XDG_CONFIG_HOME/bash/newt_colors"
+[[ -s "$XDG_CONFIG_HOME/bash/newt_colors" ]] && source "$XDG_CONFIG_HOME/bash/newt_colors"
 
 ## clipboard
-#source $XDG_CONFIG_HOME/bash/clipboard
+#[[ -s "$XDG_CONFIG_HOME/bash/clipboard" ]] && source "$XDG_CONFIG_HOME/bash/clipboard"
 
 [[ -s /etc/profile.d/autojump.sh ]] && source /etc/profile.d/autojump.sh
 
 ## COMPLETION
 if [ -n "$KITTY_REMOTE_SHELL" ]; then
-  #source "$XDG_DATA_HOME"/bash-completion/bash_completion
-  source "$XDG_DATA_HOME"/bash-complete-alias/complete_alias
+  [[ -s "$XDG_DATA_HOME/bash-completion/bash_completion" ]] && source "$XDG_DATA_HOME/bash-completion/bash_completion"
+  [[ -s "$XDG_DATA_HOME/bash-complete-alias/complete_alias" ]] && source "$XDG_DATA_HOME/bash-complete-alias/complete_alias"
 else
-  #source /usr/share/bash-completion/bash_completion
-  source /usr/share/bash-complete-alias/complete_alias
+  [[ -s "/usr/share/bash-completion/bash_completion" ]] && source /usr/share/bash-completion/bash_completion
+  [[ -s "/usr/share/bash-complete-alias/complete_alias" ]] && source /usr/share/bash-complete-alias/complete_alias
   eval "$(register-python-argcomplete pipx)"
 fi
-#shopt -s progcomp_alias
-complete -F _complete_alias SS
-complete -F _complete_alias SU
-complete -F _complete_alias saj
-complete -r oscap
+shopt -s progcomp_alias
+# 2025-07-19 TODO: staged for delete
+#complete -F _complete_alias SS
+#complete -F _complete_alias SU
+#complete -F _complete_alias saj
 
 # Enhanced file path completion in bash - https://github.com/sio/bash-complete-partial-path
 #if [ -s "$XDG_CONFIG_HOME/bash-complete-partial-path/bash_completion" ]
@@ -151,116 +149,114 @@ complete -r oscap
 #fi
 
 ##POWERLINE
-source "$XDG_CONFIG_HOME/bash/powerline"
+[[ -s "$XDG_CONFIG_HOME/bash/powerline" ]] && source "$XDG_CONFIG_HOME/bash/powerline"
 
 ## for echo -e $oct_bell ...
-#source /usr/share/icons-in-terminal/icons_bash.sh
+## Prints Icons
+#[[ -s "/usr/share/icons-in-terminal/icons_bash.sh" ]] && source /usr/share/icons-in-terminal/icons_bash.sh
 
 # this is used to launch using Ctrl-F
-#source /usr/share/wikiman/widgets/widget.bash
+#[[ -s "/usr/share/wikiman/widgets/widget.bash" ]] && source /usr/share/wikiman/widgets/widget.bash
 
 ##KITTY_INTEGRATION
-source "$XDG_CONFIG_HOME/bash/kitty"
+[[ -s "$XDG_CONFIG_HOME/bash/kitty" ]] && source "$XDG_CONFIG_HOME/bash/kitty"
 
 ##ALIAS
-source "$XDG_CONFIG_HOME/bash/alias"
-source "$XDG_CONFIG_HOME/bash/xdg-base-dir"
-
-## PYTHON venv
-#source "$HOME/.local/bin/bin/activate"
+[[ -s "$XDG_CONFIG_HOME/bash/alias" ]] && source "$XDG_CONFIG_HOME/bash/alias"
+[[ -s "$XDG_CONFIG_HOME/bash/xdg-base-dir" ]] && source "$XDG_CONFIG_HOME/bash/xdg-base-dir"
 
 # SHLVL holds number of sessions running on top of shell
 # basically print only in first shell
-if [ $SHLVL -eq 1 ]; then
+if [ $SHLVL -eq 1 ] && [ -s /home/daru/Templates/Guides/0usefull-commands-I-always-forget ]; then
   cat /home/daru/Templates/Guides/0usefull-commands-I-always-forget
 fi
 
 ## NNN
-source "$XDG_CONFIG_HOME/bash/nnn"
+[[ -s "$XDG_CONFIG_HOME/bash/nnn" ]] && source "$XDG_CONFIG_HOME/bash/nnn"
 
-## Better cd
-eval "$(zoxide init bash)"
+## BETTER CD
+#eval "$(zoxide init bash)"
 
-## Terminal Coloring
-#source "$XDG_CONFIG_HOME/zaje/zaje_functions.rc"
+## TERMINAL COLORING
 GRC_ALIASES=true
 [[ -s "/etc/profile.d/grc.sh" ]] && source /etc/profile.d/grc.sh
 
 ## PREEXEC functions
 #source /usr/share/bash-preexec/bash-preexec.sh
-preexec() {
-  #content_type=$(ble/fd#alloc _ble_util_fd_cmd_stdout "> >(file -b - | cut -f1 -d' ')" overwrite)
-  #content_type=$(ble/fd#alloc _ble_util_fd_cmd_stdout "> >(mimetype --file-compat --output-format %d --stdin| cut -f1 -d' ')" overwrite)
-  #pts_before=$(ps -t "$(tty)" | wc -l)
-
-  #for cmd in $(ls /usr/share/grc | cut -f2 -d'.'); do
-  #  # grc does it's thing
-  #  if [[ $1 = "$cmd" ]]; then
-  #    ble/fd#alloc _ble_util_fd_cmd_stdout ">/dev/tty" overwrite
-  #  fi
-  #done
-
-  if [[ "$*" =~ --help|"help "|" -h" ]] && ! [[ "$*" =~ --colou?rs? ]]; then
-    ble/fd#alloc _ble_util_fd_cmd_stdout ">/tmp/blesh-stdout" overwrite
-    ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
-    ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
-    ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
-  fi
-
-  #if [[ -z $_ble_util_fd_cmd_stdout ]]; then
-  #  ble/fd#alloc _ble_util_fd_cmd_stdout ">/tmp/blesh-stdout" overwrite
-  #fi
-  #tty=$(tty)
-  #( (
-  #  sleep 0.3                         # approx. time needed for pts allocation, delays TUI apps by this time
-  #  pts_after=$(ps -t "$tty" | wc -l) # FIX: every command creates entry in pts
-  #  #pts_after=$(stty -a | grep '\-icanon')
-  #  if [[ $pts_after -gt $((pts_before + 1)) ]]; then
-  #    # creates stdout for new application
-  #    ble/fd#alloc _ble_util_fd_cmd_stdout ">/dev/tty" overwrite
-  #    ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
-  #    ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
-  #    ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
-  #  fi
-  #) &)
-  #ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
-  #ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
-  #ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
-}
-
-precmd() {
-  :
-}
-
-postexec() {
-  # $ script -qeO /tmp/blesh-stdout -c "ls -la aroise"
-  # $ cat foo.c|highlight --syntax c --out-format=truecolor
-  #if [[ -e /tmp/blesh-stdout ]]; then
-  #  content_type=$(file -b /tmp/blesh-stdout | cut -f1 -d' ')
-  #  content_type=${content_type:-empty}
-  #fi
-
-  #if [[ "$*" =~ --help|help|-h ]]; then
-  #  bat -pplhelp /tmp/blesh-stdout
-  #elif [[ "$content_type" != "empty" ]]; then
-  #  language=$(BAT_PAGER='' bat --list-languages | grep -i -m1 "$content_type" | cut -f1 -d':')
-  #  # if not exact match then longest
-  #  #BAT_PAGER='' bat --list-languages | grep -i --color -o -E "B?o?u?r?n?e?-?A?g?a?i?n?" | awk '{print length " " $0}'| sort -n | tail -1
-  #  #language=$(BAT_PAGER='' bat --list-languages | grep -i -m1 -e "$content_type" -e "\[$content_type\]" | cut -f1 -d':')
-  #  bat -ppl"${language:-Plain Text}" /tmp/blesh-stdout
-  #fi
-  if [[ "$*" =~ --help|"help "|" -h" ]] && ! [[ "$*" =~ --colou?rs? ]]; then
-    bat -pplhelp /tmp/blesh-stdout
-    ble/fd#alloc _ble_util_fd_cmd_stdout '>/dev/tty' overwrite
-    ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
-    ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
-    ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
-    rm -f /tmp/blesh-stdout
-  fi
-}
 
 if [[ ${BLE_VERSION-} ]]; then
-  #source "$_ble_base/lib/vim-surround.sh"
+  #[[ -s "$_ble_base/lib/vim-surround.sh" ]] && source "$_ble_base/lib/vim-surround.sh"
+
+  preexec() {
+    #content_type=$(ble/fd#alloc _ble_util_fd_cmd_stdout "> >(file -b - | cut -f1 -d' ')" overwrite)
+    #content_type=$(ble/fd#alloc _ble_util_fd_cmd_stdout "> >(mimetype --file-compat --output-format %d --stdin| cut -f1 -d' ')" overwrite)
+    #pts_before=$(ps -t "$(tty)" | wc -l)
+
+    #for cmd in $(ls /usr/share/grc | cut -f2 -d'.'); do
+    #  # grc does it's thing
+    #  if [[ $1 = "$cmd" ]]; then
+    #    ble/fd#alloc _ble_util_fd_cmd_stdout ">/dev/tty" overwrite
+    #  fi
+    #done
+
+    if [[ "$*" =~ (--help| help| -h) ]] && ! [[ "$*" =~ --colou?rs? ]]; then
+      ble/fd#alloc _ble_util_fd_cmd_stdout ">/tmp/blesh-stdout" overwrite
+      ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
+      ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
+      ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
+    fi
+
+    #if [[ -z $_ble_util_fd_cmd_stdout ]]; then
+    #  ble/fd#alloc _ble_util_fd_cmd_stdout ">/tmp/blesh-stdout" overwrite
+    #fi
+    #tty=$(tty)
+    #( (
+    #  sleep 0.3                         # approx. time needed for pts allocation, delays TUI apps by this time
+    #  pts_after=$(ps -t "$tty" | wc -l) # FIX: every command creates entry in pts
+    #  #pts_after=$(stty -a | grep '\-icanon')
+    #  if [[ $pts_after -gt $((pts_before + 1)) ]]; then
+    #    # creates stdout for new application
+    #    ble/fd#alloc _ble_util_fd_cmd_stdout ">/dev/tty" overwrite
+    #    ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
+    #    ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
+    #    ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
+    #  fi
+    #) &)
+    #ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
+    #ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
+    #ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
+  }
+
+  precmd() {
+    :
+  }
+
+  postexec() {
+    # $ script -qeO /tmp/blesh-stdout -c "ls -la aroise"
+    # $ cat foo.c|highlight --syntax c --out-format=truecolor
+    #if [[ -e /tmp/blesh-stdout ]]; then
+    #  content_type=$(file -b /tmp/blesh-stdout | cut -f1 -d' ')
+    #  content_type=${content_type:-empty}
+    #fi
+
+    #if [[ "$*" =~ --help|help|-h ]]; then
+    #  bat -pplhelp /tmp/blesh-stdout
+    #elif [[ "$content_type" != "empty" ]]; then
+    #  language=$(BAT_PAGER='' bat --list-languages | grep -i -m1 "$content_type" | cut -f1 -d':')
+    #  # if not exact match then longest
+    #  #BAT_PAGER='' bat --list-languages | grep -i --color -o -E "B?o?u?r?n?e?-?A?g?a?i?n?" | awk '{print length " " $0}'| sort -n | tail -1
+    #  #language=$(BAT_PAGER='' bat --list-languages | grep -i -m1 -e "$content_type" -e "\[$content_type\]" | cut -f1 -d':')
+    #  bat -ppl"${language:-Plain Text}" /tmp/blesh-stdout
+    #fi
+    if [[ "$*" =~ (--help| help| -h) ]] && ! [[ "$*" =~ --colou?rs? ]]; then
+      bat -pplhelp /tmp/blesh-stdout
+      ble/fd#alloc _ble_util_fd_cmd_stdout '>/dev/tty' overwrite
+      ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
+      ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
+      ble/fd#add-cloexec "$_ble_util_fd_cmd_stderr"
+      rm -f /tmp/blesh-stdout
+    fi
+  }
 
   #bleopt canvas_winch_action=redraw-prev
 
@@ -268,7 +264,7 @@ if [[ ${BLE_VERSION-} ]]; then
   #ble-import contrib/histdb
   ble-import contrib/integration/bash-completion
   #ble-import contrib/airline/*
-  ble-import -f integration/zoxide
+  #ble-import -f integration/zoxide
   #ble-import integration/bash-preexec
 
   blehook POSTEXEC!=postexec
@@ -287,6 +283,7 @@ if [[ ${BLE_VERSION-} ]]; then
   #bleopt line_limit_length=1000
   #bleopt history_limit_length=1000
   bleopt exec_elapsed_enabled='usr+sys'
+  #bleopt exec_restore_pipestatus=1
   #bleopt history_default_point=preserve
   # SPEED Enhancers these are defaults if commented
   bleopt history_erasedups_limit=100
@@ -383,7 +380,7 @@ if [[ ${BLE_VERSION-} ]]; then
   ble-bind -m vi_cmap -c 'C-[' 'exit'
   ble-bind -m vi_omap -c 'C-[' 'exit'
   ble-bind -m menu_complete -f '__default__' menu_complete/cancel
-  #source "$XDG_CONFIG_HOME/bash/colemak"
+  #[[ -s "$XDG_CONFIG_HOME/bash/colemak" ]] && source "$XDG_CONFIG_HOME/bash/colemak"
 
   #ble-bind -x C-r _fzf_history_for_blesh
   #_fzf_history_for_blesh() {
