@@ -13,8 +13,8 @@ R_PATH=service0015/char0016
 # NOTE: for some reason it writes 0 every time unless this function runs and unlocks something
 #       so recommend to run this script once every hour
 for path in $(busctl tree org.bluez | grep -o "/org/bluez/hci2/dev_$MAC_ADDR/service.*/char.*"); do
-  busctl get-property org.bluez "$path" org.bluez.GattCharacteristic1 UUID 1>&2 >/dev/null &&
-    busctl call org.bluez "$path" org.bluez.GattCharacteristic1 ReadValue a{sv} 0 1>&2 >/dev/null
+  busctl get-property org.bluez "$path" org.bluez.GattCharacteristic1 UUID >/dev/null 2>&1 &&
+    busctl call org.bluez "$path" org.bluez.GattCharacteristic1 ReadValue a{sv} 0 >/dev/null 2>&1
   #echo $path
 done
 
