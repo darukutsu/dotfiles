@@ -1,6 +1,6 @@
-layout: {qmk_keyboard: corne_rotated, layout_name: LAYOUT_split_3x6_3}
+layout: {zmk_keyboard: corne}
 layers:
-  default:
+  COL:
   - TAB
   - Q
   - W
@@ -12,7 +12,7 @@ layers:
   - U
   - Y
   - ;
-  - {t: BACKSPACE, s: DELETE}
+  - $$phosphor:regular/backspace$$
   - ESC
   - A
   - R
@@ -25,7 +25,7 @@ layers:
   - I
   - O
   - ''''
-  - '&shift_caps'
+  - $$phosphor:regular/arrow-fat-lines-up$$
   - {t: Z, h: LGUI}
   - X
   - C
@@ -37,13 +37,13 @@ layers:
   - .
   - {t: /, h: LGUI}
   - {t: RET, h: RSHIFT}
-  - {t: slovak, h: LGUI}
-  - {t: '[', h: vim}
+  - {t: SK, h: LGUI}
+  - {t: '[', h: VIM}
   - {t: SPACE, h: LALT}
   - '&td_cmeh'
-  - {t: ']', h: programming}
-  - '&key_repeat'
-  colemak_qwertz:
+  - {t: ']', h: PROG}
+  - $$phosphor:regular/repeat$$
+  COLZY:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -86,7 +86,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  qwerty:
+  QWERTY:
   - TAB
   - Q
   - W
@@ -98,7 +98,7 @@ layers:
   - I
   - O
   - P
-  - {t: BACKSPACE, s: DELETE}
+  - $$phosphor:regular/backspace$$
   - LSHFT
   - A
   - S
@@ -126,10 +126,10 @@ layers:
   - ESC
   - LALT
   - SPACE
-  - {t: '[', h: vim}
-  - {t: ']', h: programming}
+  - {t: '[', h: VIM}
+  - {t: ']', h: PROG}
   - RALT
-  gaming:
+  GAM1:
   - TAB
   - Q
   - W
@@ -141,7 +141,7 @@ layers:
   - I
   - O
   - P
-  - {t: BACKSPACE, s: DELETE}
+  - $$phosphor:regular/backspace$$
   - LSHFT
   - A
   - S
@@ -167,13 +167,13 @@ layers:
   - /
   - RET
   - LALT
-  - {t: ESC, h: gaming2}
+  - {t: ESC, h: GAM2}
   - SPACE
-  - {t: '[', h: vim}
-  - {t: ']', h: programming}
+  - {t: '[', h: VIM}
+  - {t: ']', h: PROG}
   - RALT
-  gaming2:
-  - {t: gaming3, h: toggle}
+  GAM2:
+  - {t: GAM3, h: toggle}
   - '1'
   - {t: ▽, type: trans}
   - '2'
@@ -185,7 +185,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: gaming4, h: toggle}
+  - {t: GAM4, h: toggle}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -215,8 +215,8 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  gaming3:
-  - {t: gaming3, h: toggle}
+  GAM3:
+  - {t: GAM3, h: toggle}
   - Y
   - U
   - I
@@ -258,7 +258,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  gaming4:
+  GAM4:
   - {t: ▽, type: trans}
   - '!'
   - '@'
@@ -271,10 +271,10 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: gaming4, h: toggle}
+  - {t: GAM4, h: toggle}
   - ^
   - '&'
-  - KP MULTIPLY
+  - '*'
   - (
   - )
   - {t: ▽, type: trans}
@@ -301,7 +301,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  vim:
+  VIM:
   - F1
   - F2
   - F3
@@ -317,7 +317,7 @@ layers:
   - ESC
   - INS
   - PSCRN
-  - ''
+  - +PSCRN
   - PG DN
   - PG UP
   - LEFT
@@ -326,7 +326,7 @@ layers:
   - RIGHT
   - HOME
   - END
-  - '&shift_caps'
+  - $$phosphor:regular/arrow-fat-lines-up$$
   - PP
   - MUTE
   - VOL DN
@@ -342,9 +342,9 @@ layers:
   - {type: held}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: mouse, h: toggle}
-  - {t: settings, h: sticky}
-  programming:
+  - {t: MOUSE, h: toggle}
+  - {t: SET, h: sticky}
+  PROG:
   - '`'
   - '1'
   - '2'
@@ -365,11 +365,11 @@ layers:
   - '%'
   - ^
   - '&'
-  - KP MULTIPLY
+  - '*'
   - (
   - )
   - '='
-  - '&shift_caps'
+  - $$phosphor:regular/arrow-fat-lines-up$$
   - {t: F20, h: LGUI}
   - F21
   - F22
@@ -387,15 +387,15 @@ layers:
   - {t: ▽, type: trans}
   - {type: held}
   - RCTL
-  mouse:
-  - {t: mouse, h: toggle}
+  MOUSE:
+  - {t: MOUSE, h: toggle}
   - ''
   - ''
   - '&mmv MOVE_UP'
   - ''
   - ''
-  - ''
-  - ''
+  - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-down$$'}
+  - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-left$$'}
   - ''
   - ''
   - ''
@@ -406,10 +406,10 @@ layers:
   - '&mmv MOVE_DOWN'
   - '&mmv MOVE_RIGHT'
   - ''
-  - '&msc SCRL_LEFT'
-  - '&msc SCRL_DOWN'
-  - '&msc SCRL_UP'
-  - '&msc SCRL_RIGHT'
+  - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-left$$'}
+  - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-down$$'}
+  - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-up$$'}
+  - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-right$$'}
   - ''
   - ''
   - LCTRL
@@ -418,8 +418,8 @@ layers:
   - ''
   - ''
   - ''
-  - ''
-  - ''
+  - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-up$$'}
+  - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-right$$'}
   - ''
   - ''
   - ''
@@ -430,7 +430,7 @@ layers:
   - '&mkp MB2'
   - '&mkp MB3'
   - ''
-  slovak:
+  SK:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -438,33 +438,33 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: '&sk_lc_lower', s: '&sk_lc_upper'}
-  - {t: '&sk_ua_lower', s: '&sk_ua_upper'}
-  - {t: '&sk_ya_lower', s: '&sk_ya_upper'}
-  - {t: '&sk_ad_lower', s: '&sk_ad_upper'}
+  - ľ/Ľ
+  - ú/Ú
+  - ý/Ý
+  - ä/Ä
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: '&sk_aa_lower', s: '&sk_aa_upper'}
-  - {t: '&sk_ra_lower', s: '&sk_ra_upper'}
-  - {t: '&sk_sc_lower', s: '&sk_sc_upper'}
-  - {t: '&sk_tc_lower', s: '&sk_tc_upper'}
+  - á/Á
+  - ŕ/Ŕ
+  - š/Š
+  - ť/Ť
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: '&sk_nc_lower', s: '&sk_nc_upper'}
-  - {t: '&sk_ea_lower', s: '&sk_ea_upper'}
-  - {t: '&sk_ia_lower', s: '&sk_ia_upper'}
-  - {t: '&sk_oa_lower', s: '&sk_oa_upper'}
-  - {t: '&sk_ox_lower', s: '&sk_ox_upper'}
+  - ň/Ň
+  - é/É
+  - í/Í
+  - ó/Ó
+  - ô/Ô
   - {t: ▽, type: trans}
-  - {t: '&sk_zc_lower', s: '&sk_zc_upper'}
+  - ž/Ž
   - {t: ▽, type: trans}
-  - {t: '&sk_cc_lower', s: '&sk_cc_upper'}
-  - {t: '&sk_dc_lower', s: '&sk_dc_upper'}
+  - č/Č
+  - ď/Ď
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - €
+  - £
+  - ¥
+  - ₹
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {type: held}
@@ -473,8 +473,8 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  numpad:
-  - {t: numpad, h: toggle}
+  NUMPAD:
+  - {t: NUMPAD, h: toggle}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -516,31 +516,31 @@ layers:
   - KP 0
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  settings:
+  SET:
   - ''
   - ''
-  - {t: numpad, h: toggle}
-  - {t: qwerty, h: toggle}
-  - {t: gaming, h: toggle}
-  - {t: colemak_qwertz, h: toggle}
+  - {t: NUMPAD, h: toggle}
+  - {t: QWERTY, h: toggle}
+  - {t: GAM1, h: toggle}
+  - {t: COLZY, h: toggle}
   - OUT TOG
   - ''
   - ''
   - ''
   - ''
-  - PWR
+  - ''
   - BT CLR
   - {t: BT, h: '0'}
   - {t: BT, h: '1'}
   - {t: BT, h: '2'}
   - {t: BT, h: '3'}
   - {t: BT, h: '4'}
-  - ''
-  - ''
-  - ''
-  - ''
-  - ''
-  - ''
+  - {t: BT DISC, h: '0'}
+  - {t: BT DISC, h: '1'}
+  - {t: BT DISC, h: '2'}
+  - {t: BT DISC, h: '3'}
+  - {t: BT DISC, h: '4'}
+  - PWR
   - ''
   - ''
   - ''

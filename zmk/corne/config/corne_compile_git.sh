@@ -20,8 +20,10 @@ source "$HOME"/.config/zmk/zmk/python-dep/bin/activate
 is_display=y
 
 if [ $is_display = 'y' ]; then
-  ldshield="corne_left nice_view_adapter nice_view"
-  rdshield="corne_right nice_view_adapter nice_view"
+  #ldshield="corne_left nice_view_adapter nice_view"
+  #rdshield="corne_right nice_view_adapter nice_view"
+  ldshield="corne_left nice_view_adapter dongle_display_view_pro_micro"
+  rdshield="corne_right"
 else
   ldshield="corne_left"
   rdshield="corne_right"
@@ -43,3 +45,4 @@ svg_out=~/.config/zmk/corne/config/corne.keymap.svg
 
 keymap -c "$keymap_drawer_conf" parse -z "$keymap_conf" -o "$keymap_yaml"
 keymap -c "$keymap_drawer_conf" draw -o "$svg_out" "$keymap_yaml"
+#keymap -c "$keymap_drawer_conf" parse -z corne.keymap | keymap -c "$keymap_drawer_conf" draw -o $svg_out -
