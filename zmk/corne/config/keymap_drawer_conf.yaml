@@ -30,7 +30,7 @@ draw_config:
     ry: 4
   svg_extra_style: ""
   footer_text: Created with <a href="https://github.com/caksoylar/keymap-drawer">keymap-drawer</a>
-  shrink_wide_legends: 7
+  shrink_wide_legends: 0
   style_layer_activators: true
   glyph_tap_size: 14
   glyph_hold_size: 12
@@ -42,13 +42,13 @@ parse_config:
   skip_binding_parsing: false
   raw_binding_map: {
       ## FreeAwesome
-      #"&mmv MODE_LEFT":
+      #"&mmv MOVE_LEFT":
       #  { t: $$fa:solid/computer-mouse$$, h: $$fa:solid/arrow-left$$ },
-      #"&mmv MODE_DOWN":
+      #"&mmv MOVE_DOWN":
       #  { t: $$fa:solid/computer-mouse$$, h: $$fa:solid/arrow-down$$ },
-      #"&mmv MODE_UP":
+      #"&mmv MOVE_UP":
       #  { t: $$fa:solid/computer-mouse$$, h: $$fa:solid/arrow-up$$ },
-      #"&mmv MODE_RIGHT":
+      #"&mmv MOVE_RIGHT":
       #  { t: $$fa:solid/computer-mouse$$, h: $$fa:solid/arrow-right$$ },
       #"&msc SCRL_LEFT":
       #  {
@@ -71,12 +71,12 @@ parse_config:
       #    h: $$fa:solid/arrow-right$$,
       #  },
       ## ProAwesome
-      #"&mmv MODE_LEFT":
+      #"&mmv MOVE_LEFT":
       #  { t: $$fa:solid/computer-mouse$$, h: $$fa:solid/left$$ },
-      #"&mmv MODE_DOWN":
+      #"&mmv MOVE_DOWN":
       #  { t: $$fa:solid/computer-mouse$$, h: $$fa:solid/down$$ },
-      #"&mmv MODE_UP": { t: $$fa:solid/computer-mouse$$, h: $$fa:solid/up$$ },
-      #"&mmv MODE_RIGHT":
+      #"&mmv MOVE_UP": { t: $$fa:solid/computer-mouse$$, h: $$fa:solid/up$$ },
+      #"&mmv MOVE_RIGHT":
       #  { t: $$fa:solid/computer-mouse$$, h: $$fa:solid/right$$ },
       #"&msc SCRL_LEFT":
       #  { t: $$fa:solid/computer-mouse-scrollwheel$$, h: $$fa:solid/left$$ },
@@ -88,13 +88,13 @@ parse_config:
       #  { t: $$fa:solid/computer-mouse-scrollwheel$$, h: $$fa:solid/right$$ },
 
       ## Phosphor
-      "&mmv MODE_LEFT":
+      "&mmv MOVE_LEFT":
         { t: $$phosphor:regular/mouse$$, h: $$phosphor:regular/arrow-left$$ },
-      "&mmv MODE_DOWN":
+      "&mmv MOVE_DOWN":
         { t: $$phosphor:regular/mouse$$, h: $$phosphor:regular/arrow-down$$ },
-      "&mmv MODE_UP":
+      "&mmv MOVE_UP":
         { t: $$phosphor:regular/mouse$$, h: $$phosphor:regular/arrow-up$$ },
-      "&mmv MODE_RIGHT":
+      "&mmv MOVE_RIGHT":
         { t: $$phosphor:regular/mouse$$, h: $$phosphor:regular/arrow-right$$ },
       "&msc SCRL_LEFT":
         {
@@ -118,13 +118,19 @@ parse_config:
         },
 
       ## Phosphor
-      "$mkp MB1": "$$phosphor:regular/mouse-left-click$$",
-      "$mkp MB2": "$$phosphor:regular/mouse-right-click$$",
-      "$mkp MB3": "$$phosphor:regular/mouse-scroll$$",
-      "&soft-off": "$$phosphor:regular/keyboard-down$$",
+      "&mkp MB1": "$$phosphor:regular/mouse-left-click$$",
+      "&mkp MB2": "$$phosphor:regular/mouse-right-click$$",
+      "&mkp MB3": "$$phosphor:regular/mouse-scroll$$",
+      #"&soft_off": "$$phosphor:regular/moon-stars$$",
+      "&soft_off": "&soft_off",
       "&shift_caps": "$$phosphor:regular/arrow-fat-lines-up$$",
-      "&key_repeat": "$$phosphor:regular/repeat$$",
+      "&key_repeat": "$$phosphor:regular/repeat$$ Repeat",
       "&bspc_del": "$$phosphor:regular/backspace$$",
+      #"&td_cmeh": "$$phosphor:regular/backspace$$",
+      #"&td_cmeh": "CMB MEH",
+      #"&td_cmeh": "¯\\_(ツ)_/¯",
+      "&td_cmeh": "$$mdi:infinity$$ Meh",
+      #<&kp LCTRL>, <&sk LG(LA(LCTRL))>, <&sk LG(LA(LS(LCTRL)))>, <&sk RALT>;
 
       ## FontAwesome
       #"$mkp MB1": "$$fa:solid/computer-mouse-button-left$$",
@@ -214,162 +220,193 @@ parse_config:
   layer_legend_map: {}
   mark_alternate_layer_activators: false
   modifier_fn_map:
-    #ctrl: "$$phosphor:regular/caret-up$$"
-    #alt: "$$phosphor:regular/escalator-up$$"
-    #shift: "$$phosphor:regular/escalator-up$$"
-    #gui: "$$fa:brands/linux$$"
-    left_ctrl: Ctl
-    right_ctrl: RCtl
-    left_shift: Sft
-    right_shift: RSft
-    left_alt: Alt
-    right_alt: AGr
-    left_gui: LGui
-    right_gui: RGui
+    # PHOSPHOR
+    #right_ctrl: "$$phosphor:regular/caret-up$$"
+    #left_ctrl: "$$phosphor:regular/caret-up$$"
+    #right_alt: "$$phosphor:regular/escalator-up$$"
+    #left_alt: "$$phosphor:regular/escalator-up$$"
+    right_shift: "$$phosphor:regular/arrow-fat-up$$ RSft"
+    left_shift: "$$phosphor:regular/arrow-fat-up$$ LSft"
+    right_ctrl: "$$mdi:apple-keyboard-control$$ RCtl"
+    left_ctrl: "$$mdi:apple-keyboard-control$$ LCtl"
+    right_alt: "$$mdi:apple-keyboard-option$$ RAlt"
+    left_alt: "$$mdi:apple-keyboard-option$$ LAlt"
+    #right_shift: "$$mdi:apple-keyboard-shift$$"
+    #left_shift: "$$mdi:apple-keyboard-shift$$"
+    right_gui: "$$fa:brands/linux$$ RGui"
+    left_gui: "$$fa:brands/linux$$ LGui"
+    #left_ctrl: Ctl
+    #right_ctrl: RCtl
+    #left_shift: Sft
+    #right_shift: RSft
+    #left_alt: Alt
+    #right_alt: AGr
+    #left_gui: LGui
+    #right_gui: RGui
     keycode_combiner: "{mods}+ {key}"
     mod_combiner: "{mod_1}+{mod_2}"
-    special_combinations:
-      left_ctrl+left_alt+left_gui+left_shift: Hyper
-      left_ctrl+left_alt+left_shift: Meh
+    #special_combinations:
+    #  left_ctrl+left_alt+left_gui+left_shift: Hyper
+    #  left_ctrl+left_alt+left_shift: Meh
   qmk_remove_keycode_prefix:
     - KC_
-  qmk_keycode_map:
-    XXXXXXX: ""
-    "NO": ""
-    MINUS: "-"
-    MINS: "-"
-    EQUAL: "="
-    EQL: "="
-    LEFT_BRACKET: "["
-    LBRC: "["
-    RIGHT_BRACKET: "]"
-    RBRC: "]"
-    BACKSLASH: \
-    BSLS: \
-    NONUS_HASH: "#"
-    NUHS: "#"
-    SEMICOLON: ;
-    SCLN: ;
-    QUOTE: "'"
-    QUOT: "'"
-    GRAVE: "`"
-    GRV: "`"
-    COMMA: ","
-    COMM: ","
-    DOT: .
-    SLASH: /
-    SLSH: /
-    TILDE: "~"
-    TILD: "~"
-    EXCLAIM: "!"
-    EXLM: "!"
-    AT: "@"
-    HASH: "#"
-    DOLLAR: $
-    DLR: $
-    PERCENT: "%"
-    PERC: "%"
-    CIRCUMFLEX: ^
-    CIRC: ^
-    AMPERSAND: "&"
-    AMPR: "&"
-    ASTERISK: "*"
-    ASTR: "*"
-    LEFT_PAREN: (
-    LPRN: (
-    RIGHT_PAREN: )
-    RPRN: )
-    UNDERSCORE: _
-    UNDS: _
-    PLUS: +
-    LEFT_CURLY_BRACE: "{"
-    LCBR: "{"
-    RIGHT_CURLY_BRACE: "}"
-    RCBR: "}"
-    PIPE: "|"
-    COLON: ":"
-    COLN: ":"
-    DOUBLE_QUOTE: '"'
-    DQUO: '"'
-    DQT: '"'
-    LEFT_ANGLE_BRACKET: <
-    LABK: <
-    LT: <
-    RIGHT_ANGLE_BRACKET: ">"
-    RABK: ">"
-    GT: ">"
-    QUESTION: "?"
-    QUEST: "?"
+  #qmk_keycode_map:
+    #XXXXXXX: ""
+    #"NO": ""
+    #MINUS: "-"
+    #MINS: "-"
+    #EQUAL: "="
+    #EQL: "="
+    #LEFT_BRACKET: "["
+    #LBRC: "["
+    #RIGHT_BRACKET: "]"
+    #RBRC: "]"
+    #BACKSLASH: \
+    #BSLS: \
+    #NONUS_HASH: "#"
+    #NUHS: "#"
+    #SEMICOLON: ;
+    #SCLN: ;
+    #QUOTE: "'"
+    #QUOT: "'"
+    #GRAVE: "`"
+    #GRV: "`"
+    #COMMA: ","
+    #COMM: ","
+    #DOT: .
+    #SLASH: /
+    #SLSH: /
+    #TILDE: "~"
+    #TILD: "~"
+    #EXCLAIM: "!"
+    #EXLM: "!"
+    #AT: "@"
+    #HASH: "#"
+    #DOLLAR: $
+    #DLR: $
+    #PERCENT: "%"
+    #PERC: "%"
+    #CIRCUMFLEX: ^
+    #CIRC: ^
+    #AMPERSAND: "&"
+    #AMPR: "&"
+    #ASTERISK: "*"
+    #ASTR: "*"
+    #LEFT_PAREN: (
+    #LPRN: (
+    #RIGHT_PAREN: )
+    #RPRN: )
+    #UNDERSCORE: _
+    #UNDS: _
+    #PLUS: +
+    #LEFT_CURLY_BRACE: "{"
+    #LCBR: "{"
+    #RIGHT_CURLY_BRACE: "}"
+    #RCBR: "}"
+    #PIPE: "|"
+    #COLON: ":"
+    #COLN: ":"
+    #DOUBLE_QUOTE: '"'
+    #DQUO: '"'
+    #DQT: '"'
+    #LEFT_ANGLE_BRACKET: <
+    #LABK: <
+    #LT: <
+    #RIGHT_ANGLE_BRACKET: ">"
+    #RABK: ">"
+    #GT: ">"
+    #QUESTION: "?"
+    #QUEST: "?"
   zmk_remove_keycode_prefix: []
   zmk_keycode_map:
-    EXCLAMATION: "!"
-    EXCL: "!"
-    AT_SIGN: "@"
-    AT: "@"
-    HASH: "#"
-    POUND: "#"
-    DOLLAR: $
-    DLLR: $
-    PERCENT: "%"
-    PRCNT: "%"
-    CARET: ^
-    AMPERSAND: "&"
-    AMPS: "&"
-    ASTERISK: "*"
-    ASTRK: "*"
-    STAR: "*"
-    LEFT_PARENTHESIS: (
-    LPAR: (
-    RIGHT_PARENTHESIS: )
-    RPAR: )
-    EQUAL: "="
-    PLUS: +
-    MINUS: "-"
-    UNDERSCORE: _
-    UNDER: _
-    SLASH: /
-    FSLH: /
-    QUESTION: "?"
-    QMARK: "?"
-    BACKSLASH: \
-    BSLH: \
-    PIPE: "|"
-    NON_US_BACKSLASH: \
-    PIPE2: "|"
-    NON_US_BSLH: "|"
-    SEMICOLON: ;
-    SEMI: ;
-    COLON: ":"
-    SINGLE_QUOTE: "'"
-    SQT: "'"
-    APOSTROPHE: "'"
-    APOS: "'"
-    DOUBLE_QUOTES: '"'
-    DQT: '"'
-    COMMA: ","
-    LESS_THAN: <
-    LT: <
-    PERIOD: .
-    DOT: .
-    GREATER_THAN: ">"
-    GT: ">"
-    LEFT_BRACKET: "["
-    LBKT: "["
-    LEFT_BRACE: "{"
-    LBRC: "{"
-    RIGHT_BRACKET: "]"
-    RBKT: "]"
-    RIGHT_BRACE: "}"
-    RBRC: "}"
-    GRAVE: "`"
-    TILDE: "~"
-    NON_US_HASH: "#"
-    NUHS: "#"
-    TILDE2: "~"
-    #CTRL: "$$phosphor:regular/caret-up$$"
-    #ALT: "$$phosphor:regular/escalator-up$$"
-    #CTRL: "$$fa:solid/angle-up$$"
-    #DELETE: "$$fa:solid/delete-left$$"
+    #EXCLAMATION: "!"
+    #EXCL: "!"
+    #AT_SIGN: "@"
+    #AT: "@"
+    #HASH: "#"
+    #POUND: "#"
+    #DOLLAR: $
+    #DLLR: $
+    #PERCENT: "%"
+    #PRCNT: "%"
+    #CARET: ^
+    #AMPERSAND: "&"
+    #AMPS: "&"
+    #ASTERISK: "*"
+    #ASTRK: "*"
+    #STAR: "*"
+    #LEFT_PARENTHESIS: (
+    #LPAR: (
+    #RIGHT_PARENTHESIS: )
+    #RPAR: )
+    #EQUAL: "="
+    #PLUS: +
+    #MINUS: "-"
+    #UNDERSCORE: _
+    #UNDER: _
+    #SLASH: /
+    #FSLH: /
+    #QUESTION: "?"
+    #QMARK: "?"
+    #BACKSLASH: \
+    #BSLH: \
+    #PIPE: "|"
+    #NON_US_BACKSLASH: \
+    #PIPE2: "|"
+    #NON_US_BSLH: "|"
+    #SEMICOLON: ;
+    #SEMI: ;
+    #COLON: ":"
+    #SINGLE_QUOTE: "'"
+    #SQT: "'"
+    #APOSTROPHE: "'"
+    #APOS: "'"
+    #DOUBLE_QUOTES: '"'
+    #DQT: '"'
+    #COMMA: ","
+    #LESS_THAN: <
+    #LT: <
+    #PERIOD: .
+    #DOT: .
+    #GREATER_THAN: ">"
+    #GT: ">"
+    #LEFT_BRACKET: "["
+    #LBKT: "["
+    #LEFT_BRACE: "{"
+    #LBRC: "{"
+    #RIGHT_BRACKET: "]"
+    #RBKT: "]"
+    #RIGHT_BRACE: "}"
+    #RBRC: "}"
+    #GRAVE: "`"
+    #TILDE: "~"
+    #NON_US_HASH: "#"
+    #NUHS: "#"
+    #TILDE2: "~"
+    LEFT: "$$phosphor:regular/arrow-left$$ Left"
+    DOWN: "$$phosphor:regular/arrow-down$$ Down"
+    UP: "$$phosphor:regular/arrow-up$$ Up"
+    RIGHT: "$$phosphor:regular/arrow-right$$ Right"
+    C_MUTE: "$$phosphor:regular/speaker-slash$$"
+    C_PP: "$$phosphor:regular/play-pause$$"
+    C_VOL_UP: "$$phosphor:regular/speaker-high$$"
+    C_VOL_DN: "$$phosphor:regular/speaker-low$$"
+    C_BRI_UP: "$$phosphor:regular/sun$$"
+    C_BRI_DN: "$$phosphor:regular/sun-dim$$"
+    C_NEXT: "$$phosphor:regular/skip-forward$$"
+    C_PREV: "$$phosphor:regular/skip-back$$"
+    RET: "$$phosphor:regular/key-return$$ Ret"
+    #RET: "$$mdi:keyboard-return$$"
+    SPACE: "$$mdi:keyboard-space$$ Spc"
+    TAB: "$$phosphor:regular/arrows-left-right$$ Tab"
+    #ESC: ""
+    #ESC: "$$mdi:keyboard-esc$$"
+    HOME: "$$phosphor:regular/caret-line-up$$ Home"
+    END: "$$phosphor:regular/caret-line-down$$ End"
+    PGUP: "$$phosphor:regular/caret-double-up$$ PgUp"
+    PGDN: "$$phosphor:regular/caret-double-down$$ PgDn"
+    BT_SEL: "$$phosphor:regular/bluetooth$$"
+    BT_DISC: "$$phosphor:regular/bluetooth-slash$$"
 
   zmk_combos: {}
   zmk_preamble: "#define KEYMAP_DRAWER"

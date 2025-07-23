@@ -1,7 +1,7 @@
 layout: {zmk_keyboard: corne}
 layers:
   COL:
-  - TAB
+  - $$phosphor:regular/arrows-left-right$$ Tab
   - Q
   - W
   - F
@@ -11,7 +11,7 @@ layers:
   - L
   - U
   - Y
-  - ;
+  - SEMI
   - $$phosphor:regular/backspace$$
   - ESC
   - A
@@ -24,7 +24,7 @@ layers:
   - E
   - I
   - O
-  - ''''
+  - SQT
   - $$phosphor:regular/arrow-fat-lines-up$$
   - {t: Z, h: LGUI}
   - X
@@ -33,16 +33,16 @@ layers:
   - V
   - K
   - H
-  - ','
-  - .
-  - {t: /, h: LGUI}
-  - {t: RET, h: RSHIFT}
+  - COMMA
+  - DOT
+  - {t: FSLH, h: LGUI}
+  - {t: '$$phosphor:regular/key-return$$ Ret', h: RSHIFT}
   - {t: SK, h: LGUI}
-  - {t: '[', h: VIM}
-  - {t: SPACE, h: LALT}
-  - '&td_cmeh'
-  - {t: ']', h: PROG}
-  - $$phosphor:regular/repeat$$
+  - {t: LBKT, h: VIM}
+  - {t: '$$mdi:keyboard-space$$ Spc', h: LALT}
+  - $$mdi:infinity$$ Meh
+  - {t: RBKT, h: PROG}
+  - $$phosphor:regular/repeat$$ Repeat
   COLZY:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -87,7 +87,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   QWERTY:
-  - TAB
+  - $$phosphor:regular/arrows-left-right$$ Tab
   - Q
   - W
   - E
@@ -109,8 +109,8 @@ layers:
   - J
   - K
   - L
-  - ;
-  - ''''
+  - SEMI
+  - SQT
   - LCTRL
   - Z
   - X
@@ -119,18 +119,18 @@ layers:
   - B
   - N
   - M
-  - ','
-  - .
-  - /
-  - {t: RET, h: RSHIFT}
+  - COMMA
+  - DOT
+  - FSLH
+  - {t: '$$phosphor:regular/key-return$$ Ret', h: RSHIFT}
   - ESC
   - LALT
-  - SPACE
-  - {t: '[', h: VIM}
-  - {t: ']', h: PROG}
+  - $$mdi:keyboard-space$$ Spc
+  - {t: LBKT, h: VIM}
+  - {t: RBKT, h: PROG}
   - RALT
   GAM1:
-  - TAB
+  - $$phosphor:regular/arrows-left-right$$ Tab
   - Q
   - W
   - E
@@ -152,8 +152,8 @@ layers:
   - J
   - K
   - L
-  - ;
-  - ''''
+  - SEMI
+  - SQT
   - LCTRL
   - Z
   - X
@@ -162,15 +162,15 @@ layers:
   - B
   - N
   - M
-  - ','
-  - .
-  - /
-  - RET
+  - COMMA
+  - DOT
+  - FSLH
+  - $$phosphor:regular/key-return$$ Ret
   - LALT
   - {t: ESC, h: GAM2}
-  - SPACE
-  - {t: '[', h: VIM}
-  - {t: ']', h: PROG}
+  - $$mdi:keyboard-space$$ Spc
+  - {t: LBKT, h: VIM}
+  - {t: RBKT, h: PROG}
   - RALT
   GAM2:
   - {t: GAM3, h: toggle}
@@ -202,7 +202,7 @@ layers:
   - '8'
   - '9'
   - '0'
-  - '='
+  - EQUAL
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -233,7 +233,7 @@ layers:
   - J
   - K
   - L
-  - ;
+  - SEMI
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -243,9 +243,9 @@ layers:
   - {t: ▽, type: trans}
   - N
   - M
-  - ','
-  - .
-  - /
+  - COMMA
+  - DOT
+  - FSLH
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -260,11 +260,11 @@ layers:
   - {t: ▽, type: trans}
   GAM4:
   - {t: ▽, type: trans}
-  - '!'
-  - '@'
-  - '#'
-  - $
-  - '%'
+  - EXCL
+  - AT
+  - HASH
+  - DLLR
+  - PRCNT
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -272,11 +272,11 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: GAM4, h: toggle}
-  - ^
-  - '&'
-  - '*'
-  - (
-  - )
+  - CARET
+  - AMPS
+  - ASTRK
+  - LPAR
+  - RPAR
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -288,7 +288,7 @@ layers:
   - '8'
   - '9'
   - '0'
-  - '='
+  - EQUAL
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -320,23 +320,23 @@ layers:
   - +PSCRN
   - PG DN
   - PG UP
-  - LEFT
-  - DOWN
-  - UP
-  - RIGHT
-  - HOME
-  - END
+  - $$phosphor:regular/arrow-left$$ Left
+  - $$phosphor:regular/arrow-down$$ Down
+  - $$phosphor:regular/arrow-up$$ Up
+  - $$phosphor:regular/arrow-right$$ Right
+  - $$phosphor:regular/caret-line-up$$ Home
+  - $$phosphor:regular/caret-line-down$$ End
   - $$phosphor:regular/arrow-fat-lines-up$$
-  - PP
-  - MUTE
-  - VOL DN
-  - VOL UP
+  - $$phosphor:regular/play-pause$$
+  - $$phosphor:regular/speaker-slash$$
+  - $$phosphor:regular/speaker-low$$
+  - $$phosphor:regular/speaker-high$$
   - PG UP
   - ''
-  - NEXT
-  - PREV
-  - BRI UP
-  - BRI DN
+  - $$phosphor:regular/skip-forward$$
+  - $$phosphor:regular/skip-back$$
+  - $$phosphor:regular/sun$$
+  - $$phosphor:regular/sun-dim$$
   - ''
   - {t: ▽, type: trans}
   - {type: held}
@@ -345,7 +345,7 @@ layers:
   - {t: MOUSE, h: toggle}
   - {t: SET, h: sticky}
   PROG:
-  - '`'
+  - GRAVE
   - '1'
   - '2'
   - '3'
@@ -356,19 +356,19 @@ layers:
   - '8'
   - '9'
   - '0'
-  - '-'
+  - MINUS
   - ESC
-  - '!'
-  - '@'
-  - '#'
-  - $
-  - '%'
-  - ^
-  - '&'
-  - '*'
-  - (
-  - )
-  - '='
+  - EXCL
+  - AT
+  - HASH
+  - DLLR
+  - PRCNT
+  - CARET
+  - AMPS
+  - ASTRK
+  - LPAR
+  - RPAR
+  - EQUAL
   - $$phosphor:regular/arrow-fat-lines-up$$
   - {t: F20, h: LGUI}
   - F21
@@ -376,11 +376,11 @@ layers:
   - F23
   - F24
   - ''
-  - ','
-  - .
-  - '['
-  - {t: ']', h: LGUI}
-  - \
+  - COMMA
+  - DOT
+  - LBKT
+  - {t: RBKT, h: LGUI}
+  - BSLH
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -391,7 +391,7 @@ layers:
   - {t: MOUSE, h: toggle}
   - ''
   - ''
-  - '&mmv MOVE_UP'
+  - {t: '$$phosphor:regular/mouse$$', h: '$$phosphor:regular/arrow-up$$'}
   - ''
   - ''
   - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-down$$'}
@@ -402,9 +402,9 @@ layers:
   - ''
   - ESC
   - ''
-  - '&mmv MOVE_LEFT'
-  - '&mmv MOVE_DOWN'
-  - '&mmv MOVE_RIGHT'
+  - {t: '$$phosphor:regular/mouse$$', h: '$$phosphor:regular/arrow-left$$'}
+  - {t: '$$phosphor:regular/mouse$$', h: '$$phosphor:regular/arrow-down$$'}
+  - {t: '$$phosphor:regular/mouse$$', h: '$$phosphor:regular/arrow-right$$'}
   - ''
   - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-left$$'}
   - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-down$$'}
@@ -423,12 +423,12 @@ layers:
   - ''
   - ''
   - ''
-  - {t: RET, h: RSHIFT}
+  - {t: '$$phosphor:regular/key-return$$ Ret', h: RSHIFT}
   - ''
   - ''
-  - '&mkp MB1'
-  - '&mkp MB2'
-  - '&mkp MB3'
+  - $$phosphor:regular/mouse-left-click$$
+  - $$phosphor:regular/mouse-right-click$$
+  - $$phosphor:regular/mouse-scroll$$
   - ''
   SK:
   - {t: ▽, type: trans}
@@ -530,16 +530,16 @@ layers:
   - ''
   - ''
   - BT CLR
-  - {t: BT, h: '0'}
-  - {t: BT, h: '1'}
-  - {t: BT, h: '2'}
-  - {t: BT, h: '3'}
-  - {t: BT, h: '4'}
-  - {t: BT DISC, h: '0'}
-  - {t: BT DISC, h: '1'}
-  - {t: BT DISC, h: '2'}
-  - {t: BT DISC, h: '3'}
-  - {t: BT DISC, h: '4'}
+  - {t: '$$phosphor:regular/bluetooth$$', h: '0'}
+  - {t: '$$phosphor:regular/bluetooth$$', h: '1'}
+  - {t: '$$phosphor:regular/bluetooth$$', h: '2'}
+  - {t: '$$phosphor:regular/bluetooth$$', h: '3'}
+  - {t: '$$phosphor:regular/bluetooth$$', h: '4'}
+  - {t: '$$phosphor:regular/bluetooth-slash$$', h: '0'}
+  - {t: '$$phosphor:regular/bluetooth-slash$$', h: '1'}
+  - {t: '$$phosphor:regular/bluetooth-slash$$', h: '2'}
+  - {t: '$$phosphor:regular/bluetooth-slash$$', h: '3'}
+  - {t: '$$phosphor:regular/bluetooth-slash$$', h: '4'}
   - PWR
   - ''
   - ''
