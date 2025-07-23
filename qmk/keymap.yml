@@ -1,0 +1,386 @@
+layout: {qmk_keyboard: kprepublic/bm40hsrgb/rev2, layout_name: LAYOUT_ortho_4x12_1x2uC}
+layers:
+  QWERTY:
+  - {t: '$$phosphor:regular/arrows-left-right$$', h: Tab}
+  - Q
+  - W
+  - E
+  - R
+  - T
+  - Y
+  - U
+  - I
+  - O
+  - P
+  - $$phosphor:regular/backspace$$
+  - ESC
+  - A
+  - S
+  - D
+  - F
+  - G
+  - H
+  - J
+  - K
+  - L
+  - ;
+  - ''''
+  - LSFT
+  - Z
+  - X
+  - C
+  - V
+  - B
+  - N
+  - M
+  - ','
+  - .
+  - /
+  - {t: ENT, h: RSFT}
+  - LCTL
+  - $$fa:brands/linux$$ LGui
+  - ''
+  - {t: '$$mdi:apple-keyboard-option$$', h: LAlt}
+  - LT( LAY1,LBRC)
+  - SPC
+  - LT( LAY2,RBRC)
+  - ''
+  - TO( LAY5)
+  - TO( LAY4)
+  - {t: \, h: RCTL}
+  COL:
+  - {t: '$$phosphor:regular/arrows-left-right$$', h: Tab}
+  - Q
+  - W
+  - F
+  - P
+  - B
+  - J
+  - L
+  - U
+  - Y
+  - ;
+  - $$phosphor:regular/backspace$$
+  - ESC
+  - A
+  - R
+  - S
+  - T
+  - G
+  - M
+  - N
+  - E
+  - I
+  - O
+  - ''''
+  - LSFT
+  - Z
+  - X
+  - C
+  - D
+  - V
+  - K
+  - H
+  - ','
+  - .
+  - /
+  - {t: ENT, h: RSFT}
+  - LCTL
+  - $$fa:brands/linux$$ LGui
+  - ''
+  - {t: '$$mdi:apple-keyboard-option$$', h: LAlt}
+  - LT( LAY1,LBRC)
+  - SPC
+  - LT( LAY2,RBRC)
+  - MO( LAY7)
+  - TO( LAY5)
+  - TO( LAY4)
+  - {t: \, h: RCTL}
+  VIM:
+  - F1
+  - F2
+  - F3
+  - F4
+  - F5
+  - F6
+  - F7
+  - F8
+  - F9
+  - F10
+  - F11
+  - F12
+  - ESC
+  - INS
+  - PSCR
+  - ''
+  - {t: '$$phosphor:regular/caret-double-down$$', h: PgDn}
+  - ''
+  - {t: '$$phosphor:regular/arrow-left$$', h: Left}
+  - {t: '$$phosphor:regular/arrow-down$$', h: Down}
+  - {t: '$$phosphor:regular/arrow-up$$', h: Up}
+  - {t: '$$phosphor:regular/arrow-right$$', h: Right}
+  - {t: '$$phosphor:regular/caret-line-up$$', h: Home}
+  - {t: '$$phosphor:regular/caret-line-down$$', h: End}
+  - LSFT
+  - $$phosphor:regular/play-pause$$
+  - $$phosphor:regular/speaker-slash$$
+  - $$phosphor:regular/speaker-low$$
+  - $$phosphor:regular/speaker-high$$
+  - {t: '$$phosphor:regular/caret-double-up$$', h: PgUp}
+  - ''
+  - ''
+  - {t: '$$phosphor:regular/sun-dim$$', h: Down}
+  - {t: '$$phosphor:regular/sun$$', h: Up}
+  - ''
+  - RSFT
+  - LCTL
+  - $$fa:brands/linux$$ LGui
+  - DEL
+  - {t: '$$mdi:apple-keyboard-option$$', h: LAlt}
+  - ''
+  - SPC
+  - ''
+  - $$phosphor:regular/skip-back$$
+  - $$phosphor:regular/skip-forward$$
+  - $$phosphor:regular/power$$
+  - RCTL
+  PROG:
+  - '`'
+  - '1'
+  - '2'
+  - '3'
+  - '4'
+  - '5'
+  - '6'
+  - '7'
+  - '8'
+  - '9'
+  - '0'
+  - '-'
+  - ESC
+  - '!'
+  - '@'
+  - '#'
+  - $
+  - '%'
+  - ^
+  - '&'
+  - '*'
+  - (
+  - )
+  - '='
+  - LSFT
+  - UC LINX
+  - UC WINC
+  - UC MAC
+  - DM REC2
+  - DM PLY1
+  - DM PLY2
+  - ','
+  - .
+  - '['
+  - ']'
+  - ENT
+  - LCTL
+  - $$fa:brands/linux$$ LGui
+  - DEL
+  - {t: '$$mdi:apple-keyboard-option$$', h: LAlt}
+  - DM REC1
+  - SPC
+  - ''
+  - KO TOGG
+  - ''
+  - DF( QWERTY)
+  - DF( COLEMAK)
+  MOUSE:
+  - {t: ▽, type: trans}
+  - ''
+  - ''
+  - {t: '$$phosphor:regular/mouse$$', h: '$$phosphor:regular/arrow-up$$'}
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - {t: QWERTY, h: toggle}
+  - ''
+  - {t: '$$phosphor:regular/mouse$$', h: '$$phosphor:regular/arrow-left$$'}
+  - {t: '$$phosphor:regular/mouse$$', h: '$$phosphor:regular/arrow-down$$'}
+  - {t: '$$phosphor:regular/mouse$$', h: '$$phosphor:regular/arrow-right$$'}
+  - ''
+  - ''
+  - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-down$$'}
+  - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-up$$'}
+  - ''
+  - ''
+  - ESC
+  - {t: ▽, type: trans}
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: QWERTY, h: toggle}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - $$phosphor:regular/mouse-left-click$$
+  - $$phosphor:regular/mouse-right-click$$
+  - ''
+  - ''
+  - {t: QWERTY, h: toggle}
+  - {t: ▽, type: trans}
+  RGB:
+  - RGB M P
+  - RGB M B
+  - RGB M R
+  - RGB M SW
+  - RGB M SN
+  - RGB M K
+  - RGB M X
+  - ''
+  - RGB HUD
+  - RGB HUI
+  - ''
+  - RGB TOG
+  - RGB M G
+  - RGB M T
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - RGB SAD
+  - RGB SAI
+  - ''
+  - RGB MOD
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - RGB VAD
+  - RGB VAI
+  - ''
+  - RGB RMOD
+  - ''
+  - ''
+  - ''
+  - ''
+  - {t: QWERTY, h: toggle}
+  - ''
+  - ''
+  - RGB SPD
+  - RGB SPI
+  - DB TOGG
+  - QK BOOT
+  SK:
+  - {t: '$$phosphor:regular/arrows-left-right$$', h: Tab}
+  - Q
+  - W
+  - é/É
+  - ŕ/Ŕ
+  - ť/Ť
+  - ý/Ý
+  - ú/Ú
+  - í/Í
+  - ó/Ó
+  - P
+  - $$phosphor:regular/backspace$$
+  - ESC
+  - á/Á
+  - š/Š
+  - ď/Ď
+  - F
+  - G
+  - H
+  - J
+  - K
+  - ľ/Ľ
+  - ô/Ô
+  - ä/Ä
+  - LSFT
+  - ž/Ž
+  - X
+  - č/Č
+  - V
+  - B
+  - ň/Ň
+  - M
+  - ','
+  - .
+  - /
+  - {t: ENT, h: RSFT}
+  - LCTL
+  - $$fa:brands/linux$$ LGui
+  - DEL
+  - {t: '$$mdi:apple-keyboard-option$$', h: LAlt}
+  - {t: QWERTY, h: toggle}
+  - SPC
+  - ''
+  - {t: '$$phosphor:regular/arrow-left$$', h: Left}
+  - {t: '$$phosphor:regular/arrow-down$$', h: Down}
+  - {t: '$$phosphor:regular/arrow-up$$', h: Up}
+  - RGHT
+  SKCOL:
+  - {t: '$$phosphor:regular/arrows-left-right$$', h: Tab}
+  - Q
+  - W
+  - é/É
+  - ŕ/Ŕ
+  - ť/Ť
+  - ý/Ý
+  - ú/Ú
+  - í/Í
+  - ó/Ó
+  - P
+  - $$phosphor:regular/backspace$$
+  - ESC
+  - á/Á
+  - š/Š
+  - ď/Ď
+  - F
+  - G
+  - H
+  - J
+  - K
+  - ľ/Ľ
+  - ô/Ô
+  - ä/Ä
+  - LSFT
+  - ž/Ž
+  - X
+  - č/Č
+  - V
+  - B
+  - ň/Ň
+  - M
+  - ','
+  - .
+  - /
+  - {t: ENT, h: RSFT}
+  - LCTL
+  - $$fa:brands/linux$$ LGui
+  - DEL
+  - {t: '$$mdi:apple-keyboard-option$$', h: LAlt}
+  - {t: QWERTY, h: toggle}
+  - SPC
+  - ''
+  - {t: '$$phosphor:regular/arrow-left$$', h: Left}
+  - {t: '$$phosphor:regular/arrow-down$$', h: Down}
+  - {t: '$$phosphor:regular/arrow-up$$', h: Up}
+  - RGHT

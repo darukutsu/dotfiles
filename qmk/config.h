@@ -38,8 +38,8 @@
 #define DRIVER_LED_TOTAL 53
 
 #ifdef RGB_DI_PIN
-#define RGB_MATRIX_KEYPRESSES  // reacts to keypresses
-#define RGBLIGHT_LIMIT_VAL 180 // Limit to vendor-recommended value
+#define RGB_MATRIX_KEYPRESSES         // reacts to keypresses
+#define RGBLIGHT_LIMIT_VAL 180        // Limit to vendor-recommended value
 #endif
 
 #undef ENABLE_RGB_MATRIX_ALPHAS_MODS
@@ -92,8 +92,8 @@
 // https://docs.qmk.fm/#/feature_rgb_matrix?id=rgb-matrix-effects
 
 #ifdef RGB_MATRIX_ENABLE
-#define RGB_DISABLE_WHEN_USB_SUSPENDED    // turn off effects when suspended
-#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 180 // Limit to vendor-recommended value
+#define RGB_MATRIX_SLEEP        // turn off effects when suspended
+// #define RGB_MATRIX_MAXIMUM_BRIGHTNESS 180        // Limit to vendor-recommended value
 
 // enabled only if RGB_MATRIX_FRAMEBUFFER_EFFECTS is defined
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
@@ -109,5 +109,5 @@
 #define MOUSEKEY_MOVE_DELTA 1
 #define BOTH_SHIFTS_TURNS_ON_CAPS_WORD
 #define DOUBLE_TAP_SHIFT_TURNS_ON_CAPS_WORD
-#define CAPS_WORD_IDLE_TIMEOUT 3000 // 3 seconds.
+#define CAPS_WORD_IDLE_TIMEOUT 3000        // 3 seconds.
 #define HOLD_ON_OTHER_KEY_PRESS

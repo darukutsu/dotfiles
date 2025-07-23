@@ -4,4 +4,4 @@ After 3 years of using this beast I'm not satisfied and I will move to split-key
 
 # Layouts
 
-QWERTY... [read pdf](keymap.pdf)
+![keymap](keymap.svg)
