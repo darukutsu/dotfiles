@@ -1,7 +1,7 @@
 layout: {zmk_keyboard: corne}
 layers:
   COL:
-  - $$phosphor:regular/arrows-left-right$$ Tab
+  - {t: '$$phosphor:regular/arrows-left-right$$', h: Tab}
   - Q
   - W
   - F
@@ -11,7 +11,7 @@ layers:
   - L
   - U
   - Y
-  - SEMI
+  - ;
   - $$phosphor:regular/backspace$$
   - ESC
   - A
@@ -24,24 +24,24 @@ layers:
   - E
   - I
   - O
-  - SQT
+  - ''''
   - $$phosphor:regular/arrow-fat-lines-up$$
-  - {t: Z, h: LGUI}
+  - {t: Z, h: '$$fa:brands/linux$$ LGui'}
   - X
   - C
   - D
   - V
   - K
   - H
-  - COMMA
-  - DOT
-  - {t: FSLH, h: LGUI}
-  - {t: '$$phosphor:regular/key-return$$ Ret', h: RSHIFT}
-  - {t: SK, h: LGUI}
-  - {t: LBKT, h: VIM}
-  - {t: '$$mdi:keyboard-space$$ Spc', h: LALT}
+  - ','
+  - .
+  - {t: /, h: '$$fa:brands/linux$$ LGui'}
+  - {t: '$$phosphor:regular/key-return$$', h: RSHIFT}
+  - {t: SK, h: '$$fa:brands/linux$$ LGui'}
+  - {t: '[', h: VIM}
+  - {t: '$$mdi:keyboard-space$$', h: '$$mdi:apple-keyboard-option$$'}
   - $$mdi:infinity$$ Meh
-  - {t: RBKT, h: PROG}
+  - {t: ']', h: PROG}
   - $$phosphor:regular/repeat$$ Repeat
   COLZY:
   - {t: ▽, type: trans}
@@ -69,7 +69,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: Y, h: LGUI}
+  - {t: Y, h: '$$fa:brands/linux$$ LGui'}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -87,7 +87,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   QWERTY:
-  - $$phosphor:regular/arrows-left-right$$ Tab
+  - {t: '$$phosphor:regular/arrows-left-right$$', h: Tab}
   - Q
   - W
   - E
@@ -109,9 +109,9 @@ layers:
   - J
   - K
   - L
-  - SEMI
-  - SQT
-  - LCTRL
+  - ;
+  - ''''
+  - {t: '$$mdi:apple-keyboard-control$$', h: LCtl}
   - Z
   - X
   - C
@@ -119,18 +119,18 @@ layers:
   - B
   - N
   - M
-  - COMMA
-  - DOT
-  - FSLH
-  - {t: '$$phosphor:regular/key-return$$ Ret', h: RSHIFT}
+  - ','
+  - .
+  - /
+  - {t: '$$phosphor:regular/key-return$$', h: RSHIFT}
   - ESC
-  - LALT
-  - $$mdi:keyboard-space$$ Spc
-  - {t: LBKT, h: VIM}
-  - {t: RBKT, h: PROG}
-  - RALT
+  - {t: '$$mdi:apple-keyboard-option$$', h: LAlt}
+  - {t: '$$mdi:keyboard-space$$', h: Spc}
+  - {t: '[', h: VIM}
+  - {t: ']', h: PROG}
+  - {t: '$$mdi:apple-keyboard-option$$', h: RAlt}
   GAM1:
-  - $$phosphor:regular/arrows-left-right$$ Tab
+  - {t: '$$phosphor:regular/arrows-left-right$$', h: Tab}
   - Q
   - W
   - E
@@ -152,9 +152,9 @@ layers:
   - J
   - K
   - L
-  - SEMI
-  - SQT
-  - LCTRL
+  - ;
+  - ''''
+  - {t: '$$mdi:apple-keyboard-control$$', h: LCtl}
   - Z
   - X
   - C
@@ -162,16 +162,16 @@ layers:
   - B
   - N
   - M
-  - COMMA
-  - DOT
-  - FSLH
-  - $$phosphor:regular/key-return$$ Ret
-  - LALT
+  - ','
+  - .
+  - /
+  - {t: '$$phosphor:regular/key-return$$', h: Ret}
+  - {t: '$$mdi:apple-keyboard-option$$', h: LAlt}
   - {t: ESC, h: GAM2}
-  - $$mdi:keyboard-space$$ Spc
-  - {t: LBKT, h: VIM}
-  - {t: RBKT, h: PROG}
-  - RALT
+  - {t: '$$mdi:keyboard-space$$', h: Spc}
+  - {t: '[', h: VIM}
+  - {t: ']', h: PROG}
+  - {t: '$$mdi:apple-keyboard-option$$', h: RAlt}
   GAM2:
   - {t: GAM3, h: toggle}
   - '1'
@@ -202,7 +202,7 @@ layers:
   - '8'
   - '9'
   - '0'
-  - EQUAL
+  - '='
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -233,7 +233,7 @@ layers:
   - J
   - K
   - L
-  - SEMI
+  - ;
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -243,9 +243,9 @@ layers:
   - {t: ▽, type: trans}
   - N
   - M
-  - COMMA
-  - DOT
-  - FSLH
+  - ','
+  - .
+  - /
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -260,11 +260,11 @@ layers:
   - {t: ▽, type: trans}
   GAM4:
   - {t: ▽, type: trans}
-  - EXCL
-  - AT
-  - HASH
-  - DLLR
-  - PRCNT
+  - '!'
+  - '@'
+  - '#'
+  - $
+  - '%'
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -272,11 +272,11 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: GAM4, h: toggle}
-  - CARET
-  - AMPS
-  - ASTRK
-  - LPAR
-  - RPAR
+  - ^
+  - '&'
+  - '*'
+  - (
+  - )
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -288,7 +288,7 @@ layers:
   - '8'
   - '9'
   - '0'
-  - EQUAL
+  - '='
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -320,12 +320,12 @@ layers:
   - +PSCRN
   - PG DN
   - PG UP
-  - $$phosphor:regular/arrow-left$$ Left
-  - $$phosphor:regular/arrow-down$$ Down
-  - $$phosphor:regular/arrow-up$$ Up
-  - $$phosphor:regular/arrow-right$$ Right
-  - $$phosphor:regular/caret-line-up$$ Home
-  - $$phosphor:regular/caret-line-down$$ End
+  - {t: '$$phosphor:regular/arrow-left$$', h: Left}
+  - {t: '$$phosphor:regular/arrow-down$$', h: Down}
+  - {t: '$$phosphor:regular/arrow-up$$', h: Up}
+  - {t: '$$phosphor:regular/arrow-right$$', h: Right}
+  - {t: '$$phosphor:regular/caret-line-up$$', h: Home}
+  - {t: '$$phosphor:regular/caret-line-down$$', h: End}
   - $$phosphor:regular/arrow-fat-lines-up$$
   - $$phosphor:regular/play-pause$$
   - $$phosphor:regular/speaker-slash$$
@@ -345,7 +345,7 @@ layers:
   - {t: MOUSE, h: toggle}
   - {t: SET, h: sticky}
   PROG:
-  - GRAVE
+  - '`'
   - '1'
   - '2'
   - '3'
@@ -356,31 +356,31 @@ layers:
   - '8'
   - '9'
   - '0'
-  - MINUS
+  - '-'
   - ESC
-  - EXCL
-  - AT
-  - HASH
-  - DLLR
-  - PRCNT
-  - CARET
-  - AMPS
-  - ASTRK
-  - LPAR
-  - RPAR
-  - EQUAL
+  - '!'
+  - '@'
+  - '#'
+  - $
+  - '%'
+  - ^
+  - '&'
+  - '*'
+  - (
+  - )
+  - '='
   - $$phosphor:regular/arrow-fat-lines-up$$
-  - {t: F20, h: LGUI}
+  - {t: F20, h: '$$fa:brands/linux$$ LGui'}
   - F21
   - F22
   - F23
   - F24
   - ''
-  - COMMA
-  - DOT
-  - LBKT
-  - {t: RBKT, h: LGUI}
-  - BSLH
+  - ','
+  - .
+  - '['
+  - {t: ']', h: '$$fa:brands/linux$$ LGui'}
+  - \
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -412,7 +412,7 @@ layers:
   - {t: '$$phosphor:regular/mouse-scroll$$', h: '$$phosphor:regular/arrow-right$$'}
   - ''
   - ''
-  - LCTRL
+  - {t: '$$mdi:apple-keyboard-control$$', h: LCtl}
   - ''
   - ''
   - ''
@@ -423,7 +423,7 @@ layers:
   - ''
   - ''
   - ''
-  - {t: '$$phosphor:regular/key-return$$ Ret', h: RSHIFT}
+  - {t: '$$phosphor:regular/key-return$$', h: RSHIFT}
   - ''
   - ''
   - $$phosphor:regular/mouse-left-click$$
@@ -552,7 +552,7 @@ layers:
   - ''
   - ''
   - ''
-  - '&soft_off'
+  - $$mdi:keyboard-close-outline$$ SoftOff
   - ''
   - {type: held}
   - ''

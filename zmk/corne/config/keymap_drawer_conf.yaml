@@ -122,7 +122,7 @@ parse_config:
       "&mkp MB2": "$$phosphor:regular/mouse-right-click$$",
       "&mkp MB3": "$$phosphor:regular/mouse-scroll$$",
       #"&soft_off": "$$phosphor:regular/moon-stars$$",
-      "&soft_off": "&soft_off",
+      "&soft_off": "$$mdi:keyboard-close-outline$$ SoftOff",
       "&shift_caps": "$$phosphor:regular/arrow-fat-lines-up$$",
       "&key_repeat": "$$phosphor:regular/repeat$$ Repeat",
       "&bspc_del": "$$phosphor:regular/backspace$$",
@@ -225,16 +225,16 @@ parse_config:
     #left_ctrl: "$$phosphor:regular/caret-up$$"
     #right_alt: "$$phosphor:regular/escalator-up$$"
     #left_alt: "$$phosphor:regular/escalator-up$$"
-    right_shift: "$$phosphor:regular/arrow-fat-up$$ RSft"
-    left_shift: "$$phosphor:regular/arrow-fat-up$$ LSft"
-    right_ctrl: "$$mdi:apple-keyboard-control$$ RCtl"
-    left_ctrl: "$$mdi:apple-keyboard-control$$ LCtl"
-    right_alt: "$$mdi:apple-keyboard-option$$ RAlt"
-    left_alt: "$$mdi:apple-keyboard-option$$ LAlt"
+    #right_shift: {t: $$phosphor:regular/arrow-fat-up$$, h: RSft}
+    #left_shift: {t: $$phosphor:regular/arrow-fat-up$$, h: LSft}
+    #right_ctrl: {t: $$mdi:apple-keyboard-control$$, h: RCtl}
+    #left_ctrl: {t: $$mdi:apple-keyboard-control$$, h: LCtl}
+    #right_alt: {t: $$mdi:apple-keyboard-option$$, h: RAlt}
+    #left_alt: {t: $$mdi:apple-keyboard-option$$, h: LAlt}
     #right_shift: "$$mdi:apple-keyboard-shift$$"
     #left_shift: "$$mdi:apple-keyboard-shift$$"
-    right_gui: "$$fa:brands/linux$$ RGui"
-    left_gui: "$$fa:brands/linux$$ LGui"
+    #right_gui: "$$fa:brands/linux$$ RGui"
+    #left_gui: "$$fa:brands/linux$$ LGui"
     #left_ctrl: Ctl
     #right_ctrl: RCtl
     #left_shift: Sft
@@ -250,143 +250,143 @@ parse_config:
     #  left_ctrl+left_alt+left_shift: Meh
   qmk_remove_keycode_prefix:
     - KC_
-  #qmk_keycode_map:
-    #XXXXXXX: ""
-    #"NO": ""
-    #MINUS: "-"
-    #MINS: "-"
-    #EQUAL: "="
-    #EQL: "="
-    #LEFT_BRACKET: "["
-    #LBRC: "["
-    #RIGHT_BRACKET: "]"
-    #RBRC: "]"
-    #BACKSLASH: \
-    #BSLS: \
-    #NONUS_HASH: "#"
-    #NUHS: "#"
-    #SEMICOLON: ;
-    #SCLN: ;
-    #QUOTE: "'"
-    #QUOT: "'"
-    #GRAVE: "`"
-    #GRV: "`"
-    #COMMA: ","
-    #COMM: ","
-    #DOT: .
-    #SLASH: /
-    #SLSH: /
-    #TILDE: "~"
-    #TILD: "~"
-    #EXCLAIM: "!"
-    #EXLM: "!"
-    #AT: "@"
-    #HASH: "#"
-    #DOLLAR: $
-    #DLR: $
-    #PERCENT: "%"
-    #PERC: "%"
-    #CIRCUMFLEX: ^
-    #CIRC: ^
-    #AMPERSAND: "&"
-    #AMPR: "&"
-    #ASTERISK: "*"
-    #ASTR: "*"
-    #LEFT_PAREN: (
-    #LPRN: (
-    #RIGHT_PAREN: )
-    #RPRN: )
-    #UNDERSCORE: _
-    #UNDS: _
-    #PLUS: +
-    #LEFT_CURLY_BRACE: "{"
-    #LCBR: "{"
-    #RIGHT_CURLY_BRACE: "}"
-    #RCBR: "}"
-    #PIPE: "|"
-    #COLON: ":"
-    #COLN: ":"
-    #DOUBLE_QUOTE: '"'
-    #DQUO: '"'
-    #DQT: '"'
-    #LEFT_ANGLE_BRACKET: <
-    #LABK: <
-    #LT: <
-    #RIGHT_ANGLE_BRACKET: ">"
-    #RABK: ">"
-    #GT: ">"
-    #QUESTION: "?"
-    #QUEST: "?"
+  qmk_keycode_map:
+    XXXXXXX: ""
+    "NO": ""
+    MINUS: "-"
+    MINS: "-"
+    EQUAL: "="
+    EQL: "="
+    LEFT_BRACKET: "["
+    LBRC: "["
+    RIGHT_BRACKET: "]"
+    RBRC: "]"
+    BACKSLASH: \
+    BSLS: \
+    NONUS_HASH: "#"
+    NUHS: "#"
+    SEMICOLON: ;
+    SCLN: ;
+    QUOTE: "'"
+    QUOT: "'"
+    GRAVE: "`"
+    GRV: "`"
+    COMMA: ","
+    COMM: ","
+    DOT: .
+    SLASH: /
+    SLSH: /
+    TILDE: "~"
+    TILD: "~"
+    EXCLAIM: "!"
+    EXLM: "!"
+    AT: "@"
+    HASH: "#"
+    DOLLAR: $
+    DLR: $
+    PERCENT: "%"
+    PERC: "%"
+    CIRCUMFLEX: ^
+    CIRC: ^
+    AMPERSAND: "&"
+    AMPR: "&"
+    ASTERISK: "*"
+    ASTR: "*"
+    LEFT_PAREN: (
+    LPRN: (
+    RIGHT_PAREN: )
+    RPRN: )
+    UNDERSCORE: _
+    UNDS: _
+    PLUS: +
+    LEFT_CURLY_BRACE: "{"
+    LCBR: "{"
+    RIGHT_CURLY_BRACE: "}"
+    RCBR: "}"
+    PIPE: "|"
+    COLON: ":"
+    COLN: ":"
+    DOUBLE_QUOTE: '"'
+    DQUO: '"'
+    DQT: '"'
+    LEFT_ANGLE_BRACKET: <
+    LABK: <
+    LT: <
+    RIGHT_ANGLE_BRACKET: ">"
+    RABK: ">"
+    GT: ">"
+    QUESTION: "?"
+    QUEST: "?"
   zmk_remove_keycode_prefix: []
   zmk_keycode_map:
-    #EXCLAMATION: "!"
-    #EXCL: "!"
-    #AT_SIGN: "@"
-    #AT: "@"
-    #HASH: "#"
-    #POUND: "#"
-    #DOLLAR: $
-    #DLLR: $
-    #PERCENT: "%"
-    #PRCNT: "%"
-    #CARET: ^
-    #AMPERSAND: "&"
-    #AMPS: "&"
-    #ASTERISK: "*"
-    #ASTRK: "*"
-    #STAR: "*"
-    #LEFT_PARENTHESIS: (
-    #LPAR: (
-    #RIGHT_PARENTHESIS: )
-    #RPAR: )
-    #EQUAL: "="
-    #PLUS: +
-    #MINUS: "-"
-    #UNDERSCORE: _
-    #UNDER: _
-    #SLASH: /
-    #FSLH: /
-    #QUESTION: "?"
-    #QMARK: "?"
-    #BACKSLASH: \
-    #BSLH: \
-    #PIPE: "|"
-    #NON_US_BACKSLASH: \
-    #PIPE2: "|"
-    #NON_US_BSLH: "|"
-    #SEMICOLON: ;
-    #SEMI: ;
-    #COLON: ":"
-    #SINGLE_QUOTE: "'"
-    #SQT: "'"
-    #APOSTROPHE: "'"
-    #APOS: "'"
-    #DOUBLE_QUOTES: '"'
-    #DQT: '"'
-    #COMMA: ","
-    #LESS_THAN: <
-    #LT: <
-    #PERIOD: .
-    #DOT: .
-    #GREATER_THAN: ">"
-    #GT: ">"
-    #LEFT_BRACKET: "["
-    #LBKT: "["
-    #LEFT_BRACE: "{"
-    #LBRC: "{"
-    #RIGHT_BRACKET: "]"
-    #RBKT: "]"
-    #RIGHT_BRACE: "}"
-    #RBRC: "}"
-    #GRAVE: "`"
-    #TILDE: "~"
-    #NON_US_HASH: "#"
-    #NUHS: "#"
-    #TILDE2: "~"
-    LEFT: "$$phosphor:regular/arrow-left$$ Left"
-    DOWN: "$$phosphor:regular/arrow-down$$ Down"
-    UP: "$$phosphor:regular/arrow-up$$ Up"
-    RIGHT: "$$phosphor:regular/arrow-right$$ Right"
+    EXCLAMATION: "!"
+    EXCL: "!"
+    AT_SIGN: "@"
+    AT: "@"
+    HASH: "#"
+    POUND: "#"
+    DOLLAR: $
+    DLLR: $
+    PERCENT: "%"
+    PRCNT: "%"
+    CARET: ^
+    AMPERSAND: "&"
+    AMPS: "&"
+    ASTERISK: "*"
+    ASTRK: "*"
+    STAR: "*"
+    LEFT_PARENTHESIS: (
+    LPAR: (
+    RIGHT_PARENTHESIS: )
+    RPAR: )
+    EQUAL: "="
+    PLUS: +
+    MINUS: "-"
+    UNDERSCORE: _
+    UNDER: _
+    SLASH: /
+    FSLH: /
+    QUESTION: "?"
+    QMARK: "?"
+    BACKSLASH: \
+    BSLH: \
+    PIPE: "|"
+    NON_US_BACKSLASH: \
+    PIPE2: "|"
+    NON_US_BSLH: "|"
+    SEMICOLON: ;
+    SEMI: ;
+    COLON: ":"
+    SINGLE_QUOTE: "'"
+    SQT: "'"
+    APOSTROPHE: "'"
+    APOS: "'"
+    DOUBLE_QUOTES: '"'
+    DQT: '"'
+    COMMA: ","
+    LESS_THAN: <
+    LT: <
+    PERIOD: .
+    DOT: .
+    GREATER_THAN: ">"
+    GT: ">"
+    LEFT_BRACKET: "["
+    LBKT: "["
+    LEFT_BRACE: "{"
+    LBRC: "{"
+    RIGHT_BRACKET: "]"
+    RBKT: "]"
+    RIGHT_BRACE: "}"
+    RBRC: "}"
+    GRAVE: "`"
+    TILDE: "~"
+    NON_US_HASH: "#"
+    NUHS: "#"
+    TILDE2: "~"
+    LEFT: {t: $$phosphor:regular/arrow-left$$, h: Left}
+    DOWN: {t: $$phosphor:regular/arrow-down$$, h: Down}
+    UP: {t: $$phosphor:regular/arrow-up$$, h: Up}
+    RIGHT: {t: $$phosphor:regular/arrow-right$$, h: Right}
     C_MUTE: "$$phosphor:regular/speaker-slash$$"
     C_PP: "$$phosphor:regular/play-pause$$"
     C_VOL_UP: "$$phosphor:regular/speaker-high$$"
@@ -395,18 +395,28 @@ parse_config:
     C_BRI_DN: "$$phosphor:regular/sun-dim$$"
     C_NEXT: "$$phosphor:regular/skip-forward$$"
     C_PREV: "$$phosphor:regular/skip-back$$"
-    RET: "$$phosphor:regular/key-return$$ Ret"
+    RET: {t: $$phosphor:regular/key-return$$, h: Ret}
     #RET: "$$mdi:keyboard-return$$"
-    SPACE: "$$mdi:keyboard-space$$ Spc"
-    TAB: "$$phosphor:regular/arrows-left-right$$ Tab"
+    SPACE: {t: $$mdi:keyboard-space$$, h: Spc}
+    TAB: {t: $$phosphor:regular/arrows-left-right$$, h: Tab}
     #ESC: ""
     #ESC: "$$mdi:keyboard-esc$$"
-    HOME: "$$phosphor:regular/caret-line-up$$ Home"
-    END: "$$phosphor:regular/caret-line-down$$ End"
-    PGUP: "$$phosphor:regular/caret-double-up$$ PgUp"
-    PGDN: "$$phosphor:regular/caret-double-down$$ PgDn"
+    HOME: {t: $$phosphor:regular/caret-line-up$$, h: Home}
+    END: {t: $$phosphor:regular/caret-line-down$$, h: End}
+    PGUP: {t: $$phosphor:regular/caret-double-up$$, h: PgUp}
+    PGDN: {t: $$phosphor:regular/caret-double-down$$, h: PgDn}
     BT_SEL: "$$phosphor:regular/bluetooth$$"
     BT_DISC: "$$phosphor:regular/bluetooth-slash$$"
+    #BT_CLR: "$$phosphor:regular/bluetooth-connected$$"
+    PWR: "$$phosphor:regular/power$$"
+    right_shift: {t: $$phosphor:regular/arrow-fat-up$$, h: RSft}
+    LSHIFT: {t: $$phosphor:regular/arrow-fat-up$$, h: LSft}
+    RCTRL: {t: $$mdi:apple-keyboard-control$$, h: RCtl}
+    LCTRL: {t: $$mdi:apple-keyboard-control$$, h: LCtl}
+    RALT: {t: $$mdi:apple-keyboard-option$$, h: RAlt}
+    LALT: {t: $$mdi:apple-keyboard-option$$, h: LAlt}
+    RGUI: "$$fa:brands/linux$$ RGui"
+    LGUI: "$$fa:brands/linux$$ LGui"
 
   zmk_combos: {}
   zmk_preamble: "#define KEYMAP_DRAWER"
