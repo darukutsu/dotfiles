@@ -122,14 +122,14 @@ parse_config:
       "&mkp MB2": "$$phosphor:regular/mouse-right-click$$",
       "&mkp MB3": "$$phosphor:regular/mouse-scroll$$",
       #"&soft_off": "$$phosphor:regular/moon-stars$$",
-      "&soft_off": "$$mdi:keyboard-close-outline$$ SoftOff",
-      "&shift_caps": "$$phosphor:regular/arrow-fat-lines-up$$",
-      "&key_repeat": "$$phosphor:regular/repeat$$ Repeat",
+      "&soft_off": {t: $$mdi:keyboard-close-outline$$, h: SoftOff},
+      "&shift_caps": {t: $$phosphor:regular/arrow-fat-lines-up$$, h: SftCaps},
+      "&key_repeat": {t: $$phosphor:regular/repeat$$, h: Repeat},
       "&bspc_del": "$$phosphor:regular/backspace$$",
       #"&td_cmeh": "$$phosphor:regular/backspace$$",
       #"&td_cmeh": "CMB MEH",
       #"&td_cmeh": "¯\\_(ツ)_/¯",
-      "&td_cmeh": "$$mdi:infinity$$ Meh",
+      "&td_cmeh": {t: $$mdi:infinity$$, h: Meh},
       #<&kp LCTRL>, <&sk LG(LA(LCTRL))>, <&sk LG(LA(LS(LCTRL)))>, <&sk RALT>;
 
       ## FontAwesome
@@ -391,8 +391,8 @@ parse_config:
     C_PP: "$$phosphor:regular/play-pause$$"
     C_VOL_UP: "$$phosphor:regular/speaker-high$$"
     C_VOL_DN: "$$phosphor:regular/speaker-low$$"
-    C_BRI_UP: "$$phosphor:regular/sun$$"
-    C_BRI_DN: "$$phosphor:regular/sun-dim$$"
+    C_BRI_UP: {t: $$phosphor:regular/sun$$, h: Up}
+    C_BRI_DN: {t: $$phosphor:regular/sun-dim$$, h: Down}
     C_NEXT: "$$phosphor:regular/skip-forward$$"
     C_PREV: "$$phosphor:regular/skip-back$$"
     RET: {t: $$phosphor:regular/key-return$$, h: Ret}
@@ -403,14 +403,14 @@ parse_config:
     #ESC: "$$mdi:keyboard-esc$$"
     HOME: {t: $$phosphor:regular/caret-line-up$$, h: Home}
     END: {t: $$phosphor:regular/caret-line-down$$, h: End}
-    PGUP: {t: $$phosphor:regular/caret-double-up$$, h: PgUp}
-    PGDN: {t: $$phosphor:regular/caret-double-down$$, h: PgDn}
+    PG_UP: {t: $$phosphor:regular/caret-double-up$$, h: PgUp}
+    PG_DN: {t: $$phosphor:regular/caret-double-down$$, h: PgDn}
     BT_SEL: "$$phosphor:regular/bluetooth$$"
     BT_DISC: "$$phosphor:regular/bluetooth-slash$$"
     #BT_CLR: "$$phosphor:regular/bluetooth-connected$$"
-    PWR: "$$phosphor:regular/power$$"
-    right_shift: {t: $$phosphor:regular/arrow-fat-up$$, h: RSft}
-    LSHIFT: {t: $$phosphor:regular/arrow-fat-up$$, h: LSft}
+    C_PWR: "$$phosphor:regular/power$$"
+    RSHFT: {t: $$phosphor:regular/arrow-fat-up$$, h: RSft}
+    LSHFT: {t: $$phosphor:regular/arrow-fat-up$$, h: LSft}
     RCTRL: {t: $$mdi:apple-keyboard-control$$, h: RCtl}
     LCTRL: {t: $$mdi:apple-keyboard-control$$, h: LCtl}
     RALT: {t: $$mdi:apple-keyboard-option$$, h: RAlt}

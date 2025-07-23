@@ -25,7 +25,7 @@ layers:
   - I
   - O
   - ''''
-  - $$phosphor:regular/arrow-fat-lines-up$$
+  - {t: '$$phosphor:regular/arrow-fat-lines-up$$', h: SftCaps}
   - {t: Z, h: '$$fa:brands/linux$$ LGui'}
   - X
   - C
@@ -40,9 +40,9 @@ layers:
   - {t: SK, h: '$$fa:brands/linux$$ LGui'}
   - {t: '[', h: VIM}
   - {t: '$$mdi:keyboard-space$$', h: '$$mdi:apple-keyboard-option$$'}
-  - $$mdi:infinity$$ Meh
+  - {t: '$$mdi:infinity$$', h: Meh}
   - {t: ']', h: PROG}
-  - $$phosphor:regular/repeat$$ Repeat
+  - {t: '$$phosphor:regular/repeat$$', h: Repeat}
   COLZY:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -99,7 +99,7 @@ layers:
   - O
   - P
   - $$phosphor:regular/backspace$$
-  - LSHFT
+  - {t: '$$phosphor:regular/arrow-fat-up$$', h: LSft}
   - A
   - S
   - D
@@ -142,7 +142,7 @@ layers:
   - O
   - P
   - $$phosphor:regular/backspace$$
-  - LSHFT
+  - {t: '$$phosphor:regular/arrow-fat-up$$', h: LSft}
   - A
   - S
   - D
@@ -318,25 +318,25 @@ layers:
   - INS
   - PSCRN
   - +PSCRN
-  - PG DN
-  - PG UP
+  - {t: '$$phosphor:regular/caret-double-down$$', h: PgDn}
+  - {t: '$$phosphor:regular/caret-double-up$$', h: PgUp}
   - {t: '$$phosphor:regular/arrow-left$$', h: Left}
   - {t: '$$phosphor:regular/arrow-down$$', h: Down}
   - {t: '$$phosphor:regular/arrow-up$$', h: Up}
   - {t: '$$phosphor:regular/arrow-right$$', h: Right}
   - {t: '$$phosphor:regular/caret-line-up$$', h: Home}
   - {t: '$$phosphor:regular/caret-line-down$$', h: End}
-  - $$phosphor:regular/arrow-fat-lines-up$$
+  - {t: '$$phosphor:regular/arrow-fat-lines-up$$', h: SftCaps}
   - $$phosphor:regular/play-pause$$
   - $$phosphor:regular/speaker-slash$$
   - $$phosphor:regular/speaker-low$$
   - $$phosphor:regular/speaker-high$$
-  - PG UP
+  - {t: '$$phosphor:regular/caret-double-up$$', h: PgUp}
   - ''
   - $$phosphor:regular/skip-forward$$
   - $$phosphor:regular/skip-back$$
-  - $$phosphor:regular/sun$$
-  - $$phosphor:regular/sun-dim$$
+  - {t: '$$phosphor:regular/sun$$', h: Up}
+  - {t: '$$phosphor:regular/sun-dim$$', h: Down}
   - ''
   - {t: ▽, type: trans}
   - {type: held}
@@ -369,7 +369,7 @@ layers:
   - (
   - )
   - '='
-  - $$phosphor:regular/arrow-fat-lines-up$$
+  - {t: '$$phosphor:regular/arrow-fat-lines-up$$', h: SftCaps}
   - {t: F20, h: '$$fa:brands/linux$$ LGui'}
   - F21
   - F22
@@ -540,7 +540,7 @@ layers:
   - {t: '$$phosphor:regular/bluetooth-slash$$', h: '2'}
   - {t: '$$phosphor:regular/bluetooth-slash$$', h: '3'}
   - {t: '$$phosphor:regular/bluetooth-slash$$', h: '4'}
-  - PWR
+  - $$phosphor:regular/power$$
   - ''
   - ''
   - ''
@@ -552,7 +552,7 @@ layers:
   - ''
   - ''
   - ''
-  - $$mdi:keyboard-close-outline$$ SoftOff
+  - {t: '$$mdi:keyboard-close-outline$$', h: SoftOff}
   - ''
   - {type: held}
   - ''
