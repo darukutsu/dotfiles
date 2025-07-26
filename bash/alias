@@ -3,6 +3,7 @@ alias testalias="pkexec env DISPLAY=$DISPLAY  XAUTHORITY=$XAUTHORITY notify-send
 alias a='ani-cli'
 #alias a='adl -r'
 alias alsa='pulsemixer'
+alias abackup='mv /home/daru/Android/MI9-backup /home/daru/Android/MI9-backup.$(stat -c %w /home/daru/Android/MI9-backup/ | awk "{print $1}") && mkdir /home/daru/Android/MI9-backup/ && sudo bftpd -d'
 alias cnet="netstat -lantp | grep ESTABLISHED |awk '{print $5}' | awk -F: '{print $1}' | sort -u"
 #alias c='printf "\033c"'
 alias c='tput reset'
@@ -31,7 +32,9 @@ alias blk='colourify lsblk -o "NAME,SIZE,FSTYPE,FSAVAIL,FSUSED,FSUSE%,MOUNTPOINT
 alias lapt0='xinput set-prop "AT Translated Set 2 keyboard" "Device Enabled" 0'
 alias lapt1='xinput set-prop "AT Translated Set 2 keyboard" "Device Enabled" 1'
 #alias mt='neomutt'
-alias nf='$XDG_CONFIG_HOME/neofetch/rand-pic.sh && neofetch'
+#alias nf='$XDG_CONFIG_HOME/neofetch/rand-pic.sh && neofetch'
+alias ff='fastfetch --logo $(find "$XDG_CONFIG_HOME/fastfetch/pic/" -type f | shuf -n 1)'
+alias ffall='fastfetch -c /usr/share/fastfetch/presets/ci.jsonc'
 #alias micsend="pactl load-module module-tunnel-sink server=tcp:$(iploc):10111"
 alias micsend="
 pactl load-module module-native-protocol-tcp listen=$(iploc);
@@ -44,7 +47,6 @@ pactl load-module module-native-protocol-tcp port=$1 listen=$2 auth-anonymous=1
 alias mov='mov-cli -s films'
 #alias mirror='xrandr --output HDMI-1 --auto; mons -m'
 alias mirror='mons -ma'
-#alias nf='fastfetch' alias ff='fastfetch'
 #alias nnn='nnn -cdHa'
 #alias page='$PAGER'
 alias pingg='ping google.com'
@@ -92,6 +94,7 @@ alias xclip='xclip -selection clipboard'
 #alias traceroute='/usr/bin/mtr'
 alias qr='qrencode -m 2 -t utf8 <<< "$1"'
 alias qrdecode='zbarimg'
+alias qrwifi='nmcli device wifi show-password'
 alias hotspot='sudo create_ap wlan0 eth0 linux aaaassss'
 #alias xev2=xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }
 
