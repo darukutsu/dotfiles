@@ -1,6 +1,8 @@
 #!/bin/sh
 #set -x
 
+systemctl --user start bspwm.target
+
 export CM_LAUNCHER=rofi-script
 export XDG_CURRENT_DESKTOP=bspwm
 export OPACITY_VALUE=1.0
@@ -15,10 +17,10 @@ if [ $(bspc query -M --names | wc -l) -gt 1 ]; then
   #bspc monitor HDMI-1 -d I II III IV V VI VII VIII IX X
   #bspc monitor DP-1 -d   II III IV V VI     
   #bspc monitor DP-1 -d  II III IV V VI VII   
-  bspc monitor eDP-1 -r
-  xrandr --output eDP-1 --off
-  bspc remove_unplugged_monitors
-  bspc remove_disabled_monitors
+  bspc monitor eDP1 -r
+  xrandr --output eDP1 --off
+  bspc config remove_unplugged_monitors true
+  bspc config remove_disabled_monitors true
 else
   brightnessctl set 1000
 fi
@@ -32,8 +34,9 @@ bsp-layout set tall I -- --master-size 0.5
 #feh --bg-fill --no-fehbg --xinerama-index 0 --randomize ~/Pictures/wallpapers/arch1*
 
 xset b off
+xset s blank
+xset s reset
 xset s off
-xset s noblank
 xset -dpms
 #xset s 1200 30
 #xss-lock -n "$XDG_CONFIG_HOME/bslock/dim-screen.sh" -- bslock &
@@ -111,6 +114,10 @@ xdo lower "$(xdotool search --classname Polybar)"
 
 # SERVICES HERE ARE INDEPENDENT OF PROTOCOL
 . "$XDG_CONFIG_HOME"/bspwm/services
+
+## TODO: fix wireplumber fucking shit
+#pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX0 roc-sink send_FL &
+#pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX1 roc-sink send_FR &
 
 #################################
 #          RULES SETUP          #

@@ -1,17 +1,39 @@
 #!/usr/bin/env bash
+## This files starts services that I don't think should be autostarted by systemd
+## since they not needed in plasma, gnome...
+## or maybe nothing should be here and I should use systemd instead
 
-# probably unneeded
-#dbus-update-activation-environment --all
-#killall "polkit-dumb-agent"
-#polkit-dumb-agent &
-killall "rofi-polkit-agent"
-rofi-polkit-agent &
+## REPLACED BY SYSTEMD SERVICES
+#fcitx5 -rd --keep
+#killall "gromit-mpx"
+#gromit-mpx &
+#killall "udiskie"
+#udiskie &
+##systemctl --user restart opentabletdriver
+#killall "otd-daemon"
+#otd-daemon &
+#systemctl --user start dunst
+##killall "dunst"
+##dunst &
+## FOR PROTONVPN
+#killall "nm-applet"
+#nm-applet &
+##"$XDG_DATA_HOME"/gnome-shell/extensions/gsconnect@andyholmes.github.io/service/daemon.js &
+##ibus-daemon -xrd
+#killall "kdeconnect-indicator"
+#kdeconnect-indicator &
+## probably unneeded
+##dbus-update-activation-environment --all
+##killall "polkit-dumb-agent"
+##polkit-dumb-agent &
+#killall "rofi-polkit-agent"
+#rofi-polkit-agent &
+##killall "zmkbatx"
+##zmkbatx &
+#/usr/lib/xdg-desktop-portal-termfilechooser -r &
+#/usr/lib/xdg-desktop-portal -r &
 
-# for protonvpn
-killall "nm-applet"
-nm-applet &
-
-cb ignore '^.{0,4}$'
+#cb ignore '^.{0,4}$'
 #---
 #killall "clipcatd"
 #rm -rf /run/user/1000/clipcat /run/user/1000/clipcatd.pid
@@ -20,34 +42,15 @@ cb ignore '^.{0,4}$'
 #killall "clipmenu"
 #clipmenud &
 #
-killall "gromit-mpx"
-gromit-mpx &
 
-#"$XDG_DATA_HOME"/gnome-shell/extensions/gsconnect@andyholmes.github.io/service/daemon.js &
-#ibus-daemon -xrd
-killall "kdeconnect-indicator"
-kdeconnect-indicator &
-
-killall "udiskie"
-udiskie &
-
-killall "$XDG_CONFIG_HOME"/wireplumber/hdmi-audio-reconnect.sh
-"$XDG_CONFIG_HOME"/wireplumber/hdmi-audio-reconnect.sh &
+#killall "$XDG_CONFIG_HOME"/wireplumber/hdmi-audio-reconnect.sh
+#"$XDG_CONFIG_HOME"/wireplumber/hdmi-audio-reconnect.sh &
 
 #conky --config="$XDG_CONFIG_HOME/conky/conky.conf" -d
 
-fcitx5 -rd --keep
+#while ! ping -c1 movie.lan; do sleep 60; done
+#killall "jellyfin-mpv-shim"
+#jellyfin-mpv-shim &
 
-#systemctl --user restart opentabletdriver
-killall "otd-daemon"
-otd-daemon &
-
-systemctl --user start dunst
-#killall "dunst"
-#dunst &
-
-killall "zmkbatx"
-zmkbatx &
-
-/usr/lib/xdg-desktop-portal-termfilechooser -r &
-/usr/lib/xdg-desktop-portal -r &
+pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX0 roc-sink send_FL &
+pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX1 roc-sink send_FR &

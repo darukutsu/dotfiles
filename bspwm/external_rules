@@ -74,7 +74,7 @@ fi
 
 # rofi set _NET_WM_WINDOW_TYPE
 # bspwm doesn't manage these windows because rofi doesn't override redirrect by default
-if [[ "$class" =~ .*rofi.* ]]; then
+if [[ "$class" =~ rofi ]]; then
   #echo "manage=off" #this will break rofi don't use this
   #echo "layer=above"
   #echo "focus=on"
@@ -82,6 +82,15 @@ if [[ "$class" =~ .*rofi.* ]]; then
   xprop -id "$wid" \
     -f _NET_WM_WINDOW_TYPE 32a \
     -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_POPUP_MENU
+
+  ## this is basically what -normal-window does
+  #xprop -id "$wid" \
+  #  -f _NET_WM_WINDOW_TYPE 32a \
+  #  -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_NORMAL
+
+  #xprop -id "$wid" \
+  #  -f WM_STATE 32c \
+  #  -set WM_STATE "1, 0"
 fi
 
 ## GAMING
