@@ -2,13 +2,15 @@
 
 # config.set('content.images', False, '*://example.com/')
 
-# with config.pattern('discord.com') as dc:
-#    mel.content.desktop_capture = True
-#    mel.content.media.audio_capture = True
-# mel.content.media.audio_video_capture = True
-# mel.content.media.video_capture = True
+with config.pattern("*://*.discord.com") as dc:
+    dc.content.autoplay = True
+#    dc.content.desktop_capture = True
+#    dc.content.media.audio_capture = True
+#    dc.content.media.audio_video_capture = True
+#    dc.content.media.video_capture = True
 
 with config.pattern("*://*.element.io") as el:
+    el.content.autoplay = True
     el.content.desktop_capture = True
     el.content.media.audio_capture = True
     el.content.media.audio_video_capture = True

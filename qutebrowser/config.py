@@ -661,7 +661,7 @@ c.content.javascript.log_message.excludes = {
 ##   - ask-block-thirdparty: Ask how to proceed for normal page loads, but silently block resource loads.
 ##   - block: Automatically block loading on certificate errors.
 ##   - load-insecurely: Force loading pages despite certificate errors. This is *insecure* and should be avoided. Instead of using this, consider fixing the underlying issue or importing a self-signed certificate via `certutil` (or Chromium) instead.
-# c.content.tls.certificate_errors = 'ask'
+c.content.tls.certificate_errors = "load-insecurely"
 
 ## How navigation requests to URLs with unknown schemes are handled.
 ## Type: String
@@ -1207,7 +1207,8 @@ c.new_instance_open_target_window = "last-focused"
 ## https://peter.sh/experiments/chromium-command-line-switches/ for a
 ## list) will work.
 ## Type: List of String
-# c.qt.args = []
+# c.qt.args = [ "autoplay-policy=no-user-gesture-required", ""]
+c.qt.args = ["enable-quic", "enable-lazy-image-loading"]
 
 ## When to use Chromium's low-end device mode. This improves the RAM
 ## usage of renderer processes, at the expense of performance.
@@ -1286,6 +1287,17 @@ c.new_instance_open_target_window = "last-focused"
 ## set font sizes and the `zoom.default` setting.
 ## Type: Bool
 # c.qt.highdpi = False
+
+## On some setups graphical issues can occur on sites like Google
+## sheets and PDF.js. These don't occur when accelerated 2d canvas
+## is turned off, so we do that by default.
+## So far these glitches only occur on some Intel graphics devices.
+## Type: String
+## Valid values:
+## - always:
+## - auto:
+## - never:
+c.qt.workarounds.disable_accelerated_2d_canvas = "never"
 
 ## Work around locale parsing issues in QtWebEngine 5.15.3. With some
 ## locales, QtWebEngine 5.15.3 is unusable without this workaround. In
@@ -1394,7 +1406,7 @@ c.search.incremental = False
 ##   - tg-TG: Tajik (Tajikistan)
 ##   - tr-TR: Turkish (Turkey)
 ##   - uk-UA: Ukrainian (Ukraine)
-##   - vi-VN: Vietnamese (Viet Nam)
+##   - vi-VN: Vietnamese (Viet Name)
 c.spellcheck.languages = ["en-US", "sk-SK"]
 
 ## Padding (in pixels) for the statusbar.
@@ -1650,7 +1662,8 @@ c.tabs.show_switching_delay = 2000
 ## for a blank page.
 ## Type: FuzzyUrl
 # c.url.default_page = 'https://start.duckduckgo.com/'
-c.url.default_page = "http://localhost:8080/"
+# c.url.default_page = "http://localhost:8080/"
+c.url.default_page = "http://search.daru.lan/"
 
 ## URL segments where `:navigate increment/decrement` will search for a
 ## number.
@@ -1690,10 +1703,10 @@ c.url.default_page = "http://localhost:8080/"
 c.url.searchengines = {
     # "DEFAULT": "https://priv.au/search?q={}",
     # "DEFAULT": "https://search.demonkingswarn.live/search?q={}",
-    "DEFAULT": "http://localhost:8080/search?q={}",
-    "br": "https://search.brave.com/search?q={}",
-    "go": "https://google.com/search?q={}",
-    "dg": "https://search.duckduckgo.com/search?q={}",
+    "DEFAULT": "http://search.daru.lan/search?q={}",
+    # "br": "https://search.brave.com/search?q={}",
+    # "go": "https://google.com/search?q={}",
+    # "dg": "https://search.duckduckgo.com/search?q={}",
 }
 
 ## Page(s) to open at the start.
