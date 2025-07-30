@@ -8,6 +8,7 @@ configuration {
 /*****----- Global Properties -----*****/
 @import                          "shared/colors.rasi"
 @import                          "shared/fonts.rasi"
+@import                          "shared/config.rasi"
 
 /*****----- Main Window -----*****/
 window {

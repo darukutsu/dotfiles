@@ -15,6 +15,7 @@ configuration {
 /*****----- Global Properties -----*****/
 @import                          "shared/colors.rasi"
 @import                          "shared/fonts.rasi"
+@import                          "shared/config.rasi"
 
 /*
 USE_ICON=YES
@@ -131,6 +132,10 @@ listview {
 element {
     enabled:                     true;
     padding:                     15px 17px;
+    min-width:                   48px;
+    min-height:                  48px;
+    horizontal-align:            0.5;
+    vertical-align:              0.5;
     border:                      0px solid;
     border-radius:               0px;
     border-color:                @selected;
@@ -140,6 +145,8 @@ element {
 }
 element-text {
     font:                        "FontAwesome 24";
+    /*TODO: fix monospace unicode different sizes*/
+    /*font:                        "Monospace 24";*/
     background-color:            transparent;
     text-color:                  inherit;
     cursor:                      inherit;

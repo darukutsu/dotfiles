@@ -1,0 +1,7 @@
+configuration {
+    hover-select:   true;
+    //kb-cancel: "Super_L";
+    //no-steal-focus: true;
+    //normal-window: 1;
+    //no-lazy-grab: true;
+}
