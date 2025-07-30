@@ -33,7 +33,7 @@ alias lapt0='xinput set-prop "AT Translated Set 2 keyboard" "Device Enabled" 0'
 alias lapt1='xinput set-prop "AT Translated Set 2 keyboard" "Device Enabled" 1'
 #alias mt='neomutt'
 #alias nf='$XDG_CONFIG_HOME/neofetch/rand-pic.sh && neofetch'
-alias ff='fastfetch --logo $(find "$XDG_CONFIG_HOME/fastfetch/pic/" -type f | shuf -n 1)'
+alias ff='clear; fastfetch --logo $(find "$XDG_CONFIG_HOME/fastfetch/pic/" -type f | shuf -n 1)'
 alias ffall='fastfetch -c /usr/share/fastfetch/presets/ci.jsonc'
 #alias micsend="pactl load-module module-tunnel-sink server=tcp:$(iploc):10111"
 alias micsend="

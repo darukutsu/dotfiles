@@ -133,7 +133,7 @@ if [ -n "$KITTY_REMOTE_SHELL" ]; then
 else
   [[ -s "/usr/share/bash-completion/bash_completion" ]] && source /usr/share/bash-completion/bash_completion
   [[ -s "/usr/share/bash-complete-alias/complete_alias" ]] && source /usr/share/bash-complete-alias/complete_alias
-  eval "$(register-python-argcomplete pipx)"
+  eval "$(register-python-argcomplete pipx 2>/dev/null)"
 fi
 shopt -s progcomp_alias
 # 2025-07-19 TODO: staged for delete
@@ -310,9 +310,12 @@ if [[ ${BLE_VERSION-} ]]; then
   }
   ble-import core-complete -C '
     # <func> or <cmd>
-    ble/function#advice around _man blerc/disable-progcomp-for-auto-complete.advice
+    #ble/function#advice around _man blerc/disable-progcomp-for-auto-complete.advice
+    _comp_load man &&
     ble/function#advice around man blerc/disable-progcomp-for-auto-complete.advice
+    _comp_load pacman &&
     ble/function#advice around pacman blerc/disable-progcomp-for-auto-complete.advice
+    _comp_load systemctl &&
     ble/function#advice around systemctl blerc/disable-progcomp-for-auto-complete.advice
   '
 
