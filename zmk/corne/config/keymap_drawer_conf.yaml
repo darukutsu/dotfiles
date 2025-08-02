@@ -233,16 +233,16 @@ parse_config:
     #left_alt: {t: $$mdi:apple-keyboard-option$$, h: LAlt}
     #right_shift: "$$mdi:apple-keyboard-shift$$"
     #left_shift: "$$mdi:apple-keyboard-shift$$"
-    #right_gui: "$$fa:brands/linux$$ RGui"
-    #left_gui: "$$fa:brands/linux$$ LGui"
-    #left_ctrl: Ctl
-    #right_ctrl: RCtl
-    #left_shift: Sft
-    #right_shift: RSft
-    #left_alt: Alt
-    #right_alt: AGr
-    #left_gui: LGui
-    #right_gui: RGui
+    #right_gui: {t: $$fa:brands/linux$$, h: RGui}
+    #left_gui: {t: $$fa:brands/linux$$, h: LGui}
+    left_ctrl: Ctl
+    right_ctrl: RCtl
+    left_shift: Sft
+    right_shift: RSft
+    left_alt: Alt
+    right_alt: AGr
+    left_gui: LGui
+    right_gui: RGui
     keycode_combiner: "{mods}+ {key}"
     mod_combiner: "{mod_1}+{mod_2}"
     #special_combinations:
@@ -317,6 +317,83 @@ parse_config:
     GT: ">"
     QUESTION: "?"
     QUEST: "?"
+    LEFT: {t: $$phosphor:regular/arrow-left$$, h: Left}
+    DOWN: {t: $$phosphor:regular/arrow-down$$, h: Down}
+    UP: {t: $$phosphor:regular/arrow-up$$, h: Up}
+    RIGHT: {t: $$phosphor:regular/arrow-right$$, h: Right}
+    MUTE: "$$phosphor:regular/speaker-slash$$"
+    MPLY: "$$phosphor:regular/play-pause$$"
+    VOLU: "$$phosphor:regular/speaker-high$$"
+    VOLD: "$$phosphor:regular/speaker-low$$"
+    BRIU: {t: $$phosphor:regular/sun$$, h: Up}
+    BRID: {t: $$phosphor:regular/sun-dim$$, h: Down}
+    MNXT: "$$phosphor:regular/skip-forward$$"
+    MPRV: "$$phosphor:regular/skip-back$$"
+    ENT: {t: $$phosphor:regular/key-return$$, h: Ret}
+    #ENT: "$$mdi:keyboard-return$$"
+    SPACE: {t: $$mdi:keyboard-space$$, h: Spc}
+    TAB: {t: $$phosphor:regular/arrows-left-right$$, h: Tab}
+    #ESC: ""
+    #ESC: "$$mdi:keyboard-esc$$"
+    HOME: {t: $$phosphor:regular/caret-line-up$$, h: Home}
+    END: {t: $$phosphor:regular/caret-line-down$$, h: End}
+    PGUP: {t: $$phosphor:regular/caret-double-up$$, h: PgUp}
+    PGDN: {t: $$phosphor:regular/caret-double-down$$, h: PgDn}
+    PWR: "$$phosphor:regular/power$$"
+    RSFT: {t: $$phosphor:regular/arrow-fat-up$$, h: RSft}
+    LSFT: {t: $$phosphor:regular/arrow-fat-up$$, h: LSft}
+    RCTL: {t: $$mdi:apple-keyboard-control$$, h: RCtl}
+    LCTL: {t: $$mdi:apple-keyboard-control$$, h: LCtl}
+    RALT: {t: $$mdi:apple-keyboard-option$$, h: RAlt}
+    LALT: {t: $$mdi:apple-keyboard-option$$, h: LAlt}
+    RGUI: "$$fa:brands/linux$$ RGui"
+    LGUI: "$$fa:brands/linux$$ LGui"
+    BSPC: "$$phosphor:regular/backspace$$"
+    UP(_EACU,_TEACU): "é/É"
+    UP(_RACU,_TRACU): "ŕ/Ŕ"
+    UP(_TCAR,_TTCAR): "ť/Ť"
+    UP(_YACU,_TYACU): "ý/Ý"
+    UP(_UACU,_TUACU): "ú/Ú"
+    UP(_IACU,_TIACU): "í/Í"
+    UP(_OACU,_TOACU): "ó/Ó"
+    UP(_AACU,_TAACU): "á/Á"
+    UP(_SCAR,_TSCAR): "š/Š"
+    UP(_DCAR,_TDCAR): "ď/Ď"
+    UP(_LCAR,_TLCAR): "ľ/Ľ"
+    UP(_OKVO,_TOKVO): "ô/Ô"
+    UP(_ACAR,_TACAR): "ä/Ä"
+    UP(_ZCAR,_TZCAR): "ž/Ž"
+    UP(_CCAR,_TCCAR): "č/Č"
+    UP(_NCAR,_TNCAR): "ň/Ň"
+    MS_L: { t: $$phosphor:regular/mouse$$, h: $$phosphor:regular/arrow-left$$ }
+    MS_D: { t: $$phosphor:regular/mouse$$, h: $$phosphor:regular/arrow-down$$ }
+    MS_U: { t: $$phosphor:regular/mouse$$, h: $$phosphor:regular/arrow-up$$ }
+    MS_R: { t: $$phosphor:regular/mouse$$, h: $$phosphor:regular/arrow-right$$ }
+    WH_L:
+      {
+        t: $$phosphor:regular/mouse-scroll$$,
+        h: $$phosphor:regular/arrow-left$$,
+      }
+    WH_D:
+      {
+        t: $$phosphor:regular/mouse-scroll$$,
+        h: $$phosphor:regular/arrow-down$$,
+      }
+    WH_U:
+      {
+        t: $$phosphor:regular/mouse-scroll$$,
+        h: $$phosphor:regular/arrow-up$$,
+      }
+    WH_R:
+      {
+        t: $$phosphor:regular/mouse-scroll$$,
+        h: $$phosphor:regular/arrow-right$$,
+      }
+
+    ## Phosphor
+    BTN1: "$$phosphor:regular/mouse-left-click$$"
+    BTN2: "$$phosphor:regular/mouse-right-click$$"
+    BTN3: "$$phosphor:regular/mouse-scroll$$"
   zmk_remove_keycode_prefix: []
   zmk_keycode_map:
     EXCLAMATION: "!"

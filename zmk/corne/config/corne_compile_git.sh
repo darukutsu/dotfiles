@@ -30,6 +30,7 @@ else
 fi
 
 #-DZMK_EXTRA_MODULES="$HOME/.config/zmk/corne/config"
+sed "/# corne_left/,/# corne_left/d" "$HOME/.config/zmk/corne/config/corne_left.conf" >"$HOME/.config/zmk/corne/config/corne_right.conf"
 
 west build -p -b nice_nano_v2 -d build/left -- -DSHIELD="$ldshield" -DZMK_CONFIG="$HOME/.config/zmk/corne/config" &&
   cp -f "$HOME"/.config/zmk/zmk/app/build/left/zephyr/zmk.uf2 zmk_left.uf2
@@ -46,3 +47,6 @@ svg_out=~/.config/zmk/corne/config/pics/corne.keymap.svg
 keymap -c "$keymap_drawer_conf" parse -z "$keymap_conf" -o "$keymap_yaml"
 keymap -c "$keymap_drawer_conf" draw -o "$svg_out" "$keymap_yaml"
 #keymap -c "$keymap_drawer_conf" parse -z corne.keymap | keymap -c "$keymap_drawer_conf" draw -o $svg_out -
+
+## in zmk dir after init
+#west update
