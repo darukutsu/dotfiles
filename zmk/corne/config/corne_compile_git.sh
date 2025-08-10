@@ -28,7 +28,7 @@ is_display=yes
 
 printf "would you like to update? y/N: "
 read -r update_repo
-if [ $update_repo = 'y' ]; then
+if [ "$update_repo" = 'y' ]; then
   git checkout main
   git pull
 fi
@@ -42,7 +42,7 @@ source "$HOME"/.config/zmk/zmk/python-dep/bin/activate
 ## in zmk dir after init
 printf "would you like to update build tools? y/N: "
 read -r update_build
-if [ $update_build = 'y' ]; then
+if [ "$update_build" = 'y' ]; then
   west update
 fi
 
@@ -80,14 +80,14 @@ fi
 flashing_time=8
 printf "flash left side? y/N: "
 read -r lflash
-if [ $lflash = 'y' ]; then
+if [ "$lflash" = 'y' ]; then
   echo "you got $flashing_time secs..."
   sleep $flashing_time && cp zmk_left.uf2 /run/media/daru/NICENANO
 fi
 
 printf "flash right side? y/N: "
 read -r rflash
-if [ $rflash = 'y' ]; then
+if [ "$rflash" = 'y' ]; then
   echo "you got $flashing_time secs..."
   sleep $flashing_time && cp zmk_right.uf2 /run/media/daru/NICENANO
 fi

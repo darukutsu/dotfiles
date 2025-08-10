@@ -17,8 +17,8 @@ if [ $(bspc query -M --names | wc -l) -gt 1 ]; then
   #bspc monitor HDMI-1 -d I II III IV V VI VII VIII IX X
   #bspc monitor DP-1 -d   II III IV V VI     
   #bspc monitor DP-1 -d  II III IV V VI VII   
-  bspc monitor eDP1 -r
-  xrandr --output eDP1 --off
+  bspc monitor eDP-1 -r
+  xrandr --output eDP-1 --off
   bspc config remove_unplugged_monitors true
   bspc config remove_disabled_monitors true
 else
@@ -114,10 +114,6 @@ xdo lower "$(xdotool search --classname Polybar)"
 
 # SERVICES HERE ARE INDEPENDENT OF PROTOCOL
 . "$XDG_CONFIG_HOME"/bspwm/services
-
-## TODO: fix wireplumber fucking shit
-#pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX0 roc-sink send_FL &
-#pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX1 roc-sink send_FR &
 
 #################################
 #          RULES SETUP          #
