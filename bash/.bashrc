@@ -175,7 +175,7 @@ fi
 [[ -s "$XDG_CONFIG_HOME/bash/nnn" ]] && source "$XDG_CONFIG_HOME/bash/nnn"
 
 ## BETTER CD
-#eval "$(zoxide init bash)"
+eval "$(zoxide init bash)"
 
 ## TERMINAL COLORING
 GRC_ALIASES=true
