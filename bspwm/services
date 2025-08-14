@@ -5,6 +5,8 @@
 
 ## REPLACED BY SYSTEMD SERVICES
 #fcitx5 -rd --keep
+xdg-autostart &
+#/usr/bin/env bash -l -c '/usr/bin/fcitx5 -dr --keep'
 #killall "gromit-mpx"
 #gromit-mpx &
 #killall "udiskie"
@@ -52,5 +54,5 @@
 #killall "jellyfin-mpv-shim"
 #jellyfin-mpv-shim &
 
-pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX0 roc-sink send_FL &
-pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX1 roc-sink send_FR &
+#pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX0 roc-sink send_FL &
+#pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX1 roc-sink send_FR &

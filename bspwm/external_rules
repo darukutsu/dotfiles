@@ -35,7 +35,10 @@ if [[ "$class" =~ gcr-prompter ]] || [[ "$class" =~ pinentry-gtk ]]; then
     -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_DIALOG
 fi
 
-if ! [[ "$class" =~ mpv ]] && ! [[ "$class" =~ yad ]] && ! [[ "$class" =~ rofi ]]; then
+if ! [[ "$class" =~ mpv ]] &&
+  ! [[ "$class" =~ yad ]] &&
+  ! [[ "$class" =~ easystroke ]] &&
+  ! [[ "$class" =~ rofi ]]; then
   if ! xprop -id "$wid" | grep -o '_NET_WM_WINDOW_TYPE_DIALOG\|_NET_WM_WINDOW_TYPE_SPLASH'; then
     echo rectangle=900x550+0+0
   fi
@@ -67,6 +70,10 @@ if [[ "$class" =~ kitty\-.* ]]; then
     -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_DROPDOWN_MENU
 fi
 
+if [[ "$class" =~ mouse-actions-gui ]]; then
+  echo state=tiled
+fi
+
 if [[ "$class" =~ kitty\-cal ]]; then
   echo center=off
   echo rectangle=200x190+856+20
@@ -78,6 +85,7 @@ if [[ "$class" =~ rofi ]]; then
   #echo "manage=off" #this will break rofi don't use this
   #echo "layer=above"
   #echo "focus=on"
+  echo "border=off"
   #echo "state=floating"
   xprop -id "$wid" \
     -f _NET_WM_WINDOW_TYPE 32a \
