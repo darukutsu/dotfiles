@@ -7,13 +7,16 @@ local em = {
 
   -- customisable values ------------------------------------------------------
 
-  lines_to_show = 17, -- NOT including search line
+  loop_when_navigating = false,          -- Loop when navigating through list
+  lines_to_show = 17,                    -- NOT including search line
   pause_on_open = true,
   resume_on_exit = "only-if-was-paused", -- another possible value is true
 
   -- styles (earlyer it was a table, but required many more steps to pass def-s
   --            here from .conf file)
   font_size = 21,
+  --font size scales by window
+  scale_by_window = false,
   -- cursor 'width', useful to change if you have hidpi monitor
   cursor_x_border = 0.3,
   line_bottom_margin = 1, -- basically space between lines
@@ -67,6 +70,8 @@ local em = {
 }
 
 -- PRIVATE METHODS ------------------------------------------------------------
+
+local ime_active = mp.get_property_native("input-ime")
 
 -- declare constructor function
 function em:new(o)
@@ -133,6 +138,7 @@ function em:set_from_to(reset_flag)
       self.list.show_from_to = { i - half_list + 1, i - half_list + to_show }
     end
   else
+    table.unpack = table.unpack or unpack -- 5.1 compatibility
     local first, last = table.unpack(self.list.show_from_to)
 
     -- handle cursor moving towards start / end bondary
@@ -153,10 +159,18 @@ end
 
 function em:change_selected_index(num)
   self.list.pointer_i = self.list.pointer_i + num
-  if self.list.pointer_i < 1 then
-    self.list.pointer_i = #self:current()
-  elseif self.list.pointer_i > #self:current() then
-    self.list.pointer_i = 1
+  if self.loop_when_navigating then
+    if self.list.pointer_i < 1 then
+      self.list.pointer_i = #self:current()
+    elseif self.list.pointer_i > #self:current() then
+      self.list.pointer_i = 1
+    end
+  else
+    if self.list.pointer_i < 1 then
+      self.list.pointer_i = 1
+    elseif self.list.pointer_i > #self:current() then
+      self.list.pointer_i = #self:current()
+    end
   end
   self:set_from_to()
   self:update()
@@ -173,10 +187,13 @@ function em:update(err_code)
   end
 
   local line_height = self.font_size + self.line_bottom_margin
-  local ww, wh = mp.get_osd_size() -- window width & height
+  local _, h, aspect = mp.get_osd_size()
+  local wh = self.scale_by_window and 720 or h
+  local ww = wh * aspect
+
   -- '+ 1' below is a search string
   local menu_y_pos =
-  wh - (line_height * (self.lines_to_show + 1) + self.menu_y_padding * 2)
+      wh - (line_height * (self.lines_to_show + 1) + self.menu_y_padding * 2)
 
   -- didn't find better place to handle filtered list update
   if self.line ~= self.prev_line then self:filter_wrapper() end
@@ -213,11 +230,11 @@ function em:update(err_code)
     -- horizontal borders.
     local cheight = self.font_size * 8
     -- TODO: maybe do it using draw_rect from ass?
-    local cglyph = '{\\r' .. -- styles reset
-        '\\1c&Hffffff&\\3c&Hffffff' .. -- font color and border color
+    local cglyph = '{\\r' ..                                   -- styles reset
+        '\\1c&Hffffff&\\3c&Hffffff' ..                         -- font color and border color
         '\\xbord' .. self.cursor_x_border .. '\\p4\\pbo24}' .. -- xborder, scale x8 and baseline offset
-        'm 0 0 l 0 ' .. cheight .. -- drawing just a line
-        '{\\p0\\r}' -- finish drawing and reset styles
+        'm 0 0 l 0 ' .. cheight ..                             -- drawing just a line
+        '{\\p0\\r}'                                            -- finish drawing and reset styles
     local before_cur = self:ass_escape(self.line:sub(1, self.cursor - 1))
     local after_cur = self:ass_escape(self.line:sub(self.cursor))
 
@@ -281,7 +298,6 @@ function em:update(err_code)
   }, "\n")
 
   em.ass:update()
-
 end
 
 -- params:
@@ -432,7 +448,8 @@ end
 
   I was too lazy to list all modifications i've done to the script, but if u
   rly need to see those - do diff with the original code
-]] --
+]]
+   --
 
 -------------------------------------------------------------------------------
 --                          START ORIGINAL MPV CODE                          --
@@ -486,6 +503,9 @@ end
 function em:set_active(active)
   if active == self.is_active then return end
   if active then
+    if ime_active == false then
+      mp.set_property_bool("input-ime", true)
+    end
     self.is_active = true
     self.insert_mode = false
     mp.enable_messages('terminal-default')
@@ -501,6 +521,9 @@ function em:set_active(active)
     self:update()
   else
     -- no need to call 'update' in this block cuz 'clear' method is calling it
+    if ime_active == false then
+      mp.set_property_bool("input-ime", false)
+    end
     self.is_active = false
     self:undefine_key_bindings()
 
@@ -653,12 +676,20 @@ end
 
 -- Go to the first command in the command history (PgUp)
 function em:handle_pgup()
-  self:go_history(1)
+  -- Determine the number of items to move up (half a page)
+  local half_page = math.ceil(self.lines_to_show / 2)
+
+  -- Move the history position up by half a page
+  self:change_selected_index(-half_page)
 end
 
 -- Stop browsing history and start editing a blank line (PgDown)
 function em:handle_pgdown()
-  self:go_history(#self.history + 1)
+  -- Determine the number of items to move down (half a page)
+  local half_page = math.ceil(self.lines_to_show / 2)
+
+  -- Move the history position down by half a page
+  self:change_selected_index(half_page)
 end
 
 -- Move to the start of the current word, or if already at the start, the start
@@ -799,56 +830,58 @@ end
 -- bindings and readline bindings.
 function em:get_bindings()
   local bindings = {
-    { 'ctrl+[', function() self:set_active(false) end },
-    { 'ctrl+g', function() self:set_active(false) end },
-    { 'esc', function() self:set_active(false) end },
-    { 'enter', function() self:handle_enter() end },
-    { 'kp_enter', function() self:handle_enter() end },
-    { 'ctrl+m', function() self:handle_enter() end },
-    { 'bs', function() self:handle_backspace() end },
-    { 'shift+bs', function() self:handle_backspace() end },
-    { 'ctrl+h', function() self:handle_backspace() end },
-    { 'del', function() self:handle_del() end },
-    { 'shift+del', function() self:handle_del() end },
-    { 'ins', function() self:handle_ins() end },
-    { 'shift+ins', function() self:paste(false) end },
-    { 'mbtn_mid', function() self:paste(false) end },
-    { 'left', function() self:prev_char() end },
-    { 'ctrl+b', function() self:prev_char() end },
-    { 'right', function() self:next_char() end },
-    { 'ctrl+f', function() self:next_char() end },
-    { 'ctrl+k', function() self:change_selected_index(-1) end },
-    { 'ctrl+p', function() self:change_selected_index(-1) end },
-    { 'ctrl+j', function() self:change_selected_index(1) end },
-    { 'ctrl+n', function() self:change_selected_index(1) end },
-    { 'up', function() self:move_history(-1) end },
-    { 'alt+p', function() self:move_history(-1) end },
-    { 'wheel_up', function() self:move_history(-1) end },
-    { 'down', function() self:move_history(1) end },
-    { 'alt+n', function() self:move_history(1) end },
-    { 'wheel_down', function() self:move_history(1) end },
-    { 'wheel_left', function() end },
+    { 'ctrl+[',      function() self:set_active(false) end },
+    { 'ctrl+g',      function() self:set_active(false) end },
+    { 'esc',         function() self:set_active(false) end },
+    { 'enter',       function() self:handle_enter() end },
+    { 'kp_enter',    function() self:handle_enter() end },
+    { 'ctrl+m',      function() self:handle_enter() end },
+    { 'bs',          function() self:handle_backspace() end },
+    { 'shift+bs',    function() self:handle_backspace() end },
+    { 'ctrl+h',      function() self:handle_backspace() end },
+    { 'del',         function() self:handle_del() end },
+    { 'shift+del',   function() self:handle_del() end },
+    { 'ins',         function() self:handle_ins() end },
+    { 'shift+ins',   function() self:paste(false) end },
+    { 'mbtn_mid',    function() self:paste(false) end },
+    { 'left',        function() self:prev_char() end },
+    { 'ctrl+b',      function() self:prev_char() end },
+    { 'right',       function() self:next_char() end },
+    { 'ctrl+f',      function() self:next_char() end },
+    { 'ctrl+k',      function() self:change_selected_index(-1) end },
+    { 'ctrl+p',      function() self:change_selected_index(-1) end },
+    { 'ctrl+j',      function() self:change_selected_index(1) end },
+    { 'ctrl+n',      function() self:change_selected_index(1) end },
+    { 'up',          function() self:move_history(-1) end },
+    { 'alt+p',       function() self:move_history(-1) end },
+    { 'wheel_up',    function() self:move_history(-1) end },
+    { 'down',        function() self:move_history(1) end },
+    { 'alt+n',       function() self:move_history(1) end },
+    { 'wheel_down',  function() self:move_history(1) end },
+    { 'wheel_left',  function() end },
     { 'wheel_right', function() end },
-    { 'ctrl+left', function() self:prev_word() end },
-    { 'alt+b', function() self:prev_word() end },
-    { 'ctrl+right', function() self:next_word() end },
-    { 'alt+f', function() self:next_word() end },
-    { 'ctrl+a', function() self:go_home() end },
-    { 'home', function() self:go_home() end },
-    { 'ctrl+e', function() self:go_end() end },
-    { 'end', function() self:go_end() end },
-    { 'pgup', function() self:handle_pgup() end },
-    { 'pgdwn', function() self:handle_pgdown() end },
-    { 'ctrl+c', function() self:clear() end },
-    { 'ctrl+d', function() self:handle_del() end },
-    { 'ctrl+u', function() self:del_to_start() end },
-    { 'ctrl+v', function() self:paste(true) end },
-    { 'meta+v', function() self:paste(true) end },
-    { 'ctrl+bs', function() self:del_word() end },
-    { 'ctrl+w', function() self:del_word() end },
-    { 'ctrl+del', function() self:del_next_word() end },
-    { 'alt+d', function() self:del_next_word() end },
-    { 'kp_dec', function() self:handle_char_input('.') end },
+    { 'ctrl+left',   function() self:prev_word() end },
+    { 'alt+b',       function() self:prev_word() end },
+    { 'ctrl+right',  function() self:next_word() end },
+    { 'alt+f',       function() self:next_word() end },
+    { 'ctrl+a',      function() self:go_home() end },
+    { 'home',        function() self:go_home() end },
+    { 'ctrl+e',      function() self:go_end() end },
+    { 'end',         function() self:go_end() end },
+    { 'ctrl+shift+f',function() self:handle_pgdown() end },
+    { 'ctrl+shift+b',function() self:handle_pgup() end },
+    { 'pgdwn',       function() self:handle_pgdown() end },
+    { 'pgup',        function() self:handle_pgup() end },
+    { 'ctrl+c',      function() self:clear() end },
+    { 'ctrl+d',      function() self:handle_del() end },
+    { 'ctrl+u',      function() self:del_to_start() end },
+    { 'ctrl+v',      function() self:paste(true) end },
+    { 'meta+v',      function() self:paste(true) end },
+    { 'ctrl+bs',     function() self:del_word() end },
+    { 'ctrl+w',      function() self:del_word() end },
+    { 'ctrl+del',    function() self:del_next_word() end },
+    { 'alt+d',       function() self:del_next_word() end },
+    { 'kp_dec',      function() self:handle_char_input('.') end },
   }
 
   for i = 0, 9 do
@@ -861,7 +894,7 @@ end
 
 function em:text_input(info)
   if info.key_text and (info.event == "press" or info.event == "down"
-      or info.event == "repeat")
+        or info.event == "repeat")
   then
     self:handle_char_input(info.key_text)
   end
