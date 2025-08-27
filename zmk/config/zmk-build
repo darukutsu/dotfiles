@@ -1,0 +1,159 @@
+#!/bin/sh
+#set -x
+
+# Only left side is enough for keymap changes, flash both if there are conf changes involving both
+
+ZMK_CONFIG_DIR=${ZMK_CONFIG_DIR:-"$HOME/.config/zmk/config"}
+export ZEPHYR_BASE=${ZEPHYR_BASE:-"$HOME/.config/zmk/zephyr"}
+ZMK_APP_DIR=${ZMK_APP_DIR:-"$HOME/.config/zmk/zmk/app"}
+ZMK_PYTHON_DIR=${ZMK_PYTHON_DIR:-"$HOME"/.config/zmk/python-dep/bin/activate}
+
+if [ -n "$ZMK_PYTHON_DIR" ]; then
+  . "$ZMK_PYTHON_DIR"
+fi
+
+# Initial setup - cudos to urob
+# This file specifies the build dependencies for Github Action workflows and
+# for local build environments. The workspace has four toplevel directories
+# containing the user config, modules, zephy and ZMK.
+#
+# ZMK-Workspace
+# ├── config
+# ├── modules
+# ├── zephyr
+# └── zmk
+#
+# To create a local build environment, clone this repository and then run the
+# following commands from its toplevel directory:
+#
+# $ west init -l config
+# $ west update
+# $ west zephyr-export
+#
+# python -m venv python-dep
+# source python-dep/bin/activate
+# pip3 install --user -r zephyr/scripts/requirements.txt
+#
+# if on ArchLinux suddenly stops working probably python broke, you just need to update/reinstall
+
+print_help() {
+  printf "Usage: zmk-build [OPTION]... [build.yaml]
+
+Short options take same arguments as their long counterpart.
+  -f, --flash                enter flashing mode after build
+  -h, --help                 display this help and exit
+  -p, --pristine
+
+If [build.yaml] is not specified, it will be used from cwd.
+Set 'ZMK_CONFIG_DIR' to path to your config.
+Set 'ZMK_APP_DIR' to path to your zmk/app (optional if you building from within).
+Set 'ZMK_PYTHON_DIR' to path to your python-venv/bin/activate (optional if you already sourced).
+Set 'ZEPHYR_BASE' to path to your zephyr (optional if you building from within).
+Use '-' to specify custom build parameters (however they will be applied for every board).
+"
+  #-t, --flash-time [SEC]     time to wait used between flashes (default: 8)
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+  -f | --flash)
+    flash=true
+    shift
+    ;;
+  -h | --help)
+    print_help
+    exit $?
+    ;;
+  -p | --pristine)
+    pristine=-p
+    shift
+    ;;
+  #-t | --flash-time)
+  #  [ $# -lt 2 ] && {
+  #    printf "missing argument!"
+  #    exit 1
+  #  }
+  #  flashing_time=$2
+  #  shift 2
+  #  ;;
+  #-V | --verbose)
+  #  verbose=true
+  #  ;;
+  #-v | --version)
+  #  print_version
+  #  exit $?
+  #  ;;
+  *)
+    if [ "$1" = '-' ]; then
+      shift
+      return
+    elif ! [ -f "$1" ]; then
+      print_help
+      exit 1
+    fi
+    build_file="$1"
+    shift
+    ;;
+  esac
+done
+
+# update tooling
+pip install update
+west update
+build_file=${build_file:-"build.yaml"}
+
+# parse build.yaml
+is_keymap_drawer=$(yq .vars.keymap-drawer "$build_file")
+keymap_drawer_conf=$(yq .vars.keymap-drawer-conf "$build_file")
+keymap_conf=$(yq .vars.keymap "$build_file")
+keymap_yaml=$(yq .vars.keymap-yaml "$build_file")
+svg_out=$(yq .vars.svg-out "$build_file")
+i=0
+
+for board in $(yq ".include[].board" "$build_file"); do
+  shield=$(yq ".include[$i].shield" "$build_file")
+  i=$((i + 1))
+  # TODO: somehow fix naming
+  build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
+
+  # export ZEPHYR_BASE
+  # shellcheck disable=SC2068
+  west build $pristine -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" "$@"
+done
+
+# generate using keymap-drawer layout svg
+if [ "$is_keymap_drawer" = "true" ]; then
+  keymap -c "$keymap_drawer_conf" parse -z "$keymap_conf" -o "$keymap_yaml"
+  keymap -c "$keymap_drawer_conf" draw -o "$svg_out" "$keymap_yaml"
+  #keymap -c "$keymap_drawer_conf" parse -z corne.keymap | keymap -c "$keymap_drawer_conf" draw -o $svg_out -
+fi
+
+# NOTE: could be done in 1 for loop but its matter of preference...
+# to build everything first and then go and ask flash
+# This way we can cancel using Ctrl+C when no more flashing required.
+if [ "$flash" != "true" ]; then
+  exit 0
+fi
+
+i=0
+for board in $(yq ".include[].board" "$build_file"); do
+  shield=$(yq ".include[$i].shield" "$build_file")
+  i=$((i + 1))
+  build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
+
+  printf "flash %s? y/N: " "$build_dir"
+  read -r continue_flash
+  if [ "$continue_flash" = 'y' ]; then
+    echo "waiting for controller to mount..."
+    while [ -z "$mount" ]; do
+      # less than 100mb, not sure if there are controllers with bigger size
+      mount=$(df -t vfat --output=source,size,target 2>/dev/null | awk '$2 < 100000{print $3}')
+      if find "$mount" -type f -name "CURRENT.UF2" 2>/dev/null | grep -q .; then
+        cp -v "$build_dir/zephyr/zmk.uf2" "$mount"
+        unset mount
+        break
+      fi
+      sleep 1
+    done
+  fi
+done

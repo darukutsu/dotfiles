@@ -1,0 +1,26 @@
+manifest:
+  defaults:
+    revision: v0.3
+  remotes:
+    - name: zmkfirmware
+      url-base: https://github.com/zmkfirmware
+    - name: urob
+      url-base: https://github.com/urob
+    - name: mctechnology17
+      url-base: https://github.com/mctechnology17
+  projects:
+    - name: zmk
+      remote: zmkfirmware
+      import: app/west.yml
+    - name: zmk-helpers
+      remote: urob
+      path: modules/zmk/zmk-helpers
+    - name: zmk-unicode
+      remote: urob
+      path: modules/zmk/zmk-unicode
+    - name: zmk-dongle-display-view
+      remote: mctechnology17
+      path: modules/zmk/zmk-dongle-display-view
+      revision: main
+  self:
+    path: config

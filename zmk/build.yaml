@@ -1,0 +1,36 @@
+# This file generates the GitHub Actions matrix
+# For simple board + shield combinations, add them
+# to the top level board and shield arrays, for more
+# control, add individual board + shield combinations to
+# the `include` property, e.g:
+#
+# board: [ "nice_nano_v2" ]
+# shield: [ "corne_left", "corne_right" ]
+# include:
+#   - board: bdn9_rev2
+#   - board: nice_nano_v2
+#     shield: reviung41
+#
+---
+vars:
+  #display: nice_view_adapter dongle_display_view_pro_micro
+  keymap-drawer: true
+  # These maybe should be generated
+  keymap-drawer-conf: "config/keymap-drawer-conf.yaml"
+  keymap: config/corne.keymap
+  keymap-yaml: config/corne.yaml
+  svg-out: config/pics/corne.keymap.svg
+
+include:
+  - board: nice_nano_v2
+    shield: corne_left nice_view_adapter dongle_display_view_pro_micro
+    #shield: corne_left nice_view_adapter nice_view
+  - board: nice_nano_v2
+    shield: corne_right
+  #- board: nrfmicro_11
+  #  #shield: nrf52840_dongle
+  #  shield: corne_dongle_xiao
+  - board: nice_nano_v2
+    shield: settings_reset
+  - board: nrfmicro_11
+    shield: settings_reset
