@@ -15,22 +15,29 @@
 vars:
   #display: nice_view_adapter dongle_display_view_pro_micro
   keymap-drawer: true
-  # These maybe should be generated
-  keymap-drawer-conf: "config/keymap-drawer-conf.yaml"
-  keymap: config/corne.keymap
-  keymap-yaml: config/corne.yaml
-  svg-out: config/pics/corne.keymap.svg
+  # These maybe should be generated, use ~ as $HOME replacement
+  keymap-drawer-conf: ~/.config/zmk/config/keymap-drawer-conf.yaml
+  keymap: ~/.config/zmk/config/corne.keymap
+  keymap-yaml: ~/.config/zmk/config/corne.yaml
+  svg-out: ~/.config/zmk/config/pics/corne.keymap.svg
 
 include:
   - board: nice_nano_v2
     shield: corne_left nice_view_adapter dongle_display_view_pro_micro
     #shield: corne_left nice_view_adapter nice_view
+    #cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
   - board: nice_nano_v2
     shield: corne_right
+    #cmake-args: -DCONFIG_ZMK_SPLIT=y -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
+  - board: seeeduino_xiao_ble
+    shield: corne_dongle_xiao nice_view_adapter dongle_display_view_seeeduino_xiao_ble
+    #shield: nrf52840_dongle nice_view_adapter dongle_display_view_seeeduino_xiao_ble
   #- board: nrfmicro_11
+  #  shield: corne_dongle_pro_micro
   #  #shield: nrf52840_dongle
-  #  shield: corne_dongle_xiao
   - board: nice_nano_v2
+    shield: settings_reset
+  - board: seeeduino_xiao_ble
     shield: settings_reset
   - board: nrfmicro_11
     shield: settings_reset

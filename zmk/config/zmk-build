@@ -41,23 +41,27 @@ print_help() {
 
 Short options take same arguments as their long counterpart.
   -f, --flash                enter flashing mode after build
+  -F, --flash-only           enter flashing mode directly (build directory must exist)
   -h, --help                 display this help and exit
   -p, --pristine
 
 If [build.yaml] is not specified, it will be used from cwd.
-Set 'ZMK_CONFIG_DIR' to path to your config.
+Set 'ZMK_CONFIG_DIR' to path to your config (MANDATORY your build directory will be there too).
 Set 'ZMK_APP_DIR' to path to your zmk/app (optional if you building from within).
 Set 'ZMK_PYTHON_DIR' to path to your python-venv/bin/activate (optional if you already sourced).
 Set 'ZEPHYR_BASE' to path to your zephyr (optional if you building from within).
 Use '-' to specify custom build parameters (however they will be applied for every board).
 "
-  #-t, --flash-time [SEC]     time to wait used between flashes (default: 8)
 }
 
 while [ $# -gt 0 ]; do
   case "$1" in
   -f | --flash)
     flash=true
+    shift
+    ;;
+  -F | --flash-only)
+    onlyflash=true
     shift
     ;;
   -h | --help)
@@ -68,14 +72,6 @@ while [ $# -gt 0 ]; do
     pristine=-p
     shift
     ;;
-  #-t | --flash-time)
-  #  [ $# -lt 2 ] && {
-  #    printf "missing argument!"
-  #    exit 1
-  #  }
-  #  flashing_time=$2
-  #  shift 2
-  #  ;;
   #-V | --verbose)
   #  verbose=true
   #  ;;
@@ -97,53 +93,52 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-# update tooling
-pip install update
-west update
 build_file=${build_file:-"build.yaml"}
-
-# parse build.yaml
-is_keymap_drawer=$(yq .vars.keymap-drawer "$build_file")
-keymap_drawer_conf=$(yq .vars.keymap-drawer-conf "$build_file")
-keymap_conf=$(yq .vars.keymap "$build_file")
-keymap_yaml=$(yq .vars.keymap-yaml "$build_file")
-svg_out=$(yq .vars.svg-out "$build_file")
-i=0
-
-for board in $(yq ".include[].board" "$build_file"); do
-  shield=$(yq ".include[$i].shield" "$build_file")
-  i=$((i + 1))
-  # TODO: somehow fix naming
-  build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
-
-  # export ZEPHYR_BASE
-  # shellcheck disable=SC2068
-  west build $pristine -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" "$@"
-done
-
-# generate using keymap-drawer layout svg
-if [ "$is_keymap_drawer" = "true" ]; then
-  keymap -c "$keymap_drawer_conf" parse -z "$keymap_conf" -o "$keymap_yaml"
-  keymap -c "$keymap_drawer_conf" draw -o "$svg_out" "$keymap_yaml"
-  #keymap -c "$keymap_drawer_conf" parse -z corne.keymap | keymap -c "$keymap_drawer_conf" draw -o $svg_out -
+if ! [ -f "$build_file" ]; then
+  echo "No $build_file found!"
+  exit 1
 fi
 
-# NOTE: could be done in 1 for loop but its matter of preference...
-# to build everything first and then go and ask flash
-# This way we can cancel using Ctrl+C when no more flashing required.
-if [ "$flash" != "true" ]; then
-  exit 0
-fi
+_zmkbuild() {
+  i=0
+  for board in $(yq ".include[].board" "$build_file"); do
+    shield=$(yq ".include[$i].shield" "$build_file")
+    cmake_args=$(yq ".include[$i].cmake-args" "$build_file")
+    i=$((i + 1))
+    # TODO: somehow fix naming
+    build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
 
-i=0
-for board in $(yq ".include[].board" "$build_file"); do
-  shield=$(yq ".include[$i].shield" "$build_file")
-  i=$((i + 1))
-  build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
+    # export ZEPHYR_BASE
+    # shellcheck disable=SC2068
+    west build $pristine -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" $cmake_args "$@"
+  done
+}
 
-  printf "flash %s? y/N: " "$build_dir"
-  read -r continue_flash
-  if [ "$continue_flash" = 'y' ]; then
+_zmkdraw() {
+  # parse build.yaml
+  is_keymap_drawer=$(yq .vars.keymap-drawer "$build_file" | sed "s#~#$HOME#")
+  keymap_drawer_conf=$(yq .vars.keymap-drawer-conf "$build_file" | sed "s#~#$HOME#")
+  keymap_conf=$(yq .vars.keymap "$build_file" | sed "s#~#$HOME#")
+  keymap_yaml=$(yq .vars.keymap-yaml "$build_file" | sed "s#~#$HOME#")
+  svg_out=$(yq .vars.svg-out "$build_file" | sed "s#~#$HOME#")
+
+  # generate using keymap-drawer layout svg
+  if [ "$is_keymap_drawer" = "true" ]; then
+    keymap -c "$keymap_drawer_conf" parse -z "$keymap_conf" -o "$keymap_yaml"
+    keymap -c "$keymap_drawer_conf" draw -o "$svg_out" "$keymap_yaml"
+    #keymap -c "$keymap_drawer_conf" parse -z corne.keymap | keymap -c "$keymap_drawer_conf" draw -o $svg_out -
+  fi
+}
+
+_zmkflash() {
+  while true; do
+    build_dir="$ZMK_CONFIG_DIR/build"
+    fzf_pick=$(ls -1 "$build_dir" | fzf --footer="Pick what you want to flash:")
+    if [ -z "$fzf_pick" ]; then
+      exit 0
+    fi
+    build_dir="$build_dir/$fzf_pick"
+
     echo "waiting for controller to mount..."
     while [ -z "$mount" ]; do
       # less than 100mb, not sure if there are controllers with bigger size
@@ -155,5 +150,24 @@ for board in $(yq ".include[].board" "$build_file"); do
       fi
       sleep 1
     done
-  fi
-done
+  done
+}
+
+if [ "$onlyflash" = true ]; then
+  _zmkflash
+  exit $?
+fi
+
+# update tooling
+pip install update
+west update
+
+_zmkbuild "$@"
+_zmkdraw
+
+# NOTE: could be done in 1 for loop but its matter of preference...
+# to build everything first and then go and ask flash
+# This way we can cancel using Ctrl+C when no more flashing required.
+if [ "$flash" = "true" ]; then
+  _zmkflash
+fi

@@ -22,5 +22,9 @@ manifest:
       remote: mctechnology17
       path: modules/zmk/zmk-dongle-display-view
       revision: main
+    - name: zmk-config
+      remote: mctechnology17
+      path: modules/zmk/zmk-config
+      revision: main
   self:
     path: config
