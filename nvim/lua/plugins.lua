@@ -207,7 +207,7 @@ return {
   },
 
   {
-    "echasnovski/mini.nvim", -- whole workflow, using only few functions
+    "nvim-mini/mini.nvim", -- whole workflow, using only few functions
     version = false,
     config = function()
       require("plug/mini")
@@ -253,6 +253,7 @@ return {
       "MunifTanjim/nui.nvim",
     },
     config = true,
+    pin = true,
   },
   "alx741/vinfo", -- vim GNU info implementation <C-]> follow tag
   {

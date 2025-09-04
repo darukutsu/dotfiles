@@ -263,7 +263,7 @@ end, { desc = "format buffer" })
 --map({ "n" }, "<leader>f", ":vimgrep /\\w\\+/j % \\| copen<cr>", {})
 
 -- Split lines under the cursor
-map({ "n" }, "K", "i<CR><Esc>g;", {})
+map({ "n" }, "K", "i<CR><Esc>g;", { desc = "reversed 'J'" })
 
 -- NOTE: use mini.move instead
 -- Move highlighted text
@@ -305,15 +305,15 @@ map({ "n" }, "gw", "<C-]>", { desc = "in help follow word definition" })
 map({ "n" }, "gd", function()
   --vim.lsp.buf.definition()
   require("telescope.builtin").lsp_definitions()
-end, {})
+end, { desc = "go definition" })
 map({ "n" }, "gm", function()
   --vim.lsp.buf.implementation()
   require("telescope.builtin").lsp_implementations()
-end, {})
+end, { desc = "telescope implementations" })
 map({ "n" }, "gp", function()
   --vim.lsp.buf.document_symbol()
   require("telescope.builtin").lsp_document_symbols()
-end, {})
+end, { desc = "telescope document symbols" })
 
 unmap({ "n" }, "grn")
 unmap({ "n" }, "grr")
@@ -323,17 +323,17 @@ map({ "n" }, "gr", function()
   --vim.lsp.buf.references()
   --vim.lsp.buf.references(nil, { on_list = require("telescope.builtin").lsp_references })
   require("telescope.builtin").lsp_references()
-end, {})
+end, { desc = "telescope references" })
 map({ "n" }, "]]", function()
   Snacks.words.jump(vim.v.count1)
 end, { desc = "Next Reference" })
 map({ "n" }, "[[", function()
   Snacks.words.jump(-vim.v.count1)
 end, { desc = "Prev Reference" })
-map({ "n" }, "g[", "<C-o>", {})
-map({ "n" }, "g]", "<C-i>", {})
-map({ "n" }, "gl", "``", {})
-map({ "n" }, "gL", "''", {})
+map({ "n" }, "g[", "<C-o>", { desc = "go prev file" })
+map({ "n" }, "g]", "<C-i>", { desc = "go next file" })
+map({ "n" }, "gl", "``", { desc = "jump between 'last' marks in file" })
+map({ "n" }, "gL", "''", { desc = "same as 'gl'" })
 map({ "n" }, "<leader>R", function()
   vim.lsp.buf.rename()
 end, { desc = "LSP Rename cursor" })
@@ -412,13 +412,15 @@ map({ "n" }, "<leader>n", ":Telescope notify<cr>", { desc = "notification histor
 -- Overseer
 map({ "n" }, "<leader>o", ":OverseerRun<cr>", { desc = "Overseer run command" })
 
+-- Mathematic functions / operations
 -- Count time values together HH:MM:SS in visual block
-map(
-  { "v" },
-  "<leader><leader>c",
-  ":'<,'>!xargs -I{} date +\\%s --date '1970-1-1 {}' \\| awk '{sum += ($1+3600)} END {printf \"\\%.2d:\\%.2d:\\%.2d\", sum/3600, (sum\\%3600)/60, sum\\%60}'<cr>",
-  { desc = "SUM time values visual" }
-)
+map({ "v" }, "<leader><leader>c", ":MathTimeSum<cr>", { desc = "SUM time values visual" })
+
+map({ "n" }, "<leader><leader>+", ":MathSum<cr>", { desc = "SUM col - yank to register first" })
+
+map({ "n" }, "<leader><leader>*", ":MathMul<cr>", { desc = "MUL col - yank to register first" })
+
+map({ "n" }, "<leader><leader>/", ":MathDiv<cr>", { desc = "DIV col - yank to register first" })
 
 -- Togglables
 map({ "n" }, "<leader><leader>;", ":CellularAutomaton make_it_rain<cr>", { desc = "lolz" })

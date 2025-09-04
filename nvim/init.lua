@@ -1,3 +1,18 @@
+--local buf_name = vim.api.nvim_buf_get_name(0)
+--local ft = vim.fn.fnamemodify(buf_name, ":t")
+--if ft == "man" or ft == "pager" then
+--  require("pager")
+--end
+vim.api.nvim_create_autocmd("BufEnter", {
+  buffer = 0,
+  callback = function()
+    vim.wo.scrolloff = 999
+    vim.wo.rnu = true
+    vim.wo.nu = true
+    --vim.g.no_man_maps = 1
+  end,
+})
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   vim.fn.system({
@@ -13,21 +28,25 @@ vim.opt.rtp:prepend(lazypath)
 
 --vim.g.mapleader = " "
 
-require('keymap')
+require("keymap")
 require("lazy").setup("plugins")
-
-local buf_name = vim.api.nvim_buf_get_name(0)
-local ft = vim.fn.fnamemodify(buf_name, ':t')
-
-if ft == 'man' or ft == 'pager' then
-  require('pager')
-end
+require("plug/loopcmd")
+require("plug/math")
 
 --require('plug/fcitx')
 --require('plug/suppress-errors')
 
 -- ZLS disable quickfix
 vim.g.zig_fmt_parse_errors = 0
+
+vim.api.nvim_create_autocmd("TermOpen", {
+  buffer = 0,
+  callback = function()
+    vim.wo.scrolloff = 999
+    vim.wo.rnu = true
+    vim.wo.nu = true
+  end,
+})
 
 vim.cmd([[
   let g:neovide_scroll_animation_length = 0
@@ -36,6 +55,7 @@ vim.cmd([[
 
   au TextYankPost * silent! lua vim.highlight.on_yank {timeout=350}
 
+  "au TermOpen * setlocal relativenumber
   set expandtab
   set tabstop=8
   " after softtabstop*N will turn into <Tab> character
@@ -76,10 +96,10 @@ vim.cmd([[
   "set clipboard+=unnamed
 
   set cmdheight=0
+  "set nowrap
 
   COQnow -s
 ]])
-
 
 -- Commands I tend to forgot
 -- :noa wq >>> ignore autocommand for following commands
