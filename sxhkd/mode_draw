@@ -14,3 +14,5 @@ a
       gromit-mpx --redo
 z
       gromit-mpx --undo
+#p
+#      sxcs --keyboard

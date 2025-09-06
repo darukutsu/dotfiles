@@ -1,0 +1,5 @@
+# return to original sxhkd
+super + Escape
+        printf "" >"$SXHKD_MODE_FILE"; \
+        killall zscroll 2>/dev/null; \
+        killall sxhkd && sxhkd &

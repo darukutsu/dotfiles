@@ -18,6 +18,7 @@ u
         xdotool key Escape; \
         $XDG_CONFIG_HOME/sxhkd/rofi_launcher.sh hidden-window
 
+# make window appear in below level to be able to record
 # with OBS xcomposite, because bspwm unmaps workspaces on lost focus
 b
 	xdotool key Escape; \
@@ -27,3 +28,8 @@ b
 f
 	xdotool key Escape; \
 	bspc node any.below -l normal -g sticky=off -f
+
+# set the node flags
+{m,l,s,p}
+	xdotool key Escape; \
+	bspc node -g {marked,locked,sticky,private}

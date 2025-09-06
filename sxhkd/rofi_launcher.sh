@@ -15,6 +15,10 @@ elif [ "$1" = "clipboard" ]; then
   rofi-clipboard
 elif [ "$1" = "layout" ]; then
   rofi-bsp-layout $2
+elif [ "$1" = "session-save" ]; then
+  rofi-bsp-session save
+elif [ "$1" = "session-load" ]; then
+  rofi-bsp-session load
 elif [ "$1" = "screenshot" ]; then
   rofi-applet-screenshot "$theme_applet"
 elif [ "$1" = "bitwarden" ]; then

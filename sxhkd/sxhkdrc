@@ -82,10 +82,6 @@ super + @space
 alt + Tab
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh window
 
-# screenlock
-#super + alt + BackSpace
-#	bslock && dunstctl set-paused true
-
 # bitwarden
 super + apostrophe
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh bitwarden
@@ -107,8 +103,7 @@ super + c
 # cmd mode or something else eg cal polybar widgets...
 #super + C
 
-# doesn't work
-#
+# emoji picker
 ctrl + alt + e
         rofimoji -f emoji kaomoji
 
@@ -158,24 +153,12 @@ super + Escape
 super + shift + Escape
 	notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-system-windows "sxhkd" "Restarting bspwm"; \
         bspc wm -r 
-#super + {_,shift +}h
-#	bspc {quit,wm -r}
 
 # close and kill
-#alt + q
-#	bspc node -c
 ctrl + shift + q
 	bspc node -c
 
-# alternate between the tiled and monocle layout
-#super + f
-#	bspc desktop -l next
-
-# send the newest marked node to the newest preselected node
-#super + y
-#	bspc node newest.marked.local -n newest.!automatic.local
-
-# session manager
+# TODO: session manager
 super + z
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh session-load
 
@@ -190,29 +173,16 @@ super + shift + z
 super + {t,s,f}
 	bspc node -t {tiled,floating,fullscreen}
 
-# hide mode
+# alternate between the tiled and monocle layout
+#super + f
+#	bspc desktop -l next
+
+# hide&flag mode
 super + h
         echo "mode_hide" >"$SXHKD_MODE_FILE"; \
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Hide mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_hide
         
-# make window appear in below level to be able to record
-# with OBS xcomposite, because bspwm unmaps workspaces on lost focus
-#super + c
-#	bspc node -l below -t fullscreen -g sticky=on
-
-#disables OBS below effect
-#super + q 
-#	bspc node any.below -l normal -g sticky=off -f
-
-#super + s
-#	bspc subscribe node -t floating -z top_left -100 0 -z top_right 100 0
-#       bspc node -t floating -z top_left -100 0 -z top_right 100 0
-
-# set the node flags
-#       super + ctrl + {m,x,y,z}
-#	bspc node -g {marked,locked,sticky,private}
-
 #
 # FOCUS/SWAP/TRANSFORM
 #
@@ -232,10 +202,6 @@ super + parenright
 # layouts remove/reset to default
 super + l
         bsp-layout remove
-
-# pin window to foreground on every workspace
-#super + p
-#        bsp-layout remove
 
 # rotates tree
 # switch from vertical to horizontal tiling and vice-versa
@@ -260,11 +226,11 @@ super + ctrl + {m,n,e,i}
 #       super + {p,b,comma,period}
 #	bspc node -f @{parent,brother,first,second}
 
-# focus prev window
+# focus prev.local.unhidden.window
 #       super + bracket{left}
 #	bspc node -f prev.local.!hidden.window
 
-# focus next window
+# focus next.local.unhidden.window
 #       super + bracket{right}
 #	bspc node -f next.local.!hidden.window
 
@@ -336,6 +302,10 @@ super + w
 
 #
 # MOUSE KEYBIDS
+# use one of the:
+# https://github.com/bjbr-dev/easy-gesture
+# https://github.com/mrsteve0924/easystroke
+# https://github.com/jersou/mouse-actions
 #
 # button9 side-front
 # button8 side-back
@@ -345,19 +315,12 @@ super + w
 # button4 scroll-up
 # button5 scroll-down
 
-# maximize/minimize a window
-super + button9
-        bspc node -f pointed; bspc node -t ~fullscreen
-
 # cursor zoom/colorpicker
 super + @button2
         "$XDG_CONFIG_HOME"/sxhkd/colorpicker.sh
 
 #super + button{4,5}
 #	pamixer {-i,-d} 5 ; "$XDG_CONFIG_HOME"/sxhkd/volume_notify.sh
-
-#button9 + button8
-#       bspc node -t ~fullscreen
 
 #
 # DRAWING

@@ -32,6 +32,7 @@ bsp-layout set tall I -- --master-size 0.5
 
 ~/Pictures/wallpapers/wallp
 #feh --bg-fill --no-fehbg --xinerama-index 0 --randomize ~/Pictures/wallpapers/arch1*
+#kitty +kitten panel --edge=background -o font_size=12 cmatrix
 
 xset b off
 xset s blank
