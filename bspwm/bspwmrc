@@ -126,7 +126,11 @@ bspc rule -r "*"
 #bspc rule -a "kitty-float" state=floating layer=above center=on desktop=focused
 bspc rule -a "Rofi" state=floating layer=above focus=on
 #bspc rule -a "*" rectangle=900x550+0+0 center=on follow=on
-bspc rule -a "mpv" state=floating layer=above center=off sticky=on rectangle=550x350+1340+660
+if xrandr | grep " connected" | grep "2560x1440"; then
+  bspc rule -a "mpv" state=floating layer=above center=off sticky=on rectangle=550x350+1980+1030
+else
+  bspc rule -a "mpv" state=floating layer=above center=off sticky=on rectangle=550x350+1340+660
+fi
 # because of bug in firefox
 bspc rule -a "firefoxdeveloperedition" desktop=focused
 bspc rule -a "Zathura" state=tiled

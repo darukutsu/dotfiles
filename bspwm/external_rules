@@ -76,7 +76,11 @@ fi
 
 if [[ "$class" =~ kitty\-cal ]]; then
   echo center=off
-  echo rectangle=200x190+856+20
+  if xrandr | grep " connected" | grep "2560x1440"; then
+    echo rectangle=200x190+1175+20
+  else
+    echo rectangle=200x190+856+20
+  fi
 fi
 
 # rofi set _NET_WM_WINDOW_TYPE
