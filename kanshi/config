@@ -1,0 +1,21 @@
+# This shit doesn't work
+profile home {
+    #output "*PHL 241B7Q*" enable
+    output DP* enable
+    output HDMI* enable
+    output eDP-1 disable
+    #exec riverctl rule-add -app-id '*' output "PHL 241B7Q"
+    exec riverctl rule-add -app-id '*' output DP
+}
+
+profile docked {
+    output DP* enable
+    output HDMI* enable
+    output eDP-1 disable
+    exec riverctl rule-add -app-id '*' output DP
+    #exec riverctl rule-add -app-id '*' output HDMI
+}
+
+profile undocked {
+    output eDP-1 enable
+}

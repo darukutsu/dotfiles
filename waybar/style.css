@@ -6,9 +6,10 @@
   padding: 0 1px;
   border: none;
   border-radius: 0;
-  font-family: "monospace", "octicons", "icons-in-terminal",
-    "Font Awesome 5 Brands", "Font Awesome 5 Free", "Iosevka";
-  font-size: 12px;
+  font-family:
+    "monospace", "octicons", "icons-in-terminal", "Font Awesome 5 Brands",
+    "Font Awesome 5 Free", "Iosevka";
+  font-size: 14px;
   min-height: 0;
 }
 
@@ -60,4 +61,27 @@ window#waybar {
 
 #memory.warning {
   background-color: #ee5555;
+}
+
+widget > * {
+  margin: 0 4px 0 0;
+  /*margin: 4px;*/
+
+  /* SEPARATOR */
+  padding-right: 16px;
+  /*padding-left: 12px;*/
+  border-right: 1px solid #3b4261;
+}
+
+/* Remove separator for the last item */
+#privacy,
+#battery,
+#clock {
+  margin-right: 0;
+  padding-right: 0;
+  border-right: none;
+}
+
+#tags > * {
+  margin: 8px;
 }

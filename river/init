@@ -1,5 +1,8 @@
 #!/bin/sh
+#set -x
 # See the river(1), riverctl(1), and rivertile(1) man pages for complete documentation.
+
+systemctl --user start river.target
 
 # TODO: source this to environment
 export XDG_CURRENT_DESKTOP=river
@@ -24,11 +27,13 @@ echo 1 >"$XDG_CONFIG_HOME"/river/.current_tag
 xrdb -load "$XDG_CONFIG_HOME/X11/xresources"
 
 # Monitor config
-#if [ $( | wc -l) -gt 1 ]; then
-kanshi &
-#riverctl rule-add -app-id '*' output DP-4
-#wlr-randr --output eDP-1 --off
-#fi
+#kanshi &
+if [ $(wlr-randr | grep -o "Enabled: yes" | wc -l) -gt 1 ]; then
+  #riverctl rule-add -app-id '*' output DP-4
+  wlr-randr --output eDP-1 --off
+else
+  brightnessctl set 1000
+fi
 
 # Set background and border color
 #riverctl background-color 0x002b36
