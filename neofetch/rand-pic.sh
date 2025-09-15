@@ -1,5 +1,5 @@
 #!/bin/sh
-set -x
+#set -x
 
 dir="$XDG_CONFIG_HOME/neofetch"
 imagesource='image_source="$XDG_CONFIG_HOME/neofetch/pic'

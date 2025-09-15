@@ -107,7 +107,6 @@ _zmkbuild() {
     # TODO: somehow fix naming
     build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
 
-    # export ZEPHYR_BASE
     # shellcheck disable=SC2068
     west build $pristine -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" $cmake_args "$@"
 

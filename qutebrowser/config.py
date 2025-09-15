@@ -334,11 +334,11 @@ c.content.blocking.whitelist = [
 ##   - no-3rdparty: Accept cookies from the same origin only. This is known to break some sites, such as GMail.
 ##   - no-unknown-3rdparty: Accept cookies from the same origin only, unless a cookie is already set for the domain. On QtWebEngine, this is the same as no-3rdparty.
 ##   - never: Don't accept cookies at all.
-# c.content.cookies.accept = 'all'
+c.content.cookies.accept = "all"
 
 ## Store cookies.
 ## Type: Bool
-# c.content.cookies.store = True
+c.content.cookies.store = True
 
 ## Default encoding to use for websites. The encoding must be a string
 ## describing an encoding such as _utf-8_, _iso-8859-1_, etc.
@@ -594,7 +594,7 @@ c.content.javascript.log_message.excludes = {
 ## this setting is set to False, the system-wide animation setting is
 ## considered.
 ## Type: Bool
-# c.content.prefers_reduced_motion = False
+c.content.prefers_reduced_motion = True
 
 ## Draw the background color and images also when the page is printed.
 ## Type: Bool
@@ -673,13 +673,13 @@ c.content.tls.certificate_errors = "load-insecurely"
 
 ## List of user stylesheet filenames to use.
 ## Type: List of File, or File
-# c.content.user_stylesheets = [
-#    "user.css",
-# ]
+c.content.user_stylesheets = [
+    # "user.css",
+]
 
 ## Enable WebGL.
 ## Type: Bool
-# c.content.webgl = True
+c.content.webgl = True
 
 ## Which interfaces to expose via WebRTC.
 ## Type: String

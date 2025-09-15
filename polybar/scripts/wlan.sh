@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$1" = "power" ]; then
-  if nmcli radio wifi | rg disabled ; then
+  if nmcli radio wifi | rg disabled; then
     nmcli radio wifi on
   else
     nmcli radio wifi off
@@ -12,7 +12,7 @@ if [ "$1" = "ui" ]; then
   exec kitty --class kitty-float nmtui &
 fi
 
-ip=$(nmcli -g IP4.ADDRESS device show wlan0)
+ip=$(nmcli -g IP4.ADDRESS device show wlp1s0 2>/dev/null)
 # Show some output when it is
 if [ -n "$ip" ]; then
   # Connected to a device

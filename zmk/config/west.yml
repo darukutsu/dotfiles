@@ -8,6 +8,11 @@ manifest:
       url-base: https://github.com/urob
     - name: mctechnology17
       url-base: https://github.com/mctechnology17
+    - name: sch3fr
+      url-base: https://github.com/sch3fr
+    - name: darukutsu
+      #url-base: https://github.com/darukutsu
+      url-base: ""
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -25,6 +30,14 @@ manifest:
     - name: zmk-config
       remote: mctechnology17
       path: modules/zmk/zmk-config
+      revision: main
+    - name: zmk-config-unix60
+      remote: sch3fr
+      path: modules/zmk/zmk-config-unix60
+      revision: master
+    - name: nrf52840-dongle
+      remote: darukutsu
+      path: modules/zmk/nrf52840-dongle
       revision: main
   self:
     path: config

@@ -22,10 +22,6 @@ bind ;x hint -F e => { const pos = tri.dom.getAbsoluteCentre(e); tri.excmds.excl
 " ctrl+shift (new page) click link
 bind ;X hint -F e => { const pos = tri.dom.getAbsoluteCentre(e); tri.excmds.exclaim_quiet("xdotool mousemove --sync " + window.devicePixelRatio * pos.x + " " + window.devicePixelRatio * pos.y + "; xdotool keydown ctrl+shift; xdotool click 1; xdotool keyup ctrl+shift")}
 
-" :back and :forward for history list
-bind ;j fillcmdline back 
-bind ;l fillcmdline forward 
-
 bind ' gobble 1 markjump
 
 "hint some elements
@@ -41,3 +37,18 @@ seturl messenger allowautofocus false
 seturl messenger preventautofocusjackhammer true
 seturl discord allowautofocus false
 seturl discord preventautofocusjackhammer true
+
+" Rebinds for colemak-dh
+
+" :back and :forward for history list
+bind ;m fillcmdline back 
+bind ;i fillcmdline forward 
+
+bind m scrollpx -50
+bind n scrollline 10
+bind e scrollline -10
+bind i scrollpx 50
+bind M back
+bind N tabprev
+bind E tabnext
+bind I forward

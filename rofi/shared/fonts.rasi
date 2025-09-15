@@ -10,5 +10,6 @@
 * {
     /*font: "Iosevka Nerd Font 10";*/
     /*font: "JetBrains Mono Nerd Font 10";*/
+    /*font: "CaskaydiaCove Nerd Font";*/
     font: "Monospace 10";
 }

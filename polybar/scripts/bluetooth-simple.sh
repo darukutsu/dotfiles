@@ -16,13 +16,13 @@ if [ "$1" = "ui" ]; then
   exec kitty --class kitty-float bluetuith &
 fi
 
-name=$(bluetoothctl info | rg Name | sed 's/Name: \(.*\)/\1/')
-battery=$(bluetoothctl info | rg "Battery Percentage" | sed 's/Battery .* \(.*\)/\1/')
+name=$(bluetoothctl info | rg Name | sed 's/Name: \(.*\)/\1/' | tr -d '\t')
+battery=$(bluetoothctl info | rg "Battery Percentage" | sed 's/Battery .* \(.*\)/\1/' | tr -d '\t')
 
 # Show some output when it is
 if [ -n "$name" ]; then
   # Connected to a device
-  echo " $battery $name"
+  echo " $battery$name"
 elif [ -n "$(bluetoothctl show | rg 'Powered: yes')" ]; then
   echo ""
 else

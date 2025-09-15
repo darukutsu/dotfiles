@@ -50,5 +50,18 @@
     "graphiceq.g7": 4,
     "graphiceq.g8": 8,
     "graphiceq.g9": -10
+  },
+  "nito5", {
+    "graphiceq.g1": 2,
+    "graphiceq.g10": 20,
+    "graphiceq.g11": 20,
+    "graphiceq.g2": 2,
+    "graphiceq.g3": -22.0105,
+    "graphiceq.g4": -10,
+    "graphiceq.g5": -5,
+    "graphiceq.g6": 0,
+    "graphiceq.g7": 4,
+    "graphiceq.g8": 8,
+    "graphiceq.g9": -10
   }
 ]

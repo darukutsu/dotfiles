@@ -1,3 +1,0 @@
-# No whitespace after the comma or in the keyboard name!
-config SHIELD_NRF52840_DONGLE_DISPLAY
-  def_bool $(shields_list_contains,nrf52840_dongle_display)

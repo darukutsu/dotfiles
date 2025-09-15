@@ -44,3 +44,6 @@ with config.pattern("*://mail.google.com") as gm:
 
 with config.pattern("*://*.aternos.org") as aternos:
     aternos.content.notifications.enabled = True
+
+# with config.pattern("*://*.github.com") as gh:
+#     gh.content.headers.custom = {}

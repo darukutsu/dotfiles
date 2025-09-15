@@ -50,6 +50,7 @@ require("plug/lsp/clangd")
 require("plug/lsp/rust-tools")
 --  require("plug/lsp/matlab")
 require("plug/lsp/ltex")
+require("plug/lsp/kotlin")
 
 require("mason-lspconfig").setup({
   ensure_installed = {
@@ -62,7 +63,7 @@ require("mason-lspconfig").setup({
     "gradle_ls",
     "html",
     "intelephense",
-    "kotlin_language_server",
+    --"kotlin_language_server", // best alternative out there for kotlin (slow)
     "lemminx",
     "ltex",
     "lua_ls",
@@ -118,7 +119,7 @@ mason_null.setup({
     "actionlint",
     "codespell",
     "markdownlint",
-    -- Formater
+    -- Formatter
     "asmfmt",
     "bibtex_tidy",
     "cbfmt",
@@ -189,3 +190,5 @@ null_ls.setup({
     autoformat_quit(client, bufnr)
   end,
 })
+
+--fstabfmt -i /etc/fstab
