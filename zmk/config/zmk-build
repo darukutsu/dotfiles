@@ -104,26 +104,41 @@ _zmkbuild() {
   for board in $(yq ".include[].board" "$build_file"); do
     shield=$(yq ".include[$i].shield" "$build_file")
     cmake_args=$(yq ".include[$i].cmake-args" "$build_file")
-    i=$((i + 1))
     # TODO: somehow fix naming
     build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
 
     # export ZEPHYR_BASE
     # shellcheck disable=SC2068
     west build $pristine -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" $cmake_args "$@"
+
+    _zmkdraw $i
+    i=$((i + 1))
   done
 }
 
-_zmkdraw() {
+_zmkdraw() { # TAKES INDEX
   # parse build.yaml
-  is_keymap_drawer=$(yq .vars.keymap-drawer "$build_file" | sed "s#~#$HOME#")
-  keymap_drawer_conf=$(yq .vars.keymap-drawer-conf "$build_file" | sed "s#~#$HOME#")
-  keymap_conf=$(yq .vars.keymap "$build_file" | sed "s#~#$HOME#")
-  keymap_yaml=$(yq .vars.keymap-yaml "$build_file" | sed "s#~#$HOME#")
-  svg_out=$(yq .vars.svg-out "$build_file" | sed "s#~#$HOME#")
+  keymap_conf=$(yq .include[$1].keymap "$build_file" | sed "s#~#$HOME#" | sed "s/^null$//")
+  # this value is not important, can be generated, but maybe somebody wants its
+  keymap_yaml=$(yq .include[$1].keymap-yaml "$build_file" | sed "s#~#$HOME#" | sed "s/^null$//")
+  svg_out=$(yq .include[$1].svg-out "$build_file" | sed "s#~#$HOME#" | sed "s/^null$//")
+  is_keymap_drawer=$(yq .include[$1].keymap-drawer "$build_file" | sed "s#~#$HOME#" | sed "s/^null$//")
+  keymap_drawer_conf=$(yq .include[$1].keymap-drawer-conf "$build_file" | sed "s#~#$HOME#" | sed "s/^null$//")
+
+  if [ -z "$is_keymap_drawer" ]; then
+    is_keymap_drawer=$(yq .vars.keymap-drawer "$build_file" | sed "s#~#$HOME#" | sed "s/^null$//")
+  fi
+
+  if [ -z "$keymap_drawer_conf" ]; then
+    keymap_drawer_conf=$(yq .vars.keymap-drawer-conf "$build_file" | sed "s#~#$HOME#" | sed "s/^null$//")
+  fi
 
   # generate using keymap-drawer layout svg
-  if [ "$is_keymap_drawer" = "true" ]; then
+  if [ "$is_keymap_drawer" = "true" ] &&
+    [ -n "$keymap_drawer_conf" ] &&
+    [ -n "$keymap_conf" ] &&
+    [ -n "$keymap_yaml" ] &&
+    [ -n "$svg_out" ]; then
     keymap -c "$keymap_drawer_conf" parse -z "$keymap_conf" -o "$keymap_yaml"
     keymap -c "$keymap_drawer_conf" draw -o "$svg_out" "$keymap_yaml"
     #keymap -c "$keymap_drawer_conf" parse -z corne.keymap | keymap -c "$keymap_drawer_conf" draw -o $svg_out -
@@ -163,7 +178,6 @@ pip install update
 west update
 
 _zmkbuild "$@"
-_zmkdraw
 
 # NOTE: could be done in 1 for loop but its matter of preference...
 # to build everything first and then go and ask flash

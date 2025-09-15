@@ -1,0 +1,5 @@
+config SHIELD_UNIX60
+    def_bool $(shields_list_contains,unix60)
+
+CONFIG_ZMK_HID_REPORT_TYPE_NKRO=y
+CONFIG_ZMK_USB_LOGGING=y
