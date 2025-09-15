@@ -1,0 +1,39 @@
+top: E g
+bottom: N G
+start: M asciicircum
+end: I $
+middle: percent apostrophe
+
+up: e
+down: n
+left: m
+right: i
+scroll_up: k
+scroll_down: j
+
+grid_up: e
+grid_down: n
+grid_left: m
+grid_right: i
+grid_keys: j l k h
+grid_exit: backspace
+grid: q
+
+hist_back: bracketleft
+hist_forward: bracketright
+cursor_size: 12
+cursor_color: #0060FF
+#https://github.com/rvaiya/warpd/issues/143
+hint_bgcolor: #00AF0066
+grid_color: #FF4400
+grid_border_color: #FFFFFF
+hint_fgcolor: #000000FF
+indicator: topleft
+indicator_size: 30
+hint_size: 18
+hint2_size: 18
+
+hint: f
+hint2: F
+#drag_button: semicolon
+buttons: space , .
