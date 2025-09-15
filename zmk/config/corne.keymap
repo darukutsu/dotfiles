@@ -65,7 +65,7 @@ https://github.com/mh4x0f/zmkBATx
     behaviors {
         shift_caps: tap_dance_caps {
             compatible = "zmk,behavior-tap-dance";
-            label = "TAP_DANCE_CAPS";
+            display-name = "TAP_DANCE_CAPS";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
             bindings = <&kp LSHFT>, <&caps_word>;
@@ -73,7 +73,7 @@ https://github.com/mh4x0f/zmkBATx
 
         td_gui: tap_dance_sticky_gui {
             compatible = "zmk,behavior-tap-dance";
-            label = "TAP_DANCE_STICKY_GUI";
+            display-name = "TAP_DANCE_STICKY_GUI";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
             bindings = <&kp LGUI>, <&sk LG(LALT)>, <&sk LG(LCTRL)>, <&sk LG(LSHIFT)>, <&sk RALT>;
@@ -81,7 +81,7 @@ https://github.com/mh4x0f/zmkBATx
 
         td_cmeh: tap_dance_sticky_ctrl_meh {
             compatible = "zmk,behavior-tap-dance";
-            label = "TAP_DANCE_STICKY_CTRL_MEH";
+            display-name = "TAP_DANCE_STICKY_CTRL_MEH";
             #binding-cells = <0>;
             tapping-term-ms = <200>;
             bindings = <&kp LCTRL>, <&sk LG(LA(LCTRL))>, <&sk LG(LA(LS(LCTRL)))>, <&sk RALT>;
@@ -89,7 +89,7 @@ https://github.com/mh4x0f/zmkBATx
 
         bspc_del: backspace_delete {
             compatible = "zmk,behavior-mod-morph";
-            label = "BACKSPACE_DELETE";
+            display-name = "BACKSPACE_DELETE";
             #binding-cells = <0>;
             bindings = <&kp BACKSPACE>, <&kp DELETE>;
             mods = <(MOD_LSFT|MOD_RSFT)>;
@@ -98,7 +98,7 @@ https://github.com/mh4x0f/zmkBATx
 
         mod_sl: hold_mod_sticky_layer {
             compatible = "zmk,behavior-hold-tap";
-            label = "HOLD_MOD_STICKY_LAYER";
+            display-name = "HOLD_MOD_STICKY_LAYER";
             #binding-cells = <2>;
             flavor = "hold-preferred";
             tapping-term-ms = <200>;
@@ -107,7 +107,7 @@ https://github.com/mh4x0f/zmkBATx
 
         lm_sk: hold_layer_sticky_key {
             compatible = "zmk,behavior-hold-tap";
-            label = "HOLD_LAYER_STICKY_KEY";
+            display-name = "HOLD_LAYER_STICKY_KEY";
             #binding-cells = <2>;
             flavor = "hold-preferred";
             tapping-term-ms = <200>;
@@ -149,7 +149,7 @@ https://github.com/mh4x0f/zmkBATx
 
     vbatt: vbatt {
         compatible = "zmk,battery-nrf-vddh";
-        label = "VBATT";
+        display-name = "VBATT";
     };
 
     keymap {
