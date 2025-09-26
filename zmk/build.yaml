@@ -20,24 +20,30 @@ vars:
 include:
   - board: nice_nano_v2
     #shield: corne_left nice_view_adapter dongle_display_view_seeeduino_xiao_ble
-    #shield: corne_left nice_view_adapter dongle_display_view_pro_micro
+    shield: corne_left nice_view_adapter dongle_display_view_pro_micro
     #shield: corne_left nice_view_adapter nrf52840_dongle_display
-    shield: corne_left
     #shield: corne_left nice_view_adapter nice_view
-    # these break building with dongle for because wpm and other things aren't recorded on peripheral
-    # use without display for now until implemented
-    cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
 
     # These maybe should be generated, use ~ as $HOME replacement
     keymap: ~/.config/zmk/config/corne.keymap
     keymap-yaml: ~/.config/zmk/config/corne/corne.yaml
     svg-out: ~/.config/zmk/config/corne/pics/corne.keymap.svg
   - board: nice_nano_v2
+    shield: corne_left
+    # these break building with display because wpm and other things aren't recorded on peripheral
+    # use without display for now until implemented
+    # or in meantime checkout:
+    # https://github.com/jfedor2/hid-remapper/blob/master/BLUETOOTH.md - zmk independent
+    # https://github.com/charlesmst/zephyr-ble-hid-usb-translator - west tooling
+    cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
+  - board: nice_nano_v2
     shield: corne_right
   - board: seeeduino_xiao_ble
     #shield: corne_dongle_xiao nice_view_adapter dongle_display_view_seeeduino_xiao_ble
     #shield: corne_dongle_pro_micro
     shield: nrf52840_dongle
+  - board: seeeduino_xiao_ble
+    shield: dongle
   - board: nice_nano_v2
     shield: settings_reset
   - board: seeeduino_xiao_ble

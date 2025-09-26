@@ -126,6 +126,12 @@ ts.setup({
     "python",
     "regex",
     "rust",
+    "norg",
+    "scss",
+    "svelte",
+    "tsx",
+    "typst",
+    "vue",
   },
 
   ignore_install = { "zig" },

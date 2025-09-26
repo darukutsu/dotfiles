@@ -88,6 +88,11 @@ vim.cmd([[
   " fixes man page bindings
   let g:no_man_maps=1
 
+  let g:loaded_node_provide = 0
+  let g:loaded_perl_provide = 0
+  let g:loaded_python3_provide = 0
+  let g:loaded_ruby_provide = 0
+
   " Alias
   command W noa wq
 

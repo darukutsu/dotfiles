@@ -300,14 +300,14 @@ return {
   },
 
   { -- MASON, formatter/linter, debugger, lsp
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     dependencies = {
       { "nvimtools/none-ls.nvim" },
       { "jay-babu/mason-null-ls.nvim" },
       { "mfussenegger/nvim-dap" },
       { "jay-babu/mason-nvim-dap.nvim" },
       { "neovim/nvim-lspconfig" },
-      { "williamboman/mason-lspconfig.nvim" },
+      { "mason-org/mason-lspconfig.nvim" },
     },
     config = function()
       require("plug/mason")
@@ -321,11 +321,9 @@ return {
 
   -- Rust config start
   {
-    "simrat39/rust-tools.nvim",
-    dependencies = {
-      { "nvim-lua/plenary.nvim" },
-      { "neovim/nvim-lspconfig" },
-    },
+    "mrcjkb/rustaceanvim",
+    --version = '^6',
+    lazy = false,
   },
   -- Rust config end
 

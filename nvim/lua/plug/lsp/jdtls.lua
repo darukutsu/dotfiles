@@ -14,10 +14,7 @@ vim.list_extend(
   vim.split(vim.fn.glob(home .. "/.local/share/nvim/mason/share/java-test/com.microsoft.java.test.plugin*.jar"), "\n")
 )
 
---require("jdtls").start_or_attach({
 vim.lsp.config("jdtls", {
-  --looks like it's automaticaly solved
-  --require('coq').lsp_ensure_capabilities({}),
   cmd = {
     -- Will search in where is Mason bin
     "jdtls",

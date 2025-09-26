@@ -47,26 +47,34 @@ require("plug/lsp/lua_ls")
 require("plug/lsp/zig")
 require("plug/lsp/jdtls")
 require("plug/lsp/clangd")
-require("plug/lsp/rust-tools")
 --  require("plug/lsp/matlab")
 require("plug/lsp/ltex")
-require("plug/lsp/kotlin")
+--require("plug/lsp/kotlin")
 
 require("mason-lspconfig").setup({
   ensure_installed = {
     -- LSP
     "arduino_language_server",
+    "ast_grep",
     "bashls",
     "biome",
+    --"circleciyamllanguageserver", -- determine name
+    "clangd",
     "dockerls",
+    "gh_actions_ls",
+    "gitlab_ci_ls",
     "gopls",
     "gradle_ls",
+    "harper_ls",
     "html",
     "intelephense",
-    --"kotlin_language_server", // best alternative out there for kotlin (slow)
+    "kotlin_lsp",
+    "jdtls",
+    "jsonls",
     "lemminx",
     "ltex",
     "lua_ls",
+    "mesonlsp",
     "ruff",
     "rust_analyzer",
     "sqlls",
@@ -118,6 +126,8 @@ mason_null.setup({
     -- Linter
     "actionlint",
     "codespell",
+    "detekt",
+    "ktlint",
     "markdownlint",
     -- Formatter
     "asmfmt",
@@ -126,6 +136,7 @@ mason_null.setup({
     "clang_format",
     "lua_ls",
     "isort",
+    "jq",
     "latexindent",
     "phpcsfixer",
     "prettier",

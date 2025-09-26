@@ -10,6 +10,8 @@ manifest:
       url-base: https://github.com/mctechnology17
     - name: sch3fr
       url-base: https://github.com/sch3fr
+    - name: charlesmst
+      url-base: https://github.com/charlesmst
     - name: darukutsu
       #url-base: https://github.com/darukutsu
       url-base: ""
@@ -38,6 +40,10 @@ manifest:
     - name: nrf52840-dongle
       remote: darukutsu
       path: modules/zmk/nrf52840-dongle
+      revision: main
+    - name: zephyr-ble-hid-usb-translator
+      remote: charlesmst
+      path: modules/zmk/zephyr-ble-hid-usb-translator
       revision: main
   self:
     path: config
