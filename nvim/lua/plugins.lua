@@ -267,6 +267,12 @@ return {
       })
     end,
   },
+  {
+    "codethread/qmk.nvim", -- zmk/qmk formatting
+    config = function()
+      require("plug/qmkzmk")
+    end,
+  },
   --
   --  _     ____  ____
   -- | |   / ___||  _ \

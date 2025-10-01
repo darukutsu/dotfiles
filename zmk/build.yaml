@@ -34,7 +34,7 @@ include:
     # use without display for now until implemented
     # or in meantime checkout:
     # https://github.com/jfedor2/hid-remapper/blob/master/BLUETOOTH.md - zmk independent
-    # https://github.com/charlesmst/zephyr-ble-hid-usb-translator - west tooling
+    # https://github.com/charlesmst/zephyr-ble-hid-usb-translator - west tooling doesn't work
     cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
   - board: nice_nano_v2
     shield: corne_right
@@ -42,8 +42,6 @@ include:
     #shield: corne_dongle_xiao nice_view_adapter dongle_display_view_seeeduino_xiao_ble
     #shield: corne_dongle_pro_micro
     shield: nrf52840_dongle
-  - board: seeeduino_xiao_ble
-    shield: dongle
   - board: nice_nano_v2
     shield: settings_reset
   - board: seeeduino_xiao_ble

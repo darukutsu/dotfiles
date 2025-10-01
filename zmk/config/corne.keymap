@@ -158,10 +158,19 @@ https://github.com/mh4x0f/zmkBATx
                 default_layer {
                         display-name = "COL";
                         bindings = <
-   &kp TAB   &kp Q &kp W &kp F &kp P &kp B   &kp J &kp L  &kp U  &kp Y   &kp SEMI &bspc_del
-   &kp ESC   &kp A &kp R &kp S &kp T &kp G   &kp M &kp N  &kp E  &kp I   &kp O    &kp SQT
-   &shift_caps &mt LGUI Z &kp X &kp C &kp D &kp V   &kp K &kp H  &kp COMMA &kp DOT &mt LGUI FSLH &mt RSHIFT RET
-             &mod_sl LGUI SVK &lt VIM LBKT &mt LALT SPACE   &td_cmeh &lt PROG RBKT &key_repeat
+//    ┌─────────────┬───────────┬───┬───┬─────────────────┬──────────┐                            ┌───────────┬──────┬───┬───┬───────────┬─────────────┐
+//    │     tab     │     Q     │ W │ F │        P        │    B     │                            │     J     │  L   │ U │ Y │     ;     │  &bspc_del  │
+//    ├─────────────┼───────────┼───┼───┼─────────────────┼──────────┤                            ├───────────┼──────┼───┼───┼───────────┼─────────────┤
+//    │     esc     │     A     │ R │ S │        T        │    G     │                            │     M     │  N   │ E │ I │     O     │      '      │
+//    ├─────────────┼───────────┼───┼───┼─────────────────┼──────────┤                            ├───────────┼──────┼───┼───┼───────────┼─────────────┤
+//    │ &shift_caps │ mt lgui Z │ X │ C │        D        │    V     │                            │     K     │  H   │ , │ . │ mt lgui / │ mt rsft ent │
+//    └─────────────┴───────────┴───┴───┼─────────────────┼──────────┼─────────────┐   ┌──────────┼───────────┼──────┼───┴───┴───────────┴─────────────┘
+//                                      │ mod_sl lgui SVK │ lt VIM [ │ mt lalt spc │   │ &td_cmeh │ lt PROG ] │ keyr │
+//                                      └─────────────────┴──────────┴─────────────┘   └──────────┴───────────┴──────┘
+  &kp TAB       &kp Q        &kp W   &kp F   &kp P              &kp B                                          &kp J           &kp L         &kp U       &kp Y     &kp SEMI        &bspc_del
+  &kp ESC       &kp A        &kp R   &kp S   &kp T              &kp G                                          &kp M           &kp N         &kp E       &kp I     &kp O           &kp SQT
+  &shift_caps   &mt LGUI Z   &kp X   &kp C   &kp D              &kp V                                          &kp K           &kp H         &kp COMMA   &kp DOT   &mt LGUI FSLH   &mt RSHIFT RET
+                                             &mod_sl LGUI SVK   &lt VIM LBKT   &mt LALT SPACE       &td_cmeh   &lt PROG RBKT   &key_repeat
                         >;
                 };
 
@@ -171,10 +180,19 @@ https://github.com/mh4x0f/zmkBATx
                 colemak_qwertz_layer {
                         display-name = "COLZY";
                         bindings = <
-   &trans &trans &trans &trans &trans &trans    &trans &trans &trans &kp Z &trans &trans
-   &trans &trans &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-   &trans &mt LGUI Y &trans &trans &trans &trans    &trans &trans &trans &trans &trans &trans
-                     &trans &trans &trans    &trans &trans &trans
+//    ┌─────┬───────────┬─────┬─────┬─────┬─────┐               ┌─────┬─────┬─────┬─────┬─────┬─────┐
+//    │     │           │     │     │     │     │               │     │     │     │  Z  │     │     │
+//    ├─────┼───────────┼─────┼─────┼─────┼─────┤               ├─────┼─────┼─────┼─────┼─────┼─────┤
+//    │     │           │     │     │     │     │               │     │     │     │     │     │     │
+//    ├─────┼───────────┼─────┼─────┼─────┼─────┤               ├─────┼─────┼─────┼─────┼─────┼─────┤
+//    │     │ mt lgui Y │     │     │     │     │               │     │     │     │     │     │     │
+//    └─────┴───────────┴─────┴─────┼─────┼─────┼─────┐   ┌─────┼─────┼─────┼─────┴─────┴─────┴─────┘
+//                                  │     │     │     │   │     │     │     │
+//                                  └─────┴─────┴─────┘   └─────┴─────┴─────┘
+  &trans   &trans       &trans   &trans   &trans   &trans                         &trans   &trans   &trans   &kp Z    &trans   &trans
+  &trans   &trans       &trans   &trans   &trans   &trans                         &trans   &trans   &trans   &trans   &trans   &trans
+  &trans   &mt LGUI Y   &trans   &trans   &trans   &trans                         &trans   &trans   &trans   &trans   &trans   &trans
+                                          &trans   &trans   &trans       &trans   &trans   &trans
                         >;
                 };
 
@@ -184,10 +202,19 @@ https://github.com/mh4x0f/zmkBATx
                 qwerty_layer {
                         display-name = "QWERTY";
                         bindings = <
-   &kp TAB   &kp Q &kp W &kp E &kp R &kp T   &kp Y &kp U  &kp I     &kp O   &kp P &bspc_del
-   &kp LSHFT &kp A &kp S &kp D &kp F &kp G   &kp H &kp J  &kp K     &kp L   &kp SEMI &kp SQT
-   &kp LCTRL &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M  &kp COMMA &kp DOT &kp FSLH &mt RSHIFT RET
-             &kp ESC &kp LALT &kp SPACE   &lt VIM LBKT &lt PROG RBKT &kp RALT
+//    ┌──────┬───┬───┬───┬─────┬──────┐                    ┌───────────┬──────┬───┬───┬───┬─────────────┐
+//    │ tab  │ Q │ W │ E │  R  │  T   │                    │     Y     │  U   │ I │ O │ P │  &bspc_del  │
+//    ├──────┼───┼───┼───┼─────┼──────┤                    ├───────────┼──────┼───┼───┼───┼─────────────┤
+//    │ lsft │ A │ S │ D │  F  │  G   │                    │     H     │  J   │ K │ L │ ; │      '      │
+//    ├──────┼───┼───┼───┼─────┼──────┤                    ├───────────┼──────┼───┼───┼───┼─────────────┤
+//    │ lctl │ Z │ X │ C │  V  │  B   │                    │     N     │  M   │ , │ . │ / │ mt rsft ent │
+//    └──────┴───┴───┴───┼─────┼──────┼─────┐   ┌──────────┼───────────┼──────┼───┴───┴───┴─────────────┘
+//                       │ esc │ lalt │ spc │   │ lt VIM [ │ lt PROG ] │ ralt │
+//                       └─────┴──────┴─────┘   └──────────┴───────────┴──────┘
+  &kp TAB     &kp Q   &kp W   &kp E   &kp R     &kp T                                     &kp Y           &kp U      &kp I       &kp O     &kp P      &bspc_del
+  &kp LSHFT   &kp A   &kp S   &kp D   &kp F     &kp G                                     &kp H           &kp J      &kp K       &kp L     &kp SEMI   &kp SQT
+  &kp LCTRL   &kp Z   &kp X   &kp C   &kp V     &kp B                                     &kp N           &kp M      &kp COMMA   &kp DOT   &kp FSLH   &mt RSHIFT RET
+                                      &kp ESC   &kp LALT   &kp SPACE       &lt VIM LBKT   &lt PROG RBKT   &kp RALT
                         >;
                 };
 
@@ -197,37 +224,82 @@ https://github.com/mh4x0f/zmkBATx
                 gaming_layer {
                         display-name = "GAM1";
                         bindings = <
-   &kp TAB   &kp Q &kp W &kp E &kp R &kp T   &kp Y &kp U  &kp I     &kp O   &kp P &bspc_del
-   &kp LSHFT &kp A &kp S &kp D &kp F &kp G   &kp H &kp J  &kp K     &kp L   &kp SEMI &kp SQT
-   &kp LCTRL &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M  &kp COMMA &kp DOT &kp FSLH &kp RET
-             &kp LALT &lt GAMING2 ESC &kp SPACE   &lt VIM LBKT &lt PROG RBKT &kp RALT
+//    ┌──────┬───┬───┬───┬──────┬────────────────┐                    ┌───────────┬──────┬───┬───┬───┬───────────┐
+//    │ tab  │ Q │ W │ E │  R   │       T        │                    │     Y     │  U   │ I │ O │ P │ &bspc_del │
+//    ├──────┼───┼───┼───┼──────┼────────────────┤                    ├───────────┼──────┼───┼───┼───┼───────────┤
+//    │ lsft │ A │ S │ D │  F   │       G        │                    │     H     │  J   │ K │ L │ ; │     '     │
+//    ├──────┼───┼───┼───┼──────┼────────────────┤                    ├───────────┼──────┼───┼───┼───┼───────────┤
+//    │ lctl │ Z │ X │ C │  V   │       B        │                    │     N     │  M   │ , │ . │ / │    ent    │
+//    └──────┴───┴───┴───┼──────┼────────────────┼─────┐   ┌──────────┼───────────┼──────┼───┴───┴───┴───────────┘
+//                       │ lalt │ lt GAMING2 esc │ spc │   │ lt VIM [ │ lt PROG ] │ ralt │
+//                       └──────┴────────────────┴─────┘   └──────────┴───────────┴──────┘
+  &kp TAB     &kp Q   &kp W   &kp E   &kp R      &kp T                                            &kp Y           &kp U      &kp I       &kp O     &kp P      &bspc_del
+  &kp LSHFT   &kp A   &kp S   &kp D   &kp F      &kp G                                            &kp H           &kp J      &kp K       &kp L     &kp SEMI   &kp SQT
+  &kp LCTRL   &kp Z   &kp X   &kp C   &kp V      &kp B                                            &kp N           &kp M      &kp COMMA   &kp DOT   &kp FSLH   &kp RET
+                                      &kp LALT   &lt GAMING2 ESC   &kp SPACE       &lt VIM LBKT   &lt PROG RBKT   &kp RALT
                         >;
                 };
                 gaming2_layer {
                         display-name = "GAM2";
                         bindings = <
-   &tog GAMING3 &kp N1 &trans &kp N2 &kp N3 &kp N4    &trans &trans &trans &trans &trans &trans
-   &tog GAMING4 &trans &trans &trans &kp N5 &kp N6    &trans &trans &trans &trans &trans &trans
-   &kp ESC    &kp N7 &kp N8 &kp N9 &kp N0 &kp EQUAL    &trans &trans &trans &trans &trans &trans
-                     &trans &trans &trans    &trans &trans &trans
+//    ┌─────────────┬─────┬─────┬─────┬─────┬─────┐               ┌─────┬─────┬──────┬─────┬─────┬─────┐
+//    │ tog GAMING3 │  1  │     │  2  │  3  │  4  │               │ f1  │ f2  │  f3  │ f4  │ f5  │     │
+//    ├─────────────┼─────┼─────┼─────┼─────┼─────┤               ├─────┼─────┼──────┼─────┼─────┼─────┤
+//    │ tog GAMING4 │     │     │     │  5  │  6  │               │ f6  │ f7  │  f8  │ f9  │ f10 │     │
+//    ├─────────────┼─────┼─────┼─────┼─────┼─────┤               ├─────┼─────┼──────┼─────┼─────┼─────┤
+//    │     esc     │  7  │  8  │  9  │  0  │  =  │               │ f11 │ f12 │ none │ f11 │  &  │     │
+//    └─────────────┴─────┴─────┴─────┼─────┼─────┼─────┐   ┌─────┼─────┼─────┼──────┴─────┴─────┴─────┘
+//                                    │     │     │     │   │     │     │     │
+//                                    └─────┴─────┴─────┘   └─────┴─────┴─────┘
+  &tog GAMING3   &kp N1   &trans   &kp N2   &kp N3   &kp N4                            &kp F1    &kp F2    &kp F3     &kp F4    &kp F5    &trans
+  &tog GAMING4   &trans   &trans   &trans   &kp N5   &kp N6                            &kp F6    &kp F7    &kp F8     &kp F9    &kp F10   &trans
+  &kp ESC        &kp N7   &kp N8   &kp N9   &kp N0   &kp EQUAL                         &kp F11   &kp F12   &kp none   &kp F11   &         &trans
+                                            &trans   &trans      &trans       &trans   &trans    &trans
                         >;
                 };
+                //gaming3_layer {
+                //        display-name = "GAM3";
+                //        bindings = <
+                //  &tog GAMING3 &kp Y &kp U  &kp I &kp O &kp P            &trans &trans &trans &trans &trans &trans
+                //  &trans       &kp H &kp J  &kp K &kp L &kp SEMI         &trans &trans &trans &trans &trans &trans
+                //  &trans       &kp N &kp M  &kp COMMA &kp DOT &kp FSLH   &trans &trans &trans &trans &trans &trans
+                //                          &trans &trans &trans    &trans &trans &trans
+                //        >;
+                //};
                 gaming3_layer {
                         display-name = "GAM3";
                         bindings = <
-   &tog GAMING3 &kp Y &kp U  &kp I &kp O &kp P    &trans &trans &trans &trans &trans &trans
-   &trans       &kp H &kp J  &kp K &kp L &kp SEMI         &trans &trans &trans &trans &trans &trans
-   &trans       &kp N &kp M  &kp COMMA &kp DOT &kp FSLH   &trans &trans &trans &trans &trans &trans
-                     &trans &trans &trans    &trans &trans &trans
+//    ┌─────────────┬─────┬─────┬─────┬─────┬─────┐               ┌─────┬─────┬─────┬─────┬─────┬─────┐
+//    │ tog GAMING3 │ f1  │ f2  │ f3  │ f4  │ f5  │               │     │     │     │     │     │     │
+//    ├─────────────┼─────┼─────┼─────┼─────┼─────┤               ├─────┼─────┼─────┼─────┼─────┼─────┤
+//    │             │ f6  │ f7  │ f8  │ f9  │ f10 │               │     │     │     │     │     │     │
+//    ├─────────────┼─────┼─────┼─────┼─────┼─────┤               ├─────┼─────┼─────┼─────┼─────┼─────┤
+//    │             │ f11 │ f12 │     │ f11 │ f12 │               │     │     │     │     │     │     │
+//    └─────────────┴─────┴─────┴─────┼─────┼─────┼─────┐   ┌─────┼─────┼─────┼─────┴─────┴─────┴─────┘
+//                                    │     │     │     │   │     │     │     │
+//                                    └─────┴─────┴─────┘   └─────┴─────┴─────┘
+  &tog GAMING3   &kp F1    &kp F2    &kp F3   &kp F4    &kp F5                          &trans   &trans   &trans   &trans   &trans   &trans
+  &trans         &kp F6    &kp F7    &kp F8   &kp F9    &kp F10                         &trans   &trans   &trans   &trans   &trans   &trans
+  &trans         &kp F11   &kp F12   &none    &kp F11   &kp F12                         &trans   &trans   &trans   &trans   &trans   &trans
+                                              &trans    &trans    &trans       &trans   &trans   &trans
                         >;
                 };
                 gaming4_layer {
                         display-name = "GAM4";
                         bindings = <
-   &trans       &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT             &trans &trans &trans &trans &trans &trans
-   &tog GAMING4 &kp CARET &kp AMPS &kp ASTRK &kp LPAR &kp RPAR    &trans &trans &trans &trans &trans &trans
-   &trans       &kp N7 &kp N8 &kp N9 &kp N0 &kp EQUAL                   &trans &trans &trans &trans &trans &trans
-                     &trans &trans &trans    &trans &trans &trans
+//    ┌─────────────┬───┬───┬───┬─────┬─────┐               ┌─────┬─────┬─────┬─────┬─────┬─────┐
+//    │             │ ! │ @ │ # │  $  │  %  │               │     │     │     │     │     │     │
+//    ├─────────────┼───┼───┼───┼─────┼─────┤               ├─────┼─────┼─────┼─────┼─────┼─────┤
+//    │ tog GAMING4 │ ^ │ & │ * │  (  │  )  │               │     │     │     │     │     │     │
+//    ├─────────────┼───┼───┼───┼─────┼─────┤               ├─────┼─────┼─────┼─────┼─────┼─────┤
+//    │             │ 7 │ 8 │ 9 │  0  │  =  │               │     │     │     │     │     │     │
+//    └─────────────┴───┴───┴───┼─────┼─────┼─────┐   ┌─────┼─────┼─────┼─────┴─────┴─────┴─────┘
+//                              │     │     │     │   │     │     │     │
+//                              └─────┴─────┴─────┘   └─────┴─────┴─────┘
+  &trans         &kp EXCL    &kp AT     &kp HASH    &kp DLLR   &kp PRCNT                         &trans   &trans   &trans   &trans   &trans   &trans
+  &tog GAMING4   &kp CARET   &kp AMPS   &kp ASTRK   &kp LPAR   &kp RPAR                          &trans   &trans   &trans   &trans   &trans   &trans
+  &trans         &kp N7      &kp N8     &kp N9      &kp N0     &kp EQUAL                         &trans   &trans   &trans   &trans   &trans   &trans
+                                                    &trans     &trans      &trans       &trans   &trans   &trans
                         >;
                 };
 
@@ -237,10 +309,19 @@ https://github.com/mh4x0f/zmkBATx
                 vim_layer {
                         display-name = "VIM";
                         bindings = <
-   &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6      &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &kp F12
-   &kp ESC &kp INS &kp PSCRN &super_pscrn &kp PG_DN &kp PG_UP    &kp LEFT &kp DOWN &kp UP &kp RIGHT &kp HOME &kp END
-   &shift_caps &kp C_PP &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp PG_UP    &none &kp C_NEXT &kp C_PREV &kp C_BRI_UP &kp C_BRI_DN &none
-                    	     &trans &none &trans    &trans &tog MOUSE &sl SETTINGS
+//    ┌─────────────┬──────┬──────┬──────────────┬──────┬──────┐               ┌───────────┬─────────────┬──────┬──────┬──────┬─────┐
+//    │     f1      │  f2  │  f3  │      f4      │  f5  │  f6  │               │    f7     │     f8      │  f9  │ f10  │ f11  │ f12 │
+//    ├─────────────┼──────┼──────┼──────────────┼──────┼──────┤               ├───────────┼─────────────┼──────┼──────┼──────┼─────┤
+//    │     esc     │ ins  │ pscr │ &super_pscrn │ pgdn │ pgup │               │   left    │    down     │  up  │ rght │ home │ end │
+//    ├─────────────┼──────┼──────┼──────────────┼──────┼──────┤               ├───────────┼─────────────┼──────┼──────┼──────┼─────┤
+//    │ &shift_caps │ play │ mute │     vold     │ volu │ pgup │               │           │    next     │ prev │ bri+ │ bri- │     │
+//    └─────────────┴──────┴──────┴──────────────┼──────┼──────┼─────┐   ┌─────┼───────────┼─────────────┼──────┴──────┴──────┴─────┘
+//                                               │      │      │     │   │     │ tog MOUSE │ sl SETTINGS │
+//                                               └──────┴──────┴─────┘   └─────┴───────────┴─────────────┘
+  &kp F1        &kp F2     &kp F3       &kp F4         &kp F5         &kp F6                            &kp F7       &kp F8         &kp F9       &kp F10        &kp F11        &kp F12
+  &kp ESC       &kp INS    &kp PSCRN    &super_pscrn   &kp PG_DN      &kp PG_UP                         &kp LEFT     &kp DOWN       &kp UP       &kp RIGHT      &kp HOME       &kp END
+  &shift_caps   &kp C_PP   &kp C_MUTE   &kp C_VOL_DN   &kp C_VOL_UP   &kp PG_UP                         &none        &kp C_NEXT     &kp C_PREV   &kp C_BRI_UP   &kp C_BRI_DN   &none
+                                                       &trans         &none       &trans       &trans   &tog MOUSE   &sl SETTINGS
                         >;
                 };
 
@@ -250,10 +331,19 @@ https://github.com/mh4x0f/zmkBATx
                 programming_layer {
                         display-name = "PROG";
                         bindings = <
-   &kp GRAVE &kp N1 &kp N2 &kp N3 &kp N4 &kp N5    &kp N6 &kp N7 &kp N8 &kp N9 &kp N0 &kp MINUS
-   &kp ESC &kp EXCL &kp AT &kp HASH &kp DLLR &kp PRCNT    &kp CARET &kp AMPS &kp ASTRK &kp LPAR &kp RPAR &kp EQUAL
-   &shift_caps  &mt LGUI F20 &kp F21 &kp F22 &kp F23 &kp F24    &none &kp COMMA &kp DOT &kp LBKT &mt LGUI RBKT &kp BSLH
-                    	     &trans &trans &trans    &trans &none &kp RCTL
+//    ┌─────────────┬─────────────┬─────┬─────┬─────┬─────┐               ┌─────┬────────┬───┬───┬───────────┬───┐
+//    │      `      │      1      │  2  │  3  │  4  │  5  │               │  6  │   7    │ 8 │ 9 │     0     │ - │
+//    ├─────────────┼─────────────┼─────┼─────┼─────┼─────┤               ├─────┼────────┼───┼───┼───────────┼───┤
+//    │     esc     │      !      │  @  │  #  │  $  │  %  │               │  ^  │   &    │ * │ ( │     )     │ = │
+//    ├─────────────┼─────────────┼─────┼─────┼─────┼─────┤               ├─────┼────────┼───┼───┼───────────┼───┤
+//    │ &shift_caps │ mt lgui f20 │ f21 │ f22 │ f23 │ f24 │               │     │   ,    │ . │ [ │ mt lgui ] │ \ │
+//    └─────────────┴─────────────┴─────┴─────┼─────┼─────┼─────┐   ┌─────┼─────┼────────┼───┴───┴───────────┴───┘
+//                                            │     │     │     │   │     │     │ rctlTL │
+//                                            └─────┴─────┴─────┘   └─────┴─────┴────────┘
+  &kp GRAVE     &kp N1         &kp N2    &kp N3     &kp N4     &kp N5                            &kp N6      &kp N7      &kp N8      &kp N9     &kp N0          &kp MINUS
+  &kp ESC       &kp EXCL       &kp AT    &kp HASH   &kp DLLR   &kp PRCNT                         &kp CARET   &kp AMPS    &kp ASTRK   &kp LPAR   &kp RPAR        &kp EQUAL
+  &shift_caps   &mt LGUI F20   &kp F21   &kp F22    &kp F23    &kp F24                           &none       &kp COMMA   &kp DOT     &kp LBKT   &mt LGUI RBKT   &kp BSLH
+                                                    &trans     &trans      &trans       &trans   &none       &kp RCTL
                         >;
                 };
 
@@ -263,10 +353,19 @@ https://github.com/mh4x0f/zmkBATx
                 mouse_layer {
                         display-name = "MOUSE";
                         bindings = <
-   &tog MOUSE &none &none &mmv MOVE_UP &none &none    &msc SCRL_DOWN &msc SCRL_LEFT &none &none &none &none
-   &kp ESC &none &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &none    &msc SCRL_LEFT &msc SCRL_DOWN &msc SCRL_UP &msc SCRL_RIGHT &none &none
-   &kp LCTRL  &none &none &none &none &none    &msc SCRL_UP &msc SCRL_RIGHT &none &none &none &mt RSHIFT RET
-                     &none &none &mkp MB1    &mkp MB2 &mkp MB3 &none
+//    ┌───────────┬─────┬────────────────┬────────────────┬────────────────┬─────┐                 ┌────────────────┬────────────────┬──────────────┬────────────────┬─────┬─────────────┐
+//    │ tog MOUSE │     │                │  &mmv MOVE_up  │                │     │                 │ &msc SCRL_down │ &msc SCRL_left │              │                │     │             │
+//    ├───────────┼─────┼────────────────┼────────────────┼────────────────┼─────┤                 ├────────────────┼────────────────┼──────────────┼────────────────┼─────┼─────────────┤
+//    │    esc    │     │ &mmv MOVE_left │ &mmv MOVE_down │ &mmv MOVE_rght │     │                 │ &msc SCRL_left │ &msc SCRL_down │ &msc SCRL_up │ &msc SCRL_rght │     │             │
+//    ├───────────┼─────┼────────────────┼────────────────┼────────────────┼─────┤                 ├────────────────┼────────────────┼──────────────┼────────────────┼─────┼─────────────┤
+//    │   lctl    │     │                │                │                │     │                 │  &msc SCRL_up  │ &msc SCRL_rght │              │                │     │ mt rsft ent │
+//    └───────────┴─────┴────────────────┴────────────────┼────────────────┼─────┼──────┐   ┌──────┼────────────────┼────────────────┼──────────────┴────────────────┴─────┴─────────────┘
+//                                                        │                │     │ lclk │   │ rclk │      mclk      │                │
+//                                                        └────────────────┴─────┴──────┘   └──────┴────────────────┴────────────────┘
+  &tog MOUSE   &none   &none            &mmv MOVE_UP     &none             &none                             &msc SCRL_DOWN   &msc SCRL_LEFT    &none          &none             &none   &none
+  &kp ESC      &none   &mmv MOVE_LEFT   &mmv MOVE_DOWN   &mmv MOVE_RIGHT   &none                             &msc SCRL_LEFT   &msc SCRL_DOWN    &msc SCRL_UP   &msc SCRL_RIGHT   &none   &none
+  &kp LCTRL    &none   &none            &none            &none             &none                             &msc SCRL_UP     &msc SCRL_RIGHT   &none          &none             &none   &mt RSHIFT RET
+                                                         &none             &none   &mkp MB1       &mkp MB2   &mkp MB3         &none
                         >;
                 };
 
@@ -276,10 +375,19 @@ https://github.com/mh4x0f/zmkBATx
                 slovak_layer {
                         display-name = "SK";
                         bindings = <
-   &trans &trans &trans &trans &trans &trans    &trans &sk_lc &sk_ua &sk_ya &sk_ad &trans
-   &trans &sk_aa &sk_ra &sk_sc &sk_tc &trans    &trans &sk_nc &sk_ea &sk_ia &sk_oa &sk_ox
-   &trans &sk_zc &trans &sk_cc &sk_dc &trans    &curr_euro &curr_pound &curr_yen &curr_indian_rupee &trans &trans
-                     &trans &trans &trans    &trans &trans &trans
+//    ┌─────┬────────┬────────┬────────┬────────┬─────┐               ┌────────────┬─────────────┬───────────┬────────────────────┬────────┬────────┐
+//    │     │        │        │        │        │     │               │            │   &sk_lc    │  &sk_ua   │       &sk_ya       │ &sk_ad │        │
+//    ├─────┼────────┼────────┼────────┼────────┼─────┤               ├────────────┼─────────────┼───────────┼────────────────────┼────────┼────────┤
+//    │     │ &sk_aa │ &sk_ra │ &sk_sc │ &sk_tc │     │               │            │   &sk_nc    │  &sk_ea   │       &sk_ia       │ &sk_oa │ &sk_ox │
+//    ├─────┼────────┼────────┼────────┼────────┼─────┤               ├────────────┼─────────────┼───────────┼────────────────────┼────────┼────────┤
+//    │     │ &sk_zc │        │ &sk_cc │ &sk_dc │     │               │ &curr_euro │ &curr_pound │ &curr_yen │ &curr_indian_rupee │        │        │
+//    └─────┴────────┴────────┴────────┼────────┼─────┼─────┐   ┌─────┼────────────┼─────────────┼───────────┴────────────────────┴────────┴────────┘
+//                                     │        │     │     │   │     │            │             │
+//                                     └────────┴─────┴─────┘   └─────┴────────────┴─────────────┘
+  &trans   &trans   &trans   &trans   &trans   &trans                         &trans       &sk_lc        &sk_ua      &sk_ya               &sk_ad   &trans
+  &trans   &sk_aa   &sk_ra   &sk_sc   &sk_tc   &trans                         &trans       &sk_nc        &sk_ea      &sk_ia               &sk_oa   &sk_ox
+  &trans   &sk_zc   &trans   &sk_cc   &sk_dc   &trans                         &curr_euro   &curr_pound   &curr_yen   &curr_indian_rupee   &trans   &trans
+                                      &trans   &trans   &trans       &trans   &trans       &trans
                         >;
                 };
 
@@ -289,10 +397,19 @@ https://github.com/mh4x0f/zmkBATx
                 numpad_layer {
                         display-name = "NUMPAD";
                         bindings = <
-   &tog NUMPAD &trans &trans &trans &trans &kp LNLCK    &kp KP_N7 &kp KP_N8 &kp KP_N9 &trans &trans &trans
-   &trans &trans &trans &trans &trans &trans    &kp KP_N4 &kp KP_N5 &kp KP_N6 &trans &trans &trans
-   &trans &trans &trans &trans &trans &trans    &kp KP_N1 &kp KP_N2 &kp KP_N3 &trans &trans &trans
-                     &trans &trans &trans    &kp KP_N0 &trans &trans
+//    ┌────────────┬─────┬─────┬─────┬─────┬───────┐             ┌─────┬─────┬───┬─────┬─────┬─────┐
+//    │ tog NUMPAD │     │     │     │     │ lnlck │             │  7  │  8  │ 9 │     │     │     │
+//    ├────────────┼─────┼─────┼─────┼─────┼───────┤             ├─────┼─────┼───┼─────┼─────┼─────┤
+//    │            │     │     │     │     │       │             │  4  │  5  │ 6 │     │     │     │
+//    ├────────────┼─────┼─────┼─────┼─────┼───────┤             ├─────┼─────┼───┼─────┼─────┼─────┤
+//    │            │     │     │     │     │       │             │  1  │  2  │ 3 │     │     │     │
+//    └────────────┴─────┴─────┴─────┼─────┼───────┼─────┐   ┌───┼─────┼─────┼───┴─────┴─────┴─────┘
+//                                   │     │       │     │   │ 0 │     │     │
+//                                   └─────┴───────┴─────┘   └───┴─────┴─────┘
+  &tog NUMPAD   &trans   &trans   &trans   &trans   &kp LNLCK                            &kp KP_N7   &kp KP_N8   &kp KP_N9   &trans   &trans   &trans
+  &trans        &trans   &trans   &trans   &trans   &trans                               &kp KP_N4   &kp KP_N5   &kp KP_N6   &trans   &trans   &trans
+  &trans        &trans   &trans   &trans   &trans   &trans                               &kp KP_N1   &kp KP_N2   &kp KP_N3   &trans   &trans   &trans
+                                           &trans   &trans      &trans       &kp KP_N0   &trans      &trans
                         >;
                 };
 
@@ -302,10 +419,19 @@ https://github.com/mh4x0f/zmkBATx
                 settings_layer {
                         display-name = "SET";
                         bindings = <
-   &none &none &tog NUMPAD &tog QWERTY &tog GAMING &tog COLEMAKZ    &out OUT_TOG &none &none &none &none &none
-   &bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4    &bt BT_DISC 0 &bt BT_DISC 1 &bt BT_DISC 2 &bt BT_DISC 3 &bt BT_DISC 4 &kp C_PWR
-   &none &none &none &none &none &none    &none &none &none &none &none &soft_off
-                     &none &none &none    &none &none &none
+//    ┌────────┬──────────┬────────────┬────────────┬────────────┬──────────────┐               ┌──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬───────────┐
+//    │        │          │ tog NUMPAD │ tog QWERTY │ tog GAMING │ tog COLEMAKZ │               │   out_ tog   │              │              │              │              │           │
+//    ├────────┼──────────┼────────────┼────────────┼────────────┼──────────────┤               ├──────────────┼──────────────┼──────────────┼──────────────┼──────────────┼───────────┤
+//    │ bt_clr │ bt_sel 0 │  bt_sel 1  │  bt_sel 2  │  bt_sel 3  │   bt_sel 4   │               │ bt_BT_DISC 0 │ bt_BT_DISC 1 │ bt_BT_DISC 2 │ bt_BT_DISC 3 │ bt_BT_DISC 4 │    pwr    │
+//    ├────────┼──────────┼────────────┼────────────┼────────────┼──────────────┤               ├──────────────┼──────────────┼──────────────┼──────────────┼──────────────┼───────────┤
+//    │        │          │            │            │            │              │               │              │              │              │              │              │ &soft_off │
+//    └────────┴──────────┴────────────┴────────────┼────────────┼──────────────┼─────┐   ┌─────┼──────────────┼──────────────┼──────────────┴──────────────┴──────────────┴───────────┘
+//                                                  │            │              │     │   │     │              │              │
+//                                                  └────────────┴──────────────┴─────┘   └─────┴──────────────┴──────────────┘
+  &none        &none          &tog NUMPAD    &tog QWERTY    &tog GAMING    &tog COLEMAKZ                       &out OUT_TOG    &none           &none           &none           &none           &none
+  &bt BT_CLR   &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4                        &bt BT_DISC 0   &bt BT_DISC 1   &bt BT_DISC 2   &bt BT_DISC 3   &bt BT_DISC 4   &kp C_PWR
+  &none        &none          &none          &none          &none          &none                               &none           &none           &none           &none           &none           &soft_off
+                                                            &none          &none           &none       &none   &none           &none
                         >;
                 };
 
