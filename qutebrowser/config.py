@@ -1087,6 +1087,14 @@ c.hints.selectors = {
         '[contenteditable]:not([contenteditable="false"])',
         "textarea",
     ],
+    "code": [
+        # Selects all code tags whose direct parent is not a pre tag
+        ":not(pre) > code",
+        # "code",
+        "pre",
+        "blockquote",
+    ],
+    "scrollable": [".__qb_scrollable__"],
 }
 
 ## Make characters in hint strings uppercase.

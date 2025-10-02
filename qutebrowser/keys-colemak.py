@@ -2,22 +2,6 @@
 ## Type: UniqueCharString
 c.hints.chars = "arstgmneio"
 
-c.hints.selectors["code"] = [
-    # Selects all code tags whose direct parent is not a pre tag
-    ":not(pre) > code",
-    # "code",
-    "pre",
-    "blockquote",
-]
-
-config.set(
-    "hints.selectors",
-    {
-        **c.hints.selectors,
-        "scrollable": [".__qb_scrollable__"],
-    },
-)
-
 # bind_chained('ttt', 'cmd-set-text -s :tab-select', 'tab-give')
 
 
