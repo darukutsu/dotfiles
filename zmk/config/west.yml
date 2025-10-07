@@ -4,6 +4,8 @@ manifest:
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
+    - name: zmkfirmware-hidbattery
+      url-base: https://github.com/Genteure
     - name: urob
       url-base: https://github.com/urob
     - name: mctechnology17
@@ -16,9 +18,13 @@ manifest:
       #url-base: https://github.com/darukutsu
       url-base: ""
   projects:
+    #- name: zmk
+    #  remote: zmkfirmware
+    #  import: app/west.yml
     - name: zmk
-      remote: zmkfirmware
+      remote: zmkfirmware-hidbattery
       import: app/west.yml
+      revision: feat/battery-reporting
     - name: zmk-helpers
       remote: urob
       path: modules/zmk/zmk-helpers
