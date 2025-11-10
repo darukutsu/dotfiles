@@ -34,6 +34,7 @@ vim.lsp.config("clangd", {
   --},
   capabilities = {
     offsetEncoding = "utf-16",
+    documentFormattingProvider = false,
   },
 })
 

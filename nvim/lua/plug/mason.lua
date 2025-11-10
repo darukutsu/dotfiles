@@ -33,6 +33,7 @@ local function autoformat_quit(client, bufnr)
       group = augroup,
       buffer = bufnr,
       callback = function()
+        --vim.lsp.buf.format({ async = false, timeout_ms = 5000 })
         vim.lsp.buf.format({ async = false })
       end,
     })
