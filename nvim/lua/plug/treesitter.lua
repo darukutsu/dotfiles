@@ -101,6 +101,7 @@ local textobjects = {
 }
 
 -- colorize text depending on language
+-- MASTER BRANCH
 local ts = require("nvim-treesitter.configs")
 ts.setup({
   -- A list of parser names, or "all"
@@ -110,28 +111,50 @@ ts.setup({
     "comment",
     "cmake",
     --"cpp",
-    --"css",
+    "css",
+    "csv",
     "diff",
     "go",
+    "gitignore",
+    "gitcommit",
+    "gitattributes",
+    "git_config",
     "html",
+    "http",
+    "json",
+    "jsonc",
+    "jsdoc",
+    "sql",
+    --"typescript",
     --"javascript",
     --"latex",
     "lua",
+    "luap",
+    "luadoc",
+    "vim",
+    "vimdoc",
     "make",
     --"markdown",
     --"markdown_inline",
     --"meson",
     "passwd",
-    --"php",
+    "printf",
+    "powershell",
+    "php",
     "python",
     "regex",
     "rust",
     "norg",
     "scss",
-    "svelte",
+    --"svelte",
     "tsx",
     "typst",
+    "toml",
+    "yaml",
     "vue",
+    "nix",
+    "xml",
+    "query",
   },
 
   ignore_install = { "zig" },
@@ -157,6 +180,100 @@ ts.setup({
     enable = true,
   },
 })
+
+-- MAIN BRANCH -- move once nvim-next https://github.com/ghostbuster91/nvim-next/issues/22
+--local ts = require("nvim-treesitter")
+----ts.setup {
+----  -- STUFF
+----}
+--
+--local ignore_install = {
+--  "zig",
+--}
+--
+--local ensure_install = {
+--  "bash",
+--  "c",
+--  "comment",
+--  "cmake",
+--  --"cpp",
+--  "css",
+--  "csv",
+--  "diff",
+--  "go",
+--  "gitignore",
+--  "gitcommit",
+--  "gitattributes",
+--  "git_config",
+--  "html",
+--  "http",
+--  "json",
+--  "jsonc",
+--  "jsdoc",
+--  "sql",
+--  --"typescript",
+--  --"javascript",
+--  --"latex",
+--  "lua",
+--  "luap",
+--  "luadoc",
+--  "vim",
+--  "vimdoc",
+--  "make",
+--  --"markdown",
+--  --"markdown_inline",
+--  --"meson",
+--  "passwd",
+--  "printf",
+--  "powershell",
+--  "php",
+--  "python",
+--  "regex",
+--  "rust",
+--  "norg",
+--  "scss",
+--  --"svelte",
+--  "tsx",
+--  "typst",
+--  "toml",
+--  "yaml",
+--  "vue",
+--  "nix",
+--  "xml",
+--  "query",
+--}
+--
+-----@generic T
+-----@param super T[]
+-----@param sub T[]
+-----@return T[]
+--function table.except(super, sub)
+--  local result = {}
+--  local seenInResult = {}
+--  local lookupSub = {}
+--
+--  for _, value in ipairs(sub) do
+--    lookupSub[value] = true
+--  end
+--
+--  for _, value in ipairs(super) do
+--    if not lookupSub[value] and not seenInResult[value] then
+--      table.insert(result, value)
+--      seenInResult[value] = true
+--    end
+--  end
+--
+--  return result
+--end
+--ts.install(table.except(ensure_install, ts.get_installed()))
+--
+--vim.api.nvim_create_autocmd("FileType", {
+--  callback = function(args)
+--    if vim.list_contains(ts.get_installed(), vim.treesitter.language.get_lang(args.match)) then
+--      vim.treesitter.start(args.buf)
+--    end
+--  end,
+--})
 
 if package.loaded["nvim-next"] then
   ts.setup({

@@ -308,6 +308,7 @@ return {
   { -- MASON, formatter/linter, debugger, lsp
     "mason-org/mason.nvim",
     dependencies = {
+      --{ "mhartington/formatter.nvim" },
       { "nvimtools/none-ls.nvim" },
       { "jay-babu/mason-null-ls.nvim" },
       { "mfussenegger/nvim-dap" },
@@ -335,7 +336,11 @@ return {
 
   {
     "nvim-treesitter/nvim-treesitter", -- highlight code
-    dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      --branch = "main",
+    },
+    --branch = "main",
     build = ":TSUpdate",
     config = function()
       require("plug/treesitter")
@@ -410,7 +415,7 @@ return {
     dependencies = {
       { "nvim-tree/nvim-web-devicons" },
       { "folke/tokyonight.nvim" },
-      { "alexxGmZ/e-ink.nvim" },
+      { "e-ink-colorscheme/e-ink.nvim" },
     },
     config = function()
       require("theme")
