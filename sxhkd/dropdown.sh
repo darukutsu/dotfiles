@@ -22,13 +22,16 @@ elif [ -z "$wid" ]; then
   # maybe later will figure out how to send all marked to 1 node
   # and then operate over multiple marked nodes
   touch "/tmp/$dropname"
-  # FIX: we cannot directly determine which node is marked
+  # FIX: we cannot directly determine which node is marked,
+  # use send_marked_selection.sh
   bspc query -N -n focused.marked | tail -n1 >"/tmp/$dropname"
   bspc node "$(head -n1)" -g marked=off
 else
-  if bspc node "$wid".!hidden -g hidden=on; then
+  if bspc query -N -n "$wid".!hidden.!local; then
+    bspc node "$wid" -d focused -f
+  elif bspc node "$wid".!hidden -g hidden=on -g sticky=on; then
     :
   else
-    bspc node "$wid".hidden -g hidden=off -d any.active -f
+    bspc node "$wid".hidden -g hidden=off -g sticky=off -d any.active -f
   fi
 fi

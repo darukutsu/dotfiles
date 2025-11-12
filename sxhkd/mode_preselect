@@ -5,22 +5,37 @@ Escape
         killall sxhkd && sxhkd &
 
 # preselect the direction
-{m,n,e,i}
-	bspc node -p {west,south,north,east}
+{_,alt + ,super + }{m,n,e,i}
+	bspc node { ,@brother,@parent} -p {west,south,north,east}
 
 # preselect the ratio
-{1-9}
-	bspc node -o 0.{1-9}
+{_,alt + ,super + }{1-9}
+	bspc node { ,@brother,@parent} -o 0.{1-9}
 
 # cancel the preselection for the focused node
+#{space}
+#	bspc node -p cancel
+
+# cancel the last preselection
 {space}
-	bspc node -p cancel
+	bspc node any.!automatic -p cancel
 
 # cancel the preselection for the focused desktop
 d
 	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
 
+# cancel the preselection for the focused desktop and exit
+x
+	xdotool key Escape; \
+	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
+
 # send marked node
 # send the newest marked node to the newest preselected node
 s
-	bspc node newest.marked.local -n newest.!automatic.local
+	bspc node newest.marked -n newest.!automatic.local
+
+# send all marked nodes to preselect area, btree shape
+# requires to have only 1 preselection active on given desktop
+# otherwise won't work
+a
+        "$XDG_CONFIG_HOME"/sxhkd/send_marked_selection.sh

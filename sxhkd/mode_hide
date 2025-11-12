@@ -4,9 +4,9 @@ Escape
         killall zscroll 2>/dev/null; \
         killall sxhkd && sxhkd &
 
-# hide focused window
-h
-	bspc node -g hidden
+# hide focused/marked window
+{_,super + }h
+	bspc node { ,.marked} -g hidden -g marked=off
 
 # unhide/show all hidden windows on current desktop
 a

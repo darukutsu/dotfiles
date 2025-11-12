@@ -158,6 +158,10 @@ super + shift + Escape
 ctrl + shift + q
 	bspc node -c
 
+# close and kill marked
+super + shift + q
+	bspc node .marked -c
+
 # TODO: session manager
 super + z
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh session-load
@@ -171,7 +175,7 @@ super + shift + z
 
 # set the window state
 super + {t,s,f}
-	bspc node -t {tiled,floating,fullscreen}
+	bspc node -t {tiled -g sticky=off,floating,fullscreen}
 
 # alternate between the tiled and monocle layout
 #super + f
@@ -205,12 +209,12 @@ super + l
 
 # rotates tree
 # switch from vertical to horizontal tiling and vice-versa
-super + {period,comma}
-	bspc node @/ -R {90,270}
+super + {_,ctrl + }{period,comma}
+	bspc node {@/,@parent} -R {90,270}
 
 # rotates "switch" tree in focused node places new node
-super + alt + {period,comma}
-    bspc node @/ -C {forward,backward}
+super + alt + {_,ctrl + }{period,comma}
+    bspc node {@/,@parent} -C {forward,backward}
 #super + {less,greater}
 
 # focus (or swap with alt) the node in the given direction
@@ -244,6 +248,7 @@ super + {grave,Tab}
 
 # focus the older or newer node in the focus history
 # focus the next/previous window in the current desktop
+# TODO: {_,ctrl + } parent next
 super + {j,k}
 	bspc node -f {next,prev}.local.!hidden.window
 
@@ -258,8 +263,8 @@ super + a
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_focus
 
 # send focused window to the given desktop
-super + alt + {1-9,0}
-	bspc node -d '^{1-9,10}' --follow
+super + alt + {_,ctrl + }{1-9,0}
+	bspc node { ,.marked} -d '^{1-9,10}' --follow -g marked=off
 
 # focus desktop
 super + {1-9,0}
