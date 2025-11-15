@@ -6,22 +6,20 @@ set -e
 . $(dirname $0)/containers_config
 
 # If container name is not passed, signal an error
-if [ $# -eq 0 ]
-then
+if [ $# -eq 0 ]; then
   send_msg "error" "Usage: container-add <container-name>"
   exit 1
 fi
 
 CONTAINER_NAME="$1"
 # Check if container already exists
-if container_exists "$CONTAINER_NAME"
-then
+if container_exists "$CONTAINER_NAME"; then
   send_msg "error" "Container already exists"
   exit 1
 fi
 
 # Add container to list
-echo "$CONTAINER_NAME" >> $CONTAINER_LIST
+echo "$CONTAINER_NAME" >>$CONTAINER_LIST
 
 # Create base dir
 BASE_DIR="$CONTAINER_BASE/$CONTAINER_NAME"
@@ -33,4 +31,6 @@ mkdir -p "$BASE_DIR"/config
 mkdir -p "$BASE_DIR"/data
 ln -s ~/.config/qutebrowser/greasemonkey "$BASE_DIR"/config/greasemonkey
 ln -s ~/.config/qutebrowser/userscripts "$BASE_DIR"/config/userscripts
+ln -s ~/.config/qutebrowser/bookmarks "$BASE_DIR"/config/bookmarks
 ln -s ~/.local/share/qutebrowser/qtwebengine_dictionaries "$BASE_DIR"/data/qtwebengine_dictionaries
+ln -s ~/.local/share/qutebrowser/greasemonkey "$BASE_DIR"/data/greasemonkey

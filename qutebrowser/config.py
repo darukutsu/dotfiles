@@ -1038,6 +1038,8 @@ c.hints.selectors = {
         "area",
         "textarea",
         "select",
+        ## cloudflare
+        #'input[type="checkbox"]',
         'input:not([type="hidden"])',
         "button",
         "frame",

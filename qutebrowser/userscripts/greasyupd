@@ -1,0 +1,52 @@
+#!/bin/sh
+set -x
+# This script updates your qutebrowser greasemonkey scripts, and creates backup of old ones
+
+greasemonkey_dir=${XDG_CONFIG_HOME:-$HOME/.config}/qutebrowser/greasemonkey
+greasemonkey_bak=${XDG_CONFIG_HOME:-$HOME/.config}/qutebrowser/greasemonkey-old
+
+mkdir -p "$greasemonkey_bak"
+
+compare_versions() {
+  vold=$(grep '@version' "$file" | awk '{print $3}')
+  vnew=$(grep '@version' "$file.new" | awk '{print $3}')
+
+  if echo "$vold" | grep "-" || echo "$vnew" | grep "-"; then
+    # probably date versioning
+    vnew=$(echo $vnew | sed -e 's/-/*1000+/' -e 's/-/*100+/')
+    vnew=$((vnew))
+    vold=$(echo $vold | sed -e 's/-/*1000+/' -e 's/-/*100+/')
+    vold=$((vold))
+    if [ "$vold" -lt "$vnew" ]; then
+      return 0
+    fi
+  elif echo "$vold" | grep "[a-zA-Z]" || echo "$vnew" | grep "[a-zA-Z]"; then
+    # TODO:
+    # probably commit versioning
+    :
+  else
+    set -- $(echo $vnew | tr '.' ' ')
+    for i in $(echo $vold | tr '.' ' '); do
+      if [ "$i" -lt "$1" ]; then
+        return 0
+      fi
+      shift
+    done
+  fi
+
+  return 1
+}
+
+for file in $greasemonkey_dir/*; do
+  if ! grep '@downloadURL' "$file"; then
+    continue
+  fi
+
+  grep '@downloadURL' "$file" | curl "$(awk '{print $3}')" -o "$file.new"
+  if compare_versions; then
+    mv "$file" "$greasemonkey_bak/$(basename $file).old"
+    mv "$file.new" "$file"
+  else
+    rm "$file.new"
+  fi
+done

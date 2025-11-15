@@ -1,0 +1,19 @@
+#!/bin/sh
+## this script opens github files in raw page without need navigating and clicking raw button
+#set -x
+
+if [ $XDG_SESSION_TYPE = "x11" ]; then
+  clipboard=$(xclip -o -selection clipboard)
+else
+  clipboard=$(wl-paste -n)
+fi
+
+clipboard=$(echo "$clipboard" | sed -e 's/github.com/raw.githubusercontent.com/' -e 's@/blob/@/refs/heads/@')
+
+#clipboard=$(echo "$clipboard" | sed -e 's@/blob/\([0-9a-z]*\)/@/\1/@')
+
+if [ $XDG_SESSION_TYPE = "x11" ]; then
+  echo -n "$clipboard" | xclip -selection clipboard
+else
+  echo -n "$clipboard" | wl-copy
+fi
