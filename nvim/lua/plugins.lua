@@ -144,12 +144,12 @@ return {
     end,
   },
 
-  {
-    "ghostbuster91/nvim-next", -- repeable movements ;, for all commands
-    config = function()
-      require("plug/nvim-next")
-    end,
-  },
+  --{
+  --  "ghostbuster91/nvim-next", -- repeable movements ;, for all commands
+  --  config = function()
+  --    require("plug/nvim-next")
+  --  end,
+  --},
 
   {
     "chrisgrieser/nvim-spider", -- advanced wordmotion
@@ -163,22 +163,22 @@ return {
     end,
   },
 
-  {
-    "wellle/targets.vim", -- advanced treesitter textobjects
-    dependencies = {
-      "chrisgrieser/nvim-various-textobjs", -- advanced textobjects
-    },
-    config = function()
-      vim.cmd([[
-        " targets.vim
-        let g:targets_nl=['n', 'N']
-        " due to this i have to inoremap and nnoremap for colemak
-        " let g:targets_aiAI='alAL'
-        "let g:targets_mapped_aiAI='aiAI'
-        let g:targets_gracious = 1
-    ]])
-    end,
-  },
+  --{
+  --  "wellle/targets.vim", -- advanced treesitter textobjects
+  --  dependencies = {
+  --    "chrisgrieser/nvim-various-textobjs", -- advanced textobjects
+  --  },
+  --  config = function()
+  --    vim.cmd([[
+  --      " targets.vim
+  --      let g:targets_nl=['n', 'N']
+  --      " due to this i have to inoremap and nnoremap for colemak
+  --      " let g:targets_aiAI='alAL'
+  --      "let g:targets_mapped_aiAI='aiAI'
+  --      let g:targets_gracious = 1
+  --  ]])
+  --  end,
+  --},
 
   {
     "folke/which-key.nvim", -- key help floating while typing
@@ -335,12 +335,19 @@ return {
   -- Rust config end
 
   {
+    "nvim-treesitter/nvim-treesitter-textobjects",
+    dependencies = {
+      "chrisgrieser/nvim-various-textobjs",
+    },
+    branch = "main",
+  },
+  {
     "nvim-treesitter/nvim-treesitter", -- highlight code
     dependencies = {
+      "chrisgrieser/nvim-various-textobjs",
       "nvim-treesitter/nvim-treesitter-textobjects",
-      --branch = "main",
     },
-    --branch = "main",
+    branch = "main",
     build = ":TSUpdate",
     config = function()
       require("plug/treesitter")

@@ -1,6 +1,27 @@
+--require("mini.clue").setup{}
+--require("mini.git").setup{}
+--require("mini.align").setup{}
 --require("mini.pairs").setup{}
---require("mini.surround").setup{}
+--require("mini.bracketed").setup{}
+--require("mini.operator").setup{} -- verycool but no idea about usecase
 --require("mini.cursorword").setup{}
+
+require("mini.surround").setup({
+  mappings = {
+    add = ">a", -- Add surrounding in Normal and Visual modes
+    delete = ">d", -- Delete surrounding
+    find = ">f", -- Find surrounding (to the right)
+    find_left = ">F", -- Find surrounding (to the left)
+    highlight = ">h", -- Highlight surrounding
+    replace = ">r", -- Replace surrounding
+
+    suffix_last = "l", -- Suffix to search with "prev" method
+    suffix_next = "n", -- Suffix to search with "next" method
+  },
+
+  search_method = "cover_or_nearest",
+  --n_lines = 1,
+})
 require("mini.move").setup({})
 require("mini.splitjoin").setup({
   mappings = {
@@ -24,9 +45,12 @@ require("mini.ai").setup({
   },
 
   mappings = {
-    goto_left = "",
-    goto_right = "",
+    goto_left = "g}",
+    goto_right = "g{",
   },
+
+  search_method = "cover_or_nearest",
+  --n_lines = 1,
 })
 
 local map = vim.keymap.set

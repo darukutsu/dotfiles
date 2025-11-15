@@ -1,167 +1,106 @@
--- see https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-local textobjects = {
-  --select = {
-  --  enable = true,
-  --  lookahead = true,
+-- colorize text depending on language
 
-  --  keymaps = {
-  --    -- @statement works on sentences too
-  --    ["as"] = { query = "@statement.outer", desc = "outer statement" },
-  --    ["is"] = { query = "@statement.outer", desc = "inner statement" },
-  --    ["aa"] = { query = "@parameter.outer", desc = "outer parameter" },
-  --    ["ia"] = { query = "@parameter.inner", desc = "inner parameter" },
-  --    ["af"] = { query = "@function.outer", desc = "outer function" },
-  --    ["if"] = { query = "@function.inner", desc = "inner function" },
-  --    ["ac"] = { query = "@class.outer", desc = "outer class" },
-  --    ["ic"] = { query = "@class.inner", desc = "inner class" },
-  --    ["al"] = { query = "@loop.outer", desc = "outer loop" },
-  --    ["il"] = { query = "@loop.inner", desc = "inner loop" },
-  --    ["ai"] = { query = "@conditional.outer", desc = "outer condi" },
-  --    ["ii"] = { query = "@conditional.inner", desc = "inner condi" },
-  --  },
-  --  --selection_modes = {
-  --  --  ['@parameter.outer'] = 'v', -- charwise
-  --  --  ['@function.outer'] = 'V',  -- linewise
-  --  --  ['@class.outer'] = '<c-v>', -- blockwise
-  --  --},
-  --  include_surrounding_whitespace = true,
-  --},
+local ts = require("nvim-treesitter")
 
-  swap = {
-    enable = true,
-    swap_next = {
-      ["<leader>sa"] = "@parameter.inner",
-      ["<leader>ss"] = "@statement.inner",
-      ["<leader>si"] = "@conditional.inner",
-    },
-    swap_previous = {
-      ["<leader>sA"] = "@parameter.inner",
-      ["<leader>sS"] = "@statement.inner",
-      ["<leader>sI"] = "@conditional.inner",
-    },
-  },
-
-  move = {
-    enable = true,
-    set_jumps = true,
-    --goto_next_start = {
-    --  ["]m"] = { query = "@function.*", desc = "jmp start func" },
-    --  ["]f"] = { query = "@function.*", desc = "jmp start func" },
-    --  --["]]"] = { query = "@class.outer", desc = "Next class start" },
-    --  ["]o"] = { query = "@loop.*", desc = "jmp start loop" },
-    --  ["]l"] = { query = "@loop.*", desc = "jmp start loop" },
-    --  -- custom jumps see doc. add more of these
-    --  ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope" },
-    --  ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-    --},
-    --goto_next_end = {
-    --  ["]M"] = { query = "@function.*", desc = "jmp NEnd func" },
-    --  ["]F"] = { query = "@function.*", desc = "jmp NEnd func" },
-    --  --["]["] = { query = "@class.*", desc = "jmp NEnd class" },
-    --  ["]p"] = { query = "@parameter.*", desc = "jmp NEnd param" },
-    --  ["]a"] = { query = "@parameter.*", desc = "jmp NEnd param" },
-    --},
-    --goto_previous_start = {
-    --  ["[m"] = { query = "@function.*", desc = "jmp PStart func" },
-    --  ["[f"] = { query = "@function.*", desc = "jmp PStart func" },
-    --  --["[["] = { query = "@class.*", desc = "jmp PStart class" },
-    --  ["[o"] = { query = "@loop.*", desc = "jmp PStart func" },
-    --},
-    --goto_previous_end = {
-    --  ["[M"] = { query = "@function.*", desc = "jmp PEnd func" },
-    --  ["[F"] = { query = "@function.*", desc = "jmp PEnd func" },
-    --  --["[]"] = { query = "@class.*", desc = "jmp PEnd class" },
-    --  ["[p"] = { query = "@parameter.*", desc = "jmp PEnd param" },
-    --  ["[a"] = { query = "@parameter.*", desc = "jmp PEnd param" },
-    --},
-
-    goto_next = {
-      ["]f"] = { query = "@function.outer", desc = "next func" },
-      ["]p"] = { query = "@parameter.outer", desc = "next param" },
-      ["]s"] = { query = "@statement.outer", desc = "next statement" },
-      ["]c"] = { query = "@class.outer", desc = "next class" },
-      ["]d"] = { query = "@conditional.outer", desc = "next condi" },
-      ["]i"] = { query = "@conditional.outer", desc = "next condi" },
-      ["]o"] = { query = "@loop.outer", desc = "next loop" },
-      ["]l"] = { query = "@loop.outer", desc = "next loop" },
-      ["]r"] = { query = "@return.outer", desc = "next return" },
-    },
-    goto_previous = {
-      ["[f"] = { query = "@function.outer", desc = "prev func" },
-      ["[p"] = { query = "@parameter.outer", desc = "prev param" },
-      ["[s"] = { query = "@statement.outer", desc = "prev statement" },
-      ["[c"] = { query = "@class.outer", desc = "prev class" },
-      ["[d"] = { query = "@conditional.outer", desc = "prev condi" },
-      ["[i"] = { query = "@conditional.outer", desc = "prev condi" },
-      ["[o"] = { query = "@loop.outer", desc = "prev loop" },
-      ["[l"] = { query = "@loop.outer", desc = "prev loop" },
-      ["[r"] = { query = "@return.outer", desc = "prev return" },
-    },
-  },
+local ignore_install = {
+  "zig",
 }
 
--- colorize text depending on language
--- MASTER BRANCH
-local ts = require("nvim-treesitter.configs")
+local ensure_install = {
+  "asm",
+  "bash",
+  "c",
+  "comment",
+  "cmake",
+  --"cpp",
+  "css",
+  "csv",
+  "desktop",
+  "devicetree",
+  "dockerfile",
+  "diff",
+  "go",
+  "gomod",
+  "gosum",
+  "gitignore",
+  "gitcommit",
+  "gitattributes",
+  "git_config",
+  "editorconfig",
+  "html",
+  "http",
+  "ini",
+  "json",
+  "jsonc",
+  "jsdoc",
+  "sql",
+  --"typescript",
+  --"javascript",
+  --"latex",
+  "lua",
+  "luap",
+  "luadoc",
+  "kconfig",
+  "vim",
+  "vimdoc",
+  "make",
+  --"markdown",
+  --"markdown_inline",
+  --"meson",
+  "passwd",
+  "printf",
+  "powershell",
+  --"php",
+  "python",
+  "regex",
+  "rust",
+  "norg",
+  "scss",
+  --"svelte",
+  "tsx",
+  "typst",
+  "toml",
+  "udev",
+  "yaml",
+  "vue",
+  "nix",
+  "xml",
+  "query",
+}
+
+---@generic T
+---@param super T[]
+---@param sub T[]
+---@return T[]
+function table.except(super, sub)
+  local result = {}
+  local seenInResult = {}
+  local lookupSub = {}
+
+  for _, value in ipairs(sub) do
+    lookupSub[value] = true
+  end
+
+  for _, value in ipairs(super) do
+    if not lookupSub[value] and not seenInResult[value] then
+      table.insert(result, value)
+      seenInResult[value] = true
+    end
+  end
+
+  return result
+end
+ts.install(table.except(ensure_install, ts.get_installed()))
+
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function(args)
+    if vim.list_contains(ts.get_installed(), vim.treesitter.language.get_lang(args.match)) then
+      vim.treesitter.start(args.buf)
+    end
+  end,
+})
+
 ts.setup({
-  -- A list of parser names, or "all"
-  ensure_installed = {
-    "bash",
-    "c",
-    "comment",
-    "cmake",
-    --"cpp",
-    "css",
-    "csv",
-    "diff",
-    "go",
-    "gitignore",
-    "gitcommit",
-    "gitattributes",
-    "git_config",
-    "html",
-    "http",
-    "json",
-    "jsonc",
-    "jsdoc",
-    "sql",
-    --"typescript",
-    --"javascript",
-    --"latex",
-    "lua",
-    "luap",
-    "luadoc",
-    "vim",
-    "vimdoc",
-    "make",
-    --"markdown",
-    --"markdown_inline",
-    --"meson",
-    "passwd",
-    "printf",
-    "powershell",
-    "php",
-    "python",
-    "regex",
-    "rust",
-    "norg",
-    "scss",
-    --"svelte",
-    "tsx",
-    "typst",
-    "toml",
-    "yaml",
-    "vue",
-    "nix",
-    "xml",
-    "query",
-  },
-
-  ignore_install = { "zig" },
-
-  sync_install = false,
-  auto_install = true,
-
   ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
   -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
 
@@ -181,113 +120,6 @@ ts.setup({
   },
 })
 
--- MAIN BRANCH -- move once nvim-next https://github.com/ghostbuster91/nvim-next/issues/22
---local ts = require("nvim-treesitter")
-----ts.setup {
-----  -- STUFF
-----}
---
---local ignore_install = {
---  "zig",
---}
---
---local ensure_install = {
---  "bash",
---  "c",
---  "comment",
---  "cmake",
---  --"cpp",
---  "css",
---  "csv",
---  "diff",
---  "go",
---  "gitignore",
---  "gitcommit",
---  "gitattributes",
---  "git_config",
---  "html",
---  "http",
---  "json",
---  "jsonc",
---  "jsdoc",
---  "sql",
---  --"typescript",
---  --"javascript",
---  --"latex",
---  "lua",
---  "luap",
---  "luadoc",
---  "vim",
---  "vimdoc",
---  "make",
---  --"markdown",
---  --"markdown_inline",
---  --"meson",
---  "passwd",
---  "printf",
---  "powershell",
---  "php",
---  "python",
---  "regex",
---  "rust",
---  "norg",
---  "scss",
---  --"svelte",
---  "tsx",
---  "typst",
---  "toml",
---  "yaml",
---  "vue",
---  "nix",
---  "xml",
---  "query",
---}
---
------@generic T
------@param super T[]
------@param sub T[]
------@return T[]
---function table.except(super, sub)
---  local result = {}
---  local seenInResult = {}
---  local lookupSub = {}
---
---  for _, value in ipairs(sub) do
---    lookupSub[value] = true
---  end
---
---  for _, value in ipairs(super) do
---    if not lookupSub[value] and not seenInResult[value] then
---      table.insert(result, value)
---      seenInResult[value] = true
---    end
---  end
---
---  return result
---end
---ts.install(table.except(ensure_install, ts.get_installed()))
---
---vim.api.nvim_create_autocmd("FileType", {
---  callback = function(args)
---    if vim.list_contains(ts.get_installed(), vim.treesitter.language.get_lang(args.match)) then
---      vim.treesitter.start(args.buf)
---    end
---  end,
---})
-
-if package.loaded["nvim-next"] then
-  ts.setup({
-    nvim_next = {
-      enable = true,
-      textobjects = textobjects,
-    },
-  })
-else
-  ts.setup({
-    textobjects = textobjects,
-  })
-end
-
 vim.api.nvim_create_user_command("TSStart", function(args)
   local buf = tonumber(args.fargs[1]) or bufnr
   local lang = args.fargs[1]
@@ -302,19 +134,111 @@ vim.api.nvim_create_user_command("TSStop", function(args)
   vim.treesitter.stop(buf)
 end, { nargs = "?" })
 
---local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
+local ts_repeat_move = require("nvim-treesitter-textobjects.repeatable_move")
+local map = vim.keymap.set
 
 -- Repeat movement with ; and ,
--- ensure ; goes forward and , goes backward regardless of the last direction
---vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
---vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
-
--- vim way: ; goes to the direction you were moving.
--- vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
--- vim.keymap.set({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
+-- ensure ; goes forward and, goes backward regardless of the last direction
+map({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
+map({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
 
 -- Optionally, make builtin f, F, t, T also repeatable with ; and ,
---vim.keymap.set({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f)
---vim.keymap.set({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F)
---vim.keymap.set({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t)
---vim.keymap.set({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T)
+--map({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
+--map({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
+--map({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
+--map({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
+
+require("nvim-treesitter-textobjects").setup({
+  --select = {
+  --  lookahead = true,
+  --  --selection_modes = {
+  --  --  ['@parameter.outer'] = 'v', -- charwise
+  --  --  ['@function.outer'] = 'V',  -- linewise
+  --  --  ['@class.outer'] = '<c-v>', -- blockwise
+  --  --},
+  --  include_surrounding_whitespace = true,
+  --},
+  move = {
+    set_jumps = true,
+  },
+})
+
+-- @statement works on sentences too
+local map_select = function(key, operation, type, desc)
+  vim.keymap.set({ "x", "o" }, key, function()
+    require("nvim-treesitter-textobjects.select")[operation](type)
+  end, { desc = desc })
+end
+map_select("as", "select_textobject", "@statement.outer", "outer statement")
+map_select("is", "select_textobject", "@statement.outer", "inner statement")
+map_select("aa", "select_textobject", "@parameter.outer", "outer parameter")
+map_select("ia", "select_textobject", "@parameter.inner", "inner parameter")
+map_select("af", "select_textobject", "@function.outer", "outer function")
+map_select("if", "select_textobject", "@function.inner", "inner function")
+map_select("ac", "select_textobject", "@class.outer", "outer class")
+map_select("ic", "select_textobject", "@class.inner", "inner class")
+map_select("al", "select_textobject", "@loop.outer", "outer loop")
+map_select("il", "select_textobject", "@loop.inner", "inner loop")
+map_select("ai", "select_textobject", "@conditional.outer", "outer condi")
+map_select("ii", "select_textobject", "@conditional.inner", "inner condi")
+
+local map_swap = function(key, operation, type, desc)
+  vim.keymap.set({ "n" }, key, function()
+    require("nvim-treesitter-textobjects.swap")[operation](type)
+  end, { desc = desc })
+end
+map_swap("<leader>sa", "swap_next", "@parameter.inner")
+map_swap("<leader>ss", "swap_next", "@statement.inner")
+map_swap("<leader>si", "swap_next", "@conditional.inner")
+map_swap("<leader>sA", "swap_previous", "@parameter.inner")
+map_swap("<leader>sS", "swap_previous", "@statement.inner")
+map_swap("<leader>sI", "swap_previous", "@conditional.inner")
+
+local map_move = function(key, operation, type, group, desc)
+  vim.keymap.set({ "n", "x", "o" }, key, function()
+    require("nvim-treesitter-textobjects.move")[operation](type, group)
+  end, { desc = desc })
+end
+--map_move("]m", "goto_next_start", "@function.*", "textobjects", "jmp start func")
+--map_move("]f", "goto_next_start", "@function.*", "textobjects", "jmp start func")
+--map_move("]]", "goto_next_start", "@class.outer", "textobjects", "Next class start")
+--map_move("]o", "goto_next_start", "@loop.*", "textobjects", "jmp start loop")
+--map_move("]l", "goto_next_start", "@loop.*", "textobjects", "jmp start loop")
+--map_move("]s", "goto_next_start", "@scope", "locals", "Next scope")
+--map_move("]z", "goto_next_start", "@fold", "folds", "Next fold")
+--
+--map_move("]M", "goto_next_end", "@function.*", "textobjects", "jmp NEnd func")
+--map_move("]F", "goto_next_end", "@function.*", "textobjects", "jmp NEnd func")
+--map_move("]p", "goto_next_end", "@parameter.*", "textobjects", "jmp NEnd param")
+--map_move("]a", "goto_next_end", "@parameter.*", "textobjects", "jmp NEnd param")
+--
+--map_move("[m", "goto_previous_start", "@function.*", "textobjects", "jmp PStart func")
+--map_move("[f", "goto_previous_start", "@function.*", "textobjects", "jmp PStart func")
+--map_move("[[", "goto_previous_start", "@class.*", "textobjects", "jmp PStart class")
+--map_move("[o", "goto_previous_start", "@loop.*", "textobjects", "jmp PStart func")
+--
+--map_move("[M", "goto_previous_end", "@function.*", "textobjects", "jmp PEnd func")
+--map_move("[F", "goto_previous_end", "@function.*", "textobjects", "jmp PEnd func")
+--map_move("[]", "goto_previous_end", "@class.*", "textobjects", "jmp PEnd class")
+--map_move("[p", "goto_previous_end", "@parameter.*", "textobjects", "jmp PEnd param")
+--map_move("[a", "goto_previous_end", "@parameter.*", "textobjects", "jmp PEnd param")
+
+map_move("]f", "goto_next", "@function.outer", "textobjects", "next func")
+map_move("]p", "goto_next", "@parameter.outer", "textobjects", "next param")
+map_move("]s", "goto_next", "@statement.outer", "textobjects", "next statement")
+map_move("]c", "goto_next", "@class.outer", "textobjects", "next class")
+map_move("]d", "goto_next", "@conditional.outer", "textobjects", "next condi")
+map_move("]i", "goto_next", "@conditional.outer", "textobjects", "next condi")
+map_move("]o", "goto_next", "@loop.outer", "textobjects", "next loop")
+map_move("]l", "goto_next", "@loop.outer", "textobjects", "next loop")
+map_move("]r", "goto_next", "@return.outer", "textobjects", "next return")
+
+map_move("[f", "goto_previous", "@function.outer", "textobjects", "prev func")
+map_move("[p", "goto_previous", "@parameter.outer", "textobjects", "prev param")
+map_move("[s", "goto_previous", "@statement.outer", "textobjects", "prev statement")
+map_move("[c", "goto_previous", "@class.outer", "textobjects", "prev class")
+map_move("[d", "goto_previous", "@conditional.outer", "textobjects", "prev condi")
+map_move("[i", "goto_previous", "@conditional.outer", "textobjects", "prev condi")
+map_move("[o", "goto_previous", "@loop.outer", "textobjects", "prev loop")
+map_move("[l", "goto_previous", "@loop.outer", "textobjects", "prev loop")
+map_move("[r", "goto_previous", "@return.outer", "textobjects", "prev return")
