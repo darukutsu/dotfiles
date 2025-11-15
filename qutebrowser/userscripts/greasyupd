@@ -1,6 +1,6 @@
 #!/bin/sh
-set -x
-# This script updates your qutebrowser greasemonkey scripts, and creates backup of old ones
+## This script updates your qutebrowser greasemonkey scripts, and creates backup of old ones
+#set -x
 
 greasemonkey_dir=${XDG_CONFIG_HOME:-$HOME/.config}/qutebrowser/greasemonkey
 greasemonkey_bak=${XDG_CONFIG_HOME:-$HOME/.config}/qutebrowser/greasemonkey-old
