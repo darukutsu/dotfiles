@@ -284,11 +284,25 @@ map({ "n" }, "K", "i<CR><Esc>g;", { desc = "reversed 'J'" })
 
 -- Navigation
 map({ "n" }, "gep", function()
-  vim.diagnostic.jump({ count = -1, float = true })
+  vim.diagnostic.jump({
+    count = -1,
+    float = true,
+    severity = { vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN },
+  })
 end, { desc = "jump diag prev err" })
 map({ "n" }, "gen", function()
-  vim.diagnostic.jump({ count = 1, float = true })
+  vim.diagnostic.jump({
+    count = 1,
+    float = true,
+    severity = { vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN },
+  })
 end, { desc = "jump diag next err" })
+map({ "n" }, "geP", function()
+  vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = "jump diag prev" })
+map({ "n" }, "geN", function()
+  vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = "jump diag next" })
 map({ "n" }, "ge[", function()
   vim.diagnostic.jump({ count = -1, float = true })
 end, { desc = "jump diag prev err" })

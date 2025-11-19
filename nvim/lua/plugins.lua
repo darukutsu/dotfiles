@@ -247,14 +247,16 @@ return {
   --
   --
   --
-  {
-    "denialofsandwich/sudo.nvim", -- write sudo if not in sudo
-    dependencies = {
-      "MunifTanjim/nui.nvim",
-    },
-    config = true,
-    pin = true,
-  },
+  -- using local alternative so I don't need to care about overwriting or changing config on server
+  -- in .local/share/nvim...
+  --{
+  --  "denialofsandwich/sudo.nvim", -- write sudo if not in sudo
+  --  dependencies = {
+  --    "MunifTanjim/nui.nvim",
+  --  },
+  --  config = true,
+  --  pin = true,
+  --},
   "alx741/vinfo", -- vim GNU info implementation <C-]> follow tag
   {
     "luukvbaal/nnn.nvim",
@@ -373,13 +375,13 @@ return {
     end,
   },
 
-  {
-    "stevearc/overseer.nvim", -- task runner, like shell, good for dap
-    opts = {},
-    config = function()
-      require("plug/overseer")
-    end,
-  },
+  --{
+  --  "stevearc/overseer.nvim", -- task runner, like shell, good for dap
+  --  opts = {},
+  --  config = function()
+  --    require("plug/overseer")
+  --  end,
+  --},
   --  _   _
   -- | |_| |__   ___ _ __ ___   ___  ___
   -- | __| '_ \ / _ \ '_ ` _ \ / _ \/ __|
