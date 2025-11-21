@@ -225,6 +225,9 @@ map({ "n" }, "<leader>c", ":CccPick<cr>", { desc = "color picker" })
 -- Markdown preview
 map({ "n" }, "<leader><leader>m", ":MarkdownPreviewToggle<cr>", { desc = "markdown preview" })
 
+-- Taskwarrior in nvim
+map({ "n" }, "<leader>t", ":NeoWarriorOpen<cr>", { desc = "open taskwarrior" })
+
 -- Neogit
 map({ "n" }, "<leader>G", ":Neogit<cr>", { desc = "neogit" })
 

@@ -275,6 +275,19 @@ return {
       require("plug/qmkzmk")
     end,
   },
+  {
+    "duckdm/neowarrior.nvim",
+    event = "VeryLazy",
+    -- TODO: change to main when autocmd fixed
+    branch = "develop",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "folke/noice.nvim",
+    },
+    config = function()
+      require("plug/taskw")
+    end,
+  },
   --
   --  _     ____  ____
   -- | |   / ___||  _ \
