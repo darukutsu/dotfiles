@@ -14,23 +14,29 @@ manifest:
       url-base: https://github.com/sch3fr
     - name: charlesmst
       url-base: https://github.com/charlesmst
+    - name: englmaxi
+      url-base: https://github.com/englmaxi
     - name: darukutsu
       #url-base: https://github.com/darukutsu
       url-base: ""
   projects:
-    #- name: zmk
-    #  remote: zmkfirmware
-    #  import: app/west.yml
     - name: zmk
-      remote: zmkfirmware-hidbattery
+      remote: zmkfirmware
       import: app/west.yml
-      revision: feat/battery-reporting
+    #- name: zmk
+    #  remote: zmkfirmware-hidbattery
+    #  import: app/west.yml
+    #  revision: feat/battery-reporting
     - name: zmk-helpers
       remote: urob
       path: modules/zmk/zmk-helpers
     - name: zmk-unicode
       remote: urob
       path: modules/zmk/zmk-unicode
+    - name: zmk-dongle-display
+      remote: englmaxi
+      path: modules/zmk/zmk-dongle-display
+      revision: main
     - name: zmk-dongle-display-view
       remote: mctechnology17
       path: modules/zmk/zmk-dongle-display-view
