@@ -2,6 +2,13 @@
 ## This script updates your qutebrowser greasemonkey scripts, and creates backup of old ones
 #set -x
 
+# Comment this out if don't want notification
+notify=1
+
+if [ $notify = 1 ]; then
+  notify-send -i "/usr/share/icons/Papirus/16x16/categories/qutebrowser.svg" "Qutebrowser: Greasemonkey Update" "Proceeding..."
+fi
+
 greasemonkey_dir=${XDG_CONFIG_HOME:-$HOME/.config}/qutebrowser/greasemonkey
 greasemonkey_bak=${XDG_CONFIG_HOME:-$HOME/.config}/qutebrowser/greasemonkey-old
 
@@ -37,6 +44,7 @@ compare_versions() {
   return 1
 }
 
+updated=0
 for file in $greasemonkey_dir/*; do
   if ! grep '@downloadURL' "$file"; then
     continue
@@ -46,7 +54,15 @@ for file in $greasemonkey_dir/*; do
   if compare_versions; then
     mv "$file" "$greasemonkey_bak/$(basename $file).old"
     mv "$file.new" "$file"
+    if [ $notify = 1 ]; then
+      notify-send -i "/usr/share/icons/Papirus/16x16/categories/qutebrowser.svg" "Qutebrowser: Greasemonkey Update" "$file"
+    fi
+    updated=$((updated + 1))
   else
     rm "$file.new"
   fi
 done
+
+if [ $notify = 1 ] && [ $updated = 0 ]; then
+  notify-send -i "/usr/share/icons/Papirus/16x16/categories/qutebrowser.svg" "Qutebrowser: Greasemonkey Update" "Nothing to update..."
+fi
