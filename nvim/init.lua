@@ -30,11 +30,12 @@ vim.opt.rtp:prepend(lazypath)
 
 require("keymap")
 require("lazy").setup("plugins")
+require("plug/sudo")
 require("plug/loopcmd")
 require("plug/math")
 
 --require('plug/fcitx')
---require('plug/suppress-errors')
+require("plug/suppress-errors")
 
 -- ZLS disable quickfix
 vim.g.zig_fmt_parse_errors = 0

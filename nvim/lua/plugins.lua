@@ -258,6 +258,7 @@ return {
   --  pin = true,
   --},
   "alx741/vinfo", -- vim GNU info implementation <C-]> follow tag
+  "benoror/gpg.nvim", -- decrypt/edit encrypted gpg files on the fly
   {
     "luukvbaal/nnn.nvim",
     config = function()
@@ -299,6 +300,19 @@ return {
   --
   --
   "lervag/vimtex", -- latex thingi...
+  --{
+  --  "lukas-reineke/lsp-format.nvim",
+  --  config = function()
+  --    require("lsp-format").setup({})
+
+  --    vim.api.nvim_create_autocmd("LspAttach", {
+  --      callback = function(args)
+  --        local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+  --        require("lsp-format").on_attach(client, args.buf)
+  --      end,
+  --    })
+  --  end,
+  --},
   --'folke/trouble.nvim'                  -- diagnostics haven't tried yet
 
   --{
@@ -312,6 +326,19 @@ return {
   --    vim.g.tabby_inline_completion_trigger = "auto"
   --  end,
   --},
+
+  -- for school purpose only
+  {
+    --event = "VeryLazy",
+    "tomtomjhj/vsrocq.nvim",
+    --"simon-dima/vsrocq.nvim",
+    dependencies = {
+      { "whonore/Coqtail" },
+    },
+    config = function()
+      require("plug/lsp/rocq")
+    end,
+  },
 
   {
     "mfussenegger/nvim-jdtls", -- java
