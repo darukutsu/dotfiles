@@ -5,27 +5,41 @@ dropname="$1"
 wid=$(xdotool search --classname "$dropname")
 
 if [ -s "/tmp/$dropname" ]; then
-  wid=$(head -n1 "/tmp/$dropname")
+  wid=$(tail -1 "/tmp/$dropname")
 
   # removes file if window was destroyed
-  # or when node was marked (thus normal state)
-  if ! bspc query -N -n $wid || { bspc query -N -n $wid.marked && bspc node $wid -g marked=off; }; then
+  if ! bspc query -N -n $wid; then
+    while read -r node; do
+      bspc node $node -g sticky=off -g hidden=off
+    done <"/tmp/$dropname"
     rm "/tmp/$dropname"
-    exit
   fi
+  exit
 fi
 
 if [ -z "$wid" ] && echo "$dropname" | grep kitty; then
   kitty --hold --class="$dropname" "$XDG_CONFIG_HOME/sxhkd/unmap.sh" "$dropname"
 elif [ -z "$wid" ]; then
-  # currently only focused window is supported
-  # maybe later will figure out how to send all marked to 1 node
-  # and then operate over multiple marked nodes
   touch "/tmp/$dropname"
-  # FIX: we cannot directly determine which node is marked,
-  # use send_marked_selection.sh
-  bspc query -N -n focused.marked | tail -n1 >"/tmp/$dropname"
-  bspc node "$(head -n1)" -g marked=off
+  bspc monitor -a tmp
+  i=0
+  for node in $(bspc query -N -n .marked | tee "/tmp/$dropname"); do
+    bspc node $node -d tmp
+
+    if [ $((i % 2)) = 0 ]; then
+      bspc node $node -p east
+    else
+      bspc node $node -p south
+    fi
+
+    #bspc node $node -g marked=off # this is done implicitly
+    i=$((i + 1))
+  done
+  bspc node $node -p cancel
+  parent=$(bspc query -N $(tail -1 "/tmp/$dropname") -n @parent)
+  echo "$parent" >>"/tmp/$dropname"
+  bspc node $parent -g hidden=off -g sticky=on
+  bspc desktop tmp -r
 else
   if bspc query -N -n "$wid".!hidden.!local; then
     bspc node "$wid" -d focused -f

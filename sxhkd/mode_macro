@@ -38,7 +38,9 @@ p
 r
 	xdotool key Escape; \
         notify-send -a "system-sxhkd" --hint int:transient:1 "sxhkd" "Recording macro"; \       
-        keystrokes -r -D "Corne Keyboard" "M705"
+        keystrokes -r -D $(libinput list-kernel-devices | rofi -dmenu -multi-select -i -markup-rows -no-show-icons -width 1000 -lines 15 -yoffset 40 | grep -o "/dev/input/event[0-9]*")
+        #keystrokes -r -D "M705" $(libinput list-kernel-devices | grep 'ZMK Project Keyboard' | grep -o "/dev/input/event[0-9]*" | head -n1)
+        #keystrokes -r -D "Corne Keyboard" "M705"
 
 # delete macro
 R

@@ -221,6 +221,10 @@ super + alt + {_,ctrl + }{period,comma}
 super + {_,alt + }{m,n,e,i}
 	bspc node -{f,s} {west,south,north,east}
 
+# focus multiple
+super + ctrl + @space
+	bspc node @parent -f
+
 # swap the node and it's descendants in the given direction
 super + ctrl + {m,n,e,i}
 	bspc node first_ancestor -s {west,south,north,east} && \
