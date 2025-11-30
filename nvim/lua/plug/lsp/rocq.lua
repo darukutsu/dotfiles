@@ -6,9 +6,30 @@ vim.cmd([[
 ]])
 
 require("vsrocq").setup({
+  vsrocq = {
+    memory = { limit = 2 },
+    goals = {
+      diff = { mode = "on" },
+      messages = { full = true },
+    },
+    completion = { enable = true },
+    diagnostics = { full = true },
+    proof = { mode = "Continuous" },
+  },
   lsp = {
     on_attach = function(client, bufnr)
       local map = vim.keymap.set
+      local rocqMode = "Continuous"
+
+      map({ "n" }, "<leader>rr", function()
+        if rocqMode == "Continuous" then
+          rocqMode = "Manual"
+          vim.cmd("VsRocq manual")
+        else
+          rocqMode = "Continuous"
+          vim.cmd("VsRocq continuous")
+        end
+      end, { desc = "toggle between Rocq modes" })
       map({ "n", "x", "o" }, "<leader>rn", ":VsRocq stepForward<cr>", { buffer = bufnr, desc = "Roqc step forward" })
       map({ "n", "x", "o" }, "<leader>rp", ":VsRocq stepBackward<cr>", { buffer = bufnr, desc = "Roqc step backward" })
       map(
