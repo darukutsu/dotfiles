@@ -1,9 +1,12 @@
 manifest:
   defaults:
+    #revision: v0.3.0
     revision: main
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
+    - name: petejohanson
+      url-base: https://github.com/petejohanson
     - name: zmkfirmware-hidbattery
       url-base: https://github.com/Genteure
     - name: urob
@@ -27,6 +30,10 @@ manifest:
     #  remote: zmkfirmware-hidbattery
     #  import: app/west.yml
     #  revision: feat/battery-reporting
+    #- name: zmk
+    #  remote: petejohanson
+    #  import: app/west.yml
+    #  revision: core/move-to-zephyr-4-1
     - name: zmk-helpers
       remote: urob
       path: modules/zmk/zmk-helpers
@@ -41,10 +48,11 @@ manifest:
       remote: mctechnology17
       path: modules/zmk/zmk-dongle-display-view
       revision: main
-    - name: zmk-config
-      remote: mctechnology17
-      path: modules/zmk/zmk-config
-      revision: main
+    # check once fixed for 4.1 release
+    #- name: zmk-config
+    #  remote: mctechnology17
+    #  path: modules/zmk/zmk-config
+    #  revision: main
     - name: zmk-config-unix60
       remote: sch3fr
       path: modules/zmk/zmk-config-unix60
@@ -53,9 +61,10 @@ manifest:
       remote: darukutsu
       path: modules/zmk/nrf52840-dongle
       revision: main
-    - name: zephyr-ble-hid-usb-translator
-      remote: charlesmst
-      path: modules/zmk/zephyr-ble-hid-usb-translator
-      revision: main
+    # check once fixed for 4.1 release
+    #- name: zephyr-ble-hid-usb-translator
+    #  remote: charlesmst
+    #  path: modules/zmk/zephyr-ble-hid-usb-translator
+    #  revision: main
   self:
     path: config
