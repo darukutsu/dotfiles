@@ -24,7 +24,7 @@ option=${option:-n}
 
 case $option in
 y | yes | Y | YES) option="if [ -d '{}' ]; then ${cp} -r '{}' .; else ${cp} '{}' .; fi" ;;
-"" | n | no | N | NO) option="if [ -d '{}' ]; then ${cp} --update=none -r '{}' .; else ${cp} '{}' .; fi" ;;
+"" | n | no | N | NO) option="if [ -d '{}' ]; then ${cp} --update=none -r '{}' .; else ${cp} --update=none '{}' .; fi" ;;
 d | D) option="if [ -d '{}' ]; then rsync -a --delete '{}' .; else ${cp} '{}' .; fi" ;;
 *) echo "Nothing to do..." exit ;;
 esac
