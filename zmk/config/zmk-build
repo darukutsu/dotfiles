@@ -107,6 +107,7 @@ _zmkbuild() {
     # TODO: somehow fix naming
     build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
 
+    mkdir -p "$build_dir"
     fifo="$build_dir/fifo"
     mkfifo "$fifo" >/dev/null 2>&1
     tee "$build_dir/build.log" <"$fifo" &
