@@ -102,8 +102,13 @@ fi
 _zmkbuild() {
   i=0
   for board in $(yq ".include[].board" "$build_file"); do
-    shield=$(yq ".include[$i].shield" "$build_file")
-    cmake_args=$(yq ".include[$i].cmake-args" "$build_file")
+    for var in shield cmake_args west_args env_args; do
+      val="$(yq ".include[$i].${var}" "$build_file")"
+      export $var="$val"
+      if [ "$val" = "null" ]; then
+        unset $var
+      fi
+    done
     # TODO: somehow fix naming
     build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
 
@@ -112,8 +117,13 @@ _zmkbuild() {
     mkfifo "$fifo" >/dev/null 2>&1
     tee "$build_dir/build.log" <"$fifo" &
     tpid=$!
-    # shellcheck disable=SC2068,SC2086
-    west build $pristine -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" $cmake_args "$@" >"$fifo"
+
+    {
+      # shellcheck disable=SC2154
+      export ${env_args} >/dev/null 2>&1
+      # shellcheck disable=SC2068,SC2086,SC2154
+      west build $pristine $west_args -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" $cmake_args "$@" >"$fifo"
+    }
 
     if [ $? -ne 0 ]; then
       build_status_list="$build_status_list\n\033[31m$build_dir - failed\033[0m"
