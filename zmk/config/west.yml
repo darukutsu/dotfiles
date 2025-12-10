@@ -62,9 +62,9 @@ manifest:
       path: modules/zmk/nrf52840-dongle
       revision: main
     # check once fixed for 4.1 release
-    #- name: zephyr-ble-hid-usb-translator
-    #  remote: charlesmst
-    #  path: modules/zmk/zephyr-ble-hid-usb-translator
-    #  revision: main
+    - name: zephyr-ble-hid-usb-translator
+      remote: charlesmst
+      path: modules/zmk/zephyr-ble-hid-usb-translator
+      revision: main
   self:
     path: config

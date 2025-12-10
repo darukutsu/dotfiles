@@ -416,6 +416,7 @@ https://github.com/mh4x0f/zmkBATx
 
 
 
+// add there &sys_reset on both side sometime
                 settings_layer {
                         display-name = "SET";
                         bindings = <
