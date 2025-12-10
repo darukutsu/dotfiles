@@ -107,12 +107,29 @@ _zmkbuild() {
     # TODO: somehow fix naming
     build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
 
-    # shellcheck disable=SC2068
-    west build $pristine -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" $cmake_args "$@"
+    fifo="$build_dir/fifo"
+    mkfifo "$fifo" >/dev/null 2>&1
+    tee "$build_dir/build.log" <"$fifo" &
+    tpid=$!
+    # shellcheck disable=SC2068,SC2086
+    west build $pristine -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" $cmake_args "$@" >"$fifo"
+
+    if [ $? -ne 0 ]; then
+      build_status_list="$build_status_list\n\033[31m$build_dir - failed\033[0m"
+    else
+      build_status_list="$build_status_list\n\033[32m$build_dir - succeeded\033[0m"
+    fi
+
+    wait "$tpid"
+    rm "$fifo" >/dev/null 2>&1
 
     _zmkdraw $i
     i=$((i + 1))
   done
+
+  printf "\n\nBUILD STATUS:\n"
+  # shellcheck disable=SC2059
+  printf "$build_status_list\n"
 }
 
 _zmkdraw() { # TAKES INDEX
