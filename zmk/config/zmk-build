@@ -110,6 +110,7 @@ _zmkbuild() {
       fi
     done
     # TODO: somehow fix naming
+    # shellcheck disable=SC2154
     build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
 
     mkdir -p "$build_dir"
@@ -119,12 +120,13 @@ _zmkbuild() {
     tpid=$!
 
     {
-      # shellcheck disable=SC2154
+      # shellcheck disable=SC2086,SC2154,SC2163
       export ${env_args} >/dev/null 2>&1
       # shellcheck disable=SC2068,SC2086,SC2154
-      west build $pristine $west_args -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" $cmake_args "$@" >"$fifo"
+      west build $pristine $west_args -b "$board" -d "$build_dir" "$ZMK_APP_DIR" -- -DSHIELD="$shield" -DZMK_CONFIG="$ZMK_CONFIG_DIR" $cmake_args "$@" >"$fifo" 2>&1
     }
 
+    # shellcheck disable=SC2181
     if [ $? -ne 0 ]; then
       build_status_list="$build_status_list\n\033[31m$build_dir - failed\033[0m"
     else
