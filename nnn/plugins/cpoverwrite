@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # Description: Enables you to copy(overwrite) files without needing
-#              to explicitely state 'y' option for every file
+#              to explicitly state 'y' option for every file
 #
 # Dependencies: cp, rsync
 #
@@ -24,12 +24,13 @@ option=${option:-n}
 
 case $option in
 y | yes | Y | YES) option="if [ -d '{}' ]; then ${cp} -r '{}' .; else ${cp} '{}' .; fi" ;;
-"" | n | no | N | NO) option="if [ -d '{}' ]; then ${cp} -nr '{}' .; else ${cp} '{}' .; fi" ;;
+"" | n | no | N | NO) option="if [ -d '{}' ]; then ${cp} --update=none -r '{}' .; else ${cp} '{}' .; fi" ;;
 d | D) option="if [ -d '{}' ]; then rsync -a --delete '{}' .; else ${cp} '{}' .; fi" ;;
 *) echo "Nothing to do..." exit ;;
 esac
 
 if [ "$isroot" = y ] || [ "$isroot" = Y ]; then
+  # shellcheck disable=SC2024
   sudo xargs -0 -I{} sh -c "$option" <"$selection"
 else
   xargs -0 -I{} sh -c "$option" <"$selection"
