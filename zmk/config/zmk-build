@@ -102,16 +102,34 @@ fi
 _zmkbuild() {
   i=0
   for board in $(yq ".include[].board" "$build_file"); do
-    for var in shield cmake_args west_args env_args; do
+    for var in shield cmake_args west_args env_args name; do
       val="$(yq ".include[$i].${var}" "$build_file")"
       export $var="$val"
       if [ "$val" = "null" ]; then
         unset $var
       fi
     done
-    # TODO: somehow fix naming
-    # shellcheck disable=SC2154
-    build_dir="$ZMK_CONFIG_DIR/$(echo "build/$board.$shield" | sed 's/ /_/g')"
+
+    if [ -n "$name" ]; then
+      # TODO: solve duplicate names or just behaviour is overwrite/unexpected
+      build_dir="$ZMK_CONFIG_DIR/$(echo "build/$name" | sed 's/ /_/g')"
+    else
+      # shellcheck disable=SC2154
+      placeholder="$(echo "build/$board.$shield" | sed 's/ /_/g')"
+
+      index=0
+      for n in $name_exists; do
+        if [ "$n" = "$placeholder" ]; then
+          index=$((index + 1))
+        fi
+      done
+      if [ $index -eq 0 ]; then
+        index=""
+      fi
+
+      build_dir="$ZMK_CONFIG_DIR/$placeholder$index"
+      name_exists="$name_exists $placeholder"
+    fi
 
     mkdir -p "$build_dir"
     fifo="$build_dir/fifo"
