@@ -6,7 +6,7 @@ return {
   --  \ V  V / (_) | |  |   <|  _| | (_) \ V  V /
   --   \_/\_/ \___/|_|  |_|\_\_| |_|\___/ \_/\_/
   --
-  --
+  -- 1000ms
   --
   "tpope/vim-sleuth", -- heuristic shiftwidth
 
@@ -30,6 +30,8 @@ return {
 
   { -- COQ
     "ms-jpq/coq_nvim",
+    --event = "InsertEnter",
+    lazy = false,
     branch = "coq",
     dependencies = {
       { "windwp/nvim-ts-autotag" },
@@ -246,7 +248,7 @@ return {
   -- |_|_|_| |_|\__,_/_/\_\
   --
   --
-  --
+  -- 200 ms
   --
   -- using local alternative so I don't need to care about overwriting or changing config on server
   -- in .local/share/nvim...
@@ -298,7 +300,7 @@ return {
   -- |_____|____/|_|
   --
   --
-  --
+  -- 800 ms
   --
   "lervag/vimtex", -- latex thingi...
   --{
@@ -350,6 +352,7 @@ return {
 
   { -- MASON, formatter/linter, debugger, lsp
     "mason-org/mason.nvim",
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
       --{ "mhartington/formatter.nvim" },
       { "nvimtools/none-ls.nvim" },
@@ -386,6 +389,7 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter", -- highlight code
+    event = { "BufReadPost", "BufNewFile" },
     dependencies = {
       "chrisgrieser/nvim-various-textobjs",
       "nvim-treesitter/nvim-treesitter-textobjects",
@@ -430,11 +434,12 @@ return {
   --  \__|_| |_|\___|_| |_| |_|\___||___/
   --
   --
-  --
+  -- 500ms
   --
   "Eandrju/cellular-automaton.nvim",
   {
     "m00qek/baleia.nvim",
+    event = "VeryLazy",
     version = "*",
     config = function()
       vim.g.baleia = require("baleia").setup({
@@ -462,6 +467,8 @@ return {
 
   { -- fancy line
     "nvim-lualine/lualine.nvim",
+    event = "VeryLazy",
+    lazy = false,
     dependencies = {
       { "nvim-tree/nvim-web-devicons" },
       { "folke/tokyonight.nvim" },

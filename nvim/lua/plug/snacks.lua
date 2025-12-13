@@ -5,7 +5,10 @@ local M = {
   --scroll = {},
   dim = {},
   indent = {},
-  bigfile = {},
+  bigfile = {
+    enabled = true,
+    size = 1024 * 200, -- 200KB
+  },
   --quickfile = {},
   animate = {},
   --git = {},

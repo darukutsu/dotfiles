@@ -1,15 +1,34 @@
---local buf_name = vim.api.nvim_buf_get_name(0)
---local ft = vim.fn.fnamemodify(buf_name, ":t")
---if ft == "man" or ft == "pager" then
---  require("pager")
---end
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.neovide_scroll_animation_length = 0
+--vim.g.neovide_cursor_animate_command_line = v:false
+--vim.g.neovide_cursor_trail_size = 0
+-- fixes man page bindings
+vim.g.no_man_maps = 1
+
+-- without this autocmd startup is around 2700ms see approx. times in plugins.lua
+local aug = vim.api.nvim_create_augroup("BigFileDisable", {})
+vim.api.nvim_create_autocmd("BufReadPre", {
+  group = aug,
+  callback = function(args)
+    local ok, stats = pcall(vim.loop.fs_stat, vim.fn.expand("<afile>"))
+    if ok and stats and stats.size > 200000 then
+      vim.b.bigfile = true
+      --vim.cmd("syntax off") -- enable in future if big c file encountered or smth
+      vim.opt_local.foldmethod = "manual"
+      vim.opt_local.spell = false
+    end
+  end,
+})
+
 vim.api.nvim_create_autocmd("BufEnter", {
   buffer = 0,
   callback = function()
     vim.wo.scrolloff = 999
     vim.wo.rnu = true
     vim.wo.nu = true
-    --vim.g.no_man_maps = 1
   end,
 })
 
@@ -26,10 +45,32 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
---vim.g.mapleader = " "
-
+require("lazy").setup("plugins", {
+  defaults = {
+    lazy = true, -- make all plugins lazy by default
+  },
+  performance = {
+    cache = {
+      enabled = true,
+    },
+    rtp = {
+      disabled_plugins = {
+        "gzip",
+        "matchit",
+        "matchparen",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
+  },
+  --ui = {
+  --  border = "rounded",
+  --},
+})
 require("keymap")
-require("lazy").setup("plugins")
 require("plug/sudo")
 require("plug/loopcmd")
 require("plug/math")
@@ -49,11 +90,34 @@ vim.api.nvim_create_autocmd("TermOpen", {
   end,
 })
 
-vim.cmd([[
-  let g:neovide_scroll_animation_length = 0
-  "let g:neovide_cursor_animate_command_line = v:false
-  "let g:neovide_cursor_trail_size = 0
+---- system clipboard ssh speeds maybe ?
+--vim.opt.clipboard:append("unnamedplus")
+---- Fix "waiting for osc52 response from terminal" message
+---- https://github.com/neovim/neovim/issues/28611
+--if vim.env.SSH_TTY ~= nil then
+--  -- Set up clipboard for ssh
+--  local function my_paste(_)
+--    return function(_)
+--      local content = vim.fn.getreg('"')
+--      return vim.split(content, "\n")
+--    end
+--  end
+--  vim.g.clipboard = {
+--    name = "OSC 52",
+--    copy = {
+--      ["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+--      ["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+--    },
+--    paste = {
+--      -- No OSC52 paste action since wezterm doesn't support it
+--      -- Should still paste from nvim
+--      ["+"] = my_paste("+"),
+--      ["*"] = my_paste("*"),
+--    },
+--  }
+--end
 
+vim.cmd([[
   au TextYankPost * silent! lua vim.highlight.on_yank {timeout=350}
 
   "au TermOpen * setlocal relativenumber
@@ -85,14 +149,6 @@ vim.cmd([[
   "set autoindent
   "set smartindent
   set scrollback=100000
-
-  " fixes man page bindings
-  let g:no_man_maps=1
-
-  let g:loaded_node_provide = 0
-  let g:loaded_perl_provide = 0
-  let g:loaded_python3_provide = 0
-  let g:loaded_ruby_provide = 0
 
   " Alias
   command W noa wq

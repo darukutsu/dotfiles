@@ -25,8 +25,12 @@ require("mason").setup({
   },
 })
 
+-- Trying lsp-format disable until then
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 local function autoformat_quit(client, bufnr)
+  if vim.b[bufnr].bigfile then
+    return
+  end
   if client:supports_method("textDocument/formatting") then
     vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
     vim.api.nvim_create_autocmd("BufWritePre", {
@@ -45,6 +49,7 @@ end
 require("plug/lsp/lua_ls")
 --  require("plug/lsp/pyright")
 --  require("plug/lsp/pylyzer")
+require("plug/lsp/ruff")
 require("plug/lsp/zig")
 require("plug/lsp/jdtls")
 require("plug/lsp/clangd")
@@ -74,7 +79,7 @@ require("mason-lspconfig").setup({
     "jsonls",
     "lemminx",
     "ltex",
-    "lua_ls",
+    --"lua-language-server", -- shows errors
     "mesonlsp",
     "ruff",
     "rust_analyzer",
@@ -94,6 +99,17 @@ local dap_handlers = {
   function(server_name) -- default handler (optional)
     require("mason-nvim-dap").default_setup(server_name)
   end,
+
+  --["gopls"] = function(server_name)
+  --  server_name.capabilities = vim.tbl_extend("force", vim.lsp.protocol.make_client_capabilities(), {
+  --    textDocument = {
+  --      rangeFormatting = {
+  --        dynamicRegistration = true,
+  --        rangesSupport = true,
+  --      },
+  --    },
+  --  })
+  --end,
   --["codelldb"] = function(server_name)
   --  server_name.adapters = {
   --    type = 'server',
@@ -135,7 +151,7 @@ mason_null.setup({
     "bibtex_tidy",
     "cbfmt",
     "clang_format",
-    "lua_ls",
+    "lua-language-server",
     "isort",
     "jq",
     "latexindent",
@@ -193,12 +209,16 @@ null_ls.setup({
     null_ls.builtins.formatting.stylua.with({
       extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
     }),
+    --null_ls.builtins.formatting.black,
+    --null_ls.builtins.diagnostics.ruff,
   },
   -- you can reuse a shared lspconfig on_attach callback here
   on_attach = function(client, bufnr)
     --if vim.fs.root(0, ".stylua.toml") == nil then
     --	null_ls.disable({ name = "stylua" })
     --end
+    client.server_capabilities.documentFormattingProvider = true
+    client.server_capabilities.documentRangeFormattingProvider = true
     autoformat_quit(client, bufnr)
   end,
 })

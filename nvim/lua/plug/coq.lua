@@ -1,4 +1,8 @@
 -- COQ setup
+-- we don't want this since we want to use COQ macros etc
+--if vim.b.bigfile then
+--  return
+--end
 local coq = require("coq")
 local map = vim.api.nvim_set_keymap
 vim.g.coq_settings = {
