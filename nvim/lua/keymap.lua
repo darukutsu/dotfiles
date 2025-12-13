@@ -258,9 +258,29 @@ end, { desc = "spell suggest" })
 map({ "n" }, "<leader><leader>n", ":NnnExplorer<cr>", { desc = "nnn explorer" })
 
 -- Format buffer
-map({ "n" }, "<leader><leader>f", function()
-  vim.lsp.buf.format({ async = true })
+map({ "n", "v" }, "<leader><leader>f", function()
+  vim.lsp.buf.format({ rangeFormatting = { dynamicRegistration = true, rangeSupport = true }, async = true })
 end, { desc = "format buffer" })
+
+--https://github.com/neovim/neovim/discussions/27042
+--
+-- Format selection
+--map({ "v" }, "<leader><leader>f", function()
+--  -- get visual range in (1-indexed row, 0-indexed col)
+--  local start_pos = vim.fn.getpos("'<")
+--  local end_pos = vim.fn.getpos("'>")
+--  vim.lsp.buf.format({
+--    --async = true,
+--    range = {
+--      { start_pos[2], start_pos[3] },
+--      { end_pos[2], end_pos[3] },
+--    },
+--    --range = {
+--    --["start"] = vim.api.nvim_buf_get_mark(0, "<"),
+--    --["end"] = vim.api.nvim_buf_get_mark(0, ">"),
+--    --},
+--  })
+--end, { desc = "format selection" })
 
 -- Quickfix
 --map({ "n" }, "<leader>f", ":vimgrep /\\w\\+/j % \\| copen<cr>", {})
@@ -354,7 +374,6 @@ map({ "n" }, "gL", "''", { desc = "same as 'gl'" })
 map({ "n" }, "<leader>R", function()
   vim.lsp.buf.rename()
 end, { desc = "LSP Rename cursor" })
---map({ "n" }, "<leader>a", function() vim.lsp.buf.code_action() end, {})
 
 -- Center cursor up/down search
 map({ "n", "v", "o" }, "<C-u>", "<C-u>zz", {})

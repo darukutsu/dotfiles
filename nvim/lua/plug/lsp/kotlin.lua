@@ -1,0 +1,16 @@
+--vim.lsp.config("kotlin_language_server", {
+--  settings = {
+--    kotlin = {
+--    }
+--    Lua = {
+--      diagnostics = {
+--        -- Get the language server to recognize the `vim` global
+--        globals = { "vim" },
+--      },
+--      format = {
+--        -- stylua good
+--        enable = false,
+--      },
+--    },
+--  },
+--})

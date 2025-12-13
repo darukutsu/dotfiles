@@ -45,10 +45,12 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- keymap must be before loading plugins
+require("keymap")
 require("lazy").setup("plugins", {
-  defaults = {
-    lazy = true, -- make all plugins lazy by default
-  },
+  --defaults = {
+  --  lazy = true, -- make all plugins lazy by default
+  --},
   performance = {
     cache = {
       enabled = true,
@@ -70,7 +72,6 @@ require("lazy").setup("plugins", {
   --  border = "rounded",
   --},
 })
-require("keymap")
 require("plug/sudo")
 require("plug/loopcmd")
 require("plug/math")

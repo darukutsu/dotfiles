@@ -8,8 +8,10 @@ return {
   --
   -- 1000ms
   --
-  "tpope/vim-sleuth", -- heuristic shiftwidth
-
+  {
+    "tpope/vim-sleuth", -- heuristic shiftwidth
+    lazy = false,
+  },
   {
     "kristijanhusak/vim-dadbod-ui",
     dependencies = {
@@ -46,6 +48,7 @@ return {
 
   {
     "chrisgrieser/nvim-recorder",
+    lazy = false,
     dependencies = "rcarriga/nvim-notify",
     config = function()
       require("plug/nvim-recorder")
@@ -54,6 +57,7 @@ return {
 
   {
     "nvim-telescope/telescope.nvim",
+    lazy = false,
     dependencies = {
       { "MunifTanjim/nui.nvim" },
       { "nvim-lua/plenary.nvim" },
@@ -125,6 +129,7 @@ return {
 
   {
     "kevinhwang91/nvim-ufo",
+    lazy = false,
     dependencies = "kevinhwang91/promise-async",
     config = function()
       require("plug/ufo")
@@ -156,6 +161,7 @@ return {
 
   {
     "chrisgrieser/nvim-spider", -- advanced wordmotion
+    lazy = false,
     config = function()
       require("spider").setup({
         skipInsignificantPunctuation = true,
@@ -186,19 +192,21 @@ return {
   {
     "folke/which-key.nvim", -- key help floating while typing
     event = "VeryLazy",
+    lazy = false,
     opts = {},
   },
 
   {
     "chentoast/marks.nvim", -- mark hint on side
+    lazy = false,
     config = function()
       require("plug/marks")
     end,
   },
-  -- marks are for jumps within work file
-  -- harpoon for jumps over work files
+  -- marks are for jumps within work file harpoon for jumps over work files
   {
     "ThePrimeagen/harpoon",
+    lazy = false,
     branch = "harpoon2",
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -211,6 +219,7 @@ return {
 
   {
     "nvim-mini/mini.nvim", -- whole workflow, using only few functions
+    lazy = false,
     version = false,
     config = function()
       require("plug/mini")
@@ -219,6 +228,7 @@ return {
 
   {
     "uga-rosa/ccc.nvim", -- color picker with :CccPick
+    lazy = false,
     config = function()
       require("plug/ccc")
     end,
@@ -260,10 +270,17 @@ return {
   --  config = true,
   --  pin = true,
   --},
-  "alx741/vinfo", -- vim GNU info implementation <C-]> follow tag
-  "benoror/gpg.nvim", -- decrypt/edit encrypted gpg files on the fly
+  {
+    "alx741/vinfo", -- vim GNU info implementation <C-]> follow tag
+    lazy = false,
+  },
+  {
+    "benoror/gpg.nvim", -- decrypt/edit encrypted gpg files on the fly
+    lazy = false,
+  },
   {
     "luukvbaal/nnn.nvim",
+    lazy = false,
     config = function()
       require("nnn").setup({
         explorer = {
@@ -275,6 +292,8 @@ return {
   },
   {
     "codethread/qmk.nvim", -- zmk/qmk formatting
+    --event = { "BufReadPre", "BufNewFile" },
+    lazy = false,
     config = function()
       require("plug/qmkzmk")
     end,
@@ -411,6 +430,7 @@ return {
   --
   { -- debug ui
     "rcarriga/nvim-dap-ui",
+    --lazy = false,
     dependencies = { { "folke/lazydev.nvim" }, { "mfussenegger/nvim-dap" }, { "nvim-neotest/nvim-nio" } },
     config = function()
       require("plug/dapui")
@@ -436,7 +456,10 @@ return {
   --
   -- 500ms
   --
-  "Eandrju/cellular-automaton.nvim",
+  {
+    "Eandrju/cellular-automaton.nvim",
+    lazy = false,
+  },
   {
     "m00qek/baleia.nvim",
     event = "VeryLazy",

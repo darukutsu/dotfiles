@@ -19,33 +19,35 @@ local function toggle_telescope(harpoon_files)
     })
   end
 
-  require("telescope.pickers").new({}, {
-    prompt_title = "Harpoon",
-    finder = finder(),
-    --finder = require("telescope.finders").new_table({
-    --  results = file_paths,
-    --}),
-    previewer = conf.file_previewer({}),
-    sorter = conf.generic_sorter({}),
-    attach_mappings = function(prompt_bufnr, map)
-      map("i", "<C-d>", function()
-        local state = require("telescope.actions.state")
-        local selected_entry = state.get_selected_entry()
-        local current_picker = state.get_current_picker(prompt_bufnr)
+  require("telescope.pickers")
+    .new({}, {
+      prompt_title = "Harpoon",
+      finder = finder(),
+      --finder = require("telescope.finders").new_table({
+      --  results = file_paths,
+      --}),
+      previewer = conf.file_previewer({}),
+      sorter = conf.generic_sorter({}),
+      attach_mappings = function(prompt_bufnr, map)
+        map("i", "<C-d>", function()
+          local state = require("telescope.actions.state")
+          local selected_entry = state.get_selected_entry()
+          local current_picker = state.get_current_picker(prompt_bufnr)
 
-        table.remove(harpoon_files.items, selected_entry.index)
-        current_picker:refresh(finder())
-      end)
-      return true
-    end,
-  }):find()
+          table.remove(harpoon_files.items, selected_entry.index)
+          current_picker:refresh(finder())
+        end)
+        return true
+      end,
+    })
+    :find()
 end
 
+-- stylua: ignore start
 map("n", "<leader>a", function() harpoon:list():add() end, { desc = "harpoon add" })
 map("n", "<leader>A", function() harpoon:list():remove() end, { desc = "harpoon remove" })
 --map("n", "<leader>h", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 map("n", "<leader>h", function() toggle_telescope(harpoon:list()) end, { desc = "harpoon telescope" })
-
 map("n", "<leader>1", function() harpoon:list():select(1) end, { desc = "harpoon 1" })
 map("n", "<leader>2", function() harpoon:list():select(2) end, { desc = "harpoon 2" })
 map("n", "<leader>3", function() harpoon:list():select(3) end, { desc = "harpoon 3" })
@@ -60,3 +62,4 @@ map("n", "<leader>0", function() harpoon:list():select(10) end, { desc = "harpoo
 -- Toggle previous & next buffers stored within Harpoon list
 map("n", "<C-p>", function() harpoon:list():prev() end)
 map("n", "<C-n>", function() harpoon:list():next() end)
+-- stylua: ignore end
