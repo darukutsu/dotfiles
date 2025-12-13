@@ -45,7 +45,13 @@ require("vsrocq").setup({
         { buffer = bufnr, desc = "Roqc interpretToEnd" }
       )
     end,
-    --cmd = { "vsrocqtop" },
+    cmd = {
+      --"env",
+      --"COQLIB=/usr/lib/ocaml/coq",
+      --"COQCORELIB=/usr/lib/ocaml/rocq-runtime",
+      --"OCAMLFIND=ocamlfind",
+      "vsrocqtop",
+    },
     filetypes = { "coq", "v" },
   },
 })

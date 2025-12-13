@@ -9,24 +9,48 @@
 -- For the default config, along with instructions on how to customize the settings
 vim.lsp.config("ruff_ls", {
   --on_attach = on_attach,
-  init_options = {
-    settings = {
-      -- Any extra CLI arguments for `ruff` go here
-      args = {
-        "--select=ALL",
-      },
-      format = {
-        args = {
-          --"--config",
-          --"indent-width = 2",
-        },
-      },
-      showNotification = true,
-      --organizeImports = true,
-      source = {
-        organizeImports = true,
-        --fixAll = true,
-      },
-    },
-  },
+  filetypes = { "python", "py", "py3" },
+  --init_options = {
+  --  settings = {
+  --    -- Any extra CLI arguments for `ruff` go here
+  --    args = {
+  --      "--select=ALL",
+  --    },
+  --    format = {
+  --      args = {
+  --        --"--config",
+  --        --"indent-width = 2",
+  --      },
+  --    },
+  --    showNotification = true,
+  --    --organizeImports = true,
+  --    source = {
+  --      organizeImports = true,
+  --      --fixAll = true,
+  --    },
+  --  },
+  --commands = {
+  --  RuffAutofix = {
+  --    function()
+  --      vim.lsp.buf.execute_command({
+  --        command = "ruff.applyAutofix",
+  --        arguments = {
+  --          { uri = vim.uri_from_bufnr(0) },
+  --        },
+  --      })
+  --    end,
+  --    description = "Ruff: Fix all auto-fixable problems",
+  --  },
+  --  RuffOrganizeImports = {
+  --    function()
+  --      vim.lsp.buf.execute_command({
+  --        command = "ruff.applyOrganizeImports",
+  --        arguments = {
+  --          { uri = vim.uri_from_bufnr(0) },
+  --        },
+  --      })
+  --    end,
+  --    description = "Ruff: Format imports",
+  --  },
+  --},
 })
