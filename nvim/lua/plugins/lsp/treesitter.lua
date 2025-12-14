@@ -1,6 +1,6 @@
 return {
   "nvim-treesitter/nvim-treesitter", -- highlight code
-  event = "VeryLazy",
+  event = { "BufReadPre", "BufNewFile" },
   dependencies = {
     "chrisgrieser/nvim-various-textobjs",
     "nvim-treesitter/nvim-treesitter-textobjects",
