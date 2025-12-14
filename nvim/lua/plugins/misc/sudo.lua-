@@ -1,0 +1,10 @@
+-- using local alternative so I don't need to care about overwriting or changing config on server
+-- in .local/share/nvim...
+return {
+  "denialofsandwich/sudo.nvim", -- write sudo if not in sudo
+  dependencies = {
+    "MunifTanjim/nui.nvim",
+  },
+  config = true,
+  pin = true,
+}

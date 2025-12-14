@@ -23,7 +23,7 @@ local unmap = vim.keymap.del
 --"map H H
 --]])
 
-map({ "t" }, "<C-S-h>", "<C-\\><C-n>")
+map({ "t" }, "<Esc>", "<C-\\><C-n>")
 
 vim.g.mapleader = " "
 
@@ -225,27 +225,13 @@ map({ "n" }, "<leader>c", ":CccPick<cr>", { desc = "color picker" })
 -- Markdown preview
 map({ "n" }, "<leader><leader>m", ":MarkdownPreviewToggle<cr>", { desc = "markdown preview" })
 
--- Taskwarrior in nvim
-map({ "n" }, "<leader>t", ":NeoWarriorOpen<cr>", { desc = "open taskwarrior" })
-
--- Neogit
-map({ "n" }, "<leader>G", ":Neogit<cr>", { desc = "neogit" })
-
 -- dadbod database ui toggle
 map({ "n" }, "<leader>D", ":DBUIToggle<cr>", { desc = "neogit" })
 
--- Gitsigns
+-- Git
 map({ "n" }, "<leader>gu", function()
   Snacks.gitbrowse()
 end, {})
-map({ "n" }, "<leader>gb", ":Gitsigns blame<cr>", {})
-map({ "n" }, "<leader>gl", ":Gitsigns blame_line<cr>", {})
---map({ "n" }, "<leader>gb", ":Gitsigns toggle_current_line_blame<cr>", {})
-map({ "n" }, "<leader>gh", ":Gitsigns preview_hunk<cr>", {})
-map({ "n" }, "<leader>gn", ":Gitsigns next_hunk<cr>", {})
-map({ "n" }, "<leader>gp", ":Gitsigns prev_hunk<cr>", {})
-map({ "n" }, "<leader>g]", ":Gitsigns next_hunk<cr>", {})
-map({ "n" }, "<leader>g[", ":Gitsigns prev_hunk<cr>", {})
 
 -- Spellcheck
 map({ "n" }, "<leader><leader>S", ":set spell!<cr>", { desc = "toggle spell" })
@@ -459,7 +445,6 @@ map({ "n" }, "<leader><leader>*", ":MathMul<cr>", { desc = "MUL col - yank to re
 map({ "n" }, "<leader><leader>/", ":MathDiv<cr>", { desc = "DIV col - yank to register first" })
 
 -- Togglables
-map({ "n" }, "<leader><leader>;", ":CellularAutomaton make_it_rain<cr>", { desc = "lolz" })
 --map({ "n" }, "<leader><leader>d", function() Snacks.toggle.dim() end, { desc = "toggle dim" })
 local isDim = false
 map({ "n" }, "<leader><leader>d", function()

@@ -51,6 +51,12 @@ if [ -n "$KITTY_REMOTE_SHELL" ]; then
   export XDG_CACHE_HOME=${REMOTE_HOME}/.cache
   export XDG_DOWNLOAD_DIR=${REMOTE_HOME}/Downloads
 
+  bash <(curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh)
+  #atuin register -u daru -e darupeter@pm.me
+  #atuin import autoatuin sync
+
+  unset NNN_BMS NNN_PLUG
+
   echo "files were sourced successfully"
 fi
 
@@ -65,8 +71,8 @@ elif command -v nvimpager >/dev/null; then
   export PAGER="nvimpager"
   export MANPAGER="nvimpager"
   export SYSTEMD_PAGER="nvimpager"
-else
-  export PAGER="nvim -R -c BaleiaColorize"
+elif command -v nvim >/dev/null; then
+  export PAGER="nvim -R -c 'set ft=pager'"
   export MANPAGER="nvim +Man! -R"
   export SYSTEMD_PAGER="$PAGER"
 fi
@@ -82,17 +88,23 @@ h() {
 # Alternatively, to pick a bit better `man` highlighting:
 man() {
   if test $(/bin/man -w "${@:$#}"); then
-    if [[ "$PAGER" =~ page.* ]]; then
+    if [[ "$PAGER" =~ ^page.* ]]; then
       if [ $2 ]; then
         $PAGER man://"$2($1)"
       elif [ $1 ]; then
         $PAGER man://"$1"
       fi
     else
-      /usr/bin/man "$2" "$1"
+      # shellcheck disable=SC2068
+      /usr/bin/man $@
     fi
   else
-    h "$1"
+    if [ $# -gt 1 ]; then
+      last=$#
+      h "${!last}"
+    else
+      h "$1"
+    fi
   fi
   #  SECT=${@[-2]}; PROG=${@[-1]}; page man://"$PROG($SECT)"
 }

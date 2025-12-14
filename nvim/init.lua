@@ -32,52 +32,64 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
+-- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
 end
 vim.opt.rtp:prepend(lazypath)
 
 -- keymap must be before loading plugins
 require("keymap")
-require("lazy").setup("plugins", {
-  --defaults = {
-  --  lazy = true, -- make all plugins lazy by default
-  --},
+require("lazy").setup({
+  defaults = {
+    lazy = true, -- make all plugins lazy by default
+  },
+  spec = {
+    -- all cool plugins see my stared https://github.com/stars/Darukutsu/lists/nvim
+    --{ import = "plugins/ai" },
+    { import = "plugins/misc" },
+    { import = "plugins/themes" },
+    { import = "plugins/lsp" },
+    { import = "plugins" },
+  },
   performance = {
     cache = {
       enabled = true,
     },
-    rtp = {
-      disabled_plugins = {
-        "gzip",
-        "matchit",
-        "matchparen",
-        "netrwPlugin",
-        "tarPlugin",
-        "tohtml",
-        "tutor",
-        "zipPlugin",
-      },
-    },
+    --rtp = {
+    --  disabled_plugins = {
+    --    "gzip",
+    --    "matchit",
+    --    "matchparen",
+    --    "netrwPlugin",
+    --    "tarPlugin",
+    --    "tohtml",
+    --    "tutor",
+    --    "zipPlugin",
+    --  },
+    --},
   },
   --ui = {
   --  border = "rounded",
   --},
 })
-require("plug/sudo")
-require("plug/loopcmd")
-require("plug/math")
 
---require('plug/fcitx')
-require("plug/suppress-errors")
+require("custom/sudo")
+require("custom/loopcmd")
+require("custom/math")
+--require('custom/fcitx')
+require("custom/suppress-errors")
 
 -- ZLS disable quickfix
 vim.g.zig_fmt_parse_errors = 0
@@ -160,8 +172,6 @@ vim.cmd([[
 
   set cmdheight=0
   "set nowrap
-
-  COQnow -s
 ]])
 
 -- Commands I tend to forgot

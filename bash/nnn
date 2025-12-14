@@ -14,7 +14,7 @@ export NNN_FIFO=/tmp/nnn.fifo
 export NNN_OPENER="/home/daru/.config/nnn/plugins/nuke"
 export NNN_OPENWITH="/home/daru/.config/nnn/plugins/openwith"
 
-export NNN_PLUG='?:help;
+NNN_PLUG='?:help;
 a:mtpmount;
 c:.cbcp;
 d:diffs;
@@ -26,6 +26,7 @@ g:gpge;
 G:gpgd;
 h:http-server;
 i:imgur;
+j:autojump;
 k:kdeconnect;
 l:sessionls;
 m:nmount;
@@ -49,7 +50,7 @@ Z:zfs-snapdir'
 #not working under kitty xembed missing
 #v:preview-tabbed;'
 
-export NNN_BMS="e:/etc;
+NNN_BMS="e:/etc;
 a:/run/user/$UID/gvfs;
 E:/run/media/SAM500/;
 m:/run/media/;
@@ -63,6 +64,9 @@ g:$HOME/Public;
 t:$HOME/Public/GitTuke/4ZS;
 p:$HOME/Pictures/;
 v:$HOME/Videos/"
+
+export NNN_PLUG=$(echo $NNN_PLUG | tr -d ' \n')
+export NNN_BMS=$(echo $NNN_BMS | tr -d ' \n')
 
 nn() {
   # Block nesting of nnn in subshells

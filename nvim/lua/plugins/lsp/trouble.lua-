@@ -1,0 +1,2 @@
+
+  return 'folke/trouble.nvim'                  -- diagnostics haven't tried yet
