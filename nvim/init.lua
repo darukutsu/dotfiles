@@ -57,7 +57,7 @@ require("lazy").setup({
   },
   spec = {
     -- all cool plugins see my stared https://github.com/stars/Darukutsu/lists/nvim
-    --{ import = "plugins/ai" },
+    { import = "plugins/ai" },
     { import = "plugins/misc" },
     { import = "plugins/themes" },
     { import = "plugins/lsp" },
