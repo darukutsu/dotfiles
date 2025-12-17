@@ -1,6 +1,6 @@
 return {
   "lewis6991/gitsigns.nvim", -- git time stamps
-  event = "CmdlineEnter",
+  event = "VeryLazy",
   keys = {
     { "<leader>gb", ":Gitsigns blame<cr>" },
     { "<leader>gl", ":Gitsigns blame_line<cr>" },

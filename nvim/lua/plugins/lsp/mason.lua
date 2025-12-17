@@ -59,16 +59,28 @@ return { -- MASON, formatter/linter, debugger, lsp
 
     --https://github.com/neovim/nvim-lspconfig/wiki/Understanding-setup-%7B%7D
     -- lsphandlers were disabled in nvim0.11+ use vim.lsp.config() instead
-    require("plugins/lsp/server/lua_ls")
-    --  require("plugins/lsp/server/pyright")
-    --  require("plugins/lsp/server/pylyzer")
-    require("plugins/lsp/server/ruff")
-    require("plugins/lsp/server/zig")
-    require("plugins/lsp/server/jdtls")
-    require("plugins/lsp/server/clangd")
-    --  require("plugins/lsp/server/matlab")
-    require("plugins/lsp/server/ltex")
-    --require("plugins/lsp/server/kotlin")
+    local servers = {
+      lua_ls = "lua-language-server",
+      --pyright = "pyright",
+      --pylyzer = "pylyzer",
+      ruff = "ruff",
+      zig = "zls",
+      jdtls = "jdtls",
+      clangd = "clangd",
+      --matlab = "matlab",
+      ltex = "ltex-ls",
+      --kotlin = "kotlin",
+    }
+
+    local mason_registry = require("mason-registry")
+    for server, mason_name in pairs(servers) do
+      local ok, pkg = pcall(mason_registry.get_package, mason_name)
+      if ok and pkg:is_installed() then
+        require("plugins/lsp/server/" .. server)
+      else
+        print("why are you gae" .. server)
+      end
+    end
 
     require("mason-lspconfig").setup({
       ensure_installed = {
