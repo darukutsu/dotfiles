@@ -77,8 +77,6 @@ return { -- MASON, formatter/linter, debugger, lsp
       local ok, pkg = pcall(mason_registry.get_package, mason_name)
       if ok and pkg:is_installed() then
         require("plugins/lsp/server/" .. server)
-      else
-        print("why are you gae" .. server)
       end
     end
 
