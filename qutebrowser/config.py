@@ -1275,7 +1275,11 @@ c.new_instance_open_target_window = "last-focused"
 ## list) will work.
 ## Type: List of String
 # c.qt.args = [ "autoplay-policy=no-user-gesture-required", ""]
-c.qt.args = ["enable-quic", "enable-lazy-image-loading"]
+c.qt.args = [
+    "enable-quic",
+    "enable-lazy-image-loading",
+    "disable-renderer-accessibility",
+]
 
 ## When to use Chromium's low-end device mode. This improves the RAM
 ## usage of renderer processes, at the expense of performance.
@@ -1771,9 +1775,10 @@ c.url.searchengines = {
     # "DEFAULT": "https://priv.au/search?q={}",
     # "DEFAULT": "https://search.demonkingswarn.live/search?q={}",
     "DEFAULT": "http://search.daru.lan/search?q={}",
-    # "br": "https://search.brave.com/search?q={}",
-    # "go": "https://google.com/search?q={}",
-    # "dg": "https://search.duckduckgo.com/search?q={}",
+    # this has reason for remote work setup
+    "br": "https://search.brave.com/search?q={}",
+    "go": "https://google.com/search?q={}",
+    "dg": "https://search.duckduckgo.com/search?q={}",
 }
 
 ## Page(s) to open at the start.
