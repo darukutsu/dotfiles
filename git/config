@@ -1,0 +1,45 @@
+[include]
+	path = ~/.config/git/github
+
+[includeIf "gitdir:~/Public/GitTuke/"]
+	path = ~/.config/git/tuke
+#[includeIf "gitdir:~/.config/nsxiv/nsxiv-extra/"]
+#	path = ~/.config/git/codebergconfig
+
+[alias]
+	#lol = log --oneline --decorate --format="%h%ch %d %s"
+	lol = log --oneline --decorate --format=\"%h %cs %d %s\"
+	graph = log --oneline --graph --decorate
+	logg = log --oneline --graph --decorate
+	reflog = reflog --date=iso --pretty
+	diff = diff --word-diff
+	unadd = reset
+
+[grep]
+	lineNumber =true
+	patternType = perl
+
+[rerere]
+	enabled = true
+
+[merge]
+	tool = nvimdiff1
+
+##[reflog]
+##	log.date = iso
+##	format.pretty = true
+
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[pager]
+	branch = false
+	#log = false
