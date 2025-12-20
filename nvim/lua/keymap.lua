@@ -383,7 +383,7 @@ map({ "n" }, "<C-S-M>", "<C-t>", {})
 --map({ "n" }, "<leader>q", "@@", {})
 
 -- Clipboard
-map({ "n" }, "<leader>p", '"_dP', {})
+map({ "n", "v", "o" }, "<leader>p", '"_dP', {})
 -- nnoremap <leader>d "add
 -- nnoremap <leader>y "ayy
 -- nnoremap <leader>c "acc

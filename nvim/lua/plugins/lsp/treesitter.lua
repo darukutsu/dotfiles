@@ -80,6 +80,8 @@ return {
       "query",
     }
 
+    -- checkhealth for missing tools otherwise this will always print msg
+    -- mainly tree-sitter-cli
     require("treesitter-autoinstall").setup()
 
     ts.setup({
