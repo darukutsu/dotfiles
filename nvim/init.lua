@@ -130,6 +130,14 @@ vim.api.nvim_create_autocmd("TermOpen", {
 --  }
 --end
 
+vim.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.foldmethod = "expr"
+--vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+--vim.wo[0][0].foldmethod = "expr"
+-- Automatic open folds when openinig file
+--vim.g.foldlevelstart = 99
+--vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+
 vim.cmd([[
   au TextYankPost * silent! lua vim.highlight.on_yank {timeout=350}
 
@@ -145,17 +153,6 @@ vim.cmd([[
 
   set wildmode=longest:full,list,full
   set spelllang=en_us
-
-  "set foldmethod=indent
-  "set foldmethod=syntax
-  set foldmethod=expr
-  set foldexpr=nvim_treesitter#foldexpr()
-  " Automatic save folds
-  "https://www.vim.org/scripts/script.php?script_id=4021
-  "autocmd BufWinLeave *.* mkview
-  "autocmd BufWinEnter *.* silent loadview
-  " Automatic open folds when openinig file
-  set foldlevelstart=99
 
   set cursorline
   "set spell

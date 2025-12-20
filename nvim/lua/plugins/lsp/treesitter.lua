@@ -1,7 +1,9 @@
 return {
   "nvim-treesitter/nvim-treesitter", -- highlight code
-  event = { "BufReadPre", "BufNewFile" },
+  --event = { "BufReadPre", "BufNewFile" },
+  lazy = false,
   dependencies = {
+    "mks-h/treesitter-autoinstall.nvim",
     "chrisgrieser/nvim-various-textobjs",
     "nvim-treesitter/nvim-treesitter-textobjects",
   },
@@ -11,6 +13,7 @@ return {
     -- colorize text depending on language
     local ts = require("nvim-treesitter")
 
+    -- TODO: remove later after testing autoinstall
     local ignore_install = {
       "zig",
     }
@@ -77,37 +80,7 @@ return {
       "query",
     }
 
-    ---@generic T
-    ---@param super T[]
-    ---@param sub T[]
-    ---@return T[]
-    function table.except(super, sub)
-      local result = {}
-      local seenInResult = {}
-      local lookupSub = {}
-
-      for _, value in ipairs(sub) do
-        lookupSub[value] = true
-      end
-
-      for _, value in ipairs(super) do
-        if not lookupSub[value] and not seenInResult[value] then
-          table.insert(result, value)
-          seenInResult[value] = true
-        end
-      end
-
-      return result
-    end
-    ts.install(table.except(ensure_install, ts.get_installed()))
-
-    vim.api.nvim_create_autocmd("FileType", {
-      callback = function(args)
-        if vim.list_contains(ts.get_installed(), vim.treesitter.language.get_lang(args.match)) then
-          vim.treesitter.start(args.buf)
-        end
-      end,
-    })
+    require("treesitter-autoinstall").setup()
 
     ts.setup({
       ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
