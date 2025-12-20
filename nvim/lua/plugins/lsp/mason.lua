@@ -68,7 +68,7 @@ return { -- MASON, formatter/linter, debugger, lsp
       jdtls = "jdtls",
       clangd = "clangd",
       --matlab = "matlab",
-      ltex = "ltex-ls",
+      ltex = "ltex",
       --kotlin = "kotlin",
     }
 
