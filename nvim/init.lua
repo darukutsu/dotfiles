@@ -50,7 +50,8 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- keymap must be before loading plugins
-require("keymap")
+vim.g.mapleader = " "
+require("custom/snackmap")
 require("lazy").setup({
   defaults = {
     lazy = true, -- make all plugins lazy by default
@@ -85,6 +86,7 @@ require("lazy").setup({
   --},
 })
 
+require("keymap")
 require("custom/sudo")
 require("custom/loopcmd")
 require("custom/math")

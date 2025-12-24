@@ -1,0 +1,12 @@
+return {
+  {
+    "tenxsoydev/size-matters.nvim",
+    event = "UIEnter",
+    --lazy = false,
+    config = function()
+      if vim.g.neovide or vim.g.goneovim or vim.g.nvui or vim.g.gnvim then
+        require("size-matters")
+      end
+    end,
+  },
+}

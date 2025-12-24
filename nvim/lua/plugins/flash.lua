@@ -1,7 +1,15 @@
 return {
   "folke/flash.nvim", --better fF
-  event = "VeryLazy",
+  --event = "VeryLazy",
   --lazy = false,
+  keys = function()
+    return {
+      { "f" },
+      { "F" },
+      { "t" },
+      { "T" },
+    }
+  end,
   opts = {
     -- excluded ydcn
     labels = "arstgmeioqwfpbjluzxvkh",

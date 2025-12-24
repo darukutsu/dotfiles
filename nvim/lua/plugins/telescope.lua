@@ -9,6 +9,7 @@ return {
     { "nvim-telescope/telescope-dap.nvim" },
     { "nvim-telescope/telescope-ui-select.nvim" },
     { "jonarrien/telescope-cmdline.nvim" },
+    { "benfowler/telescope-luasnip.nvim", dependencies = { "benfowler/telescope-luasnip.nvim" } },
     --{ "gbrlsnchs/telescope-lsp-handlers.nvim" }, -- FIX: deprecated
   },
   config = function()
@@ -355,6 +356,7 @@ return {
     --tel.load_extension("ui-select") -- probably using snacks instead of this
     --tel.load_extension("lsp_handlers") -- FIX: nvim 0.11 not working
     tel.load_extension("cmdline")
+    tel.load_extension("luasnip")
     --tel.load_extension("macros") -- using nvim-recorder instead
   end,
 }

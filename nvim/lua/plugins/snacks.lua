@@ -6,20 +6,24 @@ return {
     "nvim-tree/nvim-web-devicons",
   },
   opts = {
-    words = {},
-    toggle = {},
-    statuscolumn = {},
-    --scroll = {},
-    dim = {},
-    indent = {},
+    animate = {},
     bigfile = {
       enabled = true,
       size = 1024 * 200, -- 200KB
     },
-    --quickfile = {},
-    animate = {},
+    dashboard = {
+      sections = {
+        { section = "header" },
+        { icon = " ", title = "Keymaps", section = "keys", indent = 2, padding = 1 },
+        { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+        { icon = " ", title = "Projects", section = "projects", indent = 2, padding = 1 },
+        { section = "startup" },
+      },
+    },
+    dim = {},
     --git = {},
     gitbrowse = {},
+    indent = {},
     input = {
       win = {
         position = "bottom",
@@ -31,5 +35,23 @@ return {
       enabled = true,
       ui_select = true,
     },
+    statuscolumn = {},
+    --scroll = {
+    --  animate = {
+    --    duration = { total = 500 },
+    --    easing = "linear",
+    --  },
+    --  animate_repeat = {
+    --    delay = 10,
+    --    duration = { total = 500 },
+    --    easing = "linear",
+    --  },
+    --},
+    terminal = {},
+    toggle = {
+      --which_key = false,
+    },
+    words = {},
+    --quickfile = {},
   },
 }

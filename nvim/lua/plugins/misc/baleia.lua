@@ -1,6 +1,7 @@
 return {
   "m00qek/baleia.nvim",
-  event = "CmdlineEnter",
+  --event = "CmdlineEnter",
+  cmd = "BaleiaColorize",
   ft = { "man", "pager" },
   --lazy = false,
   version = "*",

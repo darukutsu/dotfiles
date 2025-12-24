@@ -1,6 +1,7 @@
 return {
   "duckdm/neowarrior.nvim",
   event = "CmdlineEnter",
+  --cmd = {},
   -- TODO: change to main when autocmd fixed
   branch = "develop",
   dependencies = {

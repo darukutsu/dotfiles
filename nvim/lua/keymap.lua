@@ -1,6 +1,7 @@
 local map = vim.keymap.set
 local unmap = vim.keymap.del
 
+-- Colemak-DH rebinds
 --vim.cmd([[
 --noremap k m
 --noremap j e
@@ -23,225 +24,46 @@ local unmap = vim.keymap.del
 --"map H H
 --]])
 
-map({ "t" }, "<Esc>", "<C-\\><C-n>")
+--vim.opt.timeoutlen = 100
+map({ "t" }, "<C-Esc>", "<C-\\><C-n>", { silent = true })
 
-vim.g.mapleader = " "
-
+-- disable highlight match
 map({ "n" }, "<leader>;", ":noh<cr>", { silent = true })
 
 -- vim-wordmotion
-map({ "n", "v", "o" }, "W", "w", {})
-map({ "x", "o" }, "aW", "aw", {})
-map({ "x", "o" }, "iW", "iw", {})
+--map({ "n", "v", "o" }, "W", "w", {})
+--map({ "x", "o" }, "aW", "aw", {})
+--map({ "x", "o" }, "iW", "iw", {})
 -- For chaoren/vim-wordmotion colemak
 --vim.cmd([[
 --  let g:wordmotion_mappings={  'e':'', 'E':'', 'j':'<M-e>', 'J':'<M-E>',  }
 --]])
 --
--- For chrisgrieser/nvim-spider
-map({ "n", "o", "x" }, "w", function()
-  require("spider").motion("w")
-end, {})
-map({ "n", "o", "x" }, "b", function()
-  require("spider").motion("b")
-end, {})
-map({ "n", "o", "x" }, "e", function()
-  require("spider").motion("e")
-end, {})
-
-map({ "n", "o", "x" }, "W", function()
-  require("spider").motion("w", { subwordMovement = false })
-end, {})
-map({ "n", "o", "x" }, "B", function()
-  require("spider").motion("b", { subwordMovement = false })
-end, {})
-map({ "n", "o", "x" }, "E", function()
-  require("spider").motion("e", { subwordMovement = false })
-end, {})
---"func() require('spider').motion('e', { subwordMovement = false, skipInsignificantPunctuation=false })<CR>", {})
-
--- for chrisgrieser/nvim-various-textobjs
---map({ "o", "x" }, "lw", function() require('various-textobjs').subword('inner') end)
-map({ "o", "x" }, "iw", function()
-  require("various-textobjs").subword("inner")
-end)
-map({ "o", "x" }, "aw", function()
-  require("various-textobjs").subword("outer")
-end)
---map({ "o", "x" }, "iW", function() require('various-textobjs').subword('inner')end)
---map({ "o", "x" }, "lW", function() require('various-textobjs').subword('inner')end)
---map({ "o", "x" }, "aW", function() require('various-textobjs').subword('outer')end)
-map({ "o", "x" }, "au", function()
-  require("various-textobjs").url()
-end)
-map({ "o", "x" }, "iu", function()
-  require("various-textobjs").url()
-end)
-
--- Flash.nvim
--- TODO: fix this/implement
--- selects text puts it into cword
---map({ "n", "o", "x" }, "*", function()
---  local VeryLiteral = false
---
---  function VSetSearch(cmd)
---    local old_reg = vim.fn.getreg('"')
---    local old_regtype = vim.fn.getregtype('"')
---
---    vim.api.nvim_exec_autocmd("TextYankPost", {
---      pattern = "*",
---      callback = function()
---        local y1 = vim.fn.getreg('"')
---        local y2 = vim.fn.getregtype('"')
---
---        if y1 == "" then
---          return
---        end
---
---        vim.fn.setreg('"', y1, y2)
---
---        if string.match(y1, "^%d+[a-zA-Z_,]*$") or (string.match(y1, "^%d+[a-zA-Z %_,]*$") and VeryLiteral) then
---          vim.fn.setreg("/", y1, vim.fn.getregtype("/"))
---        else
---          local pat = vim.fn.escape(y1, cmd .. "\\")
---
---          if VeryLiteral then
---            pat = string.gsub(pat, "\n", "\\n")
---          else
---            pat = string.gsub(pat, "^%s+", "\\s+")
---            pat = string.gsub(pat, "%s+$", "\\s*")
---            pat = string.gsub(pat, "%s+", "_S+")
---          end
---
---          vim.fn.setreg("/", "\\V" .. pat, vim.fn.getregtype("/"))
---        end
---      end,
---    })
---
---    vim.fn.setreg('"', old_reg, old_regtype)
---  end
---
---  --vim.keymap.set({ "visual" }, "*", ":lua VSetSearch('/')<CR>", { desc = "Search forward" })
---  --vim.keymap.set({ "visual" }, "#", ":lua VSetSearch('?')<CR>", { desc = "Search backward" })
---  --vim.keymap.set({ "visual" }, "<kMultiply>", "*", { desc = "Visual mode search multiply" })
---
---  --vim.keymap.set({ "normal" }, "<leader>vl", function()
---  --  VeryLiteral = not VeryLiteral
---  --  print("VeryLiteral " .. tostring(VeryLiteral))
---  --end, { desc = "Toggle VeryLiteral mode" })
---
---  ---- Ensure the mapping is unique
---  --vim.keymap.del({ "normal" }, "<leader>vl")
---
---  VSetSearch("/")
---
---  require("flash").jump({
---    pattern = vim.fn.getreg('"'),
---  })
---end)
---
--- NOTE: delete this when tested it's no longer needed
---function Motion_f()
---  require('flash').jump({
---    search = {
---      forward = true,
---    },
---    jump = {
---      inclusive = true,
---    },
---    -- doesn't do anything for now disable this at top level
---    modes = {
---      char = {
---        multi_line = false,
---      },
---    },
---  });
---end
---
---function Motion_t()
---  require('flash').jump({
---    search = {
---      forward = true,
---    },
---    jump = {
---      inclusive = false,
---    },
---    modes = {
---      char = {
---        multi_line = false,
---      },
---    },
---  });
---end
---
---function Motion_F()
---  require('flash').jump({
---    search = {
---      forward = false,
---    },
---    jump = {
---      inclusive = true,
---    },
---    modes = {
---      char = {
---        multi_line = false,
---      },
---    },
---  });
---end
---
---function Motion_T()
---  require('flash').jump({
---    search = {
---      forward = false,
---    },
---    jump = {
---      inclusive = true,
---      offset = 1,
---    },
---    modes = {
---      char = {
---        multi_line = false,
---      },
---    },
---  });
---end
---
---local rules = { silent = true, noremap = true }
---map({ "o" }, "t", function() Motion_t() end, rules)
---map({ "o" }, "f", function() Motion_f() end, rules)
---map({ "o" }, "T", function() Motion_T() end, rules)
---map({ "o" }, "F", function() Motion_F() end, rules)
-
--- behave like original OPERATION-MODE
---vim.api.nvim_del_keymap("o", "t")
---vim.api.nvim_del_keymap("o", "f")
---vim.api.nvim_del_keymap("o", "T")
---vim.api.nvim_del_keymap("o", "F")
-
--- Ccc pick
-map({ "n" }, "<leader>c", ":CccPick<cr>", { desc = "color picker" })
-
--- Markdown preview
-map({ "n" }, "<leader><leader>m", ":MarkdownPreviewToggle<cr>", { desc = "markdown preview" })
 
 -- dadbod database ui toggle
-map({ "n" }, "<leader>D", ":DBUIToggle<cr>", { desc = "neogit" })
+map({ "n" }, "<leader>D", ":DBUIToggle<cr>", { desc = "dadbod toggle" })
 
 -- Git
 map({ "n" }, "<leader>gu", function()
   Snacks.gitbrowse()
-end, {})
+end, { desc = "open gitbrowse in webbrowser" })
 
 -- Spellcheck
-map({ "n" }, "<leader><leader>S", ":set spell!<cr>", { desc = "toggle spell" })
+SnackMap({
+  lhs = "<leader><leader>S",
+  rhs = function()
+    vim.cmd("set spell!")
+  end,
+}, {
+  name = "spell",
+  op = function()
+    return vim.wo.spell
+  end,
+})
 map({ "n" }, "<leader><leader>s", function()
   require("telescope.builtin").spell_suggest()
 end, { desc = "spell suggest" })
 --map({ "n" }, "<leader>s", "z=", {})
-
--- Nnn explorer for showoff
-map({ "n" }, "<leader><leader>n", ":NnnExplorer<cr>", { desc = "nnn explorer" })
 
 -- Format buffer
 map({ "n", "v" }, "<leader><leader>f", function()
@@ -403,94 +225,111 @@ map({ "n" }, "<leader><Tab>", ":Telescope buffers<cr>", { desc = "jump buffers" 
 --map({ "n" }, "<leader>c", ":Telescope commands<cr>")
 map({ "n" }, "<leader>v", ":Telescope vim_options<cr>")
 --map({ "n" }, "<leader>t", ":Telescope builtin include_extensions=true<cr>")
-
 map({ "n" }, "<leader>?a", function()
   vim.lsp.buf.code_action()
 end, { desc = "code actions" })
 map({ "n" }, "<leader>?k", ":Telescope keymaps<cr>", { desc = "keymaps" })
 map({ "n" }, "<leader>?d", ":Telescope diagnostics bufnr=0<cr>", { desc = "workspace diagnostics" })
 map({ "n" }, "<leader>?D", ":Telescope diagnostics<cr>", { desc = "workspace diagnostics" })
-
 map({ "n" }, "\\", ":Telescope current_buffer_fuzzy_find<cr>", { desc = "fzf cur_buffer" })
 map({ "n" }, "<leader>/", ":Telescope live_grep<cr>", { desc = "telescope grep buffers" })
-map({ "n" }, "<leader>m", ":Telescope marks mark_type=local<cr>", { desc = "telescope marks local" })
-map({ "n" }, "<leader>M", ":Telescope marks mark_type=global<cr>", { desc = "telescope marks global" })
-
-map({ "n" }, "<leader>u", ":Telescope undo<cr>", { desc = "telescope undo" })
+map({ "n" }, "<leader>'", ":Telescope marks mark_type=local<cr>", { desc = "telescope marks local" })
+map({ "n" }, '<leader>"', ":Telescope marks mark_type=global<cr>", { desc = "telescope marks global" })
+map({ "n" }, "<leader>U", ":Telescope undo<cr>", { desc = "telescope undo" })
+map({ "n" }, "<leader>#", ":TodoTelescope<cr>", { desc = "telescope todo comments" })
 
 -- Dap
 map({ "n" }, "<leader>dc", ":Telescope dap commands<cr>")
 map({ "n" }, "<leader>db", ":Telescope dap list_breakpoints<cr>")
 map({ "n" }, "<leader>du", function()
   require("dapui").toggle()
-end)
+end, { desc = "toggle dapui" })
 
 -- Notification history
-map({ "n" }, "<leader>n", ":Telescope notify<cr>", { desc = "notification history" })
+map({ "n" }, "<leader>N", ":Telescope notify<cr>", { desc = "notification history" })
+
+-- luasnip
+map({ "n" }, "<leader>l", ":Telescope luasnip<cr>", { desc = "notification history" })
 
 -- NeoComposer Macros
 --map({ "n" }, "<leader>q", ":Telescope macros<cr>", { desc = "neocomposer macros" })
 
--- Overseer
-map({ "n" }, "<leader>o", ":OverseerRun<cr>", { desc = "Overseer run command" })
-
 -- Mathematic functions / operations
 -- Count time values together HH:MM:SS in visual block
 map({ "v" }, "<leader><leader>c", ":MathTimeSum<cr>", { desc = "SUM time values visual" })
-
 map({ "n" }, "<leader><leader>+", ":MathSum<cr>", { desc = "SUM col - yank to register first" })
-
 map({ "n" }, "<leader><leader>*", ":MathMul<cr>", { desc = "MUL col - yank to register first" })
-
 map({ "n" }, "<leader><leader>/", ":MathDiv<cr>", { desc = "DIV col - yank to register first" })
 
--- Togglables
---map({ "n" }, "<leader><leader>d", function() Snacks.toggle.dim() end, { desc = "toggle dim" })
-local isDim = false
-map({ "n" }, "<leader><leader>d", function()
-  if isDim then
-    Snacks.dim.disable()
-    isDim = false
-  else
-    Snacks.dim.enable()
-    isDim = true
-  end
-end, { desc = "toggle dim" })
+-- TODO: when implemented
+---- stylua: ignore
+--map({ "n" }, "<leader>zi", function() vim.g.guifont=":h11" end, { desc = "Font big" })
+---- stylua: ignore
+--map({ "n" }, "<leader>zo", function() vim.g.guifont=":h4" end, { desc = "Font small" })
 
-local isDark = true
-map({ "n" }, "<leader><leader>t", function()
-  if isDark then
+-- Togglables
+if Snacks then
+  Snacks.toggle.dim():map("<leader><leader>d")
+end
+local function ToggleTheme()
+  if vim.o.background == "dark" then
     vim.o.background = "light"
     vim.cmd([[
     :silent !kitty +kitten themes --reload-in=all "Tokyo Night Day"
     ]])
-    isDark = false
   else
     vim.o.background = "dark"
     vim.cmd([[
     :silent !kitty +kitten themes --reload-in=all "Tokyo Night Storm"
     ]])
-    isDark = true
-  end
-end, { desc = "toggle theme" })
-
-local isLSP = true
-function ToggleLsp()
-  vim.diagnostic.enable(not vim.diagnostic.is_enabled())
-  if isLSP then
-    vim.cmd(":LspStop")
-    isLSP = false
-    --vim.cmd('echo "LSP off"')
-    require("notify")("LSP off")
-  else
-    vim.cmd(":LspStart")
-    isLSP = true
-    --vim.cmd('echo "LSP on"')
-    require("notify")("LSP on")
   end
 end
-map({ "n", "o", "x" }, "<leader><leader>l", ToggleLsp, { desc = "toggle lsp" })
-map({ "n", "o", "x" }, "<F3>", ToggleLsp, { desc = "toggle lsp" })
+SnackMap({
+  lhs = "<leader><leader>t",
+  rhs = ToggleTheme,
+}, {
+  name = "light theme",
+  op = function()
+    return vim.o.background == "light"
+  end,
+})
+
+local clients
+local function ToggleLsp()
+  -- disable/enable at same time
+  local isLSP = not vim.diagnostic.is_enabled()
+  clients = (clients == {} and vim.lsp.get_clients() or {})
+  vim.diagnostic.enable(isLSP)
+  vim.lsp.enable(clients, isLSP) -- or vim.lsp.is_enabled()
+  require("notify")("LSP and diagnostic: " .. tostring(isLSP)) -- can disable and use statusline
+end
+for _, keymap in ipairs({ "<leader><leader>l", "<F3>" }) do
+  SnackMap({
+    lhs = keymap,
+    rhs = ToggleLsp,
+  }, {
+    name = "lsp",
+    op = function()
+      return not vim.diagnostic.is_enabled()
+    end,
+  })
+end
+
+-- TODO: comeup with solution that works, in file directly it doesn't...
+-- and you want to lazy load it on key
+--
+--local isMarkdown = false
+--local function ToggleMarkdown()
+--  isMarkdown = not isMarkdown
+--  vim.cmd("MarkdownPreviewToggle")
+--end
+--SnackMap({ lhs = "<leader><leader>m", rhs = ToggleMarkdown }, {
+--  name = "markdown-preview",
+--  op = function()
+--    return isMarkdown
+--  end,
+--})
+
 map({ "n", "o", "x" }, "<F1>", vim.lsp.buf.hover, { desc = "LSP help" })
 map({ "n", "o", "x" }, "<F2>", vim.diagnostic.open_float, { desc = "LSP diagnostic err" })
 --map({ "n", "o", "x" }, "<F10>", function()
@@ -499,6 +338,11 @@ map({ "n", "o", "x" }, "<F2>", vim.diagnostic.open_float, { desc = "LSP diagnost
 --map({ "n", "o", "x" }, "<F11>", function()
 --  vim.diagnostic.jump({ count = 1, float = true })
 --end, { desc = "LSP jump next diagnoses" })
+
+-- Buffer related
+map({ "n" }, "<leader>ww", ":new<cr>", { desc = "create new buffer" })
+map({ "n" }, "<leader>wn", ":new<cr>", { desc = "create new buffer" })
+map({ "n" }, "<leader>wc", ":buf?<cr>", { desc = "buff clone?" })
 
 vim.cmd([[
 " dapui

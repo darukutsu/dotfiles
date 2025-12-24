@@ -6,12 +6,24 @@ return {
     "mks-h/treesitter-autoinstall.nvim",
     "chrisgrieser/nvim-various-textobjs",
     "nvim-treesitter/nvim-treesitter-textobjects",
+    "windwp/nvim-ts-autotag",
   },
   branch = "main",
   build = ":TSUpdate",
   config = function()
     -- colorize text depending on language
     local ts = require("nvim-treesitter")
+
+    require("nvim-ts-autotag").setup({
+      opts = {
+        enable_close = true,
+        enable_rename = true,
+        enable_close_on_slash = true,
+      },
+      --aliases = {
+      --  ["your language here"] = "html",
+      --},
+    })
 
     -- TODO: remove later after testing autoinstall
     local ignore_install = {

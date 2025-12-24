@@ -1,6 +1,12 @@
 return {
   "uga-rosa/ccc.nvim", -- color picker with :CccPick
   event = "UIEnter",
+  cmd = "CccPick",
+  keys = function()
+    return {
+      { "<leader>c", ":CccPick<cr>", { desc = "color picker" } },
+    }
+  end,
   -- lazy = false,
   config = function()
     local ColorInput = require("ccc.input")

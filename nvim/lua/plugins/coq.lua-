@@ -4,7 +4,6 @@ return {
   --lazy = false,
   branch = "coq",
   dependencies = {
-    { "windwp/nvim-ts-autotag" },
     { "ms-jpq/coq.artifacts" },
     { "ms-jpq/coq.thirdparty" },
     build = ":COQdeps",
@@ -57,14 +56,19 @@ return {
         precision = 6,
       },
       { src = "vim_dadbod_completion", short_name = "DB" },
-      --{ src = "copilot", short_name = "COP", accept_key = "<c-f>" },
-      --{ src = "codeium", short_name = "COD" },
-      -- free self-hosted
-      --{ src = "tabby", short_name = "TAB" },
-      --{ src = "vimtex", short_name = "vTEX" },
+      { src = "vimtex", short_name = "vTEX" },
       { src = "nvimlua", short_name = "nLUA", conf_only = true },
-
-      --{ src = "dap" },
+      { src = "dap" },
+      { src = "builtin/ada" },
+      { src = "builtin/c" },
+      { src = "builtin/clojure" },
+      { src = "builtin/css" },
+      { src = "builtin/haskell" },
+      { src = "builtin/html" },
+      { src = "builtin/js" },
+      { src = "builtin/php" },
+      { src = "builtin/syntax" },
+      { src = "builtin/xml" },
     })
 
     -- COQ these mappings are coq recommended mappings unrelated to nvim-autopairs

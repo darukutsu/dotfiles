@@ -42,6 +42,7 @@ return { -- MASON, formatter/linter, debugger, lsp
     local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
     local function autoformat_quit(client, bufnr)
       if vim.b[bufnr].bigfile then
+        vim.b.completion = false
         return
       end
       if client:supports_method("textDocument/formatting") then
