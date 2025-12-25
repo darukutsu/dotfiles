@@ -1,6 +1,6 @@
 return {
   "folke/flash.nvim", --better fF
-  --event = "VeryLazy",
+  event = "VeryLazy", -- because of wordmotions
   --lazy = false,
   keys = function()
     return {
@@ -10,6 +10,7 @@ return {
       { "T" },
     }
   end,
+  ---@type Flash.Config
   opts = {
     -- excluded ydcn
     labels = "arstgmeioqwfpbjluzxvkh",

@@ -11,6 +11,7 @@ return {
           require("multicursor-nvim").lineAddCursor(-1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor up",
       },
       {
         "<down>",
@@ -18,6 +19,7 @@ return {
           require("multicursor-nvim").lineAddCursor(1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor down",
       },
       {
         "<leader><up>",
@@ -25,6 +27,7 @@ return {
           require("multicursor-nvim").lineSkipCursor(-1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor skip up",
       },
       {
         "<leader><down>",
@@ -32,6 +35,7 @@ return {
           require("multicursor-nvim").lineSkipCursor(1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor skip down",
       },
 
       -- Add or skip adding a new cursor by matching word/selection
@@ -42,6 +46,7 @@ return {
           require("multicursor-nvim").matchAddCursor(1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor match next",
       },
       {
         "<leader>mp",
@@ -49,6 +54,7 @@ return {
           require("multicursor-nvim").matchAddCursor(-1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor match prev",
       },
       {
         "<leader>mN",
@@ -56,6 +62,7 @@ return {
           require("multicursor-nvim").matchAddCursor(-1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor match prev",
       },
       {
         "<leader>ms",
@@ -63,6 +70,7 @@ return {
           require("multicursor-nvim").matchSkipCursor(1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor match skip up",
       },
       {
         "<leader>mS",
@@ -70,6 +78,7 @@ return {
           require("multicursor-nvim").matchSkipCursor(-1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor match skip down",
       },
 
       -- Add or skip adding a new cursor by matching diagnostics.
@@ -79,6 +88,7 @@ return {
           require("multicursor-nvim").diagnosticAddCursor(1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor diag next",
       },
       {
         "<leader>m[",
@@ -86,6 +96,7 @@ return {
           require("multicursor-nvim").diagnosticAddCursor(-1)
         end,
         mode = { "n", "x" },
+        desc = "multicursor diag prev",
       },
 
       -- Add and remove cursors with control + left click.
@@ -94,18 +105,21 @@ return {
         function()
           require("multicursor-nvim").handleMouse()
         end,
+        --desc = "multicursor mouse",
       },
       {
         "<c-leftdrag>",
         function()
           require("multicursor-nvim").handleMouseDrag()
         end,
+        --desc = "multicursor mouse drag",
       },
       {
         "<c-leftrelease>",
         function()
           require("multicursor-nvim").handleMouseRelease()
         end,
+        --desc = "multicursor mouse release",
       },
 
       -- Disable and enable cursors(pause).
@@ -115,6 +129,7 @@ return {
           require("multicursor-nvim").toggleCursor()
         end,
         mode = { "n", "x" },
+        desc = "multicursor up",
       },
 
       -- Pressing `gaip` will add a cursor on each line of a paragraph.
@@ -125,6 +140,7 @@ return {
           require("multicursor-nvim").addCursorOperator()
         end,
         mode = { "n", "x" },
+        desc = "multicursor ga motion",
       },
     }
   end,

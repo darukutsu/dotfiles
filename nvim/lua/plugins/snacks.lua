@@ -9,7 +9,9 @@ return {
     animate = {},
     bigfile = {
       enabled = true,
-      size = 1024 * 200, -- 200KB
+      notify = true,
+      size = 1024 * 300, -- KB
+      line_length = 200,
     },
     dashboard = {
       sections = {

@@ -343,6 +343,14 @@ map({ "n", "o", "x" }, "<F2>", vim.diagnostic.open_float, { desc = "LSP diagnost
 map({ "n" }, "<leader>ww", ":new<cr>", { desc = "create new buffer" })
 map({ "n" }, "<leader>wn", ":new<cr>", { desc = "create new buffer" })
 map({ "n" }, "<leader>wc", ":buf?<cr>", { desc = "buff clone?" })
+map({ "n" }, "<leader>+", "<C-W>1000+", { desc = "maximize buff" })
+map({ "n" }, "<leader>-", "<C-W>1000-", { desc = "minimize buff" })
+map({ "n" }, "<leader>=", "<C-W>=", { desc = "reset buf size" })
+map({ "n" }, "<C-s>", "<C-W><C-r>", { desc = "flip buff" })
+--map({ "n" }, "<leader>m", "<C-W>h", { desc = "" })
+--map({ "n" }, "<leader>n", "<C-W>j", { desc = "" })
+--map({ "n" }, "<leader>e", "<C-W>k", { desc = "" })
+--map({ "n" }, "<leader>i", "<C-W>l", { desc = "" })
 
 vim.cmd([[
 " dapui
@@ -360,105 +368,16 @@ vim.cmd([[
 "nnoremap <leader>ds :lua require("dap.ui.widgets").widgets.centered_float(widgets.scopes)<cr>
 "nnoremap <leader>df :lua require("dap.ui.widgets").widgets.centered_float(widgets.frames)<cr>
 
-
-" GNUInfo
-" Only apply the mapping to generated buffers
-"if &buftype =~? "nofile" || &buftype =~? "nowrite"
-""  nnoremap <buffer> gu :InfoUp<cr>
-""  nnoremap <buffer> gn :InfoNext<cr>
-""  nnoremap <buffer> gp :InfoPrev<cr>
-""  "nnoremap <buffer> gm <Plug>(InfoMenu)
-""  function! ToggleInfoMenu()
-""    try
-""      execute "normal! gm\<Plug>(InfoMenu)"
-""    catch /E117/
-""      " Handle the error, if needed
-""      echo "Error occurred!"
-""    endtry
-""    execute "q"
-""  endfunction
-""  nnoremap <buffer> gm :call ToggleInfoMenu()<cr>
-""  nnoremap <buffer> gf :InfoFollow<cr>
-"  nnoremap gn :VinfoNext<cr>
-"  nnoremap gp :VinfoPrev<cr>
-"endif
-"nnoremap gn :VinfoNext<cr>
-"nnoremap gp :VinfoPrev<cr>
-
 " Firenvim
 " nnoremap <leader>'l :set lines=
 " nnoremap <leader>'c :set columns=
 
-" Folding functions
+" NOTE: Folding functions
 " za/zA toggle current 1 level/toggle current full
 " zr/ZR open all 1 level/open all full
 " zm/ZM close all 1 level/close all full
 
-" Resize buffer
-nnoremap <leader>+ <C-W>1000+
-nnoremap <leader>- <C-W>1000-
-nnoremap <leader>= <C-W>=
-"nnoremap <C-W>m <C-W>h
-"nnoremap <C-W>n <C-W>j
-"nnoremap <C-W>e <C-W>k
-"nnoremap <C-W>i <C-W>l
-"nnoremap <leader>m <C-W>h
-"nnoremap <leader>n <C-W>j
-"nnoremap <leader>e <C-W>k
-"nnoremap <leader>i <C-W>l
-"nnoremap <leader>r <C-w><C-r>
-nnoremap <C-s> <C-w><C-r>
-
-" Search for selected text.
-" http://vim.wikia.com/wiki/VimTip171
-let s:save_cpo = &cpo | set cpo&vim
-if !exists('g:VeryLiteral')
-  let g:VeryLiteral = 0
-endif
-function! s:VSetSearch(cmd)
-  let old_reg = getreg('"')
-  let old_regtype = getregtype('"')
-  normal! gvy
-  if @@ =~? '^[0-9a-z,_]*$' || @@ =~? '^[0-9a-z ,_]*$' && g:VeryLiteral
-    let @/ = @@
-  else
-    let pat = escape(@@, a:cmd.'\')
-    if g:VeryLiteral
-      let pat = substitute(pat, '\n', '\\n', 'g')
-    else
-      let pat = substitute(pat, '^\_s\+', '\\s\\+', '')
-      let pat = substitute(pat, '\_s\+$', '\\s\\*', '')
-      let pat = substitute(pat, '\_s\+', '\\_s\\+', 'g')
-    endif
-    let @/ = '\V'.pat
-  endif
-  normal! gV
-  call setreg('"', old_reg, old_regtype)
-endfunction
-vnoremap <silent> * :<C-U>call <SID>VSetSearch('/')<cr>/<C-R>/<cr>
-vnoremap <silent> # :<C-U>call <SID>VSetSearch('?')<cr>?<C-R>/<cr>
-vmap <kMultiply> *
-nmap <silent> <Plug>VLToggle :let g:VeryLiteral = !g:VeryLiteral
-  \\| echo "VeryLiteral " . (g:VeryLiteral ? "On" : "Off")<cr>
-if !hasmapto("<Plug>VLToggle")
-  nmap <unique> <Leader>vl <Plug>VLToggle
-endif
-let &cpo = s:save_cpo | unlet s:save_cpo
-
-" rotate horizontal/vertical buffer"
-let g:isHorizontal = 1
-function! ToggleRotate(isHorizontal)
-  if g:isHorizontal==1
-    :exe "normal \<C-w>J"
-    let g:isHorizontal = 0
-  else
-    :exe "normal \<C-w>H"
-    let g:isHorizontal = 1
-  endif
-endfunction
-"nnoremap <C-w><C-r> :call ToggleRotate(isHorizontal)<cr>
-"nnoremap <leader>r :call ToggleRotate(isHorizontal)<cr>
-
+" TODO: rework
 " Paste matching text of last search single word
 function! Del_word_delims()
    let reg = getreg('/')
@@ -473,13 +392,7 @@ function! Del_word_delims()
    let res = substitute(res, '\\n'           , '\n', 'g')
    return res
 endfunction
-
 inoremap <silent> <C-R>/ <C-R>=Del_word_delims()<cr>
-
-" Jump to first ocurance of search and go to visual mode
-" don't see point of this... maybe revork to select whole selection in visual
-" noremap \\ //s<cr>v//e+1<cr>
-
 " Unfold when going in fold going out jk
 function! MoveAndFoldLeft()
     let line = getpos('.')[1]
@@ -502,8 +415,6 @@ function! MoveAndFoldRight()
     endif
 endfunction
 
-nnoremap <silent> <Left>  :<C-u>call MoveAndFoldLeft()<cr>
 nnoremap <silent> h       :<C-u>call MoveAndFoldLeft()<cr>
-nnoremap <silent> <Right> :<C-u>call MoveAndFoldRight()<cr>
 nnoremap <silent> l       :<C-u>call MoveAndFoldRight()<cr>
 ]])

@@ -11,6 +11,7 @@ return {
     slots = { "a", "b", "c", "d", "e", "f" },
     dynamicSlots = "rotate",
     editInBuffer = true,
+    logLevel = vim.log.levels.OFF,
     lessNotifications = true,
     clear = true,
     --mapping = {
@@ -25,6 +26,7 @@ return {
     --},
   },
   config = function(_, opts)
+    --vim.keymap.set("n", "q", "<Nop>")
     require("recorder").setup(opts)
 
     local oklua, lualine = pcall(require, "lualine")

@@ -128,7 +128,9 @@ eval "$(atuin init bash --disable-up-arrow)"
 #export SESSION_SWITCH="dbus-run-session -- gnome-shell --display-server --wayland"
 
 PS1='[\u@\h \W]\$ '
-set -o vi
+if [ -z $NVIM ]; then
+  set -o vi
+fi
 
 ## nmtui NEWT_COLORS
 [[ -s "$XDG_CONFIG_HOME/bash/newt_colors" ]] && source "$XDG_CONFIG_HOME/bash/newt_colors"

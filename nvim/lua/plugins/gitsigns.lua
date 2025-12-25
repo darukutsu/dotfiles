@@ -2,14 +2,14 @@ return {
   "lewis6991/gitsigns.nvim", -- git time stamps
   event = "VeryLazy",
   keys = {
-    { "<leader>gb", ":Gitsigns blame<cr>" },
-    { "<leader>gl", ":Gitsigns blame_line<cr>" },
-    { "<leader>gb", ":Gitsigns toggle_current_line_blame<cr>" },
-    { "<leader>gh", ":Gitsigns preview_hunk<cr>" },
-    { "<leader>gn", ":Gitsigns next_hunk<cr>" },
-    { "<leader>gp", ":Gitsigns prev_hunk<cr>" },
-    { "<leader>g]", ":Gitsigns next_hunk<cr>" },
-    { "<leader>g[", ":Gitsigns prev_hunk<cr>" },
+    { "<leader>gB", ":Gitsigns blame<cr>", desc = "gitsigns blame" },
+    { "<leader>gl", ":Gitsigns blame_line<cr>", desc = "gitsigns blame line" },
+    { "<leader>gL", ":Gitsigns toggle_current_line_blame<cr>", desc = "gitsigns toggle blame line" },
+    { "<leader>gh", ":Gitsigns preview_hunk<cr>", desc = "gitsigns preview_hunk" },
+    { "<leader>gn", ":Gitsigns next_hunk<cr>", desc = "gitsigns next_hunk" },
+    { "<leader>gp", ":Gitsigns prev_hunk<cr>", desc = "gitsigns prev_hunk" },
+    { "<leader>g]", ":Gitsigns next_hunk<cr>", desc = "gitsigns next_hunk" },
+    { "<leader>g[", ":Gitsigns prev_hunk<cr>", desc = "gitsigns prev_hunk" },
   },
   opts = {
     signs = {

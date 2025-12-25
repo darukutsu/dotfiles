@@ -58,8 +58,8 @@ return {
       -- },
     },
     cmd = "Copilot",
-    event = { "InsertEnter", "CmdlineEnter" },
-    --event = "VeryLazy",
+    --event = { "InsertEnter", "CmdlineEnter" },
+    event = "VeryLazy", -- so we can use it in any buffer even if can't edit
     keys = {
       { "<leader>CC", ":Copilot panel toggle<cr>", desc = "toggle copilot panel" },
       { "<leader>Cp", ":Copilot panel toggle<cr>", desc = "toggle copilot panel" },

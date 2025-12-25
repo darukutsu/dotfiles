@@ -9,7 +9,7 @@ return {
     "folke/noice.nvim",
   },
   keys = {
-    { "<leader>t", ":NeoWarriorOpen<cr>", desc = "open taskwarrior" },
+    { "<leader>T", ":NeoWarriorOpen<cr>", desc = "open taskwarrior" },
   },
   opts = {},
 }
