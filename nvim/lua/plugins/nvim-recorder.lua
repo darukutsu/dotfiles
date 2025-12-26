@@ -2,7 +2,6 @@ return {
   "chrisgrieser/nvim-recorder",
   --event = "UIEnter",
   --lazy = false,
-  dependencies = "rcarriga/nvim-notify",
   keys = {
     { "q", desc = " Start Recording Macro" },
     { "Q", desc = " Play Recording Macro" },

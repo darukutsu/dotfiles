@@ -10,8 +10,8 @@ return {
     bigfile = {
       enabled = true,
       notify = true,
-      size = 1024 * 300, -- KB
-      line_length = 200,
+      size = 1024 * 500, -- KB
+      line_length = 1000,
     },
     dashboard = {
       sections = {

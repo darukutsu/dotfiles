@@ -104,6 +104,14 @@ return {
   version = "1.*",
   dependencies = {
     "rafamadriz/friendly-snippets",
+    --"moyiz/blink-emoji.nvim",
+    --"MahanRahmati/blink-nerdfont.nvim",
+    --"mgalliou/blink-cmp-tmux",
+    "disrupted/blink-cmp-conventional-commits",
+    --{
+    --  "Kaiser-Yang/blink-cmp-dictionary",
+    --  dependencies = { "nvim-lua/plenary.nvim" },
+    --},
     --"L3MON4D3/LuaSnip",
     {
       "fang2hou/blink-copilot",
@@ -144,13 +152,21 @@ return {
         --auto_show_delay_ms = 0,
         border = "single",
         draw = {
-          columns = { { "item_idx" }, { "kind_icon" }, { "label", "label_description", gap = 1 } },
+          columns = { { "item_idx" }, { "kind_icon" }, { "label", gap = 1 } },
           components = {
             item_idx = {
               text = function(ctx)
                 return ctx.idx == 10 and "0" or ctx.idx >= 10 and " " or tostring(ctx.idx)
               end,
               highlight = "BlinkCmpItemIdx",
+            },
+            label = {
+              text = function(ctx)
+                return require("colorful-menu").blink_components_text(ctx)
+              end,
+              highlight = function(ctx)
+                return require("colorful-menu").blink_components_highlight(ctx)
+              end,
             },
           },
         },
@@ -177,11 +193,22 @@ return {
 
     sources = {
       default = {
+        "conventional_commits",
         "lsp",
         "buffer",
         "path",
         "snippets",
         "copilot",
+      },
+      per_filetype = {
+        sql = {
+          "lsp",
+          "snippets",
+          "dadbod",
+          "buffer",
+          "path",
+          "copilot",
+        },
       },
       --default = function(ctx)
       --
@@ -205,6 +232,17 @@ return {
           score_offset = 100,
           async = true,
         },
+        conventional_commits = {
+          name = "Conventional Commits",
+          module = "blink-cmp-conventional-commits",
+          enabled = function()
+            return vim.bo.filetype == "gitcommit"
+          end,
+          ---@module 'blink-cmp-conventional-commits'
+          ---@type blink-cmp-conventional-commits.Options
+          opts = {}, -- none so far
+        },
+        dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
         buffer = {
           opts = {
             -- get all buffers, even ones like neo-tree
@@ -215,6 +253,9 @@ return {
                 return vim.bo[bufnr].buftype == ""
               end, vim.api.nvim_list_bufs())
             end,
+            max_sync_buffer_size = 20000,
+            max_async_buffer_size = 300000,
+            max_total_buffer_size = 500000,
           },
         },
         path = {
@@ -227,10 +268,15 @@ return {
         --  --enabled = true,
         --  ghost_text = { enabled = true },
         --},
+        ---- some lsps will always be enabled, some are weak
+        --lsp = {
+        --  fallbacks = {},
+        --},
       },
     },
 
     fuzzy = {
+      --implementation = "lua",
       implementation = "prefer_rust_with_warning",
       sorts = {
         "exact",

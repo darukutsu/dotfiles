@@ -70,6 +70,7 @@ return { -- MASON, formatter/linter, debugger, lsp
       clangd = "clangd",
       --matlab = "matlab",
       ltex = "ltex",
+      ctags_lsp = "ctags_lsp",
       --kotlin = "kotlin",
     }
 
@@ -246,22 +247,26 @@ return { -- MASON, formatter/linter, debugger, lsp
 
     -- don't use Wiki on git repo for lspconfig rather use :help lspconfig or :help lsp
 
-    --vim.diagnostic.config({
-    --  virtual_text = false
-    --})
-
     -- Show line diagnostics automatically in hover window
     --vim.o.updatetime = 250
     --vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 
-    -- CHANGE DIAGNOSTIC SYMBOLS IN THE SIGN COLUMN (GUTTER)
     vim.diagnostic.config({
+      --virtual_lines = { current_line = true },
+      --virtual_text = false,
+
       signs = {
         text = {
-          [vim.diagnostic.severity.ERROR] = " ",
+          [vim.diagnostic.severity.ERROR] = " ",
           [vim.diagnostic.severity.WARN] = " ",
-          [vim.diagnostic.severity.HINT] = " ",
+          --[vim.diagnostic.severity.WARN] = " ",
+          --[vim.diagnostic.severity.HINT] = " ",
+          --[vim.diagnostic.severity.HINT] = "󰮦 ",
+          [vim.diagnostic.severity.HINT] = " ",
+          --[vim.diagnostic.severity.HINT] = "󰋖 ",
           [vim.diagnostic.severity.INFO] = " ",
+          --[vim.diagnostic.severity.INFO] = "󰙎 ",
+          --"󰋖 " " "
         },
       },
     })
