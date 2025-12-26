@@ -16,6 +16,7 @@ return {
     --require("mini.cursorword").setup{}
 
     require("mini.surround").setup({
+      -- NOTE: creates overlapping mappings
       mappings = {
         add = "#a", -- Add surrounding in Normal and Visual modes
         delete = "#d", -- Delete surrounding

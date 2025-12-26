@@ -23,6 +23,12 @@ local unmap = vim.keymap.del
 --"noremap I L
 --"map H H
 --]])
+--unmap({ "n" }, "gcc") -- wordmotion
+unmap({ "n" }, "grn")
+unmap({ "n" }, "grr")
+unmap({ "n" }, "grt")
+unmap({ "n" }, "gri")
+unmap({ "n", "v" }, "gra")
 
 --vim.opt.timeoutlen = 100
 map({ "t" }, "<C-Esc>", "<C-\\><C-n>", { silent = true })
@@ -39,9 +45,6 @@ map({ "n" }, "<leader>;", ":noh<cr>", { silent = true })
 --  let g:wordmotion_mappings={  'e':'', 'E':'', 'j':'<M-e>', 'J':'<M-E>',  }
 --]])
 --
-
--- dadbod database ui toggle
-map({ "n" }, "<leader>D", ":DBUIToggle<cr>", { desc = "dadbod toggle" })
 
 -- Git
 map({ "n" }, "<leader>gu", function()
@@ -60,6 +63,7 @@ SnackMap({
     return vim.wo.spell
   end,
 })
+
 map({ "n" }, "<leader><leader>s", function()
   require("telescope.builtin").spell_suggest()
 end, { desc = "spell suggest" })
@@ -70,9 +74,8 @@ map({ "n", "v" }, "<leader><leader>f", function()
   vim.lsp.buf.format({ rangeFormatting = { dynamicRegistration = true, rangeSupport = true }, async = true })
 end, { desc = "format buffer" })
 
---https://github.com/neovim/neovim/discussions/27042
---
--- Format selection
+----https://github.com/neovim/neovim/discussions/27042
+---- Format selection
 --map({ "v" }, "<leader><leader>f", function()
 --  -- get visual range in (1-indexed row, 0-indexed col)
 --  local start_pos = vim.fn.getpos("'<")
@@ -160,10 +163,6 @@ map({ "n" }, "gp", function()
   require("telescope.builtin").lsp_document_symbols()
 end, { desc = "telescope document symbols" })
 
-unmap({ "n" }, "grn")
-unmap({ "n" }, "grr")
-unmap({ "n" }, "gri")
-unmap({ "n", "v" }, "gra")
 map({ "n" }, "gr", function()
   --vim.lsp.buf.references()
   --vim.lsp.buf.references(nil, { on_list = require("telescope.builtin").lsp_references })
@@ -215,44 +214,12 @@ map({ "n" }, "x", '"bx', {})
 map({ "n" }, "X", '"bX', {})
 --xnoremap <leader>k \"_dP
 
--- Telescope shortcut
---map({ "n" }, "<leader>:", ":")
-map({ "n" }, "<leader>:", ":Telescope cmdline<cr>")
 map({ "n" }, "<leader>f", function()
   vim.find_files_from_project_git_root()
 end, { desc = "jump files" })
-map({ "n" }, "<leader><Tab>", ":Telescope buffers<cr>", { desc = "jump buffers" })
---map({ "n" }, "<leader>c", ":Telescope commands<cr>")
-map({ "n" }, "<leader>v", ":Telescope vim_options<cr>")
---map({ "n" }, "<leader>t", ":Telescope builtin include_extensions=true<cr>")
 map({ "n" }, "<leader>?a", function()
   vim.lsp.buf.code_action()
 end, { desc = "code actions" })
-map({ "n" }, "<leader>?k", ":Telescope keymaps<cr>", { desc = "keymaps" })
-map({ "n" }, "<leader>?d", ":Telescope diagnostics bufnr=0<cr>", { desc = "workspace diagnostics" })
-map({ "n" }, "<leader>?D", ":Telescope diagnostics<cr>", { desc = "workspace diagnostics" })
-map({ "n" }, "\\", ":Telescope current_buffer_fuzzy_find<cr>", { desc = "fzf cur_buffer" })
-map({ "n" }, "<leader>/", ":Telescope live_grep<cr>", { desc = "telescope grep buffers" })
-map({ "n" }, "<leader>'", ":Telescope marks mark_type=local<cr>", { desc = "telescope marks local" })
-map({ "n" }, '<leader>"', ":Telescope marks mark_type=global<cr>", { desc = "telescope marks global" })
-map({ "n" }, "<leader>U", ":Telescope undo<cr>", { desc = "telescope undo" })
-map({ "n" }, "<leader>#", ":TodoTelescope<cr>", { desc = "telescope todo comments" })
-
--- Dap
-map({ "n" }, "<leader>dc", ":Telescope dap commands<cr>")
-map({ "n" }, "<leader>db", ":Telescope dap list_breakpoints<cr>")
-map({ "n" }, "<leader>du", function()
-  require("dapui").toggle()
-end, { desc = "toggle dapui" })
-
--- Notification history
-map({ "n" }, "<leader>N", ":Telescope notify<cr>", { desc = "notification history" })
-
--- luasnip
-map({ "n" }, "<leader>l", ":Telescope luasnip<cr>", { desc = "notification history" })
-
--- NeoComposer Macros
---map({ "n" }, "<leader>q", ":Telescope macros<cr>", { desc = "neocomposer macros" })
 
 -- Mathematic functions / operations
 -- Count time values together HH:MM:SS in visual block
@@ -353,21 +320,6 @@ map({ "n" }, "<C-s>", "<C-W><C-r>", { desc = "flip buff" })
 --map({ "n" }, "<leader>i", "<C-W>l", { desc = "" })
 
 vim.cmd([[
-" dapui
-"nnoremap <leader>dc :lua require("dap").continue()<cr>
-"nnoremap <leader>dR :lua require("dap").restart()<cr>
-"nnoremap <leader>dP :lua require("dap").pause()<cr>
-""nnoremap <leader>dr :lua require("dap").repl.open()<cr>
-"nnoremap <leader>db :lua require("dap").toggle_breakpoint()<cr>
-"nnoremap <leader>dl :lua require("dap").run_last()<cr>
-"nnoremap <leader>dO :lua require("dap").step_over()<cr>
-"nnoremap <leader>di :lua require("dap").step_into()<cr>
-"nnoremap <leader>do :lua require("dap").step_out()<cr>
-"nnoremap <leader>dh :lua require("dap.ui.widgets").hover()<cr>
-"nnoremap <leader>dp :lua require("dap.ui.widgets").preview()<cr>
-"nnoremap <leader>ds :lua require("dap.ui.widgets").widgets.centered_float(widgets.scopes)<cr>
-"nnoremap <leader>df :lua require("dap.ui.widgets").widgets.centered_float(widgets.frames)<cr>
-
 " Firenvim
 " nnoremap <leader>'l :set lines=
 " nnoremap <leader>'c :set columns=

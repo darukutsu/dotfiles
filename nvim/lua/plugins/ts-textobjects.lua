@@ -1,8 +1,8 @@
 return {
   {
     "chrisgrieser/nvim-various-textobjs",
-    event = "VeryLazy",
-    lazy = false,
+    --event = "VeryLazy",
+    --lazy = false,
     keys = function()
       return {
         {
@@ -35,16 +35,102 @@ return {
           end,
           mode = { "o", "x" },
         },
+        {
+          "gG",
+          function()
+            require("various-textobjs").entireBuffer()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "|",
+          function()
+            require("various-textobjs").column()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "ik",
+          function()
+            require("various-textobjs").key()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "ak",
+          function()
+            require("various-textobjs").key()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "in",
+          function()
+            require("various-textobjs").number()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "an",
+          function()
+            require("various-textobjs").number()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "iF",
+          function()
+            require("various-textobjs").filepath()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "aF",
+          function()
+            require("various-textobjs").filepath()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "i#",
+          function()
+            require("various-textobjs").color()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "a#",
+          function()
+            require("various-textobjs").color()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "iD",
+          function()
+            require("various-textobjs").doubleSquareBrackets()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "aD",
+          function()
+            require("various-textobjs").doubleSquareBrackets()
+          end,
+          mode = { "o", "x" },
+        },
       }
     end,
     opts = {
       --doesn't work with lazylodading
       keymaps = {
-        useDefaults = true,
+        -- because causes keybind conflicts
+        useDefaults = false,
       },
     },
   },
   {
+    -- NOTE: creates overlapping mappings
     "nvim-treesitter/nvim-treesitter-textobjects",
     event = "VeryLazy",
     branch = "main",

@@ -1,0 +1,27 @@
+-- vim equivalent
+-- https://vim.fandom.com/wiki/Search_for_visually_selected_text
+-- looks like its not needed in neovim anymore, or maybe other plugin handles this
+--return {
+--  "backdround/improved-search.nvim",
+--  keys = {
+--
+--    -- Search next / previous.
+--    { { "n", "x", "o" }, "n", require("improved-search").stable_next },
+--    { { "n", "x", "o" }, "N", require("improved-search").stable_previous },
+--
+--    -- Search current word without moving.
+--    { "n", "!", require("improved-search").current_word },
+--
+--    -- Search selected text in visual mode
+--    { "x", "!", require("improved-search").in_place },
+--    { "x", "*", require("improved-search").forward },
+--    { "x", "#", require("improved-search").backward },
+--
+--    -- Search by motion in place
+--    { "n", "|", require("improved-search").in_place },
+--    -- You can also use require("improved-search").forward / search.backward for motion selection.
+--  },
+--  --event = "UIEnter",
+--  --lazy = false,
+--  opts = {},
+--}

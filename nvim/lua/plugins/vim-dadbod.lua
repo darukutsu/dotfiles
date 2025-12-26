@@ -4,6 +4,11 @@ return {
   "kristijanhusak/vim-dadbod-ui",
   --event = "VeryLazy",
   ft = ft,
+  keys = function()
+    return {
+      { "<leader>D", ":DBUIToggle<cr>", { desc = "dadbod toggle" } },
+    }
+  end,
   dependencies = {
     { "tpope/vim-dadbod", ft = ft, lazy = true },
     { "kristijanhusak/vim-dadbod-completion", ft = ft, lazy = true },

@@ -194,6 +194,8 @@ return {
     sources = {
       default = {
         "conventional_commits",
+        "lazydev",
+        "dadbod",
         "lsp",
         "buffer",
         "path",
@@ -201,14 +203,14 @@ return {
         "copilot",
       },
       per_filetype = {
-        sql = {
-          "lsp",
-          "snippets",
-          "dadbod",
-          "buffer",
-          "path",
-          "copilot",
-        },
+        --sql = {
+        --  "lsp",
+        --  "snippets",
+        --  "dadbod",
+        --  "buffer",
+        --  "path",
+        --  "copilot",
+        --},
       },
       --default = function(ctx)
       --
@@ -243,6 +245,11 @@ return {
           opts = {}, -- none so far
         },
         dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+        lazydev = {
+          name = "LazyDev",
+          module = "lazydev.integrations.blink",
+          score_offset = 100,
+        },
         buffer = {
           opts = {
             -- get all buffers, even ones like neo-tree

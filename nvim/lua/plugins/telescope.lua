@@ -1,7 +1,33 @@
 return {
   "nvim-telescope/telescope.nvim",
+  -- NOTE: because some other plugins can execute whatever is set to default (eg telescope)
+  -- we cannot lazyload this very well
   event = "VeryLazy",
   --lazy = false,
+  --cmd = "Telescope",
+  keys = function()
+    return {
+      { "<leader>:", ":Telescope cmdline<cr>", desc = "Telescope cmdline" },
+      { "<leader><Tab>", ":Telescope buffers<cr>", { desc = "Telescope jump buffers" } },
+      { "<leader>?c", ":Telescope commands<cr>", desc = "Telescope commands" },
+      { "<leader>v", ":Telescope vim_options<cr>", desc = "Telescope vim_options" },
+      { "<leader>?b", ":Telescope builtin include_extensions=true<cr>", desc = "Telescope builtin" },
+      { "<leader>?k", ":Telescope keymaps<cr>", { desc = "keymaps" } },
+      { "<leader>?d", ":Telescope diagnostics bufnr=0<cr>", { desc = "workspace diagnostics" } },
+      { "<leader>?D", ":Telescope diagnostics<cr>", { desc = "workspace diagnostics" } },
+      { "\\", ":Telescope current_buffer_fuzzy_find<cr>", { desc = "fzf cur_buffer" } },
+      { "<leader>/", ":Telescope live_grep<cr>", { desc = "telescope grep buffers" } },
+      { "<leader>'", ":Telescope marks mark_type=local<cr>", { desc = "telescope marks local" } },
+      { '<leader>"', ":Telescope marks mark_type=global<cr>", { desc = "telescope marks global" } },
+      { "<leader>U", ":Telescope undo<cr>", { desc = "telescope undo" } },
+      { "<leader>#", ":TodoTelescope<cr>", { desc = "telescope todo comments" } },
+      { "<leader>dc", ":Telescope dap commands<cr>", desc = "Telescope dap commands" },
+      { "<leader>db", ":Telescope dap list_breakpoints<cr>", desc = "Telescope dap breakpoints" },
+      { "<leader>N", ":Telescope notify<cr>", { desc = "notification history" } },
+      { "<leader>l", ":Telescope luasnip<cr>", { desc = "notification history" } },
+      { "<leader>q", ":Telescope macros<cr>", { desc = "neocomposer macros" } },
+    }
+  end,
   dependencies = {
     { "MunifTanjim/nui.nvim" },
     { "nvim-lua/plenary.nvim" },

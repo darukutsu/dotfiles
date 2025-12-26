@@ -1,0 +1,6 @@
+return {
+  "xb-bx/editable-term.nvim",
+  --event = "TermOpen",
+  lazy = false,
+  config = true,
+}
