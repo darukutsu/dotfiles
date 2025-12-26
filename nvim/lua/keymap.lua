@@ -319,7 +319,11 @@ map({ "n" }, "<C-s>", "<C-W><C-r>", { desc = "flip buff" })
 --map({ "n" }, "<leader>e", "<C-W>k", { desc = "" })
 --map({ "n" }, "<leader>i", "<C-W>l", { desc = "" })
 
+map({ "x" }, "<c-g>", ":s/\\%V", { desc = "rename only visual selection block" })
 vim.cmd([[
+" replace using S in visual block selection
+cnoreabbrev <expr> S/ getcmdtype() == ':' ? 's/\%V' : 'S/'
+
 " Firenvim
 " nnoremap <leader>'l :set lines=
 " nnoremap <leader>'c :set columns=

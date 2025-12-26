@@ -87,6 +87,7 @@ require("lazy").setup({
 })
 
 require("keymap")
+-- TODO: will need rework if more than 10, also don't forget to handle dependencies
 require("custom/sudo")
 require("custom/loopcmd")
 require("custom/math")

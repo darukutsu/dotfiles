@@ -1,12 +1,32 @@
 require("clangd_extensions").setup({})
 
-local function myon_attach()
-  --require("clangd_extensions.inlay_hints").setup_autocmd()
-  --require("clangd_extensions.inlay_hints").set_inlay_hints()
-end
-
+-- NOTE: not sure how much of these are defaults
 vim.lsp.config("clangd", {
-  --cmd = { "clangd", "--background-index" },
+  root_markers = {
+    "compile_commands.json",
+    "compile_flags.txt",
+    "configure.ac", -- AutoTools
+    "Makefile",
+    "configure.ac",
+    "configure.in",
+    "config.h.in",
+    "meson.build",
+    "meson_options.txt",
+    "build.ninja",
+    ".git",
+  },
+  cmd = {
+    "clangd",
+    "-j=8",
+    "--malloc-trim",
+    "--background-index",
+    "--pch-storage=memory",
+    "--clang-tidy",
+    "--header-insertion=iwyu",
+    "--completion-style=detailed",
+    "--function-arg-placeholders",
+    "--fallback-style=llvm",
+  },
   --filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
   --settings = {
   --  settings = {
@@ -36,11 +56,10 @@ vim.lsp.config("clangd", {
     offsetEncoding = "utf-16",
     documentFormattingProvider = false,
   },
+  init_options = {
+    clangdFileStatus = true,
+    usePlaceholders = true,
+    completeUnimported = true,
+    semanticHighlighting = true,
+  },
 })
-
---  --init_options = {
---  --  clangdFileStatus = true,
---  --  usePlaceholders = true,
---  --  completeUnimported = true,
---  --  semanticHighlighting = true,
---  --},

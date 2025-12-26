@@ -5,6 +5,7 @@ return {
     return {
       { "<C-r>", "<CMD>SearchReplaceSingleBufferVisualSelection<CR>", mode = "v", desc = "" },
       { "<C-s>", "<CMD>SearchReplaceWithinVisualSelection<CR>", mode = "v", desc = "" },
+      { "<C-R>", "<CMD>SearchReplaceWithinVisualSelection<CR>", mode = "v", desc = "" },
       { "<C-b>", "<CMD>SearchReplaceWithinVisualSelectionCWord<CR>", mode = "v", desc = "" },
 
       { "<leader>rs", "<CMD>SearchReplaceSingleBufferSelections<CR>", desc = "Selections" },

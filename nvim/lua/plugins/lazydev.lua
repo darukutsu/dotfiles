@@ -6,9 +6,18 @@ return {
       library = {
         -- you can specify here multiple libraries
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
-        { "nvim-dap-ui" },
-        --{ "blink.cmp" },
+        "nvim-dap-ui",
+        "neotest",
+        "blink.cmp",
+        "mini",
+        "mason",
+        "telescope",
       },
     },
+  },
+  {
+    "folke/neoconf.nvim",
+    event = "VeryLazy",
+    opts = {},
   },
 }
