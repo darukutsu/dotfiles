@@ -4,9 +4,11 @@ return {
   opts = {
     memory_usage = {
       border = "bold",
+      backdrop = 80,
     },
     symbol_info = {
       border = "bold",
+      backdrop = 80,
     },
   },
 }

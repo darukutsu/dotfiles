@@ -14,7 +14,8 @@ return { -- MASON, formatter/linter, debugger, lsp
     -- :Mason shows below windows unlike :Lazy which shows above all even telescope
     require("mason").setup({
       ui = {
-        border = "none",
+        border = "bold",
+        backdrop = 80,
         --width = 1,
         height = 0.8,
         icons = {

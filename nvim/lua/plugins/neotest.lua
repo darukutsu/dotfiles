@@ -36,6 +36,7 @@ return {
   opts = {
     floating = {
       border = "bold",
+      backdrop = 80,
     },
     summary = {
       enabled = true,

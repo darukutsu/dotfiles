@@ -81,9 +81,10 @@ require("lazy").setup({
     --  },
     --},
   },
-  --ui = {
-  --  border = "rounded",
-  --},
+  ui = {
+    border = "bold",
+    backdrop = 80,
+  },
 })
 
 require("keymap")

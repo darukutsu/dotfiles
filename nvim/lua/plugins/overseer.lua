@@ -6,7 +6,7 @@ return {
   ---@type overseer.SetupOpts
   keys = function()
     return {
-      { "<leader>o", ":OverseerRun<cr>", { desc = "Overseer run command" } },
+      { "<leader>O", ":OverseerRun<cr>", { desc = "Overseer run command" } },
     }
   end,
   opts = {},
