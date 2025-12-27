@@ -199,25 +199,25 @@ return {
       MiniSplitjoin.toggle()
     end, { desc = "line split toggle" })
 
-    local gen_spec = require("mini.ai").gen_spec
-    require("mini.ai").setup({
-      custom_textobjects = {
-        s = gen_spec.treesitter({ a = "@statement.outer", i = "@statement.inner" }),
-        a = gen_spec.treesitter({ a = "@parameter.outer", i = "@parameter.inner" }),
-        f = gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
-        c = gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
-        l = gen_spec.treesitter({ a = "@loop.outer", i = "@loop.inner" }),
-        i = gen_spec.treesitter({ a = "@conditional.outer", i = "@conditional.inner" }),
-      },
+    --local gen_spec = require("mini.ai").gen_spec
+    --require("mini.ai").setup({
+    --  custom_textobjects = {
+    --    s = gen_spec.treesitter({ a = "@statement.outer", i = "@statement.inner" }),
+    --    a = gen_spec.treesitter({ a = "@parameter.outer", i = "@parameter.inner" }),
+    --    f = gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }),
+    --    c = gen_spec.treesitter({ a = "@class.outer", i = "@class.inner" }),
+    --    l = gen_spec.treesitter({ a = "@loop.outer", i = "@loop.inner" }),
+    --    i = gen_spec.treesitter({ a = "@conditional.outer", i = "@conditional.inner" }),
+    --  },
 
-      mappings = {
-        goto_left = "g}",
-        goto_right = "g{",
-      },
+    --  mappings = {
+    --    goto_left = "g}",
+    --    goto_right = "g{",
+    --  },
 
-      search_method = "cover_or_nearest",
-      --n_lines = 1,
-    })
+    --  search_method = "cover_or_nearest",
+    --  --n_lines = 1,
+    --})
 
     require("mini.snippets").setup({
       -- define your snippets here

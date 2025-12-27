@@ -56,7 +56,6 @@ return {
         end,
         mode = { "n", "o", "x" },
       },
-      --"func() require('spider').motion('e', { subwordMovement = false, skipInsignificantPunctuation=false })<CR>", {})
     }
   end,
   opts = {

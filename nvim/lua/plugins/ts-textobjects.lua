@@ -5,32 +5,42 @@ return {
     --lazy = false,
     keys = function()
       return {
+        --{
+        --  "iI",
+        --  function()
+        --    require("various-textobjs").indentation("inner", "outer")
+        --  end,
+        --  mode = { "o", "x" },
+        --},
+        --{
+        --  "aI",
+        --  function()
+        --    require("various-textobjs").indentation("outer", "inner")
+        --  end,
+        --  mode = { "o", "x" },
+        --},
         {
           "iI",
-          function()
-            require("various-textobjs").indentation("inner", "outer")
-          end,
-          mode = { "o", "x" },
-        },
-        {
-          "aI",
-          function()
-            require("various-textobjs").indentation("outer", "inner")
-          end,
-          mode = { "o", "x" },
-        },
-        {
-          "ii",
           function()
             require("various-textobjs").indentation("inner", "inner")
           end,
           mode = { "o", "x" },
         },
         {
-          "ai",
+          "aI",
           function()
             require("various-textobjs").indentation("outer", "outer")
           end,
+          mode = { "o", "x" },
+        },
+        {
+          "iW",
+          "iw",
+          mode = { "o", "x" },
+        },
+        {
+          "aW",
+          "aw",
           mode = { "o", "x" },
         },
         {
@@ -47,8 +57,34 @@ return {
           end,
           mode = { "o", "x" },
         },
-        --{ "iW", function() require('various-textobjs').subword('inner')end, mode = {"o", "x"}},
-        --{ "aW", function() require('various-textobjs').subword('outer')end, mode = {"o", "x"}},
+        {
+          "im",
+          function()
+            require("various-textobjs").chainMember("inner")
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "am",
+          function()
+            require("various-textobjs").chainMember("outer")
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "iv",
+          function()
+            require("various-textobjs").value("inner")
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "av",
+          function()
+            require("various-textobjs").value("outer")
+          end,
+          mode = { "o", "x" },
+        },
         {
           "au",
           function()
@@ -60,27 +96,6 @@ return {
           "iu",
           function()
             require("various-textobjs").url("inner")
-          end,
-          mode = { "o", "x" },
-        },
-        {
-          "gG",
-          function()
-            require("various-textobjs").entireBuffer()
-          end,
-          mode = { "o", "x" },
-        },
-        {
-          "|",
-          function()
-            require("various-textobjs").column("down")
-          end,
-          mode = { "o", "x" },
-        },
-        {
-          "a|",
-          function()
-            require("various-textobjs").column("both")
           end,
           mode = { "o", "x" },
         },
@@ -151,6 +166,53 @@ return {
           "aD",
           function()
             require("various-textobjs").doubleSquareBrackets("outer")
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "m",
+          function()
+            local orig = vim.opt.iskeyword
+            vim.opt.iskeyword:append(".")
+            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>viw", true, false, true), "n", false)
+            vim.schedule(function()
+              vim.opt.iskeyword = orig
+            end)
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "C",
+          function()
+            require("various-textobjs").toNextClosingBracket()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "Q",
+          function()
+            require("various-textobjs").toNextQuotationMark()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "gG",
+          function()
+            require("various-textobjs").entireBuffer()
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "|",
+          function()
+            require("various-textobjs").column("down")
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "a|",
+          function()
+            require("various-textobjs").column("both")
           end,
           mode = { "o", "x" },
         },

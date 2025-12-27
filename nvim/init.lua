@@ -120,6 +120,7 @@ vim.foldmethod = "expr"
 -- Automatic open folds when openinig file
 --vim.g.foldlevelstart = 99
 --vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+vim.opt.iskeyword:append("-")
 
 vim.cmd([[
   au TextYankPost * silent! lua vim.highlight.on_yank {timeout=350}
