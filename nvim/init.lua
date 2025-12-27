@@ -123,13 +123,7 @@ vim.foldmethod = "expr"
 
 vim.cmd([[
   au TextYankPost * silent! lua vim.highlight.on_yank {timeout=350}
-
-  "au TermOpen * setlocal relativenumber
-  set expandtab
-  set tabstop=8
-  " after softtabstop*N will turn into <Tab> character
-  "set softtabstop=0 noexpandtab
-  set shiftwidth=2
+  au TermOpen * setlocal number relativenumber
   set number relativenumber
   " display both relative and linenumber at same time
   "set statuscolumn=%@SignCb@%=%T%@NumCb@%l%s%r│%T

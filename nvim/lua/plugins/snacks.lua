@@ -25,7 +25,14 @@ return {
     dim = {},
     --git = {},
     gitbrowse = {},
-    indent = {},
+    indent = {
+      indent = {
+        --only_scope = true,
+      },
+      chunk = {
+        --enabled = true,
+      },
+    },
     input = {
       win = {
         position = "bottom",

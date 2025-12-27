@@ -7,6 +7,14 @@ return {
   config = function()
     local map = vim.keymap.set
 
+    -- motions are kinda good
+    --require("mini.indentscope").setup({
+    --  --options ={
+    --  --  indent_at_cursor = false,
+    --  --},
+    --  symbol = "┃",
+    --})
+
     --require("mini.clue").setup{}
     --require("mini.git").setup{}
     --require("mini.align").setup{}

@@ -204,15 +204,18 @@ map({ "n" }, "<C-S-M>", "<C-t>", {})
 --map({ "n" }, "<leader>q", "@@", {})
 
 -- Clipboard
-map({ "n", "v", "o" }, "<leader>p", '"_dP', {})
--- nnoremap <leader>d "add
--- nnoremap <leader>y "ayy
--- nnoremap <leader>c "acc
+-- use gp gP instead
+--map({ "v" }, "<leader>p", "p", { desc = "yank to reg, overwrites clipboard" })
+--map({ "v" }, "<leader>P", "P", { desc = "yank to reg, overwrites clipboard" })
+--map({ "n", "v", "o" }, "<leader>d", '"_dd', {desc = 'yank to reg, overwrites clipboard'})
+--map({ "n", "v", "o" }, "<leader>y", '"_yy', {desc = 'yank to reg, overwrites clipboard'})
+--map({ "n", "v", "o" }, "<leader>c", '"_cc', {desc = 'yank to reg, overwrites clipboard'})
 
 -- Ignores clipboardplus
-map({ "n" }, "x", '"bx', {})
-map({ "n" }, "X", '"bX', {})
---xnoremap <leader>k \"_dP
+map({ "n" }, "x", '"_x', {})
+map({ "n" }, "X", '"_X', {})
+map({ "v" }, "p", '"_dP', {})
+map({ "v" }, "P", '"_dP', {})
 
 map({ "n" }, "<leader>f", function()
   vim.find_files_from_project_git_root()
@@ -222,7 +225,7 @@ map({ "n" }, "<leader>?a", function()
 end, { desc = "code actions" })
 
 -- Mathematic functions / operations
--- Count time values together HH:MM:SS in visual block
+-- Count time values together HH:map:SS in visual block
 map({ "v" }, "<leader><leader>c", ":MathTimeSum<cr>", { desc = "SUM time values visual" })
 map({ "n" }, "<leader><leader>+", ":MathSum<cr>", { desc = "SUM col - yank to register first" })
 map({ "n" }, "<leader><leader>*", ":MathMul<cr>", { desc = "MUL col - yank to register first" })

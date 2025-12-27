@@ -12,6 +12,7 @@ return {
         "mini",
         "mason",
         "telescope",
+        "snacks",
       },
     },
   },

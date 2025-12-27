@@ -6,6 +6,34 @@ return {
     keys = function()
       return {
         {
+          "iI",
+          function()
+            require("various-textobjs").indentation("inner", "outer")
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "aI",
+          function()
+            require("various-textobjs").indentation("outer", "inner")
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "ii",
+          function()
+            require("various-textobjs").indentation("inner", "inner")
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "ai",
+          function()
+            require("various-textobjs").indentation("outer", "outer")
+          end,
+          mode = { "o", "x" },
+        },
+        {
           "iw",
           function()
             require("various-textobjs").subword("inner")
@@ -24,14 +52,14 @@ return {
         {
           "au",
           function()
-            require("various-textobjs").url()
+            require("various-textobjs").url("outer")
           end,
           mode = { "o", "x" },
         },
         {
           "iu",
           function()
-            require("various-textobjs").url()
+            require("various-textobjs").url("inner")
           end,
           mode = { "o", "x" },
         },
@@ -45,77 +73,84 @@ return {
         {
           "|",
           function()
-            require("various-textobjs").column()
+            require("various-textobjs").column("down")
+          end,
+          mode = { "o", "x" },
+        },
+        {
+          "a|",
+          function()
+            require("various-textobjs").column("both")
           end,
           mode = { "o", "x" },
         },
         {
           "ik",
           function()
-            require("various-textobjs").key()
+            require("various-textobjs").key("inner")
           end,
           mode = { "o", "x" },
         },
         {
           "ak",
           function()
-            require("various-textobjs").key()
+            require("various-textobjs").key("outer")
           end,
           mode = { "o", "x" },
         },
         {
           "in",
           function()
-            require("various-textobjs").number()
+            require("various-textobjs").number("inner")
           end,
           mode = { "o", "x" },
         },
         {
           "an",
           function()
-            require("various-textobjs").number()
+            require("various-textobjs").number("outer")
           end,
           mode = { "o", "x" },
         },
         {
           "iF",
           function()
-            require("various-textobjs").filepath()
+            require("various-textobjs").filepath("inner")
           end,
           mode = { "o", "x" },
         },
         {
           "aF",
           function()
-            require("various-textobjs").filepath()
+            require("various-textobjs").filepath("outer")
           end,
           mode = { "o", "x" },
         },
         {
           "i#",
           function()
-            require("various-textobjs").color()
+            require("various-textobjs").color("inner")
           end,
           mode = { "o", "x" },
         },
         {
           "a#",
           function()
-            require("various-textobjs").color()
+            require("various-textobjs").color("outer")
           end,
           mode = { "o", "x" },
         },
         {
           "iD",
           function()
-            require("various-textobjs").doubleSquareBrackets()
+            require("various-textobjs").doubleSquareBrackets("inner")
           end,
           mode = { "o", "x" },
         },
         {
           "aD",
           function()
-            require("various-textobjs").doubleSquareBrackets()
+            require("various-textobjs").doubleSquareBrackets("outer")
           end,
           mode = { "o", "x" },
         },
@@ -126,6 +161,10 @@ return {
       keymaps = {
         -- because causes keybind conflicts
         useDefaults = false,
+        disabledDefaults = { "r" },
+      },
+      textobjs = {
+        subword = {},
       },
     },
   },
@@ -179,12 +218,12 @@ return {
       map_select("ia", "select_textobject", "@parameter.inner", "inner parameter")
       map_select("af", "select_textobject", "@function.outer", "outer function")
       map_select("if", "select_textobject", "@function.inner", "inner function")
-      map_select("ac", "select_textobject", "@class.outer", "outer class")
-      map_select("ic", "select_textobject", "@class.inner", "inner class")
+      map_select("aC", "select_textobject", "@class.outer", "outer class")
+      map_select("iC", "select_textobject", "@class.inner", "inner class")
       map_select("al", "select_textobject", "@loop.outer", "outer loop")
       map_select("il", "select_textobject", "@loop.inner", "inner loop")
-      map_select("ai", "select_textobject", "@conditional.outer", "outer condi")
-      map_select("ii", "select_textobject", "@conditional.inner", "inner condi")
+      map_select("ac", "select_textobject", "@conditional.outer", "outer condi")
+      map_select("ic", "select_textobject", "@conditional.inner", "inner condi")
 
       local map_swap = function(key, operation, type, desc)
         vim.keymap.set({ "n" }, key, function()
@@ -193,10 +232,10 @@ return {
       end
       map_swap("<leader>sa", "swap_next", "@parameter.inner")
       map_swap("<leader>ss", "swap_next", "@statement.inner")
-      map_swap("<leader>si", "swap_next", "@conditional.inner")
+      map_swap("<leader>sc", "swap_next", "@conditional.inner")
       map_swap("<leader>sA", "swap_previous", "@parameter.inner")
       map_swap("<leader>sS", "swap_previous", "@statement.inner")
-      map_swap("<leader>sI", "swap_previous", "@conditional.inner")
+      map_swap("<leader>sC", "swap_previous", "@conditional.inner")
 
       local map_move = function(key, operation, type, group, desc)
         vim.keymap.set({ "n", "x", "o" }, key, function()
@@ -230,9 +269,9 @@ return {
       map_move("]f", "goto_next", "@function.outer", "textobjects", "next func")
       map_move("]p", "goto_next", "@parameter.outer", "textobjects", "next param")
       map_move("]s", "goto_next", "@statement.outer", "textobjects", "next statement")
-      map_move("]c", "goto_next", "@class.outer", "textobjects", "next class")
+      map_move("]C", "goto_next", "@class.outer", "textobjects", "next class")
       map_move("]d", "goto_next", "@conditional.outer", "textobjects", "next condi")
-      map_move("]i", "goto_next", "@conditional.outer", "textobjects", "next condi")
+      map_move("]c", "goto_next", "@conditional.outer", "textobjects", "next condi")
       map_move("]o", "goto_next", "@loop.outer", "textobjects", "next loop")
       map_move("]l", "goto_next", "@loop.outer", "textobjects", "next loop")
       map_move("]r", "goto_next", "@return.outer", "textobjects", "next return")
@@ -240,9 +279,9 @@ return {
       map_move("[f", "goto_previous", "@function.outer", "textobjects", "prev func")
       map_move("[p", "goto_previous", "@parameter.outer", "textobjects", "prev param")
       map_move("[s", "goto_previous", "@statement.outer", "textobjects", "prev statement")
-      map_move("[c", "goto_previous", "@class.outer", "textobjects", "prev class")
+      map_move("[C", "goto_previous", "@class.outer", "textobjects", "prev class")
       map_move("[d", "goto_previous", "@conditional.outer", "textobjects", "prev condi")
-      map_move("[i", "goto_previous", "@conditional.outer", "textobjects", "prev condi")
+      map_move("[c", "goto_previous", "@conditional.outer", "textobjects", "prev condi")
       map_move("[o", "goto_previous", "@loop.outer", "textobjects", "prev loop")
       map_move("[l", "goto_previous", "@loop.outer", "textobjects", "prev loop")
       map_move("[r", "goto_previous", "@return.outer", "textobjects", "prev return")
