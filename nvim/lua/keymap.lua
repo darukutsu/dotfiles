@@ -204,9 +204,6 @@ map({ "n" }, "<C-S-M>", "<C-t>", {})
 --map({ "n" }, "<leader>q", "@@", {})
 
 -- Clipboard
--- use gp gP instead
---map({ "v" }, "<leader>p", "p", { desc = "yank to reg, overwrites clipboard" })
---map({ "v" }, "<leader>P", "P", { desc = "yank to reg, overwrites clipboard" })
 --map({ "n", "v", "o" }, "<leader>d", '"_dd', {desc = 'yank to reg, overwrites clipboard'})
 --map({ "n", "v", "o" }, "<leader>y", '"_yy', {desc = 'yank to reg, overwrites clipboard'})
 --map({ "n", "v", "o" }, "<leader>c", '"_cc', {desc = 'yank to reg, overwrites clipboard'})
@@ -214,8 +211,6 @@ map({ "n" }, "<C-S-M>", "<C-t>", {})
 -- Ignores clipboardplus
 map({ "n" }, "x", '"_x', {})
 map({ "n" }, "X", '"_X', {})
-map({ "v" }, "p", '"_dP', {})
-map({ "v" }, "P", '"_dP', {})
 
 map({ "n" }, "<leader>f", function()
   vim.find_files_from_project_git_root()

@@ -19,7 +19,11 @@ local function keymaps()
     ["<esc>"] = {
       function(cmp)
         if cmp.snippet_active() then
-          return "cancel"
+          -- snippet completion
+          return cmp.cancel()
+        elseif cmp.get_selected_item() then
+          -- still needs to provide esc but can be fixed and its desired anyway
+          return cmp.cancel()
         end
       end,
       "fallback",
@@ -134,6 +138,20 @@ return {
 
     appearance = {
       nerd_font_variant = "mono",
+    },
+
+    cmdline = {
+      keymap = {
+        ["<esc>"] = {
+          function(cmp)
+            if cmp.is_visible() then
+              cmp.cancel()
+            else
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-c>", true, true, true), "n", true)
+            end
+          end,
+        },
+      },
     },
 
     completion = {
