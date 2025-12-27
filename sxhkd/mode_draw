@@ -4,18 +4,25 @@ Escape
         killall zscroll 2>/dev/null; \
         killall sxhkd && sxhkd &
 
+# DRAW clear
 c
       gromit-mpx --clear
+# DRAW toggle
 t
       gromit-mpx --toggle
+# DRAW visibility
 v
       gromit-mpx --visibility
+# DRAW redo
 a
       gromit-mpx --redo
+# DRAW undo
 z
       gromit-mpx --undo
+# DRAW redo
 r
       gromit-mpx --redo
+# DRAW undo
 u
       gromit-mpx --undo
 #p

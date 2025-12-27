@@ -12,6 +12,7 @@ super + g
 	#firefox-developer-edition
         #vieb
 
+# Browser launcher - container
 super + G
         "$XDG_CONFIG_HOME"/qutebrowser/userscripts/container-open
 
@@ -31,12 +32,12 @@ super + @Print
 super + shift + @space
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh powermenu
 
-# Brightness control
+# Brightness control {up,down}
 XF86MonBrightness{Up,Down}
 	ddcutil -d 1 --sleep-multiplier 2.0 setvcp 10 {+,-} 20
 	#brightnessctl s 5%{+,-}
 
-# Audio control
+# Audio control {raise,lower}
 XF86Audio{Raise,Lower}Volume
 	pamixer {-i,-d} 5 ; "$XDG_CONFIG_HOME"/sxhkd/volume_notify.sh
 
@@ -44,7 +45,7 @@ XF86Audio{Raise,Lower}Volume
 XF86AudioMute
 	pamixer -t && "$XDG_CONFIG_HOME"/sxhkd/volume_notify.sh
 
-# Media controls
+# Media controls {play,next,prev}
 XF86Audio{Play,Next,Prev}
 	playerctl {play-pause,next,previous}
 
@@ -74,11 +75,11 @@ F11
 F12
         "$XDG_CONFIG_HOME"/sxhkd/dropdown.sh kitty-drop
 
-# progra"m launcher
+# program launcher
 super + @space
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh combi
 
-# progra"m switcher
+# program switcher
 alt + Tab
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh window
 
@@ -94,14 +95,14 @@ super + v
 super + u
         dunstctl close-all
 
+# TODO: find better way
+# cmd mode or something else eg: cal, polybar, widgets...
+#
 # Notification history control-panel
 super + c
         "$XDG_CONFIG_HOME"/sxhkd/history_notify.sh show; \
         echo "mode_control_panel" >"$SXHKD_MODE_FILE"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_control_panel
-#
-# cmd mode or something else eg cal polybar widgets...
-#super + C
 
 # emoji picker
 ctrl + alt + e
@@ -127,11 +128,13 @@ super + ctrl + x
 # MACRO MODE
 #
 
+# Enter Macro Mode
 super + q
         echo "mode_macro" >"$SXHKD_MODE_FILE"; \
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Macro mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_macro
 
+# Force-stop/save recording
 super + control + q
         keystrokes -s && \
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Macro forcestopped"
@@ -144,7 +147,7 @@ super + control + q
 #super + {equal,minus}
 #	"$XDG_CONFIG_HOME"/sxhkd/opacity.sh active {on,off}
 
-# make sxhkd reload its configuration files:
+# make sxhkd reload its configuration files
 super + Escape
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-desktop-keyboard-shortcuts "sxhkd" "Restarting sxhkd"; \
 	killall "sxhkd"; xmodmap "$XDG_CONFIG_HOME/bspwm/Xmodmap"; sxhkd &
@@ -163,9 +166,12 @@ super + shift + q
 	bspc node .marked -c
 
 # TODO: session manager
+#
+# session load
 super + z
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh session-load
 
+# session save
 super + shift + z
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh session-save
 
@@ -173,7 +179,10 @@ super + shift + z
 # state/flags
 #
 
-# set the window state
+# TODO: put floating window on top of monocle layout at node x
+#
+# a
+# set the window state {tiled,floating,fullscreen}
 super + {t,s,f}
 	bspc node -t {tiled -g sticky=off,floating,fullscreen}
 
@@ -181,7 +190,7 @@ super + {t,s,f}
 #super + f
 #	bspc desktop -l next
 
-# hide&flag mode
+# Enter Hide & Flag Mode
 super + h
         echo "mode_hide" >"$SXHKD_MODE_FILE"; \
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Hide mode enabled"; \
@@ -195,11 +204,11 @@ super + h
 super + b
 	bspc node -s biggest.local.window
 
-# layouts
+# set layout
 super + parenleft
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh layout
 
-# layouts persistent
+# set layout persistent
 super + parenright
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh layout persistent
 
@@ -207,25 +216,25 @@ super + parenright
 super + l
         bsp-layout remove
 
-# rotates tree
 # switch from vertical to horizontal tiling and vice-versa
+# rotates {tree,node group} {clockwise,counterclock} - focus preserved
 super + {_,ctrl + }{period,comma}
 	bspc node {@/,@parent} -R {90,270}
 
 # rotates "switch" tree in focused node places new node
+# rotates {tree,node group} {clockwise,counterclock} - focus next/prev
 super + alt + {_,ctrl + }{period,comma}
     bspc node {@/,@parent} -C {forward,backward}
-#super + {less,greater}
 
-# focus (or swap with alt) the node in the given direction
+# {focus,swap} the node {left,down,up,right}
 super + {_,alt + }{m,n,e,i}
 	bspc node -{f,s} {west,south,north,east}
 
-# focus multiple
+# focus multiple/node group
 super + ctrl + @space
 	bspc node @parent -f
 
-# swap the node and it's descendants in the given direction
+# swap the node and it's descendants {left,down,up,right}
 super + ctrl + {m,n,e,i}
 	bspc node first_ancestor -s {west,south,north,east} && \
         bspc node -f
@@ -242,11 +251,11 @@ super + ctrl + {m,n,e,i}
 #       super + bracket{right}
 #	bspc node -f next.local.!hidden.window
 
-# focus the next/previous desktop in the current monitor
+# focus the {next,previous} desktop in the current monitor
 super + bracket{left,right}
 	bspc desktop -f {prev,next}.occupied
 
-# focus the last node/desktop
+# focus the last {node,desktop}
 super + {grave,Tab}
 	bspc {node,desktop} -f last
 
@@ -256,21 +265,17 @@ super + {grave,Tab}
 super + {j,k}
 	bspc node -f {next,prev}.local.!hidden.window
 
+# Enter Focus/Swap Mode
 super + o
         echo "mode_focus" >"$SXHKD_MODE_FILE"; \
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Focus/Swap mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_focus
 
-super + a
-        echo "mode_focus" >"$SXHKD_MODE_FILE"; \
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Focus/Swap mode enabled"; \
-        killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_focus
-
-# send focused window to the given desktop
+# send {focused,marked} node to the given desktop
 super + alt + {_,ctrl + }{1-9,0}
 	bspc node { ,.marked} -d '^{1-9,10}' --follow -g marked=off
 
-# focus desktop
+# focus given desktop
 super + {1-9,0}
 	bspc desktop -f '^{1-9,10}' --follow
 
@@ -284,11 +289,13 @@ super + shift + m
         bspc node -g marked=off || \
         bspc node -g marked=on 
 
+# Enter Preselect Mode
 super + p
         echo "mode_preselect" >"$SXHKD_MODE_FILE"; \
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Preselect mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_preselect
 
+# Enter Passthrough Mode
 super + shift + p
         echo "mode_passthrough" >"$SXHKD_MODE_FILE"; \
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Passthrough mode enabled"; \
@@ -298,12 +305,13 @@ super + shift + p
 # MOVE/RESIZE
 #
 
+# Enter Resize Mode
 super + r
         echo "mode_resize" >"$SXHKD_MODE_FILE"; \
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Resize mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_resize
 
-# move a floating window
+# Enter Window Move Mode
 super + w
         echo "mode_move" >"$SXHKD_MODE_FILE"; \
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Move mode enabled"; \
@@ -334,6 +342,8 @@ super + @button2
 #
 # DRAWING
 #
+
+# Enter Draw Mode
 super + d
         echo "mode_draw" >"$SXHKD_MODE_FILE"; \
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Draw mode enabled"; \

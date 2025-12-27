@@ -4,7 +4,6 @@
 systemctl --user start bspwm.target
 
 export CM_LAUNCHER=rofi-script
-export XDG_CURRENT_DESKTOP=bspwm
 export OPACITY_VALUE=1.0
 export _JAVA_AWT_WM_NONREPARENTING=1
 export SXHKD_MODE_FILE="$HOME/.config/sxhkd/zscroll-polybar"
@@ -26,7 +25,8 @@ else
 fi
 bspc monitor -d I II III IV V VI VII VIII IX X
 
-bsp-layout set tall I -- --master-size 0.5
+# needs fixing
+#bsp-layout set tall I -- --master-size 0.5
 #bsp-layout set grid III
 #bsp-layout set monocle X
 
@@ -59,11 +59,13 @@ bspc config focused_border_color "#6181FF"
 
 bspc config split_ratio 0.5
 bspc config borderless_monocle false
+#bspc config borderless_singleton true
 bspc config gapless_monocle true
 bspc config single_monocle true
 bspc config ignore_ewmh_focus true
 bspc config external_rules_command "$XDG_CONFIG_HOME/bspwm/external_rules"
 bspc config removal_adjustment true
+bspc config honor_size_hints floating
 #bspc config automatic_scheme            spiral
 #bspc config initial_polarity            first_child
 #bspc config directional_focus_tightness high
@@ -84,8 +86,13 @@ xset r rate 600 32
 xsetroot -cursor_name left_ptr
 xinput set-prop 'Logitech M705' 'libinput Accel Speed' -0.7
 xmodmap "$XDG_CONFIG_HOME/bspwm/Xmodmap"
+# run systemd until fixed
 killall "sxhkd"
 sxhkd &
+#nohup sxhkd >/dev/null &
+#valgrind sxhkd >>sxhkd.valgr &
+#whoami >sxhkd.debug2
+#env >>sxhkd.debug2
 
 #################################
 #          X11 DAEMONS          #
@@ -121,17 +128,17 @@ xdo lower "$(xdotool search --classname Polybar)"
 #          RULES SETUP          #
 #################################
 bspc rule -r "*"
+bspc rule -a "*" center=on
+bspc rule -a "kitty" center=off
 #bspc rule -a "kitty-drop" state=floating layer=above center=on desktop=focused
 #bspc rule -a "kitty-filepicker" state=floating layer=above center=on desktop=focused
 #bspc rule -a "kitty-float" state=floating layer=above center=on desktop=focused
-bspc rule -a "Rofi" state=floating layer=above focus=on
-#bspc rule -a "*" rectangle=900x550+0+0 center=on follow=on
+bspc rule -a "Rofi" state=floating layer=above focus=on center=off
 if xrandr | grep " connected" | grep "2560x1440"; then
   bspc rule -a "mpv" state=floating layer=above center=off sticky=on rectangle=550x350+1980+1030
 else
   bspc rule -a "mpv" state=floating layer=above center=off sticky=on rectangle=550x350+1340+660
 fi
-# because of bug in firefox
 bspc rule -a "firefoxdeveloperedition" desktop=focused
 bspc rule -a "Zathura" state=tiled
 #docks are not managed by bspwm so polybar don't take rules

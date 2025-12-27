@@ -4,5 +4,6 @@ Escape
         killall zscroll 2>/dev/null; \
         killall sxhkd && sxhkd &
 
+# move window {left,down,up,right}
 {m,n,e,i}
 	bspc node -v {-20 0,0 20,0 -20,20 0}

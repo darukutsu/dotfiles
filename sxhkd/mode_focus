@@ -20,6 +20,7 @@ l
 o
 	bspc node older.!local -f; bspc node -d last --follow
 
+# focus {next,prev} local.!hidden.window
 {n,p}
 	bspc node -f {next,prev}.local.!hidden.window
 

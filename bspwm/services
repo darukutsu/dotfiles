@@ -56,3 +56,5 @@ xdg-autostart &
 
 #pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX0 roc-sink send_FL &
 #pw-cli -m cl alsa_input.usb-K66_K66_20190805V001-00.pro-input-0 capture_AUX1 roc-sink send_FR &
+
+#/home/daru/.config/pipewire/pipewire-autoconnect-roc.sh &

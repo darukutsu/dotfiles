@@ -28,9 +28,24 @@ elif [ "$1" = "powermenu" ]; then
   rofi-applet-powermenu "$theme_applet"
 elif [ "$1" = "sxhkd_help" ]; then
   # TODO: parse multiple files
-  awk '/^[a-z]/ && last {print "<small>",$0,"\t",last,"</small>"} {last=""} /^#/{last=$0}' ~/.config/sxhkd/sxhkdrc |
-    column -t -s $'\t' |
-    rofi -dmenu -i -markup-rows -no-show-icons -width 1000 -lines 15 -yoffset 40 #-normal-window
+
+  #awk '/^[a-z]/ && last {print "<small>",$0,"\t",last,"</small>"} {last=""} /^#/{last=$0}' ~/.config/sxhkd/sxhkdrc |
+  #  column -t -s $'\t' |
+  #  rofi -dmenu -i -markup-rows -no-show-icons -width 1000 -lines 15 -yoffset 40
+
+  # TODO: make this global, and dynamic
+  monitor=$(bspc query -M -m .focused --names)
+  resolution=$(xrandr | grep "^$monitor" | sed -E "s/^$monitor connected ([^ ]*).*/\1/; s/([0-9]*)x([0-9]*).*/\1x500+0+\2/")
+  width=$(echo "$resolution" | sed -E 's/([0-9]*)x([0-9]*)\+([0-9]*)\+([0-9]*).*/\1/')
+  height=$(echo "$resolution" | sed -E 's/([0-9]*)x([0-9]*)\+([0-9]*)\+([0-9]*).*/\2/')
+  xoffset=$(echo "$resolution" | sed -E 's/([0-9]*)x([0-9]*)\+([0-9]*)\+([0-9]*).*/\3/')
+  yoffset=$(echo "$resolution" | sed -E 's/([0-9]*)x([0-9]*)\+([0-9]*)\+([0-9]*).*/\4/')
+
+  hkhelper.py |
+    rofi -dmenu -i -window-title "rofi-help-menu" -markup-rows -no-show-icons \
+      -theme-str "window { height: $height; width: $width; x-offset: $xoffset; y-offset: $yoffset; }"
+
+  #sxhkhmenu -o "-theme-str window{height:$height;width:$width;x-offset:$xoffset;y-offset:$yoffset;} -dmenu -i -window-title rofi-help-menu -markup-rows -no-show-icons"
 else
   echo "unknown option"
 fi

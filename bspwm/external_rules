@@ -12,7 +12,7 @@
 wid="$1"
 class="$2"
 instance="$3" # it isn't what you'd think
-#instance=$(xprop -id $wid | grep WM_NAME)
+wm_name=$(xprop -id $wid | grep WM_NAME)
 consequences="$4"
 
 # Meaning : Nodes spawned on X desktop
@@ -76,7 +76,8 @@ fi
 
 if [[ "$class" =~ kitty\-cal ]]; then
   echo center=off
-  if xrandr | grep " connected" | grep "2560x1440"; then
+  monitor=$(xrandr --listmonitors | awk 'NR>1 { gsub(/\+/, "", $2); print $2 }')
+  if xrandr | grep "^$monitor" | grep "2560x1440"; then
     echo rectangle=200x190+1175+20
   else
     echo rectangle=200x190+856+20
@@ -85,15 +86,16 @@ fi
 
 # rofi set _NET_WM_WINDOW_TYPE
 # bspwm doesn't manage these windows because rofi doesn't override redirrect by default
-if [[ "$class" =~ rofi ]]; then
+if [[ "$class" =~ rofi.* ]]; then
   #echo "manage=off" #this will break rofi don't use this
   #echo "layer=above"
   #echo "focus=on"
   echo "border=off"
-  #echo "state=floating"
+  echo "state=floating"
+  echo "layer=above"
   xprop -id "$wid" \
     -f _NET_WM_WINDOW_TYPE 32a \
-    -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_POPUP_MENU
+    -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_DROPDOWN_MENU
 
   ## this is basically what -normal-window does
   #xprop -id "$wid" \
@@ -103,6 +105,17 @@ if [[ "$class" =~ rofi ]]; then
   #xprop -id "$wid" \
   #  -f WM_STATE 32c \
   #  -set WM_STATE "1, 0"
+fi
+
+if [[ "$wm_name" =~ rofi-help-menu ]]; then
+  xprop -id "$wid" \
+    -f _NET_WM_WINDOW_TYPE 32a \
+    -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_TOOLTIP
+  # NOTE: this can mangle with rofi default values or maybe not...
+  #
+  #monitor=$(xrandr --listmonitors | awk 'NR>1 { gsub(/\+/, "", $2); print $2 }')
+  #resolution=$(xrandr | grep "^$monitor" | sed -E "s/^$monitor connected ([^ ]*).*/\1/; s/([0-9]*)x([0-9]*).*/\1x500+0+\2/")
+  #echo "rectangle=$resolution"
 fi
 
 ## GAMING
