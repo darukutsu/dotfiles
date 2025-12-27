@@ -32,7 +32,11 @@ right_battery=$(
     grep '^.Value' | grep -Eo '[0-9]+' | tail -n1
 )
 
-if [ -n "$right_battery" ]; then
+hid_bat='/sys/class/power_supply/hid-C76AD4A6CBA81C87-battery/capacity'
+
+if [ -f "$hid_bat" ]; then
+  echo "  $(cat $hid_bat)"
+elif [ -n "$right_battery" ]; then
   echo " $left_battery  $right_battery"
 else
   echo ""
