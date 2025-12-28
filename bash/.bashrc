@@ -72,8 +72,8 @@ elif command -v nvimpager >/dev/null; then
   export MANPAGER="nvimpager"
   export SYSTEMD_PAGER="nvimpager"
 elif command -v nvim >/dev/null; then
-  export PAGER="nvim -R -c 'set ft=pager'"
-  export MANPAGER="nvim +Man! -R"
+  export PAGER="nvim -c 'set ft=pager' -c 'set nomodifiable'"
+  export MANPAGER="nvim +Man!"
   export SYSTEMD_PAGER="$PAGER"
 fi
 
