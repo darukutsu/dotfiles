@@ -18,8 +18,18 @@ done
 #done
 warr_rofi=$(paste <(printf "%s\n" "${warr[@]}") <(printf "\twid: %s\n" "${widarr[@]}"))
 
-choice=$(rofi -dmenu -p "Unhide Window" <<<"$warr_rofi") #-normal-window <<< "$warr_rofi")
+wids=''
+if command -v skippy-xd >/dev/null; then
+  wids=$(skippy-xd --desktop -1 --wm-status minimized) #-normal-window <<< "$warr_rofi")
+elif command -v rofi >/dev/null; then
+  choice=$(rofi -dmenu -p "Unhide Window" <<<"$warr_rofi") #-normal-window <<< "$warr_rofi")
+  wids=$(echo "$choice" | awk -F"wid: #" '{print $2}')
+else
+  echo "error missing command"
+  exit 1
+fi
 
-wid=$(echo "$choice" | awk -F"wid: #" '{print $2}')
-
-bspc node "$wid" -g hidden=off
+for wid in $wids; do
+  # don't focus
+  bspc node "$wid" -g hidden=off
+done

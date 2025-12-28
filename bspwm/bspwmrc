@@ -25,6 +25,12 @@ else
 fi
 bspc monitor -d I II III IV V VI VII VIII IX X
 
+# set monitor vars for each
+for monitor in $(bspc); do
+  var_zoom=BSPWM_ZOOM_$monitor
+  export "$var_zoom=1.0"
+done
+
 # needs fixing
 #bsp-layout set tall I -- --master-size 0.5
 #bsp-layout set grid III
@@ -145,6 +151,8 @@ bspc rule -a "Zathura" state=tiled
 #bspc rule -a "polybar" layer=below
 bspc rule -a "fcitx" layer=above
 bspc rule -a "Yad" manage=off
+bspc rule -a "boomer" manage=off
+bspc rule -a "skippy-xd" manage=off
 #bspc rule -a Screenkey manage=off
 
 # workspace/desktop assignment

@@ -18,7 +18,7 @@ super + G
 
 # print help
 super + slash
-        "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh sxhkd_help
+        "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh sxhkd-help
 
 # screenshot
 @Print
@@ -78,10 +78,6 @@ F12
 # program launcher
 super + @space
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh combi
-
-# program switcher
-alt + Tab
-        "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh window
 
 # bitwarden
 super + apostrophe
@@ -179,12 +175,45 @@ super + shift + z
 # state/flags
 #
 
+# zoom {in,out,reset} desktop
+super + {plus,minus,equal}
+        "$XDG_CONFIG_HOME"/sxhkd/zoom.sh {in,out,reset}
+
+# program switcher
+alt + {_,shift + } Tab
+	skippy-xd --expose --pivot Alt_L --{next,prev} --wm-status float,sticky
+        #"$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh window
+	
+# normal
+#skippy-xd --wm-status float
+# sticky only
+#skippy-xd --wm-status sticky
+
+# niri/gnome like alt-tab/desktop-switcher - toggle between current/all desktop
+super + y
+        "$XDG_CONFIG_HOME"/sxhkd/skippy.sh
+
+# multiselect good for scripting
+super + ctrl + y
+	"$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh skippy-filter
+
+# multiselect good for scripting
+#super + ctrl + y
+#    skippy-xd --multi-select --desktop -1
+
 # TODO: put floating window on top of monocle layout at node x
+# https://github.com/baskerville/bspwm/issues/584
 #
-# a
+#super + a
+# 	bspc node...
+
 # set the window state {tiled,floating,fullscreen}
-super + {t,s,f}
-	bspc node -t {tiled -g sticky=off,floating,fullscreen}
+super + {t,s,f,l}
+	bspc node -t {tiled -g sticky=off,floating,fullscreen,pseudo_tiled}
+
+# toggle between monocle and tiled
+super + semicolon
+	bspc desktop -l next
 
 # alternate between the tiled and monocle layout
 #super + f
@@ -213,7 +242,7 @@ super + parenright
         "$XDG_CONFIG_HOME"/sxhkd/rofi_launcher.sh layout persistent
 
 # layouts remove/reset to default
-super + l
+super + asterisk
         bsp-layout remove
 
 # switch from vertical to horizontal tiling and vice-versa
@@ -255,13 +284,15 @@ super + ctrl + {m,n,e,i}
 super + bracket{left,right}
 	bspc desktop -f {prev,next}.occupied
 
+#super + shift + bracket{left,right}
+#	skippy-xd --switch --{prev,next}
+
 # focus the last {node,desktop}
 super + {grave,Tab}
 	bspc {node,desktop} -f last
 
-# focus the older or newer node in the focus history
-# focus the next/previous window in the current desktop
 # TODO: {_,ctrl + } parent next
+# focus the {next,previous} window in the current desktop
 super + {j,k}
 	bspc node -f {next,prev}.local.!hidden.window
 
@@ -332,9 +363,13 @@ super + w
 # button4 scroll-up
 # button5 scroll-down
 
-# cursor zoom/colorpicker
+# cursor colorpicker
 super + @button2
         "$XDG_CONFIG_HOME"/sxhkd/colorpicker.sh
+
+# cursor zoom
+super + @button3
+        boomer
 
 #super + button{4,5}
 #	pamixer {-i,-d} 5 ; "$XDG_CONFIG_HOME"/sxhkd/volume_notify.sh

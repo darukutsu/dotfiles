@@ -1,0 +1,326 @@
+{
+  "shape_button": "Middle",
+  "bindings": [
+    {
+      "comment": "fullscreen focused window",
+      "event": {
+        "button": "Middle",
+        "modifiers": [
+          "MetaLeft"
+        ],
+        "event_type": "Shape",
+        "shapes_xy": [
+          [
+            91,
+            1000,
+            91,
+            985,
+            91,
+            949,
+            91,
+            899,
+            81,
+            874,
+            76,
+            864,
+            76,
+            854,
+            71,
+            848,
+            61,
+            833,
+            56,
+            823,
+            56,
+            813,
+            51,
+            803,
+            51,
+            788,
+            51,
+            773,
+            45,
+            753,
+            45,
+            727,
+            45,
+            707,
+            40,
+            682,
+            35,
+            652,
+            35,
+            621,
+            35,
+            596,
+            35,
+            566,
+            35,
+            525,
+            35,
+            495,
+            25,
+            444,
+            20,
+            399,
+            15,
+            359,
+            5,
+            318,
+            5,
+            283,
+            0,
+            253,
+            0,
+            217,
+            0,
+            187,
+            5,
+            146,
+            5,
+            111,
+            5,
+            86,
+            5,
+            66,
+            5,
+            45,
+            5,
+            30,
+            5,
+            15,
+            5,
+            5,
+            5,
+            0
+          ]
+        ]
+      },
+      "cmd_str": "bspc node -t fullscreen"
+    },
+    {
+      "comment": "tile focused window",
+      "event": {
+        "button": "Middle",
+        "modifiers": [
+          "MetaLeft"
+        ],
+        "event_type": "Shape",
+        "shapes_xy": [
+          [
+            0,
+            0,
+            0,
+            15,
+            5,
+            41,
+            15,
+            103,
+            15,
+            186,
+            26,
+            278,
+            31,
+            402,
+            31,
+            505,
+            31,
+            593,
+            41,
+            691,
+            52,
+            763,
+            52,
+            820,
+            62,
+            866,
+            72,
+            902,
+            82,
+            933,
+            88,
+            964,
+            93,
+            985,
+            98,
+            995,
+            103,
+            1000
+          ]
+        ]
+      },
+      "cmd_str": "bspc node -t tiled"
+    },
+    {
+      "comment": "switch right",
+      "event": {
+        "button": "Middle",
+        "modifiers": [
+          "MetaLeft"
+        ],
+        "event_type": "Shape",
+        "shapes_xy": [
+          [
+            0,
+            0,
+            15,
+            0,
+            51,
+            0,
+            103,
+            3,
+            169,
+            6,
+            244,
+            6,
+            317,
+            6,
+            392,
+            6,
+            480,
+            6,
+            564,
+            6,
+            655,
+            6,
+            733,
+            6,
+            808,
+            6,
+            869,
+            6,
+            923,
+            6,
+            962,
+            6,
+            985,
+            6,
+            995,
+            6,
+            1000,
+            6
+          ]
+        ]
+      },
+      "cmd_str": "bspc node -s east"
+    },
+    {
+      "comment": "switch left",
+      "event": {
+        "button": "Middle",
+        "modifiers": [
+          "MetaLeft"
+        ],
+        "event_type": "Shape",
+        "shapes_xy": [
+          [
+            1000,
+            10,
+            986,
+            10,
+            957,
+            10,
+            931,
+            10,
+            891,
+            10,
+            739,
+            7,
+            587,
+            0,
+            500,
+            0,
+            413,
+            0,
+            330,
+            0,
+            251,
+            3,
+            182,
+            10,
+            123,
+            17,
+            74,
+            17,
+            36,
+            17,
+            14,
+            17,
+            2,
+            17,
+            0,
+            17
+          ]
+        ]
+      },
+      "cmd_str": "bspc node -s west"
+    },
+    {
+      "comment": "close window",
+      "event": {
+        "button": "Middle",
+        "modifiers": [
+          "MetaLeft"
+        ],
+        "event_type": "Shape",
+        "shapes_xy": [
+          [
+            35,
+            0,
+            297,
+            175,
+            611,
+            288,
+            930,
+            354,
+            1000,
+            371,
+            1000,
+            376,
+            917,
+            424,
+            620,
+            524,
+            428,
+            603,
+            262,
+            690,
+            131,
+            773,
+            39,
+            843,
+            9,
+            865,
+            0,
+            869
+          ]
+        ]
+      },
+      "cmd_str": "bspc node -c"
+    },
+    {
+      "comment": "skippy alt-tab",
+      "event": {
+        "button": "Right",
+        "edges": [
+          "Top",
+          "Left"
+        ],
+        "event_type": "Click"
+      },
+      "cmd_str": "skippy-xd --expose"
+    },
+    {
+      "comment": "skippy desktop",
+      "event": {
+        "button": "Right",
+        "edges": [
+          "Bottom",
+          "Left"
+        ],
+        "event_type": "Click"
+      },
+      "cmd_str": "skippy-xd --paging"
+    }
+  ]
+}

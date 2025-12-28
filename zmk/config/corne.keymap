@@ -161,14 +161,14 @@ https://github.com/mh4x0f/zmkBATx
 //    ┌─────────────┬───────────┬───┬───┬─────────────────┬──────────┐                            ┌───────────┬──────┬───┬───┬───────────┬─────────────┐
 //    │     tab     │     Q     │ W │ F │        P        │    B     │                            │     J     │  L   │ U │ Y │     ;     │  &bspc_del  │
 //    ├─────────────┼───────────┼───┼───┼─────────────────┼──────────┤                            ├───────────┼──────┼───┼───┼───────────┼─────────────┤
-//    │     esc     │     A     │ R │ S │        T        │    G     │                            │     M     │  N   │ E │ I │     O     │      '      │
+//    │     esc     │     A     │ R │ S │    mt lctl T    │    G     │                            │     M     │  N   │ E │ I │     O     │      '      │
 //    ├─────────────┼───────────┼───┼───┼─────────────────┼──────────┤                            ├───────────┼──────┼───┼───┼───────────┼─────────────┤
 //    │ &shift_caps │ mt lgui Z │ X │ C │        D        │    V     │                            │     K     │  H   │ , │ . │ mt lgui / │ mt rsft ent │
 //    └─────────────┴───────────┴───┴───┼─────────────────┼──────────┼─────────────┐   ┌──────────┼───────────┼──────┼───┴───┴───────────┴─────────────┘
 //                                      │ mod_sl lgui SVK │ lt VIM [ │ mt lalt spc │   │ &td_cmeh │ lt PROG ] │ keyr │
 //                                      └─────────────────┴──────────┴─────────────┘   └──────────┴───────────┴──────┘
   &kp TAB       &kp Q        &kp W   &kp F   &kp P              &kp B                                          &kp J           &kp L         &kp U       &kp Y     &kp SEMI        &bspc_del
-  &kp ESC       &kp A        &kp R   &kp S   &kp T              &kp G                                          &kp M           &kp N         &kp E       &kp I     &kp O           &kp SQT
+  &kp ESC       &kp A        &kp R   &kp S   &mt LCTRL T        &kp G                                          &kp M           &kp N         &kp E       &kp I     &kp O           &kp SQT
   &shift_caps   &mt LGUI Z   &kp X   &kp C   &kp D              &kp V                                          &kp K           &kp H         &kp COMMA   &kp DOT   &mt LGUI FSLH   &mt RSHIFT RET
                                              &mod_sl LGUI SVK   &lt VIM LBKT   &mt LALT SPACE       &td_cmeh   &lt PROG RBKT   &key_repeat
                         >;

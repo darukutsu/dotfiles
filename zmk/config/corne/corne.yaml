@@ -17,7 +17,7 @@ layers:
   - A
   - R
   - S
-  - T
+  - {t: T, h: '$$mdi:apple-keyboard-control$$'}
   - G
   - M
   - N
