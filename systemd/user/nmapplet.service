@@ -1,0 +1,11 @@
+[Unit]
+Description=NetworkManager applet indicator
+After=graphical-session.target network-online.target
+
+[Service]
+ExecStart=/usr/bin/nm-applet
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=graphical-session.target

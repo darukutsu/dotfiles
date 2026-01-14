@@ -1,0 +1,8 @@
+[Unit]
+Description=Searxng container updater timer
+
+[Timer]
+OnActiveSec=2w
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,15 @@
+[Unit]
+Description=fcitx5 daemon
+After=graphical-session.target
+
+[Service]
+Type=dbus
+BusName=org.fcitx.Fcitx
+ExecStart=/usr/bin/env bash -l -c '/usr/bin/fcitx5 -D'
+#ExecStart=/usr/bin/env bash -l -c '/usr/bin/fcitx5 -r --keep'
+#ExecStart=/usr/bin/fcitx5 -rd --keep
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=graphical-session.target

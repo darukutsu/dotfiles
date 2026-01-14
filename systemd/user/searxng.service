@@ -1,0 +1,13 @@
+[Unit]
+Description=Searxng container
+#Requires=docker.service
+After=docker.service
+
+[Service]
+#ExecStart=/usr/bin/docker start -a searxng
+ExecStart=%h/.docker/searxng/start.sh
+ExecStop=/usr/bin/docker stop -t 2 searxng
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

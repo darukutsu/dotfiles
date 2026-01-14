@@ -1,0 +1,4 @@
+[Unit]
+Description=Start services that need graphical-session.target and should be run only in WMs and not DEs
+Requires=graphical-session.target
+BindsTo=graphical-session.target

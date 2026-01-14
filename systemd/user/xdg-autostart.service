@@ -1,0 +1,13 @@
+[Unit]
+Description=autostart apps according to freedesktop spec
+After=graphical-session.target wm.target
+Requires=graphical-session.target wm.target
+
+[Service]
+#ExecStart=/usr/bin/env bash -l -c 'xdg-autostart $DESKTOP_SESSION'
+ExecStart=/usr/bin/xdg-autostart
+Restart=on-failure
+RestartSec=60
+
+[Install]
+RequiredBy=wm.target

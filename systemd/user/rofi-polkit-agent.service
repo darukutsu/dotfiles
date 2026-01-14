@@ -1,0 +1,12 @@
+[Unit]
+Description=use rofi as polkit
+After=graphical-session.target wm.target
+Requires=graphical-session.target wm.target
+
+[Service]
+ExecStart=/usr/bin/env bash -l -c '/usr/bin/rofi-polkit-agent'
+Restart=on-failure
+RestartSec=60
+
+[Install]
+RequiredBy=wm.target

@@ -1,0 +1,4 @@
+[Unit]
+Description=BSPWM start services that need graphical-session.target
+Requires=wm.target
+BindsTo=wm.target

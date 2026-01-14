@@ -1,0 +1,15 @@
+[Unit]
+Description="window switcher for x11"
+After=graphical-session.target bspwm.target
+Requires=graphical-session.target bspwm.target
+
+[Service]
+#Environment=DISPLAY=:0
+#Environment=XAUTHORITY=%h/.Xauthority
+ExecStart=/usr/bin/skippy-xd --start-daemon
+#ExecStop=/usr/bin/sxhkd
+Restart=on-failure
+RestartSec=60
+
+[Install]
+RequiredBy=bspwm.target

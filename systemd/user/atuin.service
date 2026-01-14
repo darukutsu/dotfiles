@@ -1,0 +1,11 @@
+[Unit]
+Description=Atuin Daemon
+
+[Service]
+ExecStart=/usr/bin/sh -c 'rm /atuin/atuin.sock; /usr/bin/atuin daemon'
+ExecStop=/usr/bin/killall atuin
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=default.target

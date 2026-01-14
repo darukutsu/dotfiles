@@ -1,0 +1,17 @@
+[Unit]
+Description=Portal service (terminal file chooser implementation)
+Wants=graphical-session-pre.target
+PartOf=graphical-session.target
+Requires=dbus.service
+After=dbus.service
+Before=xdg-desktop-portal.service
+
+[Service]
+Type=dbus
+BusName=org.freedesktop.impl.portal.desktop.termfilechooser
+ExecStart=/usr/bin/env bash -l -c '/usr/lib/xdg-desktop-portal-termfilechooser -r'
+Restart=on-failure
+Slice=session.slice
+
+[Install]
+WantedBy=graphical-session.target
