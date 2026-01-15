@@ -103,7 +103,7 @@ _zmkbuild() {
   i=0
   for board in $(yq ".include[].board" "$build_file"); do
     for var in shield cmake_args west_args env_args name; do
-      val="$(yq ".include[$i].${var}" "$build_file")"
+      val="$(yq "$(echo ".include[$i].${var}" | tr '_' '-')" "$build_file")"
       export $var="$val"
       if [ "$val" = "null" ]; then
         unset $var
