@@ -18,8 +18,8 @@ vars:
 include:
   - board: nice_nano
     #shield: corne_left nice_view_adapter dongle_display_view_seeeduino_xiao_ble
-    shield: corne_left nice_view_adapter dongle_display_view_pro_micro
-    #shield: corne_left nice_view_adapter dongle_display
+    #shield: corne_left nice_view_adapter dongle_display_view_pro_micro
+    shield: corne_left nice_view_adapter dongle_display
     #shield: corne_left
     #shield: corne_left nice_view_adapter nrf52840_dongle_display
     #shield: corne_left nice_view_adapter nice_view
@@ -37,17 +37,20 @@ include:
     cmake-args: -DCONFIG_ZMK_SPLIT_ROLE_CENTRAL=n
   - board: nice_nano
     shield: corne_right
+  ## this might have caused red warnings even tho rest build correctly investigate
+  #- board: xiao_ble
+  #  shield: nrf52840_dongle
+  #  name: zmk_hid_support
+  #  #shield: nrf52840_mdk_dongle
+  #  #west-args: -s ~/.config/zmk/modules/zmk/zephyr-ble-hid-usb-translator/app
+  #  env-args: ZMK_APP_DIR="~/.config/zmk/modules/zmk/zephyr-ble-hid-usb-translator/app"
   - board: xiao_ble
-    shield: nrf52840_dongle
-    name: zmk_hid_support
-    #shield: nrf52840_mdk_dongle
-    #west-args: -s ~/.config/zmk/modules/zmk/zephyr-ble-hid-usb-translator/app
-    env-args: ZMK_APP_DIR="~/.config/zmk/modules/zmk/zephyr-ble-hid-usb-translator/app"
+    shield: corne_left dongle_display
   - board: xiao_ble
     #shield: corne_dongle_xiao nice_view_adapter dongle_display_view_seeeduino_xiao_ble
     #shield: corne_dongle_pro_micro
     shield: nrf52840_dongle
-    #cmake-args: -DCONFIG_ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS=2
+  #cmake-args: -DCONFIG_ZMK_SPLIT_BLE_CENTRAL_PERIPHERALS=2
   - board: nice_nano
     shield: settings_reset
   - board: xiao_ble
