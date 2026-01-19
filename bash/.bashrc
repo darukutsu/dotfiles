@@ -3,6 +3,15 @@
 ## list all files that are sourced
 # /bin/bash -lixc exit 2>&1 | sed -n 's/^+* \(source\|\.\) //p'
 
+# load this first since ble.sh
+if [ -z "$XDG_CONFIG_HOME" ] || [ "$XDG_CONFIG_HOME" != "$HOME/.config" ]; then
+  export XDG_DATA_HOME=${HOME}/.local/share
+  export XDG_CONFIG_HOME=${HOME}/.config
+  export XDG_STATE_HOME=${HOME}/.local/state
+  export XDG_CACHE_HOME=${HOME}/.cache
+  export XDG_DOWNLOAD_DIR=${HOME}/Downloads
+fi
+
 [[ $- == *i* ]] && source /usr/share/blesh/ble.sh --noattach
 shopt -u globstar
 
@@ -33,12 +42,8 @@ shopt -u globstar
 #blehook/eval-after-load complete debug/complete-load-hook
 
 ## OTHER VAR
-if [ -z "$XDG_CONFIG_HOME" ]; then
-  export XDG_DATA_HOME=${HOME}/.local/share
-  export XDG_CONFIG_HOME=${HOME}/.config
-  export XDG_STATE_HOME=${HOME}/.local/state
-  export XDG_CACHE_HOME=${HOME}/.cache
-  export XDG_DOWNLOAD_DIR=${HOME}/Downloads
+if [ -n "$WSL_DISTRO_NAME" ]; then
+  source "$XDG_CONFIG_HOME/bash/wsl"
 fi
 
 # REMOTE KITTY SHELL
@@ -74,7 +79,7 @@ elif command -v nvimpager >/dev/null; then
 elif command -v nvim >/dev/null; then
   export PAGER="nvim -c 'set ft=pager' -c 'set nomodifiable'"
   export MANPAGER="nvim +Man!"
-  export SYSTEMD_PAGER="$PAGER"
+  #export SYSTEMD_PAGER="$PAGER"
 fi
 
 h() {
