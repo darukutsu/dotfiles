@@ -104,17 +104,19 @@ return { -- MASON, formatter/linter, debugger, lsp
         "gh_actions_ls",
         "gitlab_ci_ls",
         "gopls",
-        --"gradle_ls",
+        --"gradle_ls", -- java disabled because of permissions in job
         "harper_ls",
         "html",
         "intelephense",
-        --"kotlin_lsp", -- java disabled because of permissions in siemens
-        --"jdtls",
+        --"kotlin_lsp", -- java disabled because of permissions in job
+        --"jdtls", -- java disabled because of permissions in job
         "jsonls",
         "lemminx",
         "ltex",
         --"lua-language-server", -- shows errors
         "mesonlsp",
+        "pyrefly",
+        "pylyzer",
         "ruff",
         "rust_analyzer",
         "sqlls",
@@ -189,6 +191,7 @@ return { -- MASON, formatter/linter, debugger, lsp
         "cbfmt",
         "clang_format",
         "lua-language-server",
+        "pyproject-fmt",
         --"isort",
         "jq",
         "latexindent",
