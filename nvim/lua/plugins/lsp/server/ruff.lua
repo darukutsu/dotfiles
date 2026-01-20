@@ -7,9 +7,23 @@
 -- Configure `ruff-lsp`.
 -- See: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff_lsp
 -- For the default config, along with instructions on how to customize the settings
-vim.lsp.config("ruff_ls", {
+--vim.lsp.config("ruff_ls", {
+vim.lsp.config("ruff", {
   --on_attach = on_attach,
   filetypes = { "python", "py", "py3" },
+
+  settings = {
+    configuration = {
+      --lint = {
+      --  enable = false,
+      --},
+      --format = {
+      --  enable = false,
+      --},
+      organizeImports = true,
+      fixAll = true,
+    },
+  },
   --init_options = {
   --  settings = {
   --    -- Any extra CLI arguments for `ruff` go here

@@ -53,6 +53,13 @@ return { -- MASON, formatter/linter, debugger, lsp
           buffer = bufnr,
           callback = function()
             --vim.lsp.buf.format({ async = false, timeout_ms = 5000 })
+            --vim.lsp.buf.code_action({
+            --  context = {
+            --    only = { "source.organizeImports" },
+            --    diagnostics = {},
+            --  },
+            --  apply = true,
+            --})
             vim.lsp.buf.format({ async = false })
           end,
         })
@@ -96,12 +103,12 @@ return { -- MASON, formatter/linter, debugger, lsp
         "gh_actions_ls",
         "gitlab_ci_ls",
         "gopls",
-        "gradle_ls",
+        --"gradle_ls",
         "harper_ls",
         "html",
         "intelephense",
-        "kotlin_lsp",
-        "jdtls",
+        --"kotlin_lsp", -- java disabled because of permissions in siemens
+        --"jdtls",
         "jsonls",
         "lemminx",
         "ltex",
@@ -181,7 +188,7 @@ return { -- MASON, formatter/linter, debugger, lsp
         "cbfmt",
         "clang_format",
         "lua-language-server",
-        "isort",
+        --"isort",
         "jq",
         "latexindent",
         "phpcsfixer",

@@ -1778,7 +1778,8 @@ c.url.searchengines = {
     # this has reason for remote work setup
     "br": "https://search.brave.com/search?q={}",
     "go": "https://google.com/search?q={}",
-    "dg": "https://search.duckduckgo.com/search?q={}",
+    "dg": "https://duckduckgo.com/?q={}",
+    "dgs": "https://duckduckgo.com/html/?q={}",
 }
 
 ## Page(s) to open at the start.

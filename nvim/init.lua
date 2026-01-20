@@ -7,6 +7,7 @@ vim.g.neovide_scroll_animation_length = 0
 --vim.g.neovide_cursor_trail_size = 0
 -- fixes man page bindings
 vim.g.no_man_maps = 1
+vim.o.winborder = "bold"
 
 -- without this autocmd startup is around 2700ms see approx. times in plugins.lua
 local aug = vim.api.nvim_create_augroup("BigFileDisable", {})

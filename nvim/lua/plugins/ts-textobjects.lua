@@ -198,9 +198,15 @@ return {
         {
           "gG",
           function()
-            require("various-textobjs").entireBuffer()
+            local vimmode = vim.api.nvim_get_mode()
+            if vimmode ~= nil and vimmode.mode:match("^[vV]") then
+              require("various-textobjs").entireBuffer()
+            else
+              vim.cmd("normal V")
+              require("various-textobjs").entireBuffer()
+            end
           end,
-          mode = { "o", "x" },
+          mode = { "n", "o", "x" },
         },
         {
           "|",
