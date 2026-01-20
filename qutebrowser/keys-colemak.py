@@ -132,13 +132,13 @@ config.bind("B", "cmd-set-text -s :bookmark-load -t")
 # config.bind('G', 'scroll-to-perc')
 
 # hjkl
-config.bind("m", "scroll-px -50 0")
+config.bind("m", "scroll-px -100 0")
 config.bind("M", "back")
-config.bind("n", "scroll-px 0 50")
+config.bind("n", "scroll-px 0 100")
 config.bind("N", "tab-prev")
-config.bind("e", "scroll-px 0 -50")
+config.bind("e", "scroll-px 0 -100")
 config.bind("E", "tab-next")
-config.bind("i", "scroll-px 50 0")
+config.bind("i", "scroll-px 100 0")
 config.bind("I", "forward")
 
 config.bind("h", "mode-enter set_mark")

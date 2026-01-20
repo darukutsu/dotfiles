@@ -1,8 +1,4 @@
 // ==UserScript==
-// @exclude *://*.microsoft.com/*
-// @exclude *://*.linuxfromscratch.org/*
-// @exclude *://*.monkeytype.com/*
-// @exclude *://*.chatgpt.com/*
 // @name         Pagetual
 // @name:zh-CN   东方永页机
 // @name:zh-TW   東方永頁機
@@ -35,7 +31,6 @@
 // @name:da      Pagetual
 // @name:fr-CA   Pagetual
 // @namespace    hoothin
-// @version      1.9.37.125
 // @description  Perpetual pages - powerful auto-pager script. Auto fetching next paginated web pages and inserting into current page for infinite scroll. Support thousands of web sites without any rule.
 // @description:zh-CN  终极自动翻页 - 加载并拼接下一分页内容至当前页尾，智能适配任意网页
 // @description:zh-TW  終極自動翻頁 - 加載並拼接下一分頁內容至當前頁尾，智能適配任意網頁
@@ -102,6 +97,8 @@
 // @connect      *
 // @contributionURL      https://ko-fi.com/hoothin
 // @contributionAmount   1
+// @downloadURL https://update.greasyfork.org/scripts/438684/Pagetual.user.js
+// @updateURL https://update.greasyfork.org/scripts/438684/Pagetual.meta.js
 // ==/UserScript==
 
 (function() {
@@ -141,6 +138,9 @@
         if (document.body && getComputedStyle(document.body).display === 'none') {
             document.body.style.display = 'block';
         }
+        Element.prototype.scrollIntoView = function() {
+            console.log('ScrollIntoView blocked.');
+        };
         return;
     }
 
@@ -157,7 +157,7 @@
     }
 
     const noRuleTest = false;
-    const lang = navigator.appName === "Netscape" ? navigator.language : navigator.userLanguage;
+    var langName = navigator.appName === "Netscape" ? navigator.language : navigator.userLanguage;
     const langData = [
         {
             // English translation update by github.com/https433, admin@abby0666.xyz.
@@ -4139,6 +4139,7 @@
     });
     var i18nData = langData[0].lang;
     function setLang(la) {
+        langName = la;
         for (let i = 0; i < langData.length; i++) {
             let lang = langData[i];
             if (lang && lang.match.indexOf(la) !== -1) {
@@ -4152,7 +4153,7 @@
             }
         }
     }
-    setLang(lang);
+    setLang(langName);
     var enableDebug = true;
     var _GM_xmlhttpRequest, _GM_registerMenuCommand, _GM_notification, _GM_addStyle, _GM_openInTab, _GM_info, _GM_setClipboard;
     function i18n(name, param) {
@@ -4318,7 +4319,8 @@
         });
     }
     const isMobile = ('ontouchstart' in document.documentElement && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-    const configPage = [`https://pagetual.hoothin.com/${lang === 'zh-CN' ? 'cn/' : ''}rule.html`,
+    const cnConfigPage = "https://pagetual.hoothin.com/cn/rule.html";
+    const configPage = ["https://pagetual.hoothin.com/rule.html",
                         "https://github.com/hoothin/UserScripts/tree/master/Pagetual",
                         "https://hoothin.github.io/UserScripts/Pagetual/"];
     const firstRunPage = "https://pagetual.hoothin.com/firstRun";
@@ -4566,32 +4568,40 @@
 
     function parseTrustedTypes(cspString) {
         const policies = new Set();
+        let allowDuplicates = false;
+        let ttDirectiveFound = false;
         const ttRegex = /trusted-types\s+([^;]+)/gi;
         let match;
-        while ((match = ttRegex.exec(cspString)) !== null) {
-            match[1].trim().split(/\s+/)
-                .forEach(name => {
-                    if (name !== "'allow-duplicates'" && name !== "'none'") {
-                        policies.add(name.replace(/'/g, ''));
-                    }
-                });
-        }
-        return Array.from(policies);
-    }
 
-    async function getAvailablePolicyNamesOptimized() {
-        if (_unsafeWindow.trustedTypes && _unsafeWindow.trustedTypes.getPolicyNames) {
-            const existingNames = _unsafeWindow.trustedTypes.getPolicyNames();
-            if (existingNames.length > 0) {
-                return new Set(existingNames);
+        while ((match = ttRegex.exec(cspString)) !== null) {
+            ttDirectiveFound = true;
+
+            const policyNames = match[1].trim().split(/\s+/);
+            for (const name of policyNames) {
+                if (name === "'allow-duplicates'") {
+                    allowDuplicates = true;
+                } else if (name !== "'none'") {
+                    policies.add(name.replace(/'/g, ''));
+                }
             }
         }
+        return { names: policies, allowDuplicates: allowDuplicates, ttDirectiveFound: ttDirectiveFound };
+    }
+
+    async function getCspTrustedTypesInfo() {
+        const combinedPolicies = new Set();
+        let combinedAllowDuplicates = false;
+        let combinedTtDirectiveFound = false;
 
         const meta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
         if (meta) {
-            const metaNames = parseTrustedTypes(meta.content);
-            if (metaNames.length > 0) {
-                return new Set(metaNames);
+            const metaResult = parseTrustedTypes(meta.content);
+            metaResult.names.forEach(name => combinedPolicies.add(name));
+            if (metaResult.allowDuplicates) {
+                combinedAllowDuplicates = true;
+            }
+            if (metaResult.ttDirectiveFound) {
+                combinedTtDirectiveFound = true;
             }
         }
 
@@ -4601,19 +4611,31 @@
                 url: window.location.href,
                 onload: function(response) {
                     const cspHeader = response.responseHeaders.split('\r\n')
-                        .filter(h => h.toLowerCase().startsWith('content-security-policy:'))
-                        .map(h => h.substring(26).trim())
-                        .join('; ');
+                    .filter(h => h.toLowerCase().startsWith('content-security-policy:'))
+                    .map(h => h.substring(26).trim())
+                    .join('; ');
 
-                    const headerNames = parseTrustedTypes(cspHeader);
-                    if (headerNames.length > 0) {
-                        resolve(new Set(headerNames));
-                    } else {
-                        resolve(new Set());
+                    const headerResult = parseTrustedTypes(cspHeader);
+                    headerResult.names.forEach(name => combinedPolicies.add(name));
+                    if (headerResult.allowDuplicates) {
+                        combinedAllowDuplicates = true;
                     }
+                    if (headerResult.ttDirectiveFound) {
+                        combinedTtDirectiveFound = true;
+                    }
+
+                    resolve({
+                        names: combinedPolicies,
+                        allowDuplicates: combinedAllowDuplicates,
+                        ttDirectiveFound: combinedTtDirectiveFound
+                    });
                 },
                 onerror: function(error) {
-                    resolve(new Set());
+                    resolve({
+                        names: combinedPolicies,
+                        allowDuplicates: combinedAllowDuplicates,
+                        ttDirectiveFound: combinedTtDirectiveFound
+                    });
                 }
             });
         });
@@ -4629,35 +4651,48 @@
     }
 
     async function createPolicy() {
-        if (_unsafeWindow.trustedTypes && _unsafeWindow.trustedTypes.createPolicy && isTrustedTypesEnforced()) {
-            const allowedNames = await getAvailablePolicyNamesOptimized();
+        if (!(_unsafeWindow.trustedTypes && _unsafeWindow.trustedTypes.createPolicy && isTrustedTypesEnforced())) {
+            return;
+        }
 
-            if (allowedNames.size === 0) {
-                escapeHTMLPolicy = _unsafeWindow.trustedTypes.createPolicy('pagetual_default', {
-                    createHTML: (string, sink) => string
+        const { names: allowedNames, allowDuplicates, ttDirectiveFound } = await getCspTrustedTypesInfo();
+
+        if (ttDirectiveFound && !allowDuplicates) {
+            debug("CSP Trusted Types is enforced without 'allow-duplicates'. " +
+                         "Skipping policy creation to avoid conflicts with the page.");
+            return;
+        }
+
+        const MY_POLICY_NAME = 'pvcep_default';
+
+        try {
+            escapeHTMLPolicy = _unsafeWindow.trustedTypes.createPolicy(MY_POLICY_NAME, {
+                createHTML: (string, sink) => string,
+                createScriptURL: string => string,
+                createScript: string => string
+            });
+            return;
+        } catch (e) {
+        }
+
+        const existingPolicies = new Set(_unsafeWindow.trustedTypes.getPolicyNames());
+        for (const name of allowedNames) {
+            if (name === '*' || existingPolicies.has(name)) {
+                continue;
+            }
+
+            try {
+                escapeHTMLPolicy = _unsafeWindow.trustedTypes.createPolicy(name, {
+                    createHTML: (string, sink) => string,
+                    createScriptURL: string => string,
+                    createScript: string => string
                 });
                 return;
-            }
-
-            for (const name of allowedNames) {
-                if (name === '*') continue;
-                try {
-                    escapeHTMLPolicy = _unsafeWindow.trustedTypes.createPolicy(name, {
-                        createHTML: (string, sink) => string
-                    });
-                    break;
-                } catch (e) {
-                    try {
-                        escapeHTMLPolicy = _unsafeWindow.trustedTypes.policies.get(name);
-                        if (escapeHTMLPolicy) {
-                            break;
-                        }
-                    } catch (e2) {
-                        console.warn(`create '${name}' failed`);
-                    }
-                }
+            } catch (e) {
+                debug(`create '${name}' failed, trying next...`);
             }
         }
+        debug("Could not create any trusted types policy.");
     }
 
     let escapeHTMLPolicy = null;
@@ -4879,10 +4914,12 @@
                 getBody(doc).scrollTop = actualTop - 10;
                 doc.documentElement.scrollTop = actualTop - 10;
                 setTimeout(() => {
-                    while (actualTop < maxHeight) {
+                    if (actualTop < maxHeight) {
                         actualTop += 200;
                         getBody(doc).scrollTop = actualTop;
                         doc.documentElement.scrollTop = actualTop;
+                        getBody(doc).scrollTop = maxHeight;
+                        doc.documentElement.scrollTop = maxHeight;
                     }
                 }, 0);
                 return false;
@@ -4929,7 +4966,13 @@
         runPageBar(pageBar) {
             if (this.curSiteRule.pageBar && this.curSiteRule.pageBar !== 0) {
                 try {
-                    ((typeof this.curSiteRule.pageBar === 'function') ? this.curSiteRule.pageBar : Function("pageBar",'"use strict";' + this.curSiteRule.pageBar))(pageBar);
+                    if (typeof this.curSiteRule.pageBar === 'function') {
+                        this.curSiteRule.pageBar(pageBar);
+                    } else if (/^pageBar\.className=['"][^'"]*['"];?$/.test(this.curSiteRule.pageBar)) {
+                        pageBar.className = this.curSiteRule.pageBar.match(/^pageBar\.className=['"]([^'"]*)['"];?$/)[1];
+                    } else {
+                        Function("pageBar",'"use strict";' + this.curSiteRule.pageBar)(pageBar);
+                    }
                 } catch(e) {
                     debug(e);
                 }
@@ -6332,6 +6375,7 @@
                 root_domain = /^\w+\:\/\/\/?[^\/]+/.exec(root_page)[0],
                 absolute_regex = /^\w+\:\/\//;
             this.updateUrl = false;
+            src = src.replace(/^\/(\.\.\/)+/, "/");
             while (src.indexOf("../") === 0) {
                 src = src.substr(3);
                 root_page = root_page.replace(/\/[^\/]+\/$/, "/");
@@ -7931,7 +7975,7 @@
                 e.stopPropagation();
             }, true);
 
-            let initX, initY, moving = false;
+            let initX, initY, perX, perY, moving = false;
             let removeTimer;
             move.addEventListener("click", e => {
                 if (!moving) {
@@ -7975,10 +8019,10 @@
                 if (moving) {
                     let windowHeight = window.innerHeight || document.documentElement.clientHeight;
                     let windowWidth = window.innerWidth || document.documentElement.clientWidth;
-                    initX = (clientX(e) - 10 + 40) / windowWidth * 100;
-                    initY = (clientY(e) - 83 + 83) / windowHeight * 100;
-                    this.frame.style.top = `calc(${initY}% - 83px)`;
-                    this.frame.style.left = `calc(${initX}% - 40px)`;
+                    perX = (clientX(e) - 10 + 40) / windowWidth * 100;
+                    perY = (clientY(e) - 83 + 83) / windowHeight * 100;
+                    this.frame.style.top = `calc(${perY}% - 83px)`;
+                    this.frame.style.left = `calc(${perX}% - 40px)`;
                 } else if (Math.abs(clientX(e) - initX) + Math.abs(clientY(e) - initY) > 5) {
                     moving = true;
                     clearTimeout(removeTimer);
@@ -7990,8 +8034,8 @@
                 document.removeEventListener("mouseup", mouseUpHandler, true);
                 document.removeEventListener("touchmove", mouseMoveHandler, true);
                 document.removeEventListener("touchend", mouseUpHandler, true);
-                if (moving) {
-                    rulesData.sideControllerPos = {x: parseInt(initX), y: parseInt(initY)};
+                if (moving && perX && perY && perX > 0 && perX < 100 && perY > 0 && perY < 100) {
+                    rulesData.sideControllerPos = {x: parseInt(perX), y: parseInt(perY)};
                     storage.setItem("rulesData", rulesData);
                 }
             };
@@ -9527,9 +9571,9 @@
                 let rulesExample = document.querySelector("#user-content-rules-example+a,#rules-example>a");
                 if (rulesExample) {
                     rulesExample.innerText = i18n("rulesExample");
-                    if (lang == "zh-CN") {
+                    if (langName == "zh-CN") {
                         rulesExample.href = rulesExample.href.replace("en", "cn");
-                    } else if (lang == "zh-TW" || lang == "zh-HK") {
+                    } else if (langName == "zh-TW" || langName == "zh-HK") {
                         rulesExample.href = rulesExample.href.replace("/en", "");
                     }
                 }
@@ -9922,8 +9966,10 @@
 
         let setConfigPageInput = createCheckbox(i18n("setConfigPage"), false);
         let enableWhiteListInput = createCheckbox(i18n("autoRun"), rulesData.enableWhiteList != true);
-        let sideControllerInput = createCheckbox(i18n("sideController"), rulesData.sideController);
-        let sideControllerAlwaysInput = createCheckbox(i18n("sideControllerAlways"), rulesData.sideControllerAlways, "h4", sideControllerInput);
+        //let sideControllerInput = createCheckbox(i18n("sideController"), rulesData.sideController);
+        let sideControllerInput = createCheckbox(i18n("sideController"), true);
+        //let sideControllerAlwaysInput = createCheckbox(i18n("sideControllerAlways"), rulesData.sideControllerAlways, "h4", sideControllerInput);
+        let sideControllerAlwaysInput = createCheckbox(i18n("sideControllerAlways"), true, "h4", sideControllerInput);
         let sideControllerScrollInput = createCheckbox(i18n("sideControllerScroll"), rulesData.sideControllerScroll !== false, "h4", sideControllerInput);
         let sideControllerLoadNowInput = createCheckbox(i18n("loadNow"), rulesData.sideControllerLoadNow !== false, "h4", sideControllerInput);
         let enableDebugInput = createCheckbox(i18n("enableDebug"), rulesData.enableDebug != false);
@@ -9943,7 +9989,8 @@
         let pageBarMenuInput = createCheckbox(i18n("pageBarMenu"), rulesData.pageBarMenu != false);
         let arrowToScrollInput = createCheckbox(i18n("arrowToScroll"), rulesData.arrowToScroll);
         let contentVisibilityInput = createCheckbox(i18n("contentVisibility"), rulesData.contentVisibility);
-        let wedata2githubInput = createCheckbox(i18n("wedata2github"), rulesData.wedata2github);
+        //let wedata2githubInput = createCheckbox(i18n("wedata2github"), rulesData.wedata2github);
+        let wedata2githubInput = createCheckbox(i18n("wedata2github"), true);
         let customFirstInput = createCheckbox(i18n("customFirst"), rulesData.customFirst);
         let lastPageTipsInput = createCheckbox(i18n("lastPageTips"), rulesData.lastPageTips);
         let updateNotificationInput = createCheckbox(i18n("updateNotification"), rulesData.updateNotification != false);
@@ -10111,6 +10158,7 @@
             rulesData.lang = langSelect.value || "";
             if (setConfigPageInput.checked) rulesData.configPage = location.href;
             rulesData.wedata2github = wedata2githubInput.checked;
+            //rulesData.wedata2github = true
             let opacity = parseInt(opacityInput.value) || 0;
             if (opacity > 100) opacity = 100;
             else if (opacity < 0) opacity = 0;
@@ -10141,10 +10189,13 @@
             if (rulesData.sideController != sideControllerInput.checked) {
                 rulesData.sideControllerPos = false;
             }
+	    //rulesData.sideController = true;
+	    //rulesData.sideControllerPos = true;
             rulesData.sideController = sideControllerInput.checked;
             rulesData.sideControllerScroll = sideControllerScrollInput.checked;
             rulesData.sideControllerLoadNow = sideControllerLoadNowInput.checked;
             rulesData.sideControllerAlways = sideControllerAlwaysInput.checked;
+            //rulesData.sideControllerAlways = true;
             rulesData.pageElementCss = pageElementCssInput.value;
             rulesData.customCss = customCssInput.value;
             rulesData.upBtnImg = upBtnImgInput.value;
@@ -10425,6 +10476,9 @@
             }
             if (rulesData.lang) {
                 setLang(rulesData.lang);
+                if (langName === 'zh-CN') {
+                    configPage.unshift(cnConfigPage);
+                }
             }
             if (rulesData.firstRun && storage.supportCrossSave()) {
                 rulesData.firstRun = false;
@@ -11381,14 +11435,6 @@
                 let action = e.data.action;
                 let detail = e.data.detail;
                 switch (action) {
-                    case "config":
-                        if (!detail || typeof detail !== 'object') return;
-                        rulesData = {
-                            ...rulesData,
-                            ...detail
-                        }
-                        storage.setItem("rulesData", rulesData);
-                        break;
                     case "nextPage":
                         if (detail === "" || detail === null) return;
                         detail = parseInt(detail) || 0;
@@ -12613,12 +12659,12 @@
             }
             let eles = ruleParser.getPageElement(iframeDoc, emuIframe.contentWindow, true), checkItem;
             if (eles && eles.length > 0) {
-                eles = [].filter.call(eles, ele => {return ele && !compareNodeName(ele, ["style", "script", "meta"])});
-                if (compareNodeName(eles[0], ["ul"]) || eles.length == 1) checkItem = eles[0];
-                else if (eles[0].parentNode == eles[1].parentNode) {
-                    checkItem = eles[0].parentNode;
+                const filterEles = [].filter.call(eles, ele => {return ele && !compareNodeName(ele, ["style", "script", "meta"])});
+                if (compareNodeName(filterEles[0], ["ul"]) || filterEles.length == 1) checkItem = filterEles[0];
+                else if (filterEles[0].parentNode == filterEles[1].parentNode) {
+                    checkItem = filterEles[0].parentNode;
                 } else {
-                    checkItem = eles[0];
+                    checkItem = filterEles[0];
                 }
             }
             if (!checkItem) {

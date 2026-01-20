@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                YouTube Super Fast Chat
-// @version             0.102.23
+// @version             0.102.26
 // @license             MIT
 // @name:ja             YouTube スーパーファーストチャット
 // @name:zh-TW          YouTube 超快聊天
@@ -1647,6 +1647,67 @@
       trustedTypes.createPolicy('default', { createHTML: s, createScriptURL: s, createScript: s });
     }
     return s;
+  }
+
+  // YTid 名稱修復器
+  // https://chromewebstore.google.com/detail/ytid-%E5%90%8D%E7%A8%B1%E4%BF%AE%E5%BE%A9%E5%99%A8/ajdaedmmnojooglhpjlgajfhddchhcog
+  // https://addons.mozilla.org/zh-TW/firefox/addon/ytid-%E5%90%8D%E7%A8%B1%E4%BF%AE%E5%BE%A9%E5%99%A8/
+  // https://greasyfork.org/scripts/469878/discussions/317330
+  const fixForYTidRenamer = (node) => {
+    const s = new Set();
+    const testFn = (node) => node.hasAttribute("data-ytid-handle") || node.hasAttribute("data-ytid-replaced");
+    if (node && node.nodeType > 0 && testFn(node)) {
+      s.add(node);
+      if (node && node.nodeType === 1) {
+        for (const childNode of node.querySelectorAll("*")) {
+          if (testFn(childNode)) s.add(childNode);
+        }
+      }
+      for (const node of s) {
+        node.removeAttribute("data-ytid-replaced");
+        if (node.dataset) {
+          if (node.nodeName === "SPAN") {
+            const handle = node.dataset.ytidHandle || "";
+            const display = node.dataset.ytidDisplay || "";
+            const handleTrimmed = handle.trim();
+            const displayTrimmed = display.trim();
+            if (handleTrimmed && displayTrimmed && node.textContent.trim() === displayTrimmed) {
+              node.textContent = node.textContent.replace(displayTrimmed, handleTrimmed);
+            }
+          }
+          delete node.dataset.ytidDisplay;
+          delete node.dataset.ytidHandle;
+          delete node.dataset.ytidChannelId;
+          delete node.dataset.ytidBoundHandle;
+          delete node.dataset.ytidCommentKey;
+        }
+      }
+      s.clear();
+    }
+  };
+
+  if (ENABLE_CHAT_MESSAGES_BOOSTED_STAMPING) {
+
+    let shouldCheckYTidRenamer = false;
+    document.addEventListener("youtube-chat-element-before-remove", (event) => {
+      shouldCheckYTidRenamer && fixForYTidRenamer(event.target);
+    }, true);
+    document.addEventListener("youtube-chat-element-after-append", (event) => {
+      if (tryCheckCount > 4) tryCheckCount = 4;
+      shouldCheckYTidRenamer && fixForYTidRenamer(event.target);
+    }, true);
+
+    let tryCheckCount = 9999;
+    (new MutationObserver((mutations, observer) => {
+      if (--tryCheckCount <= 0) observer.disconnect();
+      if (!shouldCheckYTidRenamer) {
+        if (document.querySelector("[data-ytid-handle], [data-ytid-replaced]")) {
+          shouldCheckYTidRenamer = true;
+          console.log("[yt-chat] fixForYTidRenamer is enabled");
+        }
+      }
+    })).observe(document, { subtree: true, childList: true });
+
   }
 
   // const nextBrowserTick_ = nextBrowserTick;
@@ -3940,6 +4001,8 @@
 
         const removeStampNode_ = (elNode) => {
 
+          elNode.dispatchEvent(new CustomEvent("youtube-chat-element-before-remove"));
+
           const elm = elNode;
           const cnt = insp(elm);
           let elemCount1 = elm.querySelectorAll('yt-img-shadow').length;
@@ -4098,6 +4161,8 @@
                     itemScrollerX.scrollTop = scrollTop2 + 16777216;
                   }
                 }
+
+                newNode.dispatchEvent(new CustomEvent("youtube-chat-element-after-append"));
 
                 return 1
               }

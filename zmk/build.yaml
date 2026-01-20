@@ -17,10 +17,11 @@ vars:
   keymap-drawer-conf: ~/.config/zmk/config/keymap-drawer-conf.yaml
 include:
   - board: nice_nano
+    name: corne_nice_dongleless
     #shield: corne_left nice_view_adapter dongle_display_view_seeeduino_xiao_ble
     #shield: corne_left nice_view_adapter dongle_display_view_pro_micro
-    shield: corne_left nice_view_adapter dongle_display
-    #shield: corne_left
+    #shield: corne_left nice_view_adapter dongle_display
+    shield: corne_left
     #shield: corne_left nice_view_adapter nrf52840_dongle_display
     #shield: corne_left nice_view_adapter nice_view
     # These maybe should be generated, use ~ as $HOME replacement

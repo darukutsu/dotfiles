@@ -332,6 +332,11 @@ super + shift + p
         notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Passthrough mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_passthrough
 
+# testing purposes
+# modal keybinds
+#super + ctrl + z:a
+#	notify-send "what's" "up"
+
 #
 # MOVE/RESIZE
 #
@@ -367,8 +372,10 @@ super + w
 super + @button2
         "$XDG_CONFIG_HOME"/sxhkd/colorpicker.sh
 
+# NOTE: notification can be cut due animation speed... find way to overlay notifications in front of boomer
 # cursor zoom
 super + @button3
+	notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-system-windows "sxhkd" "boomer activated: zoom"; \
         boomer
 
 #super + button{4,5}

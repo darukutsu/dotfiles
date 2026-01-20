@@ -80,6 +80,12 @@ elif command -v nvim >/dev/null; then
   export PAGER="nvim -c 'set ft=pager' -c 'set nomodifiable'"
   export MANPAGER="nvim +Man!"
   #export SYSTEMD_PAGER="$PAGER"
+  # FIX: systemd pager incorrect showing
+  #export PAGER="nvim -c 'set ft=pager' -c 'set nomodifiable'"
+  # might cause error need more debugging, or maybe don't pipe at all and open it directly
+  #export MANPAGER="nvim +Man!"
+  #export MANPAGER="nvim -c 'Man!'"
+  #export SYSTEMD_PAGER="$PAGER"
 fi
 
 h() {
@@ -99,6 +105,8 @@ man() {
       elif [ $1 ]; then
         $PAGER man://"$1"
       fi
+    elif command -v nvim >/dev/null; then
+      nvim -c "Man $* | only"
     else
       # shellcheck disable=SC2068
       /usr/bin/man $@

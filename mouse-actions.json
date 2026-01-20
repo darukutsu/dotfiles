@@ -306,6 +306,9 @@
           "Top",
           "Left"
         ],
+        "modifiers": [
+          "Alt"
+        ],
         "event_type": "Click"
       },
       "cmd_str": "skippy-xd --expose"
@@ -317,6 +320,9 @@
         "edges": [
           "Bottom",
           "Left"
+        ],
+        "modifiers": [
+          "Alt"
         ],
         "event_type": "Click"
       },

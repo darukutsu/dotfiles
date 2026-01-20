@@ -13,45 +13,49 @@
 //}
 
 (function () {
-  var url = location.href;
+	var url = location.href;
 
-  // Twitter -> Nitter
-  //if (/(?:twitter|^x)\.com\//.test(url)) {
-  if (location.hostname === "twitter.com" || location.hostname === "x.com") {
-    location.href = url.replace(/(?:twitter|x)\.com/, "nitter.net");
-    return;
-  }
+	// Twitter -> Nitter
+	//if (/(?:twitter|^x)\.com\//.test(url)) {
+	if (
+		location.hostname === "twitter.com" ||
+		location.hostname === "x.com" ||
+		location.hostname === "xeezz.com"
+	) {
+		location.href = url.replace(/(?:twitter|xeezz|x)\.com/, "nitter.net");
+		return;
+	}
 
-  // Instagram -> Imginn
-  if (/instagram\.com\//.test(url)) {
-    location.href = url
-      .replace(/instagram\.com/, "imginn.com")
-      .replace(/(?:reel|tv)/, "p")
-      .replace(/[?#].*$/, "");
-    return;
-  }
+	// Instagram -> Imginn
+	if (/instagram\.com\//.test(url)) {
+		location.href = url
+			.replace(/instagram\.com/, "imginn.com")
+			.replace(/(?:reel|tv)/, "p")
+			.replace(/[?#].*$/, "");
+		return;
+	}
 
-  // Old Reddit Redirect
-  //if (/(?:new|www)\.reddit\.com\//.test(url)) {
-  //  location.href = url.replace(/(?:new|www)\./, "old.");
-  //  return;
-  //}
+	// Old Reddit Redirect
+	//if (/(?:new|www)\.reddit\.com\//.test(url)) {
+	//  location.href = url.replace(/(?:new|www)\./, "old.");
+	//  return;
+	//}
 
-  // Reddit Redirect > Teddit
-  //if (/www\.reddit\.com\//.test(url)) {
-  //  location.href = url.replace(/www\.reddit\.com/, 'teddit.net.');
-  //  return;
-  //}
+	// Reddit Redirect > Teddit
+	//if (/www\.reddit\.com\//.test(url)) {
+	//  location.href = url.replace(/www\.reddit\.com/, 'teddit.net.');
+	//  return;
+	//}
 
-  // Delete the cookie message
-  //var x = document.getElementsByClassName("infobar-toaster-container");
-  //for (var y of x) {
-  //  y.remove();
-  //}
+	// Delete the cookie message
+	//var x = document.getElementsByClassName("infobar-toaster-container");
+	//for (var y of x) {
+	//  y.remove();
+	//}
 
-  //Quora Redirect
-  //if (/www\.quora\.com\//.test(url)) {
-  //  location.href = url.replace(/www\.quora\.com/, 'quetre.iket.me');
-  //  return;
-  //}
+	//Quora Redirect
+	//if (/www\.quora\.com\//.test(url)) {
+	//  location.href = url.replace(/www\.quora\.com/, 'quetre.iket.me');
+	//  return;
+	//}
 })();

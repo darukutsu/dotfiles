@@ -3,16 +3,21 @@ return {
   --event = { "BufReadPre", "BufNewFile" },
   lazy = false,
   dependencies = {
-    "mks-h/treesitter-autoinstall.nvim",
     "chrisgrieser/nvim-various-textobjs",
     "nvim-treesitter/nvim-treesitter-textobjects",
     "windwp/nvim-ts-autotag",
+    "MeanderingProgrammer/treesitter-modules.nvim",
+    "folke/ts-comments.nvim",
+    -- "lewis6991/ts-install.nvim", -- bit more advanced installer
   },
   branch = "main",
   build = ":TSUpdate",
   config = function()
-    -- colorize text depending on language
-    local ts = require("nvim-treesitter")
+    -- new treesitter is very barebone no need to call setup for now
+    --require("nvim-treesitter").setup({
+    --  ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
+    --  --install_dir = vim.fs.joinpath(vim.fn.stdpath('data') --[[@as string]], 'site'),
+    --})
 
     require("nvim-ts-autotag").setup({
       opts = {
@@ -25,7 +30,6 @@ return {
       --},
     })
 
-    -- TODO: remove later after testing autoinstall
     local ignore_install = {
       "zig",
     }
@@ -94,25 +98,34 @@ return {
 
     -- checkhealth for missing tools otherwise this will always print msg
     -- mainly tree-sitter-cli
-    require("treesitter-autoinstall").setup()
+    --
+    -- You don't need this plugin see:
+    -- https://github.com/MeanderingProgrammer/treesitter-modules.nvim?tab=readme-ov-file#implementing-yourself
+    require("treesitter-modules").setup({
+      --ensure_installed = 'all',
+      --ensure_installed = ensure_install,
+      --ignore_install = ignore_install,
 
-    ts.setup({
-      ---- If you need to change the installation directory of the parsers (see -> Advanced Setup)
-      -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
+      auto_install = true,
 
-      highlight = {
-        -- `false` will disable the whole extension
+      fold = {
         enable = true,
+        disable = false,
+      },
+      highlight = {
+        enable = true,
+        disable = false,
         additional_vim_regex_highlighting = false,
+      },
+      incremental_selection = {
+        enable = false,
+        disable = false,
       },
       indent = {
         enable = true,
-        --disable = {
-        --  "python",
-        --},
-      },
-      autotag = {
-        enable = true,
+        disable = {
+          "python",
+        },
       },
     })
 

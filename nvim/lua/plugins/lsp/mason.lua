@@ -99,7 +99,8 @@ return { -- MASON, formatter/linter, debugger, lsp
         "biome",
         --"circleciyamllanguageserver", -- determine name
         "clangd",
-        "dockerls",
+        --"dockerls",
+        "docker_language_server",
         "gh_actions_ls",
         "gitlab_ci_ls",
         "gopls",

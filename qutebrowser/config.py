@@ -25,6 +25,7 @@ config.source("style.py")
 ## Type: Dict
 # c.aliases = {'w': 'spawn --userscript tab-manager.py save', 'wo': 'spawn --userscript tab-manager.py save -f', 'e': 'spawn --userscript tab-manager.py open', 'w!': 'session-delete', 'h': 'help', 's': 'set', 'q': 'spawn --userscript tab-manager.py save;;close', 'qa': 'quit', 'wq': 'quit --save', 'wqa': 'quit --save'}
 c.aliases = {
+    "config-reload": "config-reload",
     "w": "session-save",
     "wo": "session-save -o",
     "e": "session-load",
@@ -285,6 +286,7 @@ c.content.blocking.whitelist = [
     "https://crdroid.net/*",
     "https://monkeytype.com/*",
     "https://samfw.com/*",
+    "https://wedata.net/*",
 ]
 
 ## Enable support for the HTML 5 web application cache feature. An
@@ -1401,7 +1403,7 @@ c.scrolling.bar = "overlay"
 ## Enable smooth scrolling for web pages. Note smooth scrolling does not
 ## work with the `:scroll-px` command.
 ## Type: Bool
-# c.scrolling.smooth = False
+c.scrolling.smooth = True
 
 ## When to find text on a page case-insensitively.
 ## Type: IgnoreCase

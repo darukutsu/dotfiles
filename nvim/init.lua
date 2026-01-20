@@ -109,21 +109,20 @@ vim.api.nvim_create_autocmd("TermOpen", {
 })
 
 -- Fucks with block pasting
+-- needs better handling cuz half of time kitty asks for paste
 vim.opt.clipboard:append("unnamedplus")
 if vim.env.SSH_TTY ~= nil then
   vim.g.clipboard = "osc52"
 end
 
-vim.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-vim.foldmethod = "expr"
---vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
---vim.wo[0][0].foldmethod = "expr"
 -- Automatic open folds when openinig file
 --vim.g.foldlevelstart = 99
---vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 vim.opt.iskeyword:append("-")
 
 vim.cmd([[
+  " NOTE: remove later
+  "autocmd FileType sh set filetype=bash
+
   au TextYankPost * silent! lua vim.highlight.on_yank {timeout=350}
   au TermOpen * setlocal number relativenumber
   set number relativenumber

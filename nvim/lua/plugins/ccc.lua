@@ -1,6 +1,7 @@
 return {
   "uga-rosa/ccc.nvim", -- color picker with :CccPick
-  event = "UIEnter",
+  lazy = false,
+  --event = "VeryLazy",
   cmd = "CccPick",
   keys = function()
     return {
@@ -95,6 +96,7 @@ return {
     require("ccc").setup({
       highlighter = {
         auto_enable = true,
+        lsp = true,
       },
       inputs = {
         RgbHslCmykInput,
