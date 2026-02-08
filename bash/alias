@@ -2,6 +2,7 @@
 alias testalias="pkexec env DISPLAY=$DISPLAY  XAUTHORITY=$XAUTHORITY notify-send DISPLAY=$DISPLAY  XAUTHORITY=$XAUTHORITY"
 alias a='ani-cli'
 #alias a='adl -r'
+# NOTE: if one day stops working try wiremix
 alias alsa='pulsemixer'
 alias abackup="mv /home/daru/Android/MI9-backup /home/daru/Android/MI9-backup.$(stat -c %w /home/daru/Android/MI9-backup/ | awk '{print $1}') && mkdir /home/daru/Android/MI9-backup/ && sudo bftpd -d"
 alias cnet="netstat -lantp | grep ESTABLISHED |awk '{print $5}' | awk -F: '{print $1}' | sort -u"
@@ -14,6 +15,8 @@ alias cam='sudo scrcpy -N --no-window --video-source camera --camera-{size=1920x
 alias clam='freshclam && clamscan --recursive --bell'
 alias clamstop='sudo systemctl stop clamav-clamonacc && sudo systemctl stop clamav-daemon'
 alias clamstart='sudo systemctl start clamav-clamonacc && sudo systemctl start clamav-daemon'
+alias downgrade='downgrade --git --pacman-cache ~/.cache/yay --maxdepth 2'
+alias downgrade-aur='downgrade --git --pacman-cache ~/.cache/yay --maxdepth 2'
 alias emacs='emacs -nw'
 alias find-cursor='sxcs'
 alias firefox='firefox-developer-edition'
@@ -54,7 +57,7 @@ alias mirror='mons -ma'
 #alias page='$PAGER'
 alias pingg='ping google.com'
 alias pc='pacseek -u'
-alias rollback='downgrade'
+alias rollback='downgrade --git --pacman-cache ~/.cache/yay --maxdepth 2'
 #alias rsyn='rsync -AaPhxz --size-only'
 alias rsyn='rsync -aPh --size-only'
 alias shazam='$XDG_CONFIG_HOME/bash/songrec-fix.sh'
@@ -93,6 +96,7 @@ alias scr='scrcpy --disable-screensaver -Sf'
 alias winreboot='systemctl reboot --boot-loader-entry=win.conf'
 alias fwreboot='systemctl reboot --firmware-setup'
 alias sshk='kitty +kitten ssh'
+alias taillan='sudo tailscale up --exit-node=opnsense --exit-node-allow-lan-access --accept-routes'
 ## if you supply -m at the end it will be multiline instead of interactive shell
 alias tgo='tgpt -is --provider openai --key "$AI_KEY_OPENAI"'
 alias tgl='tgpt -is --provider ollama --key "$AI_KEY_OLLAMA"'
