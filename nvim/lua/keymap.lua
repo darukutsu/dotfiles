@@ -30,7 +30,7 @@ unmap({ "n" }, "grt")
 unmap({ "n" }, "gri")
 unmap({ "n", "v" }, "gra")
 
---vim.opt.timeoutlen = 100
+vim.opt.timeoutlen = 200
 map({ "t" }, "<C-Esc>", "<C-\\><C-n>", { silent = true })
 
 -- disable highlight match
@@ -71,6 +71,13 @@ end, { desc = "spell suggest" })
 
 -- Format buffer
 map({ "n", "v" }, "<leader><leader>f", function()
+  --vim.lsp.buf.code_action({
+  --  context = {
+  --    only = { "source.organizeImports" },
+  --    diagnostics = {},
+  --  },
+  --  apply = true,
+  --})
   vim.lsp.buf.format({ rangeFormatting = { dynamicRegistration = true, rangeSupport = true }, async = true })
 end, { desc = "format buffer" })
 
@@ -307,6 +314,10 @@ map({ "n", "o", "x" }, "<F2>", vim.diagnostic.open_float, { desc = "LSP diagnost
 -- Buffer related
 map({ "n" }, "<leader>ww", ":new<cr>", { desc = "create new buffer" })
 map({ "n" }, "<leader>wn", ":new<cr>", { desc = "create new buffer" })
+map({ "n" }, "<leader>wt", ":tabnew<cr>", { desc = "new tab" })
+map({ "n" }, "<leader>wf", ":term<cr>", { desc = "fullscreen terminal" })
+map({ "n" }, "<leader>tn", ":tabnew<cr>", { desc = "new tab" })
+map({ "n" }, "<leader>tf", ":term<cr>", { desc = "fullscreen terminal" })
 map({ "n" }, "<leader>wc", ":buf?<cr>", { desc = "buff clone?" })
 map({ "n" }, "<leader>+", "<C-W>1000+", { desc = "maximize buff" })
 map({ "n" }, "<leader>-", "<C-W>1000-", { desc = "minimize buff" })
