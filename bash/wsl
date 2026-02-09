@@ -6,3 +6,8 @@ export KITTY_DISABLE_WAYLAND=1
 export GDK_BACKEND=x11
 export QT_QPA_PLATFORM=xcb
 unset WAYLAND_DISPLAY
+
+
+if ! pgrep --quiet -U "$USER" atuin; then
+	atuin daemon &
+fi 
