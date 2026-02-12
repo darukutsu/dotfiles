@@ -1,17 +1,17 @@
 ## where to store your database, default is your system data directory
 ## linux/mac: ~/.local/share/atuin/history.db
 ## windows: %USERPROFILE%/.local/share/atuin/history.db
-db_path = "/atuin/history.db"
+db_path = "/atuin/$USER/history.db"
 
 ## where to store your encryption key, default is your system data directory
 ## linux/mac: ~/.local/share/atuin/key
 ## windows: %USERPROFILE%/.local/share/atuin/key
-key_path = "/atuin/key"
+key_path = "/atuin/$USER/key"
 
 ## where to store your auth session token, default is your system data directory
 ## linux/mac: ~/.local/share/atuin/session
 ## windows: %USERPROFILE%/.local/share/atuin/session
-session_path = "/atuin/session"
+session_path = "/atuin/$USER/session"
 
 ## date format used, either "us" or "uk"
 # dialect = "us"
@@ -239,7 +239,7 @@ enabled = true
 ## The path to the unix socket used by the daemon (on unix systems)
 ## linux/mac: ~/.local/share/atuin/atuin.sock
 ## windows: Not Supported
-socket_path = "/atuin/atuin.sock"
+socket_path = "/atuin/$USER/atuin.sock"
 
 ## Use systemd socket activation rather than opening the given path (the path must still be correct for the client)
 ## linux: false
