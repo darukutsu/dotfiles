@@ -9,5 +9,6 @@ unset WAYLAND_DISPLAY
 
 
 if ! pgrep --quiet -U "$USER" atuin; then
+	rm /atuin/$USER/atuin.sock
 	atuin daemon &
 fi 
