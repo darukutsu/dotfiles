@@ -1,13 +1,16 @@
 [Unit]
-Description=Searxng container
-#Requires=docker.service
+Description=Docker Compose Searxng Service
 After=docker.service
 
 [Service]
-#ExecStart=/usr/bin/docker start -a searxng
-ExecStart=%h/.docker/searxng/start.sh
+# Where the docker-compose file is located
+#WorkingDirectory=/srv/atuin-server
+WorkingDirectory=%h/.docker/searxng
+ExecStart=%h/.docker/docker-start.sh searxng
 ExecStop=/usr/bin/docker stop -t 2 searxng
+TimeoutStartSec=0
 Restart=on-failure
+StartLimitBurst=3
 
 [Install]
 WantedBy=default.target

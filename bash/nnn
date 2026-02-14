@@ -54,20 +54,27 @@ Z:zfs-snapdir'
 #not working under kitty xembed missing
 #v:preview-tabbed;'
 
-NNN_BMS="e:/etc;
+NNN_BMS="
 a:/run/user/$UID/gvfs;
+A:/$HOME/Android/;
+b:$HOME/.config/nnn/bookmarks;
+c:$HOME/.config/;
+d:$HOME/Downloads/;
+e:/etc;
 E:/run/media/SAM500/;
+g:$HOME/Public;
+G:$HOME/Git;
+h:$HOME/Templates/Guides;
 m:/run/media/;
 M:/mnt/;
 n:$HOME/.config/nnn/;
-b:$HOME/.config/nnn/bookmarks;
-d:$HOME/Downloads/;
-h:$HOME/Templates/Guides;
-G:$HOME/Git;
-g:$HOME/Public;
-t:$HOME/Public/GitTuke/4ZS;
+N:$HOME/.config/nvim/;
 p:$HOME/Pictures/;
-v:$HOME/Videos/"
+q:$HOME/.config/qutebrowser/;
+t:$HOME/Public/GitTuke/4ZS;
+v:$HOME/Videos/;
+z:$HOME/.config/zmk/config/;
+"
 
 export NNN_PLUG=$(echo $NNN_PLUG | tr -d ' \n')
 export NNN_BMS=$(echo $NNN_BMS | tr -d ' \n')

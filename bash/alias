@@ -4,7 +4,8 @@ alias a='ani-cli'
 #alias a='adl -r'
 # NOTE: if one day stops working try wiremix
 alias alsa='pulsemixer'
-alias abackup="mv /home/daru/Android/MI9-backup /home/daru/Android/MI9-backup.$(stat -c %w /home/daru/Android/MI9-backup/ | awk '{print $1}') && mkdir /home/daru/Android/MI9-backup/ && sudo bftpd -d"
+#alias abackup="mv /home/daru/Android/MI9-backup /home/daru/Android/MI9-backup.$(stat -c %w /home/daru/Android/MI9-backup/ | awk '{print $1}') && mkdir /home/daru/Android/MI9-backup/ && sudo bftpd -d"
+alias abackup="mv /home/daru/Android/MI9-backup /home/daru/Android/MI9-backup.$(stat -c %w /home/daru/Android/MI9-backup/ | awk '{print $1}') && mkdir /home/daru/Android/MI9-backup/ && copyparty --chdir /home/daru/Android/MI9-backup/"
 alias cnet="netstat -lantp | grep ESTABLISHED |awk '{print $5}' | awk -F: '{print $1}' | sort -u"
 #alias c='printf "\033c"'
 alias c='tput reset'

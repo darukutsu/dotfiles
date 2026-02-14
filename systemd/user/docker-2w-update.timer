@@ -1,0 +1,9 @@
+[Unit]
+Description=All dockers container updater timer
+
+[Timer]
+OnUnitActiveSec=2w
+Persistent=true
+
+[Install]
+WantedBy=timers.target

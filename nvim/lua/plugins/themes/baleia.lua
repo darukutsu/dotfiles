@@ -1,53 +1,56 @@
+-- nvim/lua/plugins/themes/baleia.lua
 return {
   "m00qek/baleia.nvim",
-  --event = "CmdlineEnter",
   cmd = "BaleiaColorize",
   ft = { "man", "pager" },
-  --lazy = false,
+  lazy = false,
   version = "*",
   config = function()
-    vim.g.baleia = require("baleia").setup({
-      -- TODO: try again when fixed and displays properly
-      --strip_ansi_codes = true,
-      --colors = NR_16,
+    local baleia = require("baleia").setup({})
+    vim.g.baleia = baleia
+
+    vim.api.nvim_create_autocmd({ "StdinReadPost" }, {
+      callback = function()
+        vim.defer_fn(function()
+          local bufnr = vim.api.nvim_get_current_buf()
+
+          vim.bo[bufnr].filetype = "pager"
+          vim.opt.modifiable = true
+
+          -- Clean up OSC sequences only (keep SGR/color codes)
+          local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+          local cleaned = {}
+          for _, line in ipairs(lines) do
+            -- Remove OSC sequences but KEEP SGR sequences (ESC[...m)
+            local clean = line:gsub("\x1b%].-\x1b\\", "")
+            clean = clean:gsub("\x1b%][^\x1b]*\x07", "")
+            clean = clean:gsub("^%][^\x1b]*\x1b\\", "")
+            table.insert(cleaned, clean)
+          end
+          vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, cleaned)
+
+          -- Colorize the buffer content
+          baleia.buf_set_lines(bufnr, 0, -1, false, cleaned)
+
+          vim.opt.modifiable = false
+          vim.opt.modified = false
+
+          print("Baleia colorized buffer " .. bufnr)
+        end, 100)
+      end,
     })
 
-    local buf_name = vim.api.nvim_buf_get_name(0)
-    local ft = vim.fn.fnamemodify(buf_name, ":t")
-    if ft == "man" or ft == "pager" or buf_name == "" then
-      vim.schedule(function()
-        vim.opt.modifiable = true
-
-        -- TODO: remove... not sure which one better/faster both ai generated
-        --local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-        --for i, line in ipairs(lines) do
-        --  lines[i] = line:gsub("\x1b%]133;[^\x1b]*\x1b?\\?", ""):gsub("^%]133;[^\x1b]*\x1b?\\?", "")
-        --end
-        --vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
-
-        if ft == "pager" or buf_name == "" then
-          local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-          for i, line in ipairs(lines) do
-            lines[i] = line:gsub("\x1b%]133;.-\x1b\\", ""):gsub("^%]133;.-\x1b\\", "")
-          end
-          vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
-        end
-
-        if vim.g.baleia then
-          vim.g.baleia.once(0)
-        end
-
-        vim.opt.modifiable = false
-        vim.opt.modified = false
-      end)
-    end
-
-    -- Command to colorize the current buffer
     vim.api.nvim_create_user_command("BaleiaColorize", function()
-      vim.g.baleia.once(vim.api.nvim_get_current_buf())
+      vim.opt.modifiable = true
+      local bufnr = vim.api.nvim_get_current_buf()
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+      baleia.buf_set_lines(bufnr, 0, -1, false, lines)
+      vim.opt.modifiable = false
+      print("Manual baleia colorization done")
     end, { bang = true })
 
-    -- Command to show logs
-    vim.api.nvim_create_user_command("BaleiaLogs", vim.g.baleia.logger.show, { bang = true })
+    vim.api.nvim_create_user_command("BaleiaLogs", function()
+      baleia.logger.show()
+    end, { bang = true })
   end,
 }

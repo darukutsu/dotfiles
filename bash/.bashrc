@@ -12,7 +12,8 @@ if [ -z "$XDG_CONFIG_HOME" ] || [ "$XDG_CONFIG_HOME" != "$HOME/.config" ]; then
   export XDG_DOWNLOAD_DIR=${HOME}/Downloads
 fi
 
-[[ $- == *i* ]] && source /usr/share/blesh/ble.sh --noattach
+# shellcheck disable=SC2015,SC1094,SC1090
+[[ $- == *i* ]] && source /usr/share/blesh/ble.sh --noattach || source ~/.local/share/blesh/ble.sh --noattach
 shopt -u globstar
 
 #ble/debug/profiler/start a
@@ -77,15 +78,11 @@ elif command -v nvimpager >/dev/null; then
   export MANPAGER="nvimpager"
   export SYSTEMD_PAGER="nvimpager"
 elif command -v nvim >/dev/null; then
-  export PAGER="nvim -c 'set ft=pager' -c 'set nomodifiable'"
+  # shellcheck disable=SC2089
+  #export PAGER="nvim -c \"set ft=pager\" -c \"set nomodifiable\""
+  export PAGER="nvim -RM"
   export MANPAGER="nvim +Man!"
-  #export SYSTEMD_PAGER="$PAGER"
-  # FIX: systemd pager incorrect showing
-  #export PAGER="nvim -c 'set ft=pager' -c 'set nomodifiable'"
-  # might cause error need more debugging, or maybe don't pipe at all and open it directly
-  #export MANPAGER="nvim +Man!"
-  #export MANPAGER="nvim -c 'Man!'"
-  #export SYSTEMD_PAGER="$PAGER"
+  export SYSTEMD_PAGER="$PAGER"
 fi
 
 h() {
