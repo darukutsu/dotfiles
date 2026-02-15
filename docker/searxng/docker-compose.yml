@@ -8,6 +8,9 @@ services:
     volumes:
       - ./searxng:/etc/searxng
     environment:
-      #BASE_URL: http://localhost:8080/
-      INSTANCE_NAME: daru-localhost-instance
+      SEARXNG_BASE_URL: http://localhost:8080/
+      SEARXNG_SECRET:
+      SEARXNG_PUBLIC_INSTANCE: false
+      SEARXNG_LIMITER: false
+      SEARXNG_IMAGE_PROXY: true
     restart: unless-stopped
