@@ -71,13 +71,13 @@ end, { desc = "spell suggest" })
 
 -- Format buffer
 map({ "n", "v" }, "<leader><leader>f", function()
-  --vim.lsp.buf.code_action({
-  --  context = {
-  --    only = { "source.organizeImports" },
-  --    diagnostics = {},
-  --  },
-  --  apply = true,
-  --})
+  vim.lsp.buf.code_action({
+    context = {
+      only = { "source.organizeImports" },
+      diagnostics = {},
+    },
+    apply = true,
+  })
   vim.lsp.buf.format({ rangeFormatting = { dynamicRegistration = true, rangeSupport = true }, async = true })
 end, { desc = "format buffer" })
 

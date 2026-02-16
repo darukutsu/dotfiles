@@ -52,14 +52,14 @@ return { -- MASON, formatter/linter, debugger, lsp
           group = augroup,
           buffer = bufnr,
           callback = function()
-            --vim.lsp.buf.format({ async = false, timeout_ms = 5000 })
-            --vim.lsp.buf.code_action({
-            --  context = {
-            --    only = { "source.organizeImports" },
-            --    diagnostics = {},
-            --  },
-            --  apply = true,
-            --})
+            vim.lsp.buf.format({ async = false, timeout_ms = 5000 })
+            vim.lsp.buf.code_action({
+              context = {
+                only = { "source.organizeImports" },
+                diagnostics = {},
+              },
+              apply = true,
+            })
             vim.lsp.buf.format({ async = false })
           end,
         })
@@ -71,7 +71,7 @@ return { -- MASON, formatter/linter, debugger, lsp
     local servers = {
       lua_ls = "lua-language-server",
       --pyright = "pyright",
-      --pylyzer = "pylyzer",
+      pylyzer = "pylyzer",
       ruff = "ruff",
       zig = "zls",
       jdtls = "jdtls",
@@ -196,7 +196,7 @@ return { -- MASON, formatter/linter, debugger, lsp
         "jq",
         "latexindent",
         "phpcsfixer",
-        "prettier",
+        --"prettier",
         "shfmt",
         "sqlfmt",
         "stylua",
