@@ -59,7 +59,7 @@ fi
 #fi
 
 # drop-down terminal set _NET_WM_WINDOW_TYPE
-if [[ "$class" =~ kitty\-.* ]]; then
+if [[ "$class" =~ kitty\-.* ]] || [[ "$class" =~ keepassxc ]]; then
   echo state=floating
   echo layer=above
   echo center=on
