@@ -1,7 +1,7 @@
 local util = require("lspconfig.util")
 
 vim.lsp.config("pylyzer", {
-  root_dir = util.root_pattern("pyproject.toml", "pyrightconfig.json", "pylyzer.toml"),
+  root_dir = util.root_pattern("pyproject.toml", "pyrightconfig.json", "pylyzer.toml", ".git"),
   settings = {
     Python = {
       diagnostics = {

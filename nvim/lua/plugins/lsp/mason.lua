@@ -71,6 +71,9 @@ return { -- MASON, formatter/linter, debugger, lsp
     local servers = {
       lua_ls = "lua-language-server",
       --pyright = "pyright",
+      jedi_language_server = "jedi-language-server",
+      --pyrefly = "pyrefly",
+      harper_ls = "harper-ls",
       pylyzer = "pylyzer",
       ruff = "ruff",
       zig = "zls",
@@ -115,6 +118,7 @@ return { -- MASON, formatter/linter, debugger, lsp
         "ltex",
         --"lua-language-server", -- shows errors
         "mesonlsp",
+        "basedpyright",
         "pyrefly",
         "pylyzer",
         "ruff",
