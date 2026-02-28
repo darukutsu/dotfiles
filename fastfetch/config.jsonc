@@ -30,7 +30,7 @@
 			//"shell": "/bin/sh",
 			//"param": "-c",
 			"key": "User pacman",
-			"text": "pacman=$(pacman -Qqett | wc -l); aur=$(pacman -Qm | wc -l); echo \"$pacman, ($aur AUR)\"",
+			"text": "pacman=$(pacman -Qett | wc -l); aur=$(pacman -Qettm | wc -l); echo \"$pacman, ($aur AUR)\"",
 			//"format": "{pacman}, ({aur}AUR)",
 			"format": "{}"
 			//"condition": "",
