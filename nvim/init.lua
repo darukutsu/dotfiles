@@ -95,6 +95,7 @@ require("custom/loopcmd")
 require("custom/math")
 --require('custom/fcitx')
 require("custom/suppress-errors")
+require("custom/increment-row")
 
 -- ZLS disable quickfix
 vim.g.zig_fmt_parse_errors = 0
@@ -118,6 +119,17 @@ end
 -- Automatic open folds when openinig file
 --vim.g.foldlevelstart = 99
 vim.opt.iskeyword:append("-")
+
+-- NOTE: seems to be doing ootb elsewhere
+--vim.o.viewoptions = "folds,cursor"
+--vim.api.nvim_create_autocmd("BufWinLeave", {
+--  pattern = "*.*",
+--  command = "mkview",
+--})
+--vim.api.nvim_create_autocmd("BufWinEnter", {
+--  pattern = "*.*",
+--  command = "silent! loadview",
+--})
 
 vim.cmd([[
   " NOTE: remove later

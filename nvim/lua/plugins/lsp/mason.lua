@@ -114,17 +114,19 @@ return { -- MASON, formatter/linter, debugger, lsp
         --"kotlin_lsp", -- java disabled because of permissions in job
         --"jdtls", -- java disabled because of permissions in job
         "jsonls",
+        "jedi_language_server",
         "lemminx",
         "ltex",
         --"lua-language-server", -- shows errors
         "mesonlsp",
-        "basedpyright",
+        --"basedpyright",
         "pyrefly",
         "pylyzer",
         "ruff",
         "rust_analyzer",
         "sqlls",
         "texlab",
+        "tombi",
         "yamlls",
         "zls",
       },

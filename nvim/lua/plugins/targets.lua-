@@ -1,14 +1,8 @@
 return {
-  "wellle/targets.vim", -- advanced treesitter textobjects
-  dependencies = {
-    "chrisgrieser/nvim-various-textobjs", -- advanced textobjects
-  },
+  "wellle/targets.vim", -- di<anything> va<anything>...
   config = function()
     vim.cmd([[
-        " targets.vim
         let g:targets_nl=['n', 'N']
-        " due to this i have to inoremap and nnoremap for colemak
-        " let g:targets_aiAI='alAL'
         "let g:targets_mapped_aiAI='aiAI'
         let g:targets_gracious = 1
     ]])

@@ -3,7 +3,6 @@ return {
   --event = { "BufReadPre", "BufNewFile" },
   lazy = false,
   dependencies = {
-    "chrisgrieser/nvim-various-textobjs",
     "nvim-treesitter/nvim-treesitter-textobjects",
     "windwp/nvim-ts-autotag",
     "MeanderingProgrammer/treesitter-modules.nvim",

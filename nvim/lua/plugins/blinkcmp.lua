@@ -112,10 +112,7 @@ return {
     --"MahanRahmati/blink-nerdfont.nvim",
     --"mgalliou/blink-cmp-tmux",
     "disrupted/blink-cmp-conventional-commits",
-    --{
-    --  "Kaiser-Yang/blink-cmp-dictionary",
-    --  dependencies = { "nvim-lua/plenary.nvim" },
-    --},
+    "Kaiser-Yang/blink-cmp-dictionary",
     --"L3MON4D3/LuaSnip",
     {
       "fang2hou/blink-copilot",
@@ -240,6 +237,21 @@ return {
       --  end
       --end,
       providers = {
+        buffer = {
+          opts = {
+            -- get all buffers, even ones like neo-tree
+            --get_bufnrs = vim.api.nvim_list_bufs
+            -- or (recommended) filter to only "normal" buffers
+            get_bufnrs = function()
+              return vim.tbl_filter(function(bufnr)
+                return vim.bo[bufnr].buftype == ""
+              end, vim.api.nvim_list_bufs())
+            end,
+            max_sync_buffer_size = 20000,
+            max_async_buffer_size = 300000,
+            max_total_buffer_size = 500000,
+          },
+        },
         cmdline = {
           -- ignores cmdline completions when executing shell commands
           enabled = function()
@@ -268,19 +280,13 @@ return {
           module = "lazydev.integrations.blink",
           score_offset = 100,
         },
-        buffer = {
+        dictionary = {
+          module = "blink-cmp-dictionary",
+          name = "Dict",
+          min_keyword_length = 0,
           opts = {
-            -- get all buffers, even ones like neo-tree
-            --get_bufnrs = vim.api.nvim_list_bufs
-            -- or (recommended) filter to only "normal" buffers
-            get_bufnrs = function()
-              return vim.tbl_filter(function(bufnr)
-                return vim.bo[bufnr].buftype == ""
-              end, vim.api.nvim_list_bufs())
-            end,
-            max_sync_buffer_size = 20000,
-            max_async_buffer_size = 300000,
-            max_total_buffer_size = 500000,
+            -- dictionary_files = {}
+            --force_fallback = false,
           },
         },
         path = {
