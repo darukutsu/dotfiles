@@ -23,7 +23,7 @@ local unmap = vim.keymap.del
 --"noremap I L
 --"map H H
 --]])
---unmap({ "n" }, "gcc") -- wordmotion
+--unmap({ "n" }, "gcc") -- wordmotion conflicting whichkey
 unmap({ "n" }, "grn")
 unmap({ "n" }, "grr")
 unmap({ "n" }, "grt")

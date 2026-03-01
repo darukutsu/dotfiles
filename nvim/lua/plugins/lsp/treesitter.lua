@@ -101,7 +101,7 @@ return {
     -- You don't need this plugin see:
     -- https://github.com/MeanderingProgrammer/treesitter-modules.nvim?tab=readme-ov-file#implementing-yourself
     require("treesitter-modules").setup({
-      --ensure_installed = 'all',
+      ensure_installed = "all",
       --ensure_installed = ensure_install,
       --ignore_install = ignore_install,
 
