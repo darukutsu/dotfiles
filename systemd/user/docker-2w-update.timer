@@ -2,7 +2,9 @@
 Description=All dockers container updater timer
 
 [Timer]
-OnUnitActiveSec=2w
+#OnUnitActiveSec=2w # doesn't work with persistent
+# think about monthly
+OnCalendar=weekly 
 Persistent=true
 
 [Install]
