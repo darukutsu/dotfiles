@@ -18,6 +18,15 @@ with config.pattern("*://*.element.io") as el:
     el.content.notifications.enabled = True
     el.content.media.audio_capture = True
 
+with config.pattern("*://*.lan") as el:
+    el.content.autoplay = True
+    el.content.desktop_capture = True
+    el.content.media.audio_capture = True
+    el.content.media.audio_video_capture = True
+    el.content.media.video_capture = True
+    el.content.notifications.enabled = True
+    el.content.media.audio_capture = True
+
 # with config.pattern("meet.element.io") as mel:
 #    mel.content.desktop_capture = True
 #    mel.content.media.audio_capture = True

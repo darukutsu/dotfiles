@@ -43,3 +43,5 @@
 [pager]
 	branch = false
 	#log = false
+[color]
+	diff = never

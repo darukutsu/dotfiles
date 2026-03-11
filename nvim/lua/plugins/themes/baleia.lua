@@ -2,7 +2,7 @@
 return {
   "m00qek/baleia.nvim",
   cmd = "BaleiaColorize",
-  ft = { "man", "pager" },
+  --ft = { "man", "pager" },
   lazy = false,
   version = "*",
   config = function()

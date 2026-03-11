@@ -1389,7 +1389,8 @@ c.qt.workarounds.disable_accelerated_2d_canvas = "never"
 ## loss* on some pages (as Service Worker data isn't persisted) and will
 ## negatively impact start-up time.
 ## Type: Bool
-# c.qt.workarounds.remove_service_workers = False
+# Bad performance on many tabs especially login ones or webapps
+# c.qt.workarounds.remove_service_workers = True
 
 ## When/how to show the scrollbar.
 ## Type: String
@@ -1776,7 +1777,8 @@ c.url.default_page = "http://search.daru.lan/"
 c.url.searchengines = {
     # "DEFAULT": "https://priv.au/search?q={}",
     # "DEFAULT": "https://search.demonkingswarn.live/search?q={}",
-    "DEFAULT": "http://search.daru.lan/search?q={}",
+    "DEFAULT": "http://search.hento.org/search?q={}",
+    "sdaru": "http://search.daru.lan/search?q={}",
     # this has reason for remote work setup
     "br": "https://search.brave.com/search?q={}",
     "go": "https://google.com/search?q={}",

@@ -188,6 +188,7 @@ shopt -s progcomp_alias
 ##ALIAS
 [[ -s "$XDG_CONFIG_HOME/bash/alias" ]] && source "$XDG_CONFIG_HOME/bash/alias"
 [[ -s "$XDG_CONFIG_HOME/bash/xdg-base-dir" ]] && source "$XDG_CONFIG_HOME/bash/xdg-base-dir"
+[[ -s "$XDG_CONFIG_HOME/bash/logins" ]] && source "$XDG_CONFIG_HOME/bash/logins"
 
 # SHLVL holds number of sessions running on top of shell
 # basically print only in first shell
