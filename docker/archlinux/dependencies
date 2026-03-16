@@ -1,0 +1,12 @@
+# comments are ignored, just for documentation purpose
+# this is example setup should have more packages depending on what you need
+bspwm
+sxhkd
+xorg-server
+xorg-server-xephyr
+xorg-server-xvfb
+xorg-xeyes
+xorg-xinput
+xorg-xset
+xorg-xsetroot
+xterm

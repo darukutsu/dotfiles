@@ -1,0 +1,51 @@
+services:
+  archlinux:
+    build:
+      context: .
+      args:
+        # CHANGE THIS TO YOUR CUSTOM NAME IN .env
+        USERNAME: ${USERNAME}
+        SSHDIR: ${SSHDIR}
+        CONFDIR: ${CONFDIR}
+    gpus: all
+    devices:
+      - /dev/dxg
+      - /dev/uinput
+    device_cgroup_rules:
+      - "c 13:* rmw"
+    ports:
+      # SUNSHINE RELATED PORTS
+      - "47984-48010:47984-48010/tcp"
+      - "47998-48000:47998-48000/udp"
+      - "47999:47999/udp"
+    volumes:
+      - /usr/lib/wsl:/usr/lib/wsl:ro
+      - /mnt/wslg:/mnt/wslg
+      - /mnt/wsl:/mnt/wsl
+      - /mnt/c:/mnt/c
+      - /dev:/dev:rw
+      - /run/udev:/run/udev:ro
+      - ${SSHDIR}:/home/${USERNAME}/.ssh
+      - ${CONFDIR}:/home/${USERNAME}/.config
+      # We define entrypoint.sh here cuz use might want to do init changes on the fly.
+      # Would be easier if we had systemd, but sadly i'm stupid.
+      - ./entrypoint.sh:/entrypoint.sh
+    #tmpfs:
+    #  - /run
+    #  - /tmp
+    #  - /run/lock
+    #stop_signal: SIGRTMIN+3
+    #entrypoint: ["/lib/systemd/systemd"]
+    environment:
+      - USERNAME=${USERNAME}
+      - DISPLAY=:1
+      # comment these two when using GLX uncomment d3d12
+      - LIBGL_ALWAYS_SOFTWARE=1
+      - GALLIUM_DRIVER=llvmpipe
+      #- GALLIUM_DRIVER=d3d12
+      - LD_LIBRARY_PATH=/usr/lib/wsl/lib
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - GLYCIN_SANDBOX_POLICY=unsafe
+      - KITTY_DISABLE_WAYLAND=1
+    network_mode: host
+    privileged: true
