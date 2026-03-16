@@ -37,7 +37,11 @@ return {
     --- function will be called with a Highlights and ColorScheme table
     ---@param highlights Highlights
     ---@param colors ColorScheme
-    --on_highlights = function(highlights, colors) end,
+    on_highlights = function(hl, c)
+      hl.SidekickDiffAdd    = { fg = c.git.add,    bg = "NONE" }
+      hl.SidekickDiffDelete = { fg = c.git.delete, bg = "NONE" }
+      hl.SidekickDiffContext= { bg = "NONE" }
+    end,
 
     -- Borderless Telescope
     --on_highlights = function(hl, c)

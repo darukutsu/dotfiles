@@ -1389,8 +1389,7 @@ c.qt.workarounds.disable_accelerated_2d_canvas = "never"
 ## loss* on some pages (as Service Worker data isn't persisted) and will
 ## negatively impact start-up time.
 ## Type: Bool
-# Bad performance on many tabs especially login ones or webapps
-# c.qt.workarounds.remove_service_workers = True
+c.qt.workarounds.remove_service_workers = True
 
 ## When/how to show the scrollbar.
 ## Type: String
