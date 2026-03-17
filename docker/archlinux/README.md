@@ -57,6 +57,13 @@ sudo ufw allow 47999/udp
 
 1. maybe windows firewall blocking something?
 
+Run in powershell as admin, these are persistent rules
+
+```powershell
+New-NetFirewallRule -DisplayName "Sunshine TCP" -Direction Inbound -Protocol TCP -LocalPort 47984-48010 -Action Allow
+New-NetFirewallRule -DisplayName "Sunshine UDP" -Direction Inbound -Protocol UDP -LocalPort 47998-48000 -Action Allow
+```
+
 ###### Desktop has borders around it
 
 1. Moonlight settings -> Basic settings -> set resolution

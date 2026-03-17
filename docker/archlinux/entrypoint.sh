@@ -39,6 +39,7 @@ sudo chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.config/pulse
 # you don't need to do this move if you don't install nvidia-open but in case you did uncomment
 #sudo mv /usr/lib/libEGL_nvidia.so* /usr/lib/libnvidia-egl-*.so* /home/${USERNAME}/ 2>/dev/null || true
 #sudo ldconfig
+sudo chmod 660 /dev/uinput
 sudo LD_PRELOAD="" LD_LIBRARY_PATH="" Xorg ${DISPLAY} -noreset &
 
 # alternative way of doing if opengl not needed

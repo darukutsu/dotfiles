@@ -5,8 +5,7 @@ services:
       args:
         # CHANGE THIS TO YOUR CUSTOM NAME IN .env
         USERNAME: ${USERNAME}
-        SSHDIR: ${SSHDIR}
-        CONFDIR: ${CONFDIR}
+        HOME: ${HOME}
     gpus: all
     devices:
       - /dev/dxg
@@ -25,8 +24,13 @@ services:
       - /mnt/c:/mnt/c
       - /dev:/dev:rw
       - /run/udev:/run/udev:ro
-      - ${SSHDIR}:/home/${USERNAME}/.ssh
-      - ${CONFDIR}:/home/${USERNAME}/.config
+      # this is needed because storage in docker is not persistent
+      - ${HOME}:/home/${USERNAME} # maybe change this later to symlink to ./home
+      - arch_usr:/usr
+      - arch_etc:/etc
+      # this does not work as expected need to find workaround
+      #- ./usr:/usr
+      #- ./etc:/etc
       # We define entrypoint.sh here cuz use might want to do init changes on the fly.
       # Would be easier if we had systemd, but sadly i'm stupid.
       - ./entrypoint.sh:/entrypoint.sh
@@ -49,3 +53,7 @@ services:
       - KITTY_DISABLE_WAYLAND=1
     network_mode: host
     privileged: true
+
+volumes:
+  arch_usr:
+  arch_etc:

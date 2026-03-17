@@ -1,12 +1,15 @@
 #!/bin/sh
 
-# docker does not follow symlinks
-#ln -s /etc/ssl ./ssl
-#ln -s /etc/ca-certificates ./ca-certificates
-
-if ! [ -d ssl ]; then
-  cp -rL /etc/ssl ./ssl
-  cp -rL /etc/ca-certificates ./ca-certificates
+if ! [ -d ./etc/ssl ]; then
+  cp -rL /etc/ssl ./etc/ssl
+  cp -rL /etc/ca-certificates ./etc/ca-certificates
 fi
 
-docker compose build --no-cache
+if docker compose build --no-cache; then
+  docker create --name temp archlinux
+
+  docker cp temp:/usr/. ./usr
+  docker cp temp:/etc/. ./etc
+
+  docker rm temp
+fi
