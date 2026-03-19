@@ -1736,7 +1736,7 @@ c.tabs.show_switching_delay = 2000
 ## Type: FuzzyUrl
 # c.url.default_page = 'https://start.duckduckgo.com/'
 # c.url.default_page = "http://localhost:8080/"
-c.url.default_page = "http://search.daru.lan/"
+c.url.default_page = "https://search.hento.org/"
 
 ## URL segments where `:navigate increment/decrement` will search for a
 ## number.
@@ -1776,7 +1776,7 @@ c.url.default_page = "http://search.daru.lan/"
 c.url.searchengines = {
     # "DEFAULT": "https://priv.au/search?q={}",
     # "DEFAULT": "https://search.demonkingswarn.live/search?q={}",
-    "DEFAULT": "http://search.hento.org/search?q={}",
+    "DEFAULT": "https://search.hento.org/search?q={}",
     "sdaru": "http://search.daru.lan/search?q={}",
     # this has reason for remote work setup
     "br": "https://search.brave.com/search?q={}",
