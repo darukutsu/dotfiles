@@ -7,7 +7,7 @@ Description=Atuin Daemon
 #
 #ExecStart=/usr/bin/sh -c 'rm /atuin/atuin.sock; /usr/bin/atuin daemon & while ! [ -a "/atuin/atuin.sock" ]; do sleep 1; done; /usr/bin/chown daru:daru /atuin/atuin.sock'
 #
-ExecStart=/usr/bin/sh -c 'rm /atuin/atuin.sock; /usr/bin/atuin daemon'
+ExecStart=/usr/bin/sh -c 'rm /atuin/atuin.sock; /usr/bin/atuin daemon start'
 ExecStop=/usr/bin/killall atuin
 Restart=on-failure
 RestartSec=60

@@ -1389,7 +1389,7 @@ c.qt.workarounds.disable_accelerated_2d_canvas = "never"
 ## loss* on some pages (as Service Worker data isn't persisted) and will
 ## negatively impact start-up time.
 ## Type: Bool
-c.qt.workarounds.remove_service_workers = True
+# c.qt.workarounds.remove_service_workers = True
 
 ## When/how to show the scrollbar.
 ## Type: String
@@ -1430,7 +1430,7 @@ c.search.incremental = False
 
 ## Load a restored tab as soon as it takes focus.
 ## Type: Bool
-# c.session.lazy_restore = False
+c.session.lazy_restore = True
 
 ## Languages to use for spell checking. You can check for available
 ## languages and install dictionaries using scripts/dictcli.py. Run the

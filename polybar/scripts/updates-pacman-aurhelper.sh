@@ -17,6 +17,10 @@ if ! updates_zfs=$(yay -Sl archzfs 2>/dev/null | grep '\[installed:' | wc -l); t
   updates_zfs=0
 fi
 
+#if ! updates_flatpak=$(flatpak remote-ls --updates); then
+#  updates_flatpak=0
+#fi
+
 updates=$((updates_arch + updates_aur + updates_zfs))
 
 if [ "$updates" -gt 0 ]; then
