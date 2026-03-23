@@ -12,9 +12,6 @@ vim.lsp.config("ltex", {
   settings = {
     ltex = {
       dictionary = {
-        -- doesn't work for some reason
-        --["en"] = words,
-        --["sk"] = words,
         ["en-US"] = words,
       },
     },

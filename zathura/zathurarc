@@ -28,6 +28,8 @@ set selection-clipboard clipboard
 set scroll-page-aware true
 set show-hidden true
 set database sqlite
+set synctex true
+set synctex-editor-command "texlab inverse-search -i %{input} -l %{line}"
 #set toggle_statusbar false
 
 # ColemakDH bindings

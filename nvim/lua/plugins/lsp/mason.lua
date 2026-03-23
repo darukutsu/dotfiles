@@ -39,49 +39,43 @@ return { -- MASON, formatter/linter, debugger, lsp
       },
     })
 
-    -- Trying lsp-format disable until then
-    local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-    local function autoformat_quit(client, bufnr)
-      if vim.b[bufnr].bigfile then
-        vim.b.completion = false
-        return
-      end
-      if client:supports_method("textDocument/formatting") then
-        vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-        vim.api.nvim_create_autocmd("BufWritePre", {
-          group = augroup,
-          buffer = bufnr,
-          callback = function()
-            vim.lsp.buf.format({ async = false, timeout_ms = 5000 })
-            vim.lsp.buf.code_action({
-              context = {
-                only = { "source.organizeImports" },
-                diagnostics = {},
-              },
-              apply = true,
-            })
-            vim.lsp.buf.format({ async = false })
-          end,
-        })
-      end
-    end
+    -- Trying conform.nvim maybe switch from none-ls to nvim-lint as well
+    --local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+    --local function autoformat_quit(client, bufnr)
+    --  if vim.b[bufnr].bigfile then
+    --    vim.b.completion = false
+    --    return
+    --  end
+    --  if client:supports_method("textDocument/formatting") then
+    --    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+    --    vim.api.nvim_create_autocmd("BufWritePre", {
+    --      group = augroup,
+    --      buffer = bufnr,
+    --      callback = function()
+    --        vim.lsp.buf.code_action({
+    --          context = {
+    --            only = { "source.organizeImports" },
+    --            diagnostics = {},
+    --          },
+    --          apply = true,
+    --        })
+    --        vim.lsp.buf.format({ async = false, timeout_ms = 5000 })
+    --      end,
+    --    })
+    --  end
+    --end
 
     --https://github.com/neovim/nvim-lspconfig/wiki/Understanding-setup-%7B%7D
     -- lsphandlers were disabled in nvim0.11+ use vim.lsp.config() instead
     local servers = {
       lua_ls = "lua-language-server",
-      --pyright = "pyright",
-      jedi_language_server = "jedi-language-server",
-      --pyrefly = "pyrefly",
       harper_ls = "harper-ls",
-      pylyzer = "pylyzer",
       ruff = "ruff",
       zig = "zls",
       jdtls = "jdtls",
       clangd = "clangd",
       --matlab = "matlab",
-      ltex = "ltex",
-      ctags_lsp = "ctags_lsp",
+      --ltex = "ltex",
       --kotlin = "kotlin",
     }
 
@@ -95,14 +89,12 @@ return { -- MASON, formatter/linter, debugger, lsp
 
     require("mason-lspconfig").setup({
       ensure_installed = {
-        -- LSP
         "arduino_language_server",
-        "ast_grep",
-        "bashls",
-        "biome",
-        --"circleciyamllanguageserver", -- determine name
+        "asm_lsp",
+        "ast_grep", -- better, faster, featurefull semgrep
+        "bashls", -- needs dependencies such as shfmt and shellcheck
+        "biome", -- faster prettier (but limited to less languages)
         "clangd",
-        --"dockerls",
         "docker_language_server",
         "gh_actions_ls",
         "gitlab_ci_ls",
@@ -110,23 +102,23 @@ return { -- MASON, formatter/linter, debugger, lsp
         --"gradle_ls", -- java disabled because of permissions in job
         "harper_ls",
         "html",
+        "htmx",
         "intelephense",
         --"kotlin_lsp", -- java disabled because of permissions in job
         --"jdtls", -- java disabled because of permissions in job
-        "jsonls",
-        "jedi_language_server",
+        "jsonls", -- biome does not do json lsp(probably)
         "lemminx",
-        "ltex",
-        --"lua-language-server", -- shows errors
+        "ltex_plus",
+        "lua_ls",
+        -- "matlab_ls", -- i don't need matlab rn
+        "marksman",
         "mesonlsp",
-        --"basedpyright",
-        "pyrefly",
-        "pylyzer",
         "ruff",
         "rust_analyzer",
         "sqlls",
         "texlab",
         "tombi",
+        "ty",
         "yamlls",
         "zls",
       },
@@ -136,6 +128,7 @@ return { -- MASON, formatter/linter, debugger, lsp
 
     require("mason-nvim-dap").setup({
       ensure_installed = {
+        "bash-debug-adapter",
         "codelldb",
         "delve",
         "java-debug-adapter",
@@ -149,31 +142,6 @@ return { -- MASON, formatter/linter, debugger, lsp
         function(server_name) -- default handler (optional)
           require("mason-nvim-dap").default_setup(server_name)
         end,
-
-        --["gopls"] = function(server_name)
-        --  server_name.capabilities = vim.tbl_extend("force", vim.lsp.protocol.make_client_capabilities(), {
-        --    textDocument = {
-        --      rangeFormatting = {
-        --        dynamicRegistration = true,
-        --        rangesSupport = true,
-        --      },
-        --    },
-        --  })
-        --end,
-        --["codelldb"] = function(server_name)
-        --  server_name.adapters = {
-        --    type = 'server',
-        --    port = "${port}",
-        --    executable = {
-        --      -- CHANGE THIS to your path!
-        --      command = '/usr/bin/codelldb',
-        --      args = { "--port", "${port}" },
-
-        --      -- On windows you may have to uncomment this:
-        --      -- detached = false,
-        --    },
-        --  }
-        --end,
       },
     })
 
@@ -189,23 +157,22 @@ return { -- MASON, formatter/linter, debugger, lsp
         "actionlint",
         "codespell",
         "detekt",
-        "ktlint",
-        "markdownlint",
+        "htmlhint",
+        --"markdownlint", -- linter and formatter
+        "shellcheck",
+        "textlint", -- markdown/txt linter
+        "yamllint",
         -- Formatter
         "asmfmt",
-        "bibtex_tidy",
-        "cbfmt",
         "clang_format",
-        "lua-language-server",
+        "mdsf", -- codeblock only, probably needs setup
+        "mdformat", -- some codeblock and rest of markdown
+        -- "miss_hit", -- formatter/linter matlab i don't need rn
         "pyproject-fmt",
-        --"isort",
         "jq",
-        "latexindent",
-        "phpcsfixer",
-        --"prettier",
         "shfmt",
-        "sqlfmt",
-        "stylua",
+        "sqruff",
+        "stylua", -- one day discuss with someone whether this is needed since lua_ls does formatting
       },
 
       automatic_installation = false,
@@ -217,28 +184,8 @@ return { -- MASON, formatter/linter, debugger, lsp
       --  hover = false,
       --},
 
-      --handlers = null_handlers,
-
-      -- implicit automatic setup
-      handlers = {
-        --local null_handlers = {
-        --  ["shfmt"] = function(source_name, methods)
-        --    null_ls.register(null_ls.builtins.formatting.shfmt.with({
-        --      extra_args = { "-i", "2" },
-        --    }))
-        --  end,
-        --  --["beautysh"] = function(source_name, methods)
-        --  --  null_ls.register(null_ls.builtins.formatting.beautysh.with({
-        --  --    extra_args = { "-i", "2" },
-        --  --  }))
-        --  --end,
-        --  --["autopep8"] = function(source_name, methods)
-        --  --  null_ls.register(null_ls.builtins.formatting.autopep8.with({
-        --  --    extra_args = { "--indent-size=2", "--ignore=E121" },
-        --  --  }))
-        --  --end,
-        --}
-      },
+      -- implicit automatic setup when empty
+      handlers = {},
     })
 
     null_ls.setup({
@@ -249,17 +196,12 @@ return { -- MASON, formatter/linter, debugger, lsp
         null_ls.builtins.formatting.stylua.with({
           extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
         }),
-        --null_ls.builtins.formatting.black,
-        --null_ls.builtins.diagnostics.ruff,
       },
       -- you can reuse a shared lspconfig on_attach callback here
       on_attach = function(client, bufnr)
-        --if vim.fs.root(0, ".stylua.toml") == nil then
-        --	null_ls.disable({ name = "stylua" })
-        --end
         client.server_capabilities.documentFormattingProvider = true
         client.server_capabilities.documentRangeFormattingProvider = true
-        autoformat_quit(client, bufnr)
+        --autoformat_quit(client, bufnr)
       end,
     })
 
