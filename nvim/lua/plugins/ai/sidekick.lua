@@ -15,16 +15,25 @@ return {
         --    submit = { "<c-s>", function(t) t:send("\n") end, },
         --  },
         --},
-        --prompts = {
-        --  refactor = "Please refactor {this} to be more maintainable",
-        --  security = "Review {file} for security vulnerabilities",
-        --  custom = function(ctx)
-        --    return "Current file: " .. ctx.buf .. " at line " .. ctx.row
-        --  end,
-        --},
+        prompts = {
+          simplify = "Simplify {this}",
+          security = "Review {file} for security vulnerabilities",
+          short = "Make {this} shorter if possible",
+          --custom = function(ctx)
+          --  return "Current file: " .. ctx.buf .. " at line " .. ctx.row
+          --end,
+        },
       },
     },
     keys = {
+      {
+        "<C-tab>",
+        function()
+          return require("sidekick").nes_jump_or_apply()
+        end,
+        expr = true,
+        desc = "Goto/Apply Next Edit Suggestion",
+      },
       {
         "<leader>aa",
         function()
