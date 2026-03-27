@@ -1,6 +1,9 @@
 [includeIf "gitdir:~/.config/"]
         path = ~/.config/git/github
 
+[includeIf "gitdir:~/Git/"]
+        path = ~/.config/git/github
+
 [includeIf "gitdir:~/Public/GitTuke/"]
 	path = ~/.config/git/tuke
 #[includeIf "gitdir:~/.config/nsxiv/nsxiv-extra/"]
