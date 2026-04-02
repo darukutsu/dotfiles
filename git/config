@@ -1,43 +1,27 @@
-[includeIf "gitdir:~/.config/"]
-        path = ~/.config/git/github
-
-[includeIf "gitdir:~/Git/"]
-        path = ~/.config/git/github
-
-[includeIf "gitdir:~/Public/GitTuke/"]
+[includeIf "hasconfig:remote.*.url:https://codeberg.org/**"]
+	path = ~/.config/git/codeberg
+[includeIf "hasconfig:remote.*.url:https://git.hento.org/**"]
+	path = ~/.config/git/gitea
+[includeIf "hasconfig:remote.*.url:https://github.com/**"]
+	path = ~/.config/git/github
+[includeIf "hasconfig:remote.*.url:git@github.com:*/**"]
+	path = ~/.config/git/github
+[includeIf "hasconfig:remote.*.url:https://git.kpi.fei.tuke.sk/**"]
 	path = ~/.config/git/tuke
-#[includeIf "gitdir:~/.config/nsxiv/nsxiv-extra/"]
-#	path = ~/.config/git/codebergconfig
-
-[alias]
-	#lol = log --oneline --decorate --format="%h%ch %d %s"
-	lol = log --oneline --decorate --format=\"%h %cs %d %s\"
-	graph = log --oneline --graph --decorate
-	logg = log --oneline --graph --decorate
-	reflog = reflog --date=iso --pretty
-	diff = diff --word-diff
-	unadd = reset
-
+[includeIf "hasconfig:remote.*.url:git@git.kpi.fei.tuke.sk:*/**"]
+	path = ~/.config/git/tuke
+[credential]
+	helper = store
 [grep]
 	lineNumber =true
 	patternType = perl
-
 [rerere]
 	enabled = true
-
 [merge]
 	tool = nvimdiff1
-
 ##[reflog]
 ##	log.date = iso
 ##	format.pretty = true
-
-[credential "https://github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !/usr/bin/gh auth git-credential
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -48,3 +32,11 @@
 	#log = false
 [color]
 	diff = never
+[alias]
+	#lol = log --oneline --decorate --format="%h%ch %d %s"
+	lol = log --oneline --decorate --format=\"%h %cs %d %s\"
+	graph = log --oneline --graph --decorate
+	logg = log --oneline --graph --decorate
+	reflog = reflog --date=iso --pretty
+	diff = diff --word-diff
+	unadd = reset

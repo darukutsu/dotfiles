@@ -29,6 +29,7 @@ return {
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {
+      enabled = false,
       completions = { lsp = { enabled = true } },
       heading = {
         render_modes = true,
