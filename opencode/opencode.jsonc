@@ -59,16 +59,85 @@
 			}
 		}
 	},
+	"agent": {
+		"build": {
+			"mode": "primary",
+			"permission": {
+				"read": "allow",
+				"edit": "allow",
+				"bash": {
+					"*": "ask",
+					"awk": "allow",
+					"basename": "allow",
+					//"bash": "allow",
+					"cat": "allow",
+					"cut": "allow",
+					"df": "allow",
+					"diff": "allow",
+					"dirname": "allow",
+					"echo": "allow",
+					"find": "allow",
+					"git diff *": "allow",
+					"git log *": "allow",
+					"git status *": "allow",
+					"grep": "allow",
+					"head": "allow",
+					"ls": "allow",
+					"printf": "allow",
+					"sed": "allow",
+					"seq": "allow",
+					//"sh": "allow",
+					"sleep": "allow",
+					"sort": "allow",
+					"tail": "allow",
+					"tr": "allow"
+					//"xargs": "allow",
+				},
+				"grep": "allow",
+				"glob": "allow",
+				"list": "allow",
+				"lsp": "allow",
+				"question": "allow",
+				"skill": "allow",
+				"webfetch": "allow"
+			}
+		},
+		"review": {
+			"temperature": 0.2,
+			//"model": "deepseek-coder",
+			"description": "Reviews code for best practices and potential issues",
+			"disable": true
+		}
+	},
 	"permission": {
-		"read": "allow",
-		"edit": "allow",
-		"bash": "allow",
-		"grep": "allow",
-		"glob": "allow",
-		"list": "allow",
-		"lsp": "allow",
-		"question": "allow",
-		"skill": "allow",
-		"webfetch": "allow"
+		"bash": {
+			"*": "ask",
+			"awk": "allow",
+			"basename": "allow",
+			//"bash": "allow",
+			"cat": "allow",
+			"curl": "allow",
+			"cut": "allow",
+			"df": "allow",
+			"diff": "allow",
+			"dirname": "allow",
+			"echo": "allow",
+			"find": "allow",
+			"git diff *": "allow",
+			"git log *": "allow",
+			"git status *": "allow",
+			"grep": "allow",
+			"head": "allow",
+			"ls": "allow",
+			"printf": "allow",
+			"sed": "allow",
+			"seq": "allow",
+			//"sh": "allow",
+			"sleep": "allow",
+			"sort": "allow",
+			"tail": "allow",
+			"tr": "allow"
+			//"xargs": "allow",
+		}
 	}
 }

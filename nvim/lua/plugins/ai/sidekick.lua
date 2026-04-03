@@ -26,6 +26,10 @@ return {
       },
     },
     keys = {
+      -- NOTE:
+      -- <c-z> leave ai to nvim buffer
+      -- <c-q> normal mode cli
+      -- <q> close ai, must be in normal mode
       {
         "<C-tab>",
         function()
@@ -92,6 +96,13 @@ return {
       -- Custom ai binds
       {
         "<leader>ao",
+        function()
+          require("sidekick.cli").toggle({ name = "opencode", focus = true })
+        end,
+        desc = "Sidekick Toggle Opencode",
+      },
+      {
+        "<leader>at",
         function()
           require("sidekick.cli").toggle({ name = "copilot", focus = true })
         end,

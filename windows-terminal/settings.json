@@ -1,0 +1,17 @@
+{
+	"actions": [
+		{
+			"command": {
+				"action": "sendInput",
+				"input": "\u001b[13;2u"
+			},
+			"id": "User.sendInput.ShiftEnterCustom"
+		}
+	],
+	"keybindings": [
+		{
+			"keys": "shift+enter",
+			"id": "User.sendInput.ShiftEnterCustom"
+		}
+	]
+}

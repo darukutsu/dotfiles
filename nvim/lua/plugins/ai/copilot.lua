@@ -69,7 +69,7 @@ return {
       --{ "<leader>Cd", ":Copilot detach<cr>", desc = "toggle copilot" },
       { "<leader>Ce", ":Copilot enable<cr>", desc = "copilot enable" },
       { "<leader>Cd", ":Copilot disable<cr>", desc = "copilot disable" },
-      { "<leader>at", toggle_copilot, desc = "copilot enable/disable" },
+      { "<leader>ae", toggle_copilot, desc = "copilot enable/disable" },
       -- copilot implement rest of keybinds
     },
     config = function()
