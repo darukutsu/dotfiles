@@ -172,9 +172,6 @@ shopt -s progcomp_alias
 #    _bcpp --defaults
 #fi
 
-##POWERLINE
-[[ -s "$XDG_CONFIG_HOME/bash/powerline" ]] && source "$XDG_CONFIG_HOME/bash/powerline"
-
 ## for echo -e $oct_bell ...
 ## Prints Icons
 #[[ -s "/usr/share/icons-in-terminal/icons_bash.sh" ]] && source /usr/share/icons-in-terminal/icons_bash.sh
@@ -208,6 +205,13 @@ GRC_ALIASES=true
 
 ## PREEXEC functions
 #source /usr/share/bash-preexec/bash-preexec.sh
+
+##POWERLINE
+if command -v starship >/dev/null; then
+  eval "$(starship init bash)"
+elif [[ -s "$XDG_CONFIG_HOME/bash/powerline" ]]; then
+  source "$XDG_CONFIG_HOME/bash/powerline"
+fi
 
 if [[ ${BLE_VERSION-} ]]; then
   #[[ -s "$_ble_base/lib/vim-surround.sh" ]] && source "$_ble_base/lib/vim-surround.sh"
@@ -284,6 +288,11 @@ if [[ ${BLE_VERSION-} ]]; then
   }
 
   #bleopt canvas_winch_action=redraw-prev
+  bleopt prompt_ps1_transient="same-dir"
+  #if command -v starship >/dev/null; then
+  #  bleopt prompt_ps1_final='$(starship module character)'
+  #  bleopt prompt_rps1_final='$(starship module time)'
+  #fi
 
   ble-import contrib/colorglass
   #ble-import contrib/histdb

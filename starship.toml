@@ -1,0 +1,62 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+add_newline = false
+
+format = """
+$sudo\
+$shlvl\
+$username\
+$localip\
+[](bg:#769ff0 fg:#24283B)\
+$directory\
+[](fg:#769ff0 bg:#394260)\
+$git_branch\
+$git_status\
+[](fg:#394260 bg:#212736)\
+$git_commit\
+[](fg:#212736 bg:#1d2230)\
+[ ](fg:#1d2230)\
+$status\
+\n[\\$ ](bold purple)"""
+
+[directory]
+style = "fg:#e3e5e5 bg:#769ff0"
+format = "[ $path ]($style)"
+truncation_length = 3
+truncation_symbol = "…/"
+
+[username]
+format = "[ $user](bold fg:#a3aed2)"
+show_always = true
+
+[localip]
+# ssh_only = false
+disabled = false
+format = "[:$localipv4](fg:#bbbb00 bg:#24283B)"
+
+[shlvl]
+# format = "[ \\$$shlvl](bold fg:#bbbb00)"
+format = "[](fg:#bbbb00)[\\$$shlvl](bold fg:#394260 bg:#bbbb00)[](fg:#bbbb00)"
+disabled = false
+
+[sudo]
+format = "[](fg:#ff4444)[sudo](bold fg:#394260 bg:#ff4444)[](fg:#ff4444)"
+disabled = false
+
+[git_branch]
+symbol = ""
+style = "bg:#394260"
+format = "[[ $symbol $branch(:$remote_branch) ](fg:#769ff0 bg:#394260)]($style)"
+
+[git_commit]
+commit_hash_length = 6
+format = "[\\($hash$tag\\)](fg:#a3aed2)"
+tag_disabled = false
+
+[git_status]
+style = "bg:#394260"
+format = "[[($all_status$ahead_behind )](fg:#769ff0 bg:#394260)]($style)"
+
+[status]
+format = "[:$status](bold fg:#ff4444)"
+disabled = false
