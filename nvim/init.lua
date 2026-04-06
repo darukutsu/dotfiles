@@ -1,3 +1,5 @@
+require("vim._core.ui2").enable()
+
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_python3_provider = 0
@@ -33,8 +35,16 @@ vim.api.nvim_create_autocmd("BufEnter", {
   end,
 })
 
+vim.cmd("packadd nvim.tohtml")
+vim.cmd("packadd nvim.difftool")
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+-- with this approach lazy.nvim cannot manage its versions but its probably good enough
+-- Transition to vim.pack once it provides all necessary features like lazy loading
+--vim.pack.add({
+--  { src = "https://github.com/folke/lazy.nvim.git", version = "stable" },
+--})
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   local lazyrepo = "https://github.com/folke/lazy.nvim.git"
   local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })

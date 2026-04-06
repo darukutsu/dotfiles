@@ -4,7 +4,8 @@ if ! updates_arch=$(checkupdates 2>/dev/null | wc -l); then
   updates_arch=0
 fi
 
-if ! updates_aur=$(yay -Qum 2>/dev/null | wc -l); then
+packages=$(yay -Qum 2>/dev/null)
+if ! updates_aur=$(echo $packages | wc -l); then
   #if ! updates_aur=$(paru -Qum 2> /dev/null | wc -l); then
   #if ! updates_aur=$(cower -u 2> /dev/null | wc -l); then
   #if ! updates_aur=$(trizen -Su --aur --quiet | wc -l); then
@@ -13,9 +14,10 @@ if ! updates_aur=$(yay -Qum 2>/dev/null | wc -l); then
   updates_aur=0
 fi
 
-if ! updates_zfs=$(yay -Sl archzfs 2>/dev/null | grep '\[installed:' | wc -l); then
-  updates_zfs=0
-fi
+updates_zfs=$(echo $packages | grep -c 'zfs-linux')
+#if ! updates_zfs=$(yay -Sl archzfs 2>/dev/null | grep '\[installed:' | wc -l); then
+#  updates_zfs=0
+#fi
 
 #if ! updates_flatpak=$(flatpak remote-ls --updates); then
 #  updates_flatpak=0

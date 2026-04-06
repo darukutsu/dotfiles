@@ -28,6 +28,7 @@ unmap({ "n" }, "grn")
 unmap({ "n" }, "grr")
 unmap({ "n" }, "grt")
 unmap({ "n" }, "gri")
+unmap({ "n" }, "grx")
 unmap({ "n", "v" }, "gra")
 
 vim.opt.timeoutlen = 200
