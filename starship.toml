@@ -2,9 +2,10 @@
 
 add_newline = false
 
+# $shlvl\
 format = """
 $sudo\
-$shlvl\
+${custom.shlvl}\
 $username\
 $localip\
 [](bg:#769ff0 fg:#24283B)\
@@ -38,6 +39,11 @@ format = "[:$localipv4](fg:#bbbb00 bg:#24283B)"
 # format = "[ \\$$shlvl](bold fg:#bbbb00)"
 format = "[](fg:#bbbb00)[\\$$shlvl](bold fg:#394260 bg:#bbbb00)[](fg:#bbbb00)"
 disabled = false
+
+[custom.shlvl]
+command = "echo $((SHLVL - SHLVL_BASELINE - 1))"
+when = "[ $SHLVL -gt $((SHLVL_BASELINE+1)) ]"
+format = "[](fg:#bbbb00)[\\$$output](bold fg:#394260 bg:#bbbb00)[](fg:#bbbb00)"
 
 [sudo]
 format = "[](fg:#ff4444)[sudo](bold fg:#394260 bg:#ff4444)[](fg:#ff4444)"

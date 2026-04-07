@@ -32,6 +32,10 @@
 	#log = false
 [color]
 	diff = never
+[diff]
+    tool = nvim_difftool
+[difftool "nvim_difftool"]
+    cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
 [alias]
 	#lol = log --oneline --decorate --format="%h%ch %d %s"
 	lol = log --oneline --decorate --format=\"%h %cs %d %s\"

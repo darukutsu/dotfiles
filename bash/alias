@@ -54,6 +54,7 @@ alias m='man'
 #alias nf='$XDG_CONFIG_HOME/neofetch/rand-pic.sh && neofetch'
 alias ff='clear; fastfetch --logo $(find "$XDG_CONFIG_HOME/fastfetch/pic/" -type f | shuf -n 1)'
 alias ffall='fastfetch -c /usr/share/fastfetch/presets/ci.jsonc'
+alias freemem='sudo sysctl vm.drop_caches=3'
 #alias micsend="pactl load-module module-tunnel-sink server=tcp:$(iploc):10111"
 alias micsend="
 pactl load-module module-native-protocol-tcp listen=$(iploc);

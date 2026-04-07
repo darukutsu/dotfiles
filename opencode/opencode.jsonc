@@ -16,17 +16,41 @@
 					"_launch": true,
 					"name": "deepseek-coder"
 				},
+				"deepseek-r1": {
+					"_launch": true,
+					"name": "deepseek-r1"
+				},
 				"devstral-2": {
 					"_launch": true,
 					"name": "devstral-2"
+				},
+				"gemma": {
+					"_launch": true,
+					"name": "gemma"
 				},
 				"gemma3": {
 					"_launch": true,
 					"name": "gemma3"
 				},
+				"gemma4": {
+					"_launch": true,
+					"name": "gemma4"
+				},
 				"glm-4.7-flash": {
 					"_launch": true,
 					"name": "glm-4.7-flash"
+				},
+				"huihui_ai/qwen3-coder-abliterated": {
+					"_launch": true,
+					"name": "huihui_ai/qwen3-coder-abliterated"
+				},
+				"huihui_ai/qwen3-coder-next-abliterated": {
+					"_launch": true,
+					"name": "huihui_ai/qwen3-coder-next-abliterated"
+				},
+				"llama2-uncensored": {
+					"_launch": true,
+					"name": "llama2-uncensored"
 				},
 				"llama3.3": {
 					"_launch": true,
@@ -35,6 +59,10 @@
 				"mistral": {
 					"_launch": true,
 					"name": "mistral"
+				},
+				"qwen": {
+					"_launch": true,
+					"name": "qwen"
 				},
 				"qwen2.5-coder": {
 					"_launch": true,
