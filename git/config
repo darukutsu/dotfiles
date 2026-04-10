@@ -1,3 +1,5 @@
+[includeIf "hasconfig:remote.*.url:git@ssh.dev.azure.com:*/**"]
+	path = ~/.config/git/siemens
 [includeIf "hasconfig:remote.*.url:https://codeberg.org/**"]
 	path = ~/.config/git/codeberg
 [includeIf "hasconfig:remote.*.url:https://git.hento.org/**"]

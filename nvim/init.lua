@@ -152,7 +152,7 @@ vim.cmd([[
   "set statuscolumn=%@SignCb@%=%T%@NumCb@%l%s%r│%T
 
   set wildmode=longest:full,list,full
-  set spelllang=en_us
+  set spelllang=en_us,techjargon
 
   set cursorline
   "set spell

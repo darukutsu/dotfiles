@@ -7,8 +7,8 @@ export GDK_BACKEND=x11
 export QT_QPA_PLATFORM=xcb
 unset WAYLAND_DISPLAY
 
-
-if ! pgrep --quiet -U "$USER" atuin; then
-	rm /atuin/$USER/atuin.sock
-	atuin daemon &
-fi 
+# unnecessary since selfhosting server
+#if ! pgrep --quiet -U "$USER" atuin; then
+#	rm /atuin/$USER/atuin.sock
+#	atuin daemon &
+#fi 

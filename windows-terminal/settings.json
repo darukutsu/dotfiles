@@ -1,4 +1,92 @@
 {
+	"copyFormatting": "none",
+	"copyOnSelect": true,
+	"newTabMenu": [
+		{
+			"type": "remainingProfiles"
+		}
+	],
+	"profiles": {
+		"defaults": {
+			"colorScheme": "Tokyo Night Storm",
+			"font": {
+				"face": "NotoSansM Nerd Font",
+				"size": 11
+			}
+		}
+	},
+	"schemes": [
+		{
+			"background": "#1A1B26",
+			"black": "#15161E",
+			"blue": "#7AA2F7",
+			"brightBlack": "#414868",
+			"brightBlue": "#7AA2F7",
+			"brightCyan": "#7DCFFF",
+			"brightGreen": "#9ECE6A",
+			"brightPurple": "#9D7CD8",
+			"brightRed": "#F7768E",
+			"brightWhite": "#C0CAF5",
+			"brightYellow": "#E0AF68",
+			"cursorColor": "#C0CAF5",
+			"cyan": "#7DCFFF",
+			"foreground": "#C0CAF5",
+			"green": "#9ECE6A",
+			"name": "Tokyo Night",
+			"purple": "#BB9AF7",
+			"red": "#F7768E",
+			"selectionBackground": "#283457",
+			"white": "#A9B1D6",
+			"yellow": "#E0AF68"
+		},
+		{
+			"background": "#E1E2E7",
+			"black": "#B4B5B9",
+			"blue": "#2E7DE9",
+			"brightBlack": "#A1A6C5",
+			"brightBlue": "#2E7DE9",
+			"brightCyan": "#007197",
+			"brightGreen": "#587539",
+			"brightPurple": "#7847BD",
+			"brightRed": "#F52A65",
+			"brightWhite": "#3760BF",
+			"brightYellow": "#8C6C3E",
+			"cursorColor": "#3760BF",
+			"cyan": "#007197",
+			"foreground": "#3760BF",
+			"green": "#587539",
+			"name": "Tokyo Night Day",
+			"purple": "#9854F1",
+			"red": "#F52A65",
+			"selectionBackground": "#B7C1E3",
+			"white": "#6172B0",
+			"yellow": "#8C6C3E"
+		},
+		{
+			"background": "#24283B",
+			"black": "#1D202F",
+			"blue": "#7AA2F7",
+			"brightBlack": "#414868",
+			"brightBlue": "#7AA2F7",
+			"brightCyan": "#7DCFFF",
+			"brightGreen": "#9ECE6A",
+			"brightPurple": "#9D7CD8",
+			"brightRed": "#F7768E",
+			"brightWhite": "#C0CAF5",
+			"brightYellow": "#E0AF68",
+			"cursorColor": "#C0CAF5",
+			"cyan": "#7DCFFF",
+			"foreground": "#C0CAF5",
+			"green": "#9ECE6A",
+			"name": "Tokyo Night Storm",
+			"purple": "#BB9AF7",
+			"red": "#F7768E",
+			"selectionBackground": "#2E3C64",
+			"white": "#A9B1D6",
+			"yellow": "#E0AF68"
+		}
+	],
+	"themes": [],
 	"actions": [
 		{
 			"command": {
@@ -12,6 +100,26 @@
 		{
 			"keys": "shift+enter",
 			"id": "User.sendInput.ShiftEnterCustom"
+		},
+		{
+			"id": "Terminal.FindText",
+			"keys": "ctrl+shift+f"
+		},
+		{
+			"id": null,
+			"keys": "ctrl+v"
+		},
+		{
+			"id": null,
+			"keys": "enter"
+		},
+		{
+			"id": "Terminal.DuplicatePaneAuto",
+			"keys": "alt+shift+d"
+		},
+		{
+			"id": null,
+			"keys": "ctrl+c"
 		}
 	]
 }

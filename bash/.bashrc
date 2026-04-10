@@ -12,6 +12,10 @@ if [ -z "$XDG_CONFIG_HOME" ] || [ "$XDG_CONFIG_HOME" != "$HOME/.config" ]; then
   export XDG_DOWNLOAD_DIR=${HOME}/Downloads
 fi
 
+if [ -z "$EDITOR" ]; then
+  export EDITOR=nvim
+fi
+
 # shellcheck disable=SC2015,SC1094,SC1090
 [[ $- == *i* ]] && source /usr/share/blesh/ble.sh --noattach || source ~/.local/share/blesh/ble.sh --noattach
 shopt -u globstar

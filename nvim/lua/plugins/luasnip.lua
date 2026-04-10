@@ -1,32 +1,50 @@
 return {
-  "L3MON4D3/LuaSnip",
-  build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
-  --version = "v2.*",
-  event = "VeryLazy",
-  dependencies = {
-    "rafamadriz/friendly-snippets",
-    "benfowler/telescope-luasnip.nvim",
-  },
-  config = function(_, opts)
-    if opts then
-      require("luasnip").config.setup(opts)
-    end
-    vim.tbl_map(function(type)
-      require("luasnip.loaders.from_" .. type).lazy_load()
-    end, { "vscode", "snipmate", "lua" })
+  {
+    "L3MON4D3/LuaSnip",
+    build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
+    --version = "v2.*",
+    event = "VeryLazy",
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+      "honza/vim-snippets",
+      "molleweide/LuaSnip-snippets.nvim",
+      "benfowler/telescope-luasnip.nvim",
+    },
+    config = function(_, opts)
+      if opts then
+        require("luasnip").config.setup(opts)
+      end
 
-    require("luasnip").filetype_extend("typescript", { "tsdoc" })
-    require("luasnip").filetype_extend("javascript", { "jsdoc" })
-    require("luasnip").filetype_extend("lua", { "luadoc" })
-    require("luasnip").filetype_extend("python", { "pydoc" })
-    require("luasnip").filetype_extend("rust", { "rustdoc" })
-    require("luasnip").filetype_extend("cs", { "csharpdoc" })
-    require("luasnip").filetype_extend("java", { "javadoc" })
-    require("luasnip").filetype_extend("c", { "cdoc" })
-    require("luasnip").filetype_extend("cpp", { "cppdoc" })
-    require("luasnip").filetype_extend("php", { "phpdoc" })
-    require("luasnip").filetype_extend("kotlin", { "kdoc" })
-    require("luasnip").filetype_extend("ruby", { "rdoc" })
-    require("luasnip").filetype_extend("sh", { "shelldoc" })
-  end,
+      vim.tbl_map(function(type)
+        require("luasnip.loaders.from_" .. type).lazy_load()
+      end, { "vscode", "snipmate", "lua" })
+
+      require("luasnip").filetype_extend("typescript", { "tsdoc" })
+      require("luasnip").filetype_extend("javascript", { "jsdoc" })
+      require("luasnip").filetype_extend("lua", { "luadoc" })
+      require("luasnip").filetype_extend("python", { "pydoc" })
+      require("luasnip").filetype_extend("rust", { "rustdoc" })
+      require("luasnip").filetype_extend("cs", { "csharpdoc" })
+      require("luasnip").filetype_extend("java", { "javadoc" })
+      require("luasnip").filetype_extend("c", { "cdoc" })
+      require("luasnip").filetype_extend("cpp", { "cppdoc" })
+      require("luasnip").filetype_extend("php", { "phpdoc" })
+      require("luasnip").filetype_extend("kotlin", { "kdoc" })
+      require("luasnip").filetype_extend("ruby", { "rdoc" })
+      require("luasnip").filetype_extend("sh", { "shelldoc" })
+    end,
+  },
+  -- cool but separate keybind not inside blinkcmp
+  --{
+  --  "danymat/neogen",
+  --  dependencies = "nvim-treesitter/nvim-treesitter",
+  --  event = "VeryLazy",
+  --  config = function(_, opts)
+  --    require("neogen").setup({
+  --      enabled = true,
+  --      snippet_engine = "luasnip",
+  --      input_after_comment = true,
+  --    })
+  --  end,
+  --},
 }

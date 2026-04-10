@@ -128,6 +128,7 @@ return {
   ---@type blink.cmp.Config
   opts = {
     keymap = keymaps(),
+    snippets = { preset = "luasnip" },
     signature = {
       enabled = true,
       window = { border = "single" },
@@ -289,12 +290,30 @@ return {
             --force_fallback = false,
           },
         },
+        snippets = {
+          opts = {
+            extended_filetypes = {
+              python = { "pydoc" },
+              typescript = { "tsdoc" },
+              javascript = { "jsdoc" },
+              lua = { "luadoc" },
+              rust = { "rustdoc" },
+              cs = { "csharpdoc" },
+              java = { "javadoc" },
+              c = { "cdoc" },
+              cpp = { "cppdoc" },
+              php = { "phpdoc" },
+              kotlin = { "kdoc" },
+              ruby = { "rdoc" },
+              sh = { "shelldoc" },
+            },
+          },
+        },
         path = {
           opts = {
             show_hidden_files_by_default = true,
           },
         },
-        --snippets = { preset = "luasnip"},
         --term = {
         --  --enabled = true,
         --  ghost_text = { enabled = true },
