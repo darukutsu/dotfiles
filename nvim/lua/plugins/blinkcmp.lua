@@ -34,12 +34,17 @@ local function keymaps()
       function() -- sidekick next edit suggestion
         return require("sidekick").nes_jump_or_apply()
       end,
+      "snippet_forward",
       --function() -- if you are using Neovim's native inline completions
       --  return vim.lsp.inline_completion.get()
       --end,
       "fallback",
     },
-    ["<S-tab>"] = { "select_prev", "fallback" },
+    ["<S-tab>"] = {
+      "select_prev",
+      "snippet_backward",
+      "fallback",
+    },
     ["<C-.>"] = { "snippet_forward", "fallback" },
     ["<C-,>"] = { "snippet_backward", "fallback" },
     ["<C-space>"] = { "show", "show_documentation", "show_signature", "hide_documentation" },

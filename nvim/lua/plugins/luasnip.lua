@@ -4,6 +4,10 @@ return {
     build = vim.fn.has("win32") ~= 0 and "make install_jsregexp" or nil,
     --version = "v2.*",
     event = "VeryLazy",
+    opts = {
+      region_check_events = "InsertEnter",
+      delete_check_events = "InsertLeave",
+    },
     dependencies = {
       "rafamadriz/friendly-snippets",
       "honza/vim-snippets",
