@@ -26,6 +26,7 @@ return {
       { "<leader>N", ":Telescope notify<cr>", { desc = "notification history" } },
       { "<leader>l", ":Telescope luasnip<cr>", { desc = "notification history" } },
       { "<leader>q", ":Telescope macros<cr>", { desc = "neocomposer macros" } },
+      { "<leader>p", ":Telescope neoclip<cr>", { desc = "neoclip history" } },
     }
   end,
   dependencies = {
