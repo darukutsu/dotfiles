@@ -124,6 +124,20 @@ vim.api.nvim_create_autocmd("TermOpen", {
 vim.opt.clipboard:append("unnamedplus")
 if vim.env.SSH_TTY ~= nil then
   vim.g.clipboard = "osc52"
+elseif vim.fn.has("wsl") == 1 then
+  -- Strip \r from paste to avoid ^M from Windows clipboard
+  vim.g.clipboard = {
+    name = "WslClipboard",
+    copy = {
+      ["+"] = "win32yank.exe -i --crlf",
+      ["*"] = "win32yank.exe -i --crlf",
+    },
+    paste = {
+      ["+"] = "win32yank.exe -o --lf",
+      ["*"] = "win32yank.exe -o --lf",
+    },
+    cache_enabled = 0,
+  }
 end
 
 -- Automatic open folds when openinig file

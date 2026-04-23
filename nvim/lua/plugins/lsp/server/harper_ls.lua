@@ -9,6 +9,8 @@ vim.lsp.config("harper_ls", {
         SentenceCapitalization = false,
         PhrasalVerbAsCompoundNoun = false,
         ExpandMinimum = false,
+        MissingTo = false,
+        UseEllipsisCharacter = false,
       },
     },
   },
