@@ -53,7 +53,7 @@ alias lapt1='xinput set-prop $(xinput list | grep -o -P "[a-zA-Z0-9=: ][^\[\]]*"
 alias m='man'
 #alias mt='neomutt'
 #alias nf='$XDG_CONFIG_HOME/neofetch/rand-pic.sh && neofetch'
-alias ff='clear; fastfetch --logo $((find "$XDG_CONFIG_HOME/fastfetch/pic/" -type f || printf "archlinux") | shuf -n 1)'
+alias ff='clear; fastfetch --logo $((find "$XDG_CONFIG_HOME/fastfetch/pic/" -type f 2>/dev/null || printf "archlinux") | shuf -n 1)'
 alias ffall='fastfetch -c /usr/share/fastfetch/presets/ci.jsonc'
 alias freemem='sudo sysctl vm.drop_caches=3'
 #alias micsend="pactl load-module module-tunnel-sink server=tcp:$(iploc):10111"
