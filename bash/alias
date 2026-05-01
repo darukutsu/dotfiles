@@ -1,6 +1,7 @@
 #!/bin/sh
 alias testalias="pkexec env DISPLAY=$DISPLAY  XAUTHORITY=$XAUTHORITY notify-send DISPLAY=$DISPLAY  XAUTHORITY=$XAUTHORITY"
 alias a='ani-cli'
+alias adb='HOME="$XDG_DATA_HOME"/android adb'
 #alias a='adl -r'
 # NOTE: if one day stops working try wiremix
 alias alsa='pulsemixer'
@@ -52,7 +53,7 @@ alias lapt1='xinput set-prop $(xinput list | grep -o -P "[a-zA-Z0-9=: ][^\[\]]*"
 alias m='man'
 #alias mt='neomutt'
 #alias nf='$XDG_CONFIG_HOME/neofetch/rand-pic.sh && neofetch'
-alias ff='clear; fastfetch --logo $(find "$XDG_CONFIG_HOME/fastfetch/pic/" -type f | shuf -n 1)'
+alias ff='clear; fastfetch --logo $((find "$XDG_CONFIG_HOME/fastfetch/pic/" -type f || printf "archlinux") | shuf -n 1)'
 alias ffall='fastfetch -c /usr/share/fastfetch/presets/ci.jsonc'
 alias freemem='sudo sysctl vm.drop_caches=3'
 #alias micsend="pactl load-module module-tunnel-sink server=tcp:$(iploc):10111"
