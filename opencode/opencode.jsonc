@@ -8,83 +8,203 @@
 				"baseURL": "http://api.ai.lan/v1"
 			},
 			"models": {
-				"codellama": {
-					"_launch": true,
-					"name": "codellama"
-				},
-				"deepseek-coder": {
-					"_launch": true,
-					"name": "deepseek-coder"
-				},
-				"deepseek-r1": {
-					"_launch": true,
-					"name": "deepseek-r1"
-				},
-				"devstral-2": {
-					"_launch": true,
-					"name": "devstral-2"
-				},
-				"gemma": {
-					"_launch": true,
-					"name": "gemma"
-				},
-				"gemma3": {
-					"_launch": true,
-					"name": "gemma3"
-				},
-				"gemma4": {
-					"_launch": true,
-					"name": "gemma4"
-				},
-				"glm-4.7-flash": {
-					"_launch": true,
-					"name": "glm-4.7-flash"
-				},
-				"huihui_ai/qwen3-coder-abliterated": {
-					"_launch": true,
-					"name": "huihui_ai/qwen3-coder-abliterated"
-				},
-				"huihui_ai/qwen3-coder-next-abliterated": {
-					"_launch": true,
-					"name": "huihui_ai/qwen3-coder-next-abliterated"
-				},
-				"llama2-uncensored": {
-					"_launch": true,
-					"name": "llama2-uncensored"
-				},
-				"llama3.3": {
-					"_launch": true,
-					"name": "llama3.3"
-				},
-				"mistral": {
-					"_launch": true,
-					"name": "mistral"
-				},
-				"qwen": {
-					"_launch": true,
-					"name": "qwen"
-				},
-				"qwen2.5-coder": {
-					"_launch": true,
-					"name": "qwen2.5-coder"
-				},
-				"qwen3-coder": {
-					"_launch": true,
-					"name": "qwen3-coder"
-				},
-				"qwen3-coder-next": {
-					"_launch": true,
-					"name": "qwen3-coder-next"
-				},
-				"qwen3.5": {
-					"_launch": true,
-					"name": "qwen3.5"
-				},
-				"starcoder": {
-					"_launch": true,
-					"name": "starcoder"
-				}
-			}
+        "codellama:latest": {
+          "name": "codellama:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "deepseek-coder:latest": {
+          "name": "deepseek-coder:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "deepseek-ocr:latest": {
+          "name": "deepseek-ocr:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "deepseek-r1:latest": {
+          "name": "deepseek-r1:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "devstral-2:latest": {
+          "name": "devstral-2:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "gemma3:latest": {
+          "name": "gemma3:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "gemma4:latest": {
+          "name": "gemma4:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "gemma:latest": {
+          "name": "gemma:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "glm-4.7-flash:latest": {
+          "name": "glm-4.7-flash:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "glm-4.7:cloud": {
+          "name": "glm-4.7:cloud",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "glm-ocr:latest": {
+          "name": "glm-ocr:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "gpt-oss:latest": {
+          "name": "gpt-oss:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "huihui_ai/qwen3-coder-abliterated:latest": {
+          "name": "huihui_ai/qwen3-coder-abliterated:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "huihui_ai/qwen3-coder-next-abliterated:latest": {
+          "name": "huihui_ai/qwen3-coder-next-abliterated:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "kimi-k2.6:cloud": {
+          "name": "kimi-k2.6:cloud",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "llama2-uncensored:latest": {
+          "name": "llama2-uncensored:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "llama3.3:latest": {
+          "name": "llama3.3:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "mistral:latest": {
+          "name": "mistral:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "nemotron-3-nano:latest": {
+          "name": "nemotron-3-nano:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "qwen2.5-coder:latest": {
+          "name": "qwen2.5-coder:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "qwen3-coder-next:latest": {
+          "name": "qwen3-coder-next:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "qwen3-coder:30b-a3b-fp16": {
+          "name": "qwen3-coder:30b-a3b-fp16",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "qwen3-coder:30b-a3b-q4_K_M": {
+          "name": "qwen3-coder:30b-a3b-q4_K_M",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "qwen3-coder:30b-a3b-q8_0": {
+          "name": "qwen3-coder:30b-a3b-q8_0",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "qwen3-coder:latest": {
+          "name": "qwen3-coder:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "qwen3.5:latest": {
+          "name": "qwen3.5:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "qwen:latest": {
+          "name": "qwen:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+        "starcoder:latest": {
+          "name": "starcoder:latest",
+          "limit": {
+            "context": 128000,
+            "output": 65536
+          }
+        },
+      }
 		}
 	},
 	"agent": {
@@ -95,31 +215,32 @@
 				"edit": "allow",
 				"bash": {
 					"*": "ask",
-					"awk": "allow",
-					"basename": "allow",
-					//"bash": "allow",
-					"cat": "allow",
-					"cut": "allow",
-					"df": "allow",
-					"diff": "allow",
-					"dirname": "allow",
-					"echo": "allow",
-					"find": "allow",
+					"awk *": "allow",
+					"basename *": "allow",
+					//"bash *": "allow",
+					"cat *": "allow",
+					"cut *": "allow",
+					"df *": "allow",
+					"diff *": "allow",
+					"dirname *": "allow",
+					"echo *": "allow",
+					"find *": "allow",
 					"git diff *": "allow",
 					"git log *": "allow",
 					"git status *": "allow",
-					"grep": "allow",
-					"head": "allow",
-					"ls": "allow",
-					"printf": "allow",
-					"sed": "allow",
-					"seq": "allow",
-					//"sh": "allow",
-					"sleep": "allow",
-					"sort": "allow",
-					"tail": "allow",
-					"tr": "allow"
-					//"xargs": "allow",
+					"grep *": "allow",
+					"head *": "allow",
+					"ls *": "allow",
+					"printf *": "allow",
+					"sed *": "allow",
+					"seq *": "allow",
+					//"sh *": "allow",
+					"sleep *": "allow",
+					"sort *": "allow",
+					"tail *": "allow",
+					"tr *": "allow",
+					"wc *": "allow"
+					//"xargs *": "allow",
 				},
 				"grep": "allow",
 				"glob": "allow",

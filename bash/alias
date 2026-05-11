@@ -5,9 +5,19 @@ alias adb='HOME="$XDG_DATA_HOME"/android adb'
 #alias a='adl -r'
 # NOTE: if one day stops working try wiremix
 alias alsa='pulsemixer'
-#alias abackup="mv /home/daru/Android/MI9-backup /home/daru/Android/MI9-backup.$(stat -c %w /home/daru/Android/MI9-backup/ | awk '{print $1}') && mkdir /home/daru/Android/MI9-backup/ && sudo bftpd -d"
-alias abackup="mv /home/daru/Android/MI9-backup /home/daru/Android/MI9-backup.$(stat -c %w /home/daru/Android/MI9-backup/ | awk '{print $1}') && mkdir /home/daru/Android/MI9-backup/ && copyparty --chdir /home/daru/Android/MI9-backup/"
-alias cnet="netstat -lantp | grep ESTABLISHED |awk '{print $5}' | awk -F: '{print $1}' | sort -u"
+abackup() {
+  #mv /home/daru/Android/MI9-backup /home/daru/Android/MI9-backup.$(stat -c %w /home/daru/Android/MI9-backup/ | awk '{print $1}') && mkdir /home/daru/Android/MI9-backup/ && sudo bftpd -d
+
+  mv /home/daru/Android/MI9-backup /home/daru/Android/MI9-backup."$(stat -c %w /home/daru/Android/MI9-backup/ | awk '{print $1}')" && mkdir /home/daru/Android/MI9-backup/ && copyparty --chdir /home/daru/Android/MI9-backup/
+}
+cnet() {
+  if command -v netstat >/dev/null; then
+    #deprecated on modern distributions
+    netstat -lantp | grep ESTABLISHED | awk '{print $5}' | awk -F: '{print $1}' | sort -u
+  else
+    ss -lantp | grep ESTAB | awk '{print $5}' | awk -F: '{print $1}' | sort -u
+  fi
+}
 #alias c='printf "\033c"'
 alias c='tput reset'
 alias cpic='wl-color-picker'
@@ -57,18 +67,21 @@ alias ff='clear; fastfetch --logo $((find "$XDG_CONFIG_HOME/fastfetch/pic/" -typ
 alias ffall='fastfetch -c /usr/share/fastfetch/presets/ci.jsonc'
 alias freemem='sudo sysctl vm.drop_caches=3'
 #alias micsend="pactl load-module module-tunnel-sink server=tcp:$(iploc):10111"
-alias micsend="
-pactl load-module module-native-protocol-tcp listen=$(iploc);
-pactl load-module module-zeroconf-publish
-"
-alias micrecv="
-pactl load-module module-zeroconf-discover; 
-pactl load-module module-native-protocol-tcp port=$1 listen=$2 auth-anonymous=1
-"
+micsend() {
+  pactl load-module module-native-protocol-tcp listen="$(iploc)"
+  pactl load-module module-zeroconf-publish
+}
+micrecv() {
+  pactl load-module module-zeroconf-discover
+  pactl load-module module-native-protocol-tcp port="$1" listen="$2" auth-anonymous=1
+}
 alias mov='mov-cli -s films'
 #alias mirror='xrandr --output HDMI-1 --auto; mons -m'
 alias mirror='mons -ma'
 #alias nnn='nnn -cdHa'
+ollama_stop() {
+  curl http://api.ai.lan/api/generate -d "{\"model\": \"$1\", \"keep_alive\": 0}"
+}
 #alias page='$PAGER'
 alias pingg='ping google.com'
 alias pc='pacseek -u'
@@ -126,7 +139,9 @@ alias ti='tgpt --image'
 alias update='sudo apt update && sudo apt upgrade'
 alias xclip='xclip -selection clipboard'
 #alias traceroute='/usr/bin/mtr'
-alias qr='qrencode -m 2 -t utf8 <<< "$1"'
+qr() {
+  qrencode -m 2 -t utf8 "$1"
+}
 alias qrdecode='zbarimg'
 alias qrwifi='nmcli device wifi show-password'
 alias weather='curl wttr.in'

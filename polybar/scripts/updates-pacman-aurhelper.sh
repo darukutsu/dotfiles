@@ -5,19 +5,13 @@ if ! updates_arch=$(checkupdates 2>/dev/null | wc -l); then
 fi
 
 packages=$(yay -Qum 2>/dev/null)
-if ! updates_aur=$(echo $packages | wc -l); then
-  #if ! updates_aur=$(paru -Qum 2> /dev/null | wc -l); then
-  #if ! updates_aur=$(cower -u 2> /dev/null | wc -l); then
-  #if ! updates_aur=$(trizen -Su --aur --quiet | wc -l); then
-  #if ! updates_aur=$(pikaur -Qua 2> /dev/null | wc -l); then
-  #if ! updates_aur=$(rua upgrade --printonly 2> /dev/null | wc -l); then
-  updates_aur=0
-fi
-
-updates_zfs=$(echo $packages | grep -c 'zfs-linux')
-#if ! updates_zfs=$(yay -Sl archzfs 2>/dev/null | grep '\[installed:' | wc -l); then
-#  updates_zfs=0
-#fi
+updates_aur=$(printf "$packages" 2>/dev/null | grep -ce '.*\?$')
+#updates_aur=$(paru -Qum 2> /dev/null | wc -l)
+#updates_aur=$(cower -u 2> /dev/null | wc -l)
+#updates_aur=$(trizen -Su --aur --quiet | wc -l)
+#updates_aur=$(pikaur -Qua 2> /dev/null | wc -l)
+#updates_aur=$(rua upgrade --printonly 2> /dev/null | wc -l)
+updates_zfs=$(printf $packages 2>/dev/null | grep -c 'zfs-linux')
 
 #if ! updates_flatpak=$(flatpak remote-ls --updates); then
 #  updates_flatpak=0
