@@ -27,6 +27,9 @@ alias cam='sudo scrcpy -N --no-window --video-source camera --camera-{size=1920x
 alias clam='freshclam && clamscan --recursive --bell'
 alias clamstop='sudo systemctl stop clamav-clamonacc && sudo systemctl stop clamav-daemon'
 alias clamstart='sudo systemctl start clamav-clamonacc && sudo systemctl start clamav-daemon'
+comfy_stop() {
+  curl -X POST http://gen.ai.lan/free -d '{"unload_models": true, "free_memory": true}'
+}
 alias downgrade='downgrade --git --pacman-cache ~/.cache/yay --maxdepth 2'
 alias downgrade-aur='downgrade --git --pacman-cache ~/.cache/yay --maxdepth 2'
 alias emacs='emacs -nw'
@@ -81,6 +84,9 @@ alias mirror='mons -ma'
 #alias nnn='nnn -cdHa'
 ollama_stop() {
   curl http://api.ai.lan/api/generate -d "{\"model\": \"$1\", \"keep_alive\": 0}"
+}
+ollama_set_alive() {
+  curl http://api.ai.lan/api/generate -d "{\"model\": \"$1\", \"keep_alive\": \"$2\"}"
 }
 #alias page='$PAGER'
 alias pingg='ping google.com'
