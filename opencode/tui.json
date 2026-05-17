@@ -10,7 +10,6 @@
 		"theme_list": "none",
 		"sidebar_toggle": "<leader>b",
 		"scrollbar_toggle": "none",
-		"username_toggle": "none",
 		"status_view": "<leader>s",
 		"tool_details": "<leader>?",
 		"session_export": "<leader>x",
@@ -94,6 +93,6 @@
 		"terminal_suspend": "ctrl+z",
 		"terminal_title_toggle": "none",
 		"tips_toggle": "<leader>h",
-		"display_thinking": "none"
+		"display_thinking": "<leader>t"
 	}
 }
