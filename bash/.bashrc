@@ -99,7 +99,8 @@ h() {
 
 # Alternatively, to pick a bit better `man` highlighting:
 man() {
-  if test $(/bin/man -w "${@:$#}"); then
+  # shellcheck disable=SC2065,SC2046
+  if test $(/bin/man -w "${@:$#}") >/dev/null; then
     if [[ "$PAGER" =~ ^page.* ]]; then
       if [ $2 ]; then
         $PAGER man://"$2($1)"
@@ -115,9 +116,9 @@ man() {
   else
     if [ $# -gt 1 ]; then
       last=$#
-      h "${!last}"
+      h "${!last}" | nvim
     else
-      h "$1"
+      h "$1" | nvim
     fi
   fi
   #  SECT=${@[-2]}; PROG=${@[-1]}; page man://"$PROG($SECT)"
@@ -232,7 +233,15 @@ if [[ ${BLE_VERSION-} ]]; then
     #  fi
     #done
 
-    if [[ "$*" =~ (--help| help| -h) ]] && ! [[ "$*" =~ --colou?rs? ]]; then
+    # NOTE: there is issue that when we pipe command to tui or when we use && || ;
+    # with combination of tui program, it will hang or crash because of this
+    # Ideally we would split command into parts but that would broke piping.
+    # We need to handle this maybe by redirecting output back to stdout after processing
+    # but isn't it what we're already doing?
+    # Workaround for now and probably enough is to ignore these rules when we have |&; symbol on line
+    if [[ "$*" =~ (--help| help| -h) ]] &&
+      ! [[ "$*" =~ --colou?rs? ]] &&
+      ! [[ "$*" =~ [|\&\;]|man ]]; then
       ble/fd#alloc _ble_util_fd_cmd_stdout ">/tmp/blesh-stdout" overwrite
       ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
       ble/fd#add-cloexec "$_ble_util_fd_cmd_stdout"
@@ -281,7 +290,9 @@ if [[ ${BLE_VERSION-} ]]; then
     #  #language=$(BAT_PAGER='' bat --list-languages | grep -i -m1 -e "$content_type" -e "\[$content_type\]" | cut -f1 -d':')
     #  bat -ppl"${language:-Plain Text}" /tmp/blesh-stdout
     #fi
-    if [[ "$*" =~ (--help| help| -h) ]] && ! [[ "$*" =~ --colou?rs? ]]; then
+    if [[ "$*" =~ (--help| help| -h) ]] &&
+      ! [[ "$*" =~ --colou?rs? ]] &&
+      ! [[ "$*" =~ [|\&\;]|man ]]; then
       bat -pplhelp /tmp/blesh-stdout
       ble/fd#alloc _ble_util_fd_cmd_stdout '>/dev/tty' overwrite
       ble/fd#alloc _ble_util_fd_cmd_stderr ">&$_ble_util_fd_cmd_stdout" overwrite
