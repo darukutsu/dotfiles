@@ -83,10 +83,10 @@ alias mov='mov-cli -s films'
 alias mirror='mons -ma'
 #alias nnn='nnn -cdHa'
 ollama_stop() {
-  curl http://api.ai.lan/api/generate -d "{\"model\": \"$1\", \"keep_alive\": 0}"
+  curl http://ollama.ai.lan/api/generate -d "{\"model\": \"$1\", \"keep_alive\": 0}"
 }
 ollama_set_alive() {
-  curl http://api.ai.lan/api/generate -d "{\"model\": \"$1\", \"keep_alive\": \"$2\"}"
+  curl http://ollama.ai.lan/api/generate -d "{\"model\": \"$1\", \"keep_alive\": \"$2\"}"
 }
 #alias page='$PAGER'
 alias pingg='ping google.com'
