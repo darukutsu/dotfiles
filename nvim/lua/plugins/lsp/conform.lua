@@ -7,7 +7,14 @@ return {
       lsp_format = "fallback",
     },
     formatters_by_ft = {
+      json = { "jq" },
+      jsonc = { "jq" },
       markdown = { "mdsf" },
+    },
+    formatters = {
+      jq = {
+        prepend_args = { "--indent", "2" },
+      },
     },
   },
 }
