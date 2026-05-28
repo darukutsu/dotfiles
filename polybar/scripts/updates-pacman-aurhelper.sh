@@ -1,17 +1,17 @@
 #!/bin/sh
 
-if ! updates_arch=$(checkupdates 2>/dev/null | wc -l); then
-  updates_arch=0
-fi
+pkgs_chaotic=$(pacman -Slq chaotic-aur)
+pkgs_ignored=$(sed -ne '/^IgnorePkg/ s/IgnorePkg = *//p' /etc/pacman.conf | tr ' ' '\n')
+pkgs_native_stripped=$(printf "%s\n%s\n%s" "$(pacman -Quenq)" "$pkgs_ignored" "$pkgs_ignored" | sort | uniq -c | sed -nE '/^ *1/ s/^ *1 (.*)/\1/p')
+# we want 2 times chaotic to cancel out
+pkgs_native_upgradable=$(printf "%s\n%s\n%s" "$pkgs_native_stripped" "$pkgs_chaotic" "$pkgs_chaotic" | sort | uniq -c | sed -nE '/^ *1/ s/^ *1 (.*)/\1/p')
+pkgs_aur_upgradable=$(yay -Qum 2>/dev/null)
+pkgs_chaotic_upgradable=$(printf "%s\n%s" "$pkgs_native_stripped" "$pkgs_chaotic" | sort | uniq -c | sed -nE '/^ *2/ s/^ *2 (.*)/\1/p')
 
-packages=$(yay -Qum 2>/dev/null)
-updates_aur=$(printf "$packages" 2>/dev/null | grep -ce '.*\?$')
-#updates_aur=$(paru -Qum 2> /dev/null | wc -l)
-#updates_aur=$(cower -u 2> /dev/null | wc -l)
-#updates_aur=$(trizen -Su --aur --quiet | wc -l)
-#updates_aur=$(pikaur -Qua 2> /dev/null | wc -l)
-#updates_aur=$(rua upgrade --printonly 2> /dev/null | wc -l)
-updates_zfs=$(printf $packages 2>/dev/null | grep -c 'zfs-linux')
+#if ! updates_arch=$(checkupdates 2>/dev/null | wc -l); then updates_arch=0; fi
+updates_arch=$(printf "%s" "$pkgs_native_upgradable" 2>/dev/null | grep -ce '.*\?$')
+updates_aur=$(printf "%s\n%s" "$pkgs_aur_upgradable" "$pkgs_chaotic_upgradable" 2>/dev/null | grep -ce '.*\?$')
+updates_zfs=$(printf "%s" "$pkgs_aur_upgradable" 2>/dev/null | grep -c 'zfs-linux')
 
 #if ! updates_flatpak=$(flatpak remote-ls --updates); then
 #  updates_flatpak=0
