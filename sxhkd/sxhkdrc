@@ -131,13 +131,13 @@ super + ctrl + x
 # Enter Macro Mode
 super + q
         echo "mode_macro" >"$SXHKD_MODE_FILE"; \
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Macro mode enabled"; \
+        notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Macro mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_macro
 
 # Force-stop/save recording
 super + control + q
         keystrokes -s && \
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Macro forcestopped"
+        notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Macro forcestopped"
 
 #
 # BSPWM HOTKEYS
@@ -149,12 +149,12 @@ super + control + q
 
 # make sxhkd reload its configuration files
 super + Escape
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-desktop-keyboard-shortcuts "sxhkd" "Restarting sxhkd"; \
+        notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-desktop-keyboard-shortcuts "sxhkd" "Restarting sxhkd"; \
 	killall "sxhkd"; xmodmap "$XDG_CONFIG_HOME/bspwm/Xmodmap"; sxhkd &
 
 # quit/restart bspwm
 super + shift + Escape
-	notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-system-windows "sxhkd" "Restarting bspwm"; \
+	notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-system-windows "sxhkd" "Restarting bspwm"; \
         bspc wm -r 
 
 # close and kill
@@ -228,7 +228,7 @@ super + semicolon
 # Enter Hide & Flag Mode
 super + h
         echo "mode_hide" >"$SXHKD_MODE_FILE"; \
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Hide mode enabled"; \
+        notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Hide mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_hide
         
 #
@@ -305,7 +305,7 @@ super + {j,k}
 # Enter Focus/Swap Mode
 super + o
         echo "mode_focus" >"$SXHKD_MODE_FILE"; \
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Focus/Swap mode enabled"; \
+        notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Focus/Swap mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_focus
 
 # send {focused,marked} node to the given desktop
@@ -329,19 +329,19 @@ super + shift + m
 # Enter Preselect Mode
 super + p
         echo "mode_preselect" >"$SXHKD_MODE_FILE"; \
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Preselect mode enabled"; \
+        notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Preselect mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_preselect
 
 # Enter Passthrough Mode
 super + shift + p
         echo "mode_passthrough" >"$SXHKD_MODE_FILE"; \
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Passthrough mode enabled"; \
+        notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Passthrough mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_passthrough
 
 # testing purposes
 # modal keybinds
 #super + ctrl + z:a
-#	notify-send "what's" "up"
+#	notify-send -e -u low "what's" "up"
 
 #
 # MOVE/RESIZE
@@ -350,13 +350,13 @@ super + shift + p
 # Enter Resize Mode
 super + r
         echo "mode_resize" >"$SXHKD_MODE_FILE"; \
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Resize mode enabled"; \
+        notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Resize mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_resize
 
 # Enter Window Move Mode
 super + w
         echo "mode_move" >"$SXHKD_MODE_FILE"; \
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Move mode enabled"; \
+        notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Move mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_move
 
 #
@@ -381,7 +381,7 @@ super + @button2
 # NOTE: notification can be cut due animation speed... find way to overlay notifications in front of boomer
 # cursor zoom
 super + @button3
-	notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-system-windows "sxhkd" "boomer activated: zoom"; \
+	notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-system-windows "sxhkd" "boomer activated: zoom"; \
         boomer
 
 #super + button{4,5}
@@ -394,5 +394,5 @@ super + @button3
 # Enter Draw Mode
 super + d
         echo "mode_draw" >"$SXHKD_MODE_FILE"; \
-        notify-send -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Draw mode enabled"; \
+        notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 "sxhkd" "Draw mode enabled"; \
         killall sxhkd && sxhkd -c "$XDG_CONFIG_HOME"/sxhkd/mode_draw
