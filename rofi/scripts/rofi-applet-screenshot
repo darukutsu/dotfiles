@@ -86,7 +86,7 @@ fi
 
 # notify and view screenshot
 notify_view() {
-  notify_cmd_shot='notify-send -t 3000'
+  notify_cmd_shot='notify-send -e -u low -a screenshot -t 3000'
   ${notify_cmd_shot} "Copied to clipboard."
   viewnior ${dir}/"$file"
   if [[ -e "$dir/$file" ]]; then
@@ -164,12 +164,14 @@ shottesseract() {
   clipboard_icon=/usr/share/icons/Papirus/16x16/panel/clipboard.svg
   #ocrlang=$(tesseract --list-langs | tail +2 | rofi -dmenu)
   ocrlang=$(tesseract --list-langs | tail -n+2 | tr '\n' '+' | sed 's/+$//')
+  # shellcheck disable=2037
+  notify_cmd=notify-send -e -u low -a screenshot -i "$clipboard_icon" "Copied to clipboard"
   if [ $XDG_SESSION_TYPE = x11 ]; then
     maim -u -f png -s -k -b 2 | tesseract -l "$ocrlang" stdin stdout | xclip -selection clipboard
-    notify-send -i "$clipboard_icon" "Copied to clipboard" "$(xclip -selection clipboard -o)"
+    $notify_cmd "$(xclip -selection clipboard -o)"
   else
     grim -t png -g "$(slurp)" - | tesseract -l "$ocrlang" stdin stdout | wl-copy
-    notify-send -i "$clipboard_icon" "Copied to clipboard" "$(wl-paste)"
+    $notify_cmd "$(wl-paste)"
   fi
 }
 
