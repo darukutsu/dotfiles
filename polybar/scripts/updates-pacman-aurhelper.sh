@@ -9,8 +9,8 @@ pkgs_aur_upgradable=$(yay -Qum 2>/dev/null)
 pkgs_chaotic_upgradable=$(printf "%s\n%s" "$pkgs_native_stripped" "$pkgs_chaotic" | sort | uniq -c | sed -nE '/^ *2/ s/^ *2 (.*)/\1/p')
 
 #if ! updates_arch=$(checkupdates 2>/dev/null | wc -l); then updates_arch=0; fi
-updates_arch=$(printf "%s" "$pkgs_native_upgradable" 2>/dev/null | grep -ce '.*\?$')
-updates_aur=$(printf "%s\n%s" "$pkgs_aur_upgradable" "$pkgs_chaotic_upgradable" 2>/dev/null | grep -ce '.*\?$')
+updates_arch=$(printf "%s" "$pkgs_native_upgradable" 2>/dev/null | grep -cE '.+$')
+updates_aur=$(printf "%s\n%s" "$pkgs_aur_upgradable" "$pkgs_chaotic_upgradable" 2>/dev/null | grep -cE '.+$')
 updates_zfs=$(printf "%s" "$pkgs_aur_upgradable" 2>/dev/null | grep -c 'zfs-linux')
 
 #if ! updates_flatpak=$(flatpak remote-ls --updates); then
