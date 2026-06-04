@@ -88,6 +88,7 @@ return { -- MASON, formatter/linter, debugger, lsp
         -- "matlab_ls", -- i don't need matlab rn
         "marksman",
         "mesonlsp",
+        "neocmake",
         "ruff",
         "rust_analyzer",
         "sqlls",
