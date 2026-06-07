@@ -111,6 +111,7 @@ config.bind(",tuke", "mode-enter insert;;spawn --userscript tuke")
 config.bind(
     ",y", "jseval -f ~/.config/qutebrowser/userscripts/highlight-text-to-link.js"
 )
+config.bind(",a", "open -t -r https://web.archive.org/web/{url}")
 for mode in ["normal", "caret"]:
     config.bind("gs", "spawn --userscript yomichad", mode=mode)
     config.bind("gS", "spawn --userscript yomichad --prefix-search", mode=mode)
