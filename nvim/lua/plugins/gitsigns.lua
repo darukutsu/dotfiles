@@ -2,7 +2,12 @@ return {
   "lewis6991/gitsigns.nvim", -- git time stamps
   event = "VeryLazy",
   keys = {
-    { "<leader>gB", ":Gitsigns blame<cr>", desc = "gitsigns blame" },
+    -- think about fzf picker style menu
+    -- { "<leader>gB", ":Gitsigns change_base<cr>", desc = "gitsigns change base" },
+    { "<leader>gR", ":Gitsigns reset_base<cr>", desc = "gitsigns reset bas" },
+    { "<leader>gb", ":Gitsigns blame<cr>", desc = "gitsigns blame" },
+    { "<leader>gd", ":Gitsigns diffthis<cr>", desc = "gitsigns diff buffer" },
+    { "<leader>gw", ":Gitsigns toggle_word_diff<cr>", desc = "gitsigns word diff toggle" },
     { "<leader>gl", ":Gitsigns blame_line<cr>", desc = "gitsigns blame line" },
     { "<leader>gL", ":Gitsigns toggle_current_line_blame<cr>", desc = "gitsigns toggle blame line" },
     { "<leader>gh", ":Gitsigns preview_hunk<cr>", desc = "gitsigns preview_hunk" },
