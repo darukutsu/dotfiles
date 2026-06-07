@@ -40,6 +40,10 @@ with config.pattern("*://mail.proton.me") as pm:
     pm.content.register_protocol_handler = True
     pm.content.notifications.enabled = True
 
+with config.pattern("*://outlook.cloud.microsoft.com") as outlc:
+    outlc.content.register_protocol_handler = False
+    outlc.content.notifications.enabled = False
+
 with config.pattern("*://outlook.office.com") as outl:
     outl.content.register_protocol_handler = False
     outl.content.notifications.enabled = False

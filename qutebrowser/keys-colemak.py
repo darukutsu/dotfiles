@@ -107,7 +107,10 @@ config.bind(",tt", "spawn --userscript translate")
 config.bind(",ts", "spawn --userscript translate --text -t sk")
 config.bind(",c", "spawn --userscript getCookie")
 config.bind(",tuke", "mode-enter insert;;spawn --userscript tuke")
-config.bind(",y", "spawn --userscript highlight_text_to_link.py")
+# config.bind(",y", "spawn --userscript highlight_text_to_link.py")
+config.bind(
+    ",y", "jseval -f ~/.config/qutebrowser/userscripts/highlight-text-to-link.js"
+)
 for mode in ["normal", "caret"]:
     config.bind("gs", "spawn --userscript yomichad", mode=mode)
     config.bind("gS", "spawn --userscript yomichad --prefix-search", mode=mode)
