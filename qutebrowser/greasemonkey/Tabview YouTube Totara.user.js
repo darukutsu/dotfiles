@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name                  Tabview YouTube Totara
-// @version               5.0.207
+// @version               5.0.217
 // @namespace             https://www.youtube.com/
 // @author                CY Fung
 // @license               MIT
@@ -1166,31 +1166,45 @@ const executionScript = (communicationKey) => {
 
     function ytBtnEgmPanelCore(arr) {
 
-      if (!arr) return
-      if (!('length' in arr)) arr = [arr]
+      if (!arr) return;
+      if (!('length' in arr)) arr = [arr];
 
       const ytdFlexyElm = elements.flexy;
       if (!ytdFlexyElm) return;
 
-      let actions = []
+      let actions = [];
 
       for (const entry of arr) {
 
         if (!entry) continue;
 
-        let panelId = entry.panelId
+        let panelId = entry.panelId;
 
-        let toHide = entry.toHide
-        let toShow = entry.toShow
+        let toHide = entry.toHide;
+        let toShow = entry.toShow;
 
         if (toHide === true && !toShow) {
 
+          /*
           actions.push({
             "changeEngagementPanelVisibilityAction": {
               "targetId": panelId,
               "visibility": "ENGAGEMENT_PANEL_VISIBILITY_HIDDEN"
             }
-          })
+          });
+
+          actions.push({
+            "hideEngagementPanelEndpoint": {
+              "identifier": panelId,
+            }
+          });
+          */
+
+          actions.push({
+            "hideEngagementPanelEndpoint": {
+              "panelIdentifier": panelId,
+            }
+          });
 
         } else if (toShow === true && !toHide) {
 
@@ -1201,24 +1215,23 @@ const executionScript = (communicationKey) => {
           })
 
         }
-
-        if (actions.length > 0) {
-          const cnt = insp(ytdFlexyElm);
-
-          cnt.resolveCommand(
-            {
-              "signalServiceEndpoint": {
-                "signal": "CLIENT_SIGNAL",
-                "actions": actions
-              }
-            },
-
-            {},
-            false);
-        }
-        actions = null;
-
       }
+
+      if (actions.length > 0) {
+        const cnt = insp(ytdFlexyElm);
+        cnt.resolveCommand(
+          {
+            "signalServiceEndpoint": {
+              "signal": "CLIENT_SIGNAL",
+              "actions": actions
+            }
+          },
+
+          {},
+          false);
+      }
+      actions = null;
+
     }
 
     /*
@@ -1248,6 +1261,23 @@ const executionScript = (communicationKey) => {
     }
     */
 
+    function getPanelIdentifier(panelElm) {
+      const cnt = insp(panelElm);
+      const panelIdentifier = (cnt.data || 0).panelIdentifier;
+      if (panelIdentifier && typeof panelIdentifier === "string") {
+        return panelIdentifier;
+      }
+      const tag = ((cnt.data || 0).identifier || 0).tag;
+      if (tag && typeof tag === "string") {
+        return tag;
+      }
+      const targetId = (cnt.data || 0).targetId;
+      if (targetId && typeof targetId === "string") {
+        return targetId;
+      }
+      const id = panelElm.getAttribute000('target-id') || "";
+      return id;
+    }
 
     function ytBtnCloseEngagementPanels() {
 
@@ -1256,8 +1286,9 @@ const executionScript = (communicationKey) => {
         `ytd-watch-flexy[tyt-tab] #panels.ytd-watch-flexy ytd-engagement-panel-section-list-renderer[target-id][visibility]:not([hidden])`
       )) {
         if (panelElm.getAttribute('visibility') == "ENGAGEMENT_PANEL_VISIBILITY_EXPANDED" && !panelElm.closest('[hidden]')) {
+          const pid = getPanelIdentifier(panelElm);
           actions.push({
-            panelId: panelElm.getAttribute000('target-id'),
+            panelId: pid,
             toHide: true
           });
         }
@@ -1687,8 +1718,9 @@ const executionScript = (communicationKey) => {
         const actions = [];
         for (const panelElm of allVisiblePanels) {
           if (panelElm === targetVisible) continue;
+          const pid = getPanelIdentifier(panelElm);
           actions.push({
-            panelId: panelElm.getAttribute000('target-id'),
+            panelId: pid,
             toHide: true
           });
         }
@@ -3723,6 +3755,16 @@ const executionScript = (communicationKey) => {
 
         if (!hostElement.matches('#panels.ytd-watch-flexy > ytd-engagement-panel-section-list-renderer')) return;
 
+        if (hostElement.getAttribute('target-id') === null && hostElement.hasAttribute("visibility") && hostElement.matches('#panels.ytd-watch-flexy > ytd-engagement-panel-section-list-renderer[visibility*="ENGAGEMENT_PANEL_VISIBILITY_"]')) {
+          // add an id for modern transcript panel (engagement-panel-timeline-view-consolidated)
+          let tid = "";
+          try {
+            tid = crypto.randomUUID();
+          } catch {
+            tid = Date.now().toString(36) + "-" + Math.random().toString(36).substring(2);
+          }
+          hostElement.setAttribute000('target-id', "tid051-" + tid);
+        }
 
         if (hostElement.hasAttribute000('target-id') && hostElement.hasAttribute000('visibility')) {
 
@@ -4628,6 +4670,17 @@ const styles = {
   }
     */
 
+  ytd-watch-flexy #secondary {
+    --tyt-secondary-mt: var(--ytd-margin-6x);
+    --tyt-secondary-mb: var(--ytd-margin-6x);
+    --tyt-secondary-mr: var(--ytd-margin-6x);
+  }
+
+  ytd-watch-flexy[reduced-top-margin] #secondary {
+    --tyt-secondary-mt: var(--ytd-margin-3x);
+    --tyt-secondary-mb: var(--ytd-margin-3x);
+  }
+
   secondary-wrapper {
     display: flex;
     flex-direction: column;
@@ -4642,10 +4695,11 @@ const styles = {
     top: 0;
     right: 0;
     left: 0;
-    contain: strict;
-    padding-top: var(--ytd-margin-6x);
-    padding-right: var(--ytd-margin-6x);
-    padding-bottom: var(--ytd-margin-6x);
+    /* contain: strict; */
+    contain: size style; /* allow overflow popup */
+    padding-top: var(--tyt-secondary-mt);
+    padding-right: var(--tyt-secondary-mr);
+    padding-bottom: var(--tyt-secondary-mb);
   }
 
 
@@ -4850,7 +4904,8 @@ const styles = {
   ytd-watch-flexy[is-two-columns_] #right-tabs .tab-content-cld {
       height: 100%;
       width: 100%;
-      contain: size layout paint style;
+      /* contain: size layout paint style; */
+      contain: size style; /* allow overflow popup */
       position: absolute;
   }
 
@@ -4877,9 +4932,11 @@ const styles = {
       --tyt-tab-btn-flex-grow: 1;
       --tyt-tab-btn-flex-basis: 0%;
       --tyt-tab-bar-color-1-def: #ff4533;
-      --tyt-tab-bar-color-2-def: var(--yt-brand-light-red);
-      --tyt-tab-bar-color-1:var(--main-color, var(--tyt-tab-bar-color-1-def));
-      --tyt-tab-bar-color-2:var(--main-color, var(--tyt-tab-bar-color-2-def));
+      --tyt-tab-bar-color-2-def: var(--yt-sys-color-baseline--genai-4, var(--yt-sys-color-baseline--static-brand-red, var(--accent-color, var(--yt-brand-light-red))));
+      --tyt-tab-bar-color-1: var(--main-color, var(--tyt-tab-bar-color-1-def));
+      --tyt-tab-bar-color-2: var(--main-color, var(--tyt-tab-bar-color-2-def));
+      --tyt-tab-text-primary: var(--yt-sys-color-baseline--text-primary, var(--yt-spec-text-primary));
+      --tyt-tab-text-secondary: var(--yt-sys-color-baseline--text-secondary, var(--yt-spec-text-secondary));
   }
 
   ytd-watch-flexy #right-tabs .tab-btn[tyt-tab-content] {
@@ -4894,7 +4951,7 @@ const styles = {
       display: inline-block;
       text-decoration: none;
       text-transform: uppercase;
-      --tyt-tab-btn-color: var(--yt-spec-text-secondary);
+      --tyt-tab-btn-color: var(--tyt-tab-text-secondary);
       color: var(--tyt-tab-btn-color);
       text-align: center;
       padding: 14px 8px 10px;
@@ -4948,7 +5005,7 @@ const styles = {
   ytd-watch-flexy #right-tabs .tab-btn[tyt-tab-content].active {
       font-weight: 500;
       outline: 0;
-      --tyt-tab-btn-color: var(--yt-spec-text-primary);
+      --tyt-tab-btn-color: var(--tyt-tab-text-primary);
       background-color: var(--ytd-searchbox-legacy-button-focus-color);
       border-bottom: 4px var(--tyt-tab-bar-color-1) solid;
       border-bottom-color: var(--tyt-tab-bar-color-2);
@@ -4960,7 +5017,7 @@ const styles = {
 
   ytd-watch-flexy #right-tabs .tab-btn[tyt-tab-content]:not(.active):hover {
       background-color: var(--ytd-searchbox-legacy-button-hover-color);
-      --tyt-tab-btn-color: var(--yt-spec-text-primary);
+      --tyt-tab-btn-color: var(--tyt-tab-text-primary);
   }
 
   ytd-watch-flexy #right-tabs .tab-btn[tyt-tab-content]:not(.active):hover svg {
@@ -4977,7 +5034,7 @@ const styles = {
 
   ytd-watch-flexy[tyt-comment-disabled] #right-tabs .tab-btn[tyt-tab-content="#tab-comments"],
   ytd-watch-flexy[tyt-comment-disabled] #right-tabs .tab-btn[tyt-tab-content="#tab-comments"]:hover {
-      --tyt-tab-btn-color: var(--yt-spec-icon-disabled);
+      --tyt-tab-btn-color: var(--yt-sys-color-baseline--text-disabled, var(--yt-spec-text-disabled));
   }
 
   ytd-watch-flexy[tyt-comment-disabled] #right-tabs .tab-btn[tyt-tab-content="#tab-comments"] span#tyt-cm-count:empty{
@@ -5068,7 +5125,7 @@ const styles = {
       /* hide zoom btn for FireFox */
       width: 12px;
       height: 12px;
-      color: var(--yt-spec-text-secondary);
+      color: var(--tyt-tab-text-secondary);
       background-color: var(--yt-spec-badge-chip-background);
       box-sizing: border-box;
       cursor: pointer;
@@ -5084,7 +5141,7 @@ const styles = {
   }
 
   .font-size-btn:hover {
-      background-color: var(--yt-spec-text-primary);
+      background-color: var(--tyt-tab-text-primary);
       color: var(--yt-spec-general-background-a);
   }
 
@@ -5261,7 +5318,7 @@ const styles = {
 
   body ytd-watch-flexy[is-two-columns_][tyt-egm-panel_] #columns.style-scope.ytd-watch-flexy #panels.style-scope.ytd-watch-flexy ytd-engagement-panel-section-list-renderer[target-id][visibility="ENGAGEMENT_PANEL_VISIBILITY_EXPANDED"]{
 
-      height: initial;
+      height: 0; /* height: initial; */
       max-height: initial;
       min-height: initial;
       flex-grow: 1;
@@ -5718,11 +5775,12 @@ const styles = {
   //   });
   // }
 
-  let button = document.createElement('button');
-  button.setAttribute('onclick', createHTML(textContent)); // max size 10 million bytes
-  button.click();
-  button = null;
+  // let button = document.createElement('button');
+  // button.setAttribute('onclick', createHTML(textContent)); // max size 10 million bytes
+  // button.click();
+  // button = null;
 
+  GM_addElement(document.head || document.documentElement, "script", { textContent: textContent });
 
   let style = document.createElement('style');
   const sourceURLMainCSS = 'debug://tabview-youtube/tabview.main.css';

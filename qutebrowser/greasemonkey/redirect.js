@@ -20,9 +20,13 @@
 	if (
 		location.hostname === "twitter.com" ||
 		location.hostname === "x.com" ||
-		location.hostname === "xeezz.com"
+		location.hostname === "xeezz.com" ||
+		location.hostname === "fixupx.com"
 	) {
-		location.href = url.replace(/(?:twitter|xeezz|x)\.com/, "nitter.net");
+		location.href = url.replace(
+			/(?:twitter|fixupx|xeezz|x)\.com/,
+			"nitter.net",
+		);
 		return;
 	}
 

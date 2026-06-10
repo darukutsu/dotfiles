@@ -4,7 +4,7 @@
 // @name:zh-TW  YouTube JS Engine Tamer
 // @name:zh-CN  YouTube JS Engine Tamer
 // @namespace   UserScripts
-// @version     0.42.9
+// @version     0.42.24
 // @match       https://www.youtube.com/*
 // @match       https://www.youtube-nocookie.com/embed/*
 // @match       https://studio.youtube.com/live_chat*
@@ -46,7 +46,7 @@
   const ENABLE_COMPUTEDSTYLE_CACHE = true;
   const NO_SCHEDULING_DUE_TO_COMPUTEDSTYLE = true;
   const CHANGE_appendChild = true; // discussions#236759
-  const FIX_bind_self_this = false;　// EXPERIMENTAL !!!!! this affect page switch after live ends
+  const FIX_bind_self_this = false; // EXPERIMENTAL !!!!! this affect page switch after live ends
 
   const FIX_error_many_stack = true; // should be a bug caused by uBlock Origin
 
@@ -108,7 +108,7 @@
 
   const REMOVE_BLANK_DUMMY_IFRAME = true;
 
-  const DISABLE_COOLDOWN_SCROLLING = true; // YT cause scroll hang in MacOS
+  const DISABLE_COOLDOWN_SCROLLING = 3; // YT cause scroll hang in MacOS - 1 for enable, 2 for css hack
 
   const FIX_removeChild = true;
   const FIX_fix_requestIdleCallback_timing = true;
@@ -117,6 +117,8 @@
   const FORCE_NO_REUSEABLE_ELEMENT_POOL = true;
 
   const FIX_TRANSCRIPT_SEGMENTS = true; // Based on Tabview Youtube's implementation
+  const FIX_MODERN_TRANSCRIPT_SEGMENTS = false; // placeholder only; requires FIX_XHR_REQUESTING
+  const DISABLE_MODERN_TRANSCRIPT = true; // modern transcript is incomplete feature as of 2026.05.03
 
   const FIX_POPUP_UNIQUE_ID = true; // currently only for channel about popup;
 
@@ -146,6 +148,15 @@
 
   const DEBUG_DBR847 = false;
   const FIX_DOM_IFREPEAT_RenderDebouncerChange_SET_TO_PROPNAME = true; // default true. false might be required for future change
+
+  // --------
+  // tp-yt-app-header, tp-yt-app-header-layout, yt-page-header-renderer, yt-page-header-view-model, ...
+  // example: https://www.youtube.com/channel/UC5WKyq8V6qy1WqKi0jO97QA
+  const FIX_RESIZED_HEADER_HEIGHT = true; // ensure performUpdate is called after _interestedResizables get resized * required for delayed rendering
+  const ENHANCE_RESIZABLE_HEADER_LAYOUTING_WITH_NEXTTICK = true; // instead of RAF, just use nextTick
+  const ENABLE_SUB_COMPONENT_RELAYOUT = true; // relayout the child components as well
+  // const ENABLE_FAST_SCROLLHANDLER = true; // smoother CSS effect
+  // --------
 
   const FIX_ICON_RENDER = true;
   const FIX_GUIDE_ICON = true;
@@ -314,7 +325,7 @@
 
   // const [setTimeoutX0, clearTimeoutX0] = [setTimeout, clearTimeout];
 
-  let BY_PASS_KEYBOARD_CONTROL = false;
+  // let BY_PASS_KEYBOARD_CONTROL = false;
 
 
   // const setImmediate = ((self || 0).jmt || 0).setImmediate;
@@ -383,6 +394,23 @@
     return y.length > t.length ? t : y;
   }
 
+  const propChecker = (p, o) => {
+    if (p && typeof p === "object") {
+      for (const k of Object.keys(o)) {
+        const v = p[k];
+        const a = o[k];
+        const b1 = typeof v === "function" && (
+          typeof a === "number" ? v.length === a : a.includes(v.length)
+        );
+        if (!b1) {
+          console.warn(`Code Changed: [${(p || 0).is || (p || 0).localName || ((p || 0).nodeName || "").toLowerCase()}] method ${k}`);
+        }
+      }
+    } else {
+      console.warn("propChecker error");
+      return;
+    }
+  };
 
   const isChatRoomURL = location.pathname.startsWith('/live_chat');
 
@@ -393,8 +421,8 @@
   let xdeadc00 = null; // a deteched node with __domApi
   let xlivec00 = null; // a deteched node with __domApi
 
-  let removeTNodeRM = null;
-  let removeTNodeBP = false;
+  // let removeTNodeRM = null;
+  // let removeTNodeBP = false;
 
 
   if (Node.isConnectedOverrided === undefined) {
@@ -933,7 +961,7 @@
 
       const nmSet = [..._nmSet].map(e => kRef(e)).filter(e => !!e);
       const nmMap = [..._nmMap].map(e => kRef(e)).filter(e => !!e);
-      const nmMapV = [..._nmMapV].map(e => kRef(e)).filter(e => !!e);
+      // const nmMapV = [..._nmMapV].map(e => kRef(e)).filter(e => !!e);
 
       for (const node of nodesSet) {
         if (node === _emptyElement || node.__keepInstance038__ || node.t792) continue;
@@ -2005,7 +2033,7 @@
       // if(initied2) return;
       // initied2 = true;
       const proto = qxx;
-      const constructor = proto.constructor;
+      // const constructor = proto.constructor;
       const _stampTemplate = proto._stampTemplate;
       // console.log(12883, proto, constructor)
       if (typeof _stampTemplate === 'function' && _stampTemplate.length === 2 && !proto._stampTemplate374) {
@@ -2329,7 +2357,7 @@
       let g = function () {
         const o = kRef(this);
         if (!o) return;
-        const cnt = insp(o);
+        // const cnt = insp(o);
         // if (cnt === o) return;
         // if (!('ready' in cnt)) return;
         return f.apply(o, arguments);
@@ -3196,7 +3224,9 @@
       let segments, get_;
       if (activation && pds && (segments = pds.segments) && (get_ = segments.get)) {
         activation = false;
+        console.log('[yt-js-engine-tamer]', "traditional transcript segments getter fixed");
         segments.get = function () {
+          console.log('[yt-js-engine-tamer]', "traditional transcript segments fix applied");
           fixSegments(this);
           return get_.call(this);
         };
@@ -3502,22 +3532,68 @@
 
   if (FIX_ytScheduler) {
 
+    const clearInterval_ = clearInterval;
+    const setInterval_ = setInterval;
+
     let ytSchedulerFixed = 0;
-    // let ytActioned = false;
-    // let pr = new PromiseExternal();
 
-    // const hn = function () {
 
-    //   document.removeEventListener('yt-action', hn, true);
-    //   nextBrowserTick_(() => {
-    //     ytActioned = true;
-    //     pr.resolve();
-    //   });
+    let fcjLastLen = null;
+    let fcjTimerId = 0;
+    let fcjRequestFinish = false;
+    let fcjCheckLater = 0;
+    let fcjFn;
 
-    // }
-    // document.addEventListener('yt-action', hn, true);
+    const fetchCommentJobDone = () => {
+      fcjRequestFinish = false;
+      clearInterval_(fcjTimerId);
+      fcjTimerId = 0;
+      fcjCheckLater = 0;
+      console.log('[yt-js-engine-tamer] fetchCommentJob done');
+    }
 
-    // let cancelStore = {}; // tbc
+    const fetchCommentJobTimerFn = () => {
+      if (!fcjTimerId) return;
+      if (fcjRequestFinish) fcjLastLen = -1;
+
+      const selector = 'ytd-comments, ytd-comments > *, ytd-comments [id] > *, ytd-comments ytd-continuation-item-renderer';
+
+      const len0 = fcjLastLen;
+      const len1 = fcjLastLen = document.querySelectorAll(selector).length;
+      let sFinal = false;
+      if (len1 !== len0) {
+        fcjCheckLater = 0;
+        fcjFn();
+        const len2 = fcjLastLen = document.querySelectorAll(selector).length;
+        if (len2 !== len1) {
+          sFinal = true;
+        }
+      }
+      if (!sFinal) {
+        ++fcjCheckLater;
+        if (fcjCheckLater > 10 || document.querySelector('ytd-comments:not([hidden]) [id]')) {
+          sFinal = true;
+        }
+      }
+      if (fcjRequestFinish || sFinal) {
+        if (fcjTimerId > 0) {
+          fetchCommentJobDone();
+        }
+      }
+    };
+
+    const fetchCommentJob = (a, cid) => {
+      if (fcjTimerId > 0) {
+        fetchCommentJobDone();
+      }
+      fcjFn = a;
+      fcjLastLen = -1;
+      console.log('[yt-js-engine-tamer] fetchCommentJob start');
+      fcjTimerId = setInterval_(fetchCommentJobTimerFn, 78.0975);
+    };
+
+    const fcjNvFn = () => { if (fcjTimerId > 0) fcjRequestFinish = true; };
+
 
     // yt.scheduler.instance.addJob
     const fixAddJob = (nv) => {
@@ -3570,105 +3646,6 @@
       
           */
       window.originalAddJob = nv;
-      // const q1 = new PromiseExternal();
-      // const q2 = new PromiseExternal();
-      // let uu = 0;
-      // let q3 = 0;
-      // let mof = null;
-      // const mo = new MutationObserver((mutation, observer) => {
-      //   if (mof) {
-      //     if (mof() === true) {
-      //       observer.disconnect();
-      //       mof = null;
-      //     }
-      //   }
-      // });
-
-      let lenSkip = -1;
-      let lastLen = null;
-      let fetchCommentJobTimerId = 0;
-      let requestFinish = false;
-
-      const fetchCommentJobDone = ()=>{
-        clearInterval(fetchCommentJobTimerId);
-        fetchCommentJobTimerId = 0;
-        console.log('[yt-js-engine-tamer] fetchCommentJob done');
-      }
-
-      const fetchCommentJob = (a, cid) => {
-
-        // if (cid && cancelStore[cid]) return; // tbc
-
-          if(fetchCommentJobTimerId > 0){
-            fetchCommentJobDone();
-          }
-
-        // if (mof) {
-        //   console.log('[yt-js-engine-tamer] fetchCommentJob done');
-        //   mof = null;
-        // }
-
-        let f = a;
-
-        const selector = 'ytd-comments, ytd-comments > *, ytd-comments [id] > *, ytd-comments ytd-continuation-item-renderer';
-
-        console.log('[yt-js-engine-tamer] fetchCommentJob start');
-
-        lastLen = -1;
-        let u = 0;
-        let g = () => {
-          if (requestFinish) lastLen = -1;
-          const lastLen_ = lastLen;
-          const len1 = lastLen = document.querySelectorAll(selector).length;
-          let mm = true;
-          let ff = false; 
-          if (len1 !== lastLen_) {
-            u = 0;
-            f();
-            const len2 = lastLen = document.querySelectorAll(selector).length;
-            if (len2 !== len1) {
-              ff = true;
-              mm = false;
-            }
-          }
-          if (mm) {
-            ++u;
-            if (u > 10 || document.querySelector('ytd-comments:not([hidden]) [id]')) {
-              ff = true;
-            }
-          }
-
-          if (requestFinish) {
-            requestFinish = false;
-            fetchCommentJobDone();
-          } else if (ff){
-            fetchCommentJobDone();
-          }
-
-        }
-
-
-        fetchCommentJobTimerId = setInterval(g, 80);
-        // g(9);
-        // if (lastLen === lenSkip) {
-        //   console.log('[yt-js-engine-tamer] fetchCommentJob done');
-        //   g = f = null;
-        //   return;
-        // }
-        // console.log('[yt-js-engine-tamer] fetchCommentJob done');
-        // const q1 = lastLen;
-        // mof = () => {
-        //   const q2 = document.querySelectorAll(selector).length;
-        //   if (q1 === q2) return;
-        //   fetchCommentJobTimerId = setTimeout(g, 80);
-        //   g = null;
-        //   return true;
-        // }
-        // mo.observe(document, { childList: true, subtree: true });
-
-      }
-
-      // let pr72 = Promise.resolve();
 
 
       let qa = null;
@@ -3718,11 +3695,6 @@
 
 
         const f = a;
-        // const g = ()=>{
-        //   pr72 = pr72.then(()=>{
-        //     f();
-        //   });
-        // }
 
         if (!c) return arguments.length < 3 ? nv(f, b) : nv(f, b, c);
 
@@ -3774,10 +3746,8 @@
 
             */
 
-            requestFinish = false;
-          const cid = nv(() => { if(fetchCommentJobTimerId > 0) requestFinish = true;}, b, 1000);
-
-          // lastLen = null;
+          fcjRequestFinish = false;
+          const cid = nv(fcjNvFn, b, 1000);
           fetchCommentJob(a, cid);
 
           // queueMicrotask_(a);
@@ -3786,52 +3756,17 @@
           return cid
 
           // return nv(a, b, 1.125);
-          
-          // const cid = window.setTimeout(() => {
-          //   nextBrowserTick_(() => {
-              
-          //     if (cancelStore[cid]) {
-          //       console.log('task cancelled');
-          //       return;
-          //     }
-          //     a();
 
-          //   });
-          // }, 0.125);
-          
           // return cid;
         } else {
 
-
-
-          return nv(f,b,c);
-
-
-          // if (c > 2400) c = 2400;
-          // else if (c > 800) c = 800;
-          // if (c > 0.2 && (c % 1) === c) c -= 0.125;
-          // if (0 && ytActioned && !b) {
-          //   const cid = window.setTimeout(() => {
-          //     nextBrowserTick_(() => {
-          //       if (cancelStore[cid]) {
-          //         console.log('task cancelled');
-          //         return;
-          //       }
-          //       a();
-          //     });
-          //   }, c);
-          //   return cid;
-          // } else {
-          //   return nv(a, b, c);
-          // }
+          return nv(f, b, c);
 
         }
       }
     }
 
     const fixCancelJob = (nv) => {
-
-
       window.originalCancelJob = nv;
       return function (a) {
         if (a < 0) return nv(a);
@@ -4682,6 +4617,14 @@
 
   })();
 
+  const pLoad = new Promise(resolve => {
+    if (document.readyState !== 'loading') {
+      resolve();
+    } else {
+      window.addEventListener("DOMContentLoaded", resolve, false);
+    }
+  });
+
   const setupXdeadC = (cnt)=>{
 
     let xdeadc = xdeadc00;
@@ -4751,18 +4694,6 @@
     }
 
   }
-
-  let domApiConstructor = null;
-  const setupDomApi = (daProto) => {
-
-    daProto.__daHook377__ = true;
-
-    domApiConstructor = daProto.constructor; // TBC
-
-    // TBC
-
-  }
-
 
   // WEAKREF_ShadyDOM
 
@@ -5092,6 +5023,12 @@
     }
   }
 
+  const fixTimedText = (text) => {
+    // FIX_MODERN_TRANSCRIPT_SEGMENTS
+    // TBC
+    return text;
+  };
+
   // avoid REGEXP testPattern execution in Brave's scriptlet for performance boost
   SCRIPTLET_REMOVE_PRUNE_propNeedles && (() => {
     // const xhr = new XMLHttpRequest;
@@ -5121,8 +5058,10 @@
 
   if (FIX_XHR_REQUESTING) {
 
-    const URL = window.URL || new Function('return URL')();
-    const createObjectURL = URL.createObjectURL.bind(URL);
+    const responseTextStore = new WeakMap();
+
+    const hURL = typeof URL === "function" ? URL : document.documentElement.getRootNode().defaultView.URL;
+    const createObjectURL = hURL.createObjectURL.bind(hURL);
 
     XMLHttpRequest = (() => {
       const XMLHttpRequest_ = XMLHttpRequest;
@@ -5161,6 +5100,29 @@
           }
           if (!skip) {
             this.__xmMc8__ = 1;
+            if (FIX_MODERN_TRANSCRIPT_SEGMENTS && url.includes("youtube.com/api/timedtext?")) {
+              const S = this;
+              S.__xmMc9__ = 1;
+              const pd1 = Object.getOwnPropertyDescriptor(S, "responseText");
+              const pd2 = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(S), "responseText");
+              if (!pd1 && pd2 && pd2.get && !pd2.set && pd2.configurable && pd2.enumerable) {
+                S.__xmMc9__ = 2;
+
+                Object.defineProperty(S, "responseText", {
+                  get: () => {
+                    if (this.__xmMc9__ === 3) return responseTextStore.get(this);
+                    const text = pd2.get.call(this);
+                    if (this.__xmMc9__ === 2) {
+                      this.__xmMc9__ = 3;
+                      responseTextStore.set(this, fixTimedText(text));
+                    }
+                    return text;
+                  },
+                  enumerable: true,
+                  configurable: true
+                });
+              }
+            }
             return super.open(method, url, ...args);
           } else {
             this.__xmMc8__ = 2;
@@ -5197,7 +5159,7 @@
   }
 
   // Alternative HACK -> Tabview Youtube
-  if (DISABLE_COOLDOWN_SCROLLING && typeof EventTarget.prototype.addEventListener52178 !== 'function' && typeof EventTarget.prototype.addEventListener === 'function') {
+  if ((DISABLE_COOLDOWN_SCROLLING & 1) && typeof EventTarget.prototype.addEventListener52178 !== 'function' && typeof EventTarget.prototype.addEventListener === 'function') {
 
     // ---- << this.overscrollConfig HACK >>  -----
 
@@ -5397,6 +5359,12 @@
     };
 
     // ---- << this.overscrollConfig HACK >>  -----
+
+    if ((DISABLE_COOLDOWN_SCROLLING & 2) && !isChatRoomURL) {
+      pLoad.then(() => {
+        addNewCSS("ytd-live-chat-frame#chat{overscroll-behavior:contain;}");
+      });
+    }
 
   }
 
@@ -6136,6 +6104,177 @@
 
   // ----------------------------
 
+  // if (ENABLE_FAST_SCROLLHANDLER) {
+  //   const updatedSet = {
+  //     "scroll": new Set(),
+  //     "wheel": new Set(),
+  //   }
+  //   updatedSet.scroll.add = updatedSet.scroll.addOriginal || updatedSet.scroll.add;
+  //   updatedSet.wheel.add = updatedSet.wheel.addOriginal || updatedSet.wheel.add;
+  //   const handlerFn = (e) => {
+  //     const target = e.target;
+  //     const type = e.type;
+  //     // document.querySelector("tp-yt-app-header")?._scrollHandler();
+  //     if (updatedSet[type].has(target)) return;
+  //     updatedSet[type].add(target);
+  //     nextBrowserTick_(() => updatedSet[type].clear());
+  //     for (const element of target.querySelectorAll("tp-yt-app-header")) {
+  //       const t = element;
+  //       const k = insp(t);
+  //       const mc = t._scrollHandler || t._scrollStateChanged ? t : k._scrollHandler || k._scrollStateChanged ? k : null;
+  //       if (mc) {
+  //         if (updatedSet[type].has(mc)) continue;
+  //         const method = typeof mc._scrollHandler === "function" && mc._scrollHandler.length === 0 ? "_scrollHandler" : typeof mc._scrollStateChanged === "function" && mc._scrollStateChanged.length === 0 ? "_scrollStateChanged" : "";
+  //         if (method) {
+  //           updatedSet[type].add(mc);
+  //           mc[method]();
+  //         }
+  //       }
+  //     }
+  //   };
+  //   document.addEventListener("scroll", handlerFn, { passive: true, capture: true });
+  //   document.addEventListener("wheel", handlerFn, { passive: true, capture: true });
+  // }
+
+  ;(FIX_RESIZED_HEADER_HEIGHT || ENHANCE_RESIZABLE_HEADER_LAYOUTING_WITH_NEXTTICK) && whenCEDefined('tp-yt-app-header-layout').then(async () => {
+
+    dummy = document.createElement('tp-yt-app-header-layout');
+
+    let cProto;
+    if (!(dummy instanceof Element)) return;
+    cProto = insp(dummy).constructor.prototype;
+
+    // cProto.__functionInCall7018__ = false; // avoid recursive function call
+
+    if (FIX_RESIZED_HEADER_HEIGHT && !cProto.performUpdate75 && typeof cProto.performUpdate === "function" && cProto.performUpdate.length === 0 && typeof ResizeObserver === "function") {
+
+      const associationKey = "jtryk";
+      let triggerFlag = false;
+      let bypass = false;
+      const collectedRelayoutFn = () => {
+        const updatedSet = new Set(); // avoid duplicating calls on layout refresh
+        updatedSet.add = updatedSet.addOriginal || updatedSet.add;
+        triggerFlag = false;
+        const targetComponentElements = document.querySelectorAll(`[${associationKey}]`);
+        // reserved order so the perform layout update on the child components first
+        for (let j = targetComponentElements.length; --j >= 0;) {
+          const k = targetComponentElements[j];
+          const t = insp(k);
+          const methodController = t.performUpdate && t.performUpdate75 ? t : k.performUpdate && k.performUpdate75 ? k : null;
+          if (methodController) {
+            // we are using the conservative approach - just do performUpdate without finding the new resizeobservables
+            bypass = true;
+            if (!methodController.__functionInCall7018__) {
+              methodController.__functionInCall7018__ = true;
+              if (ENABLE_SUB_COMPONENT_RELAYOUT) {
+                // required for updating the style.transform3d for scrolling
+                const elements = k.querySelectorAll("[class]");
+                const mArray = [];
+                for (const element of elements) {
+                  const eK = element;
+                  const eT = insp(eK);
+                  const methodController = eT._updateLayoutStates ? eT : eK._updateLayoutStates ? eK : null;
+                  const _updateLayoutStates = (methodController || 0)._updateLayoutStates;
+                  if (typeof _updateLayoutStates === "function") {
+                    if (_updateLayoutStates.length !== 0) {
+                      console.warn("Unsupported _updateLayoutStates on " + (element.is || element.nodeName));
+                      continue;
+                    }
+                    mArray.push(methodController);
+                  }
+                }
+                for (let mJ = mArray.length; --mJ >= 0;) {
+                  const mT = mArray[mJ];
+                  if (!updatedSet.has(mT)) {
+                    updatedSet.add(mT);
+                    if (mT.performUpdate && typeof mT.performUpdate === "function" && mT.performUpdate.length === 0 && mT.useRaf === true) mT.performUpdate();
+                    else mT._updateLayoutStates();
+                  }
+                }
+              }
+              // with js tamer settings, this will be called few times (e.g. 3 times)
+              if (!updatedSet.has(methodController)) {
+                updatedSet.add(methodController);
+                methodController.performUpdate();
+              }
+              methodController.__functionInCall7018__ = false;
+            }
+            bypass = false;
+          }
+        }
+        updatedSet.clear();
+      };
+      const observer = new ResizeObserver((entries) => {
+        if (!triggerFlag) {
+          triggerFlag = true;
+          nextBrowserTick(collectedRelayoutFn);
+        }
+      });
+      cProto.performUpdate75 = cProto.performUpdate;
+      cProto.performUpdate = function () {
+        if (!this.header || !this.$ || !this.$.wrapper || !this.$.contentContainer) {
+          console.warn("[yt-js-engine-tamer] Patch Invalid on tp-yt-app-header-layout::performUpdate")
+          return this.performUpdate75();
+        }
+        const r = this.performUpdate75();
+        if (bypass) return r;
+        try {
+          const hostElement = (this.hostElement || this);
+          if (typeof hostElement === "object" && hostElement.nodeType === 1) {
+            if (hostElement.getAttribute(associationKey) === null) {
+              hostElement.setAttribute(associationKey, "");
+              // we are using the conservative approach - just hook on the initial _interestedResizables and assume no change afterwards
+              const resizables = this._interestedResizables
+              if (resizables && resizables.length >= 1) {
+                for (const node of resizables) {
+                  observer.observe(node);
+                }
+              }
+            }
+          }
+        } catch (e) {
+          console.warn("[yt-js-engine-tamer] Error in tp-yt-app-header-layout::performUpdate", e);
+        }
+        return r;
+      }
+    } else {
+      console.warn("[yt-js-engine-tamer] Patch Failed on tp-yt-app-header-layout::performUpdate");
+    }
+
+    if (ENHANCE_RESIZABLE_HEADER_LAYOUTING_WITH_NEXTTICK && !cProto._updateLayoutStates79 && typeof cProto.performUpdate === "function" && typeof cProto._updateLayoutStates === "function" && cProto.performUpdate.length === 0 && cProto._updateLayoutStates.length === 0) {
+      cProto._updateLayoutStates79 = cProto._updateLayoutStates;
+      cProto._updateLayoutStates = function () {
+        if (typeof this.useRaf !== "boolean" || typeof this.rafId !== "number") {
+          console.warn("[yt-js-engine-tamer] Patch Invalid on tp-yt-app-header-layout::_updateLayoutStates")
+          return this._updateLayoutStates79();
+        }
+        if (this.__functionInCall7018__) return;
+        if (this.useRaf && (!this.rafId || this.rafId < 0)) {
+          // normal path
+          nextBrowserTick(() => {
+            if (!this.__functionInCall7018__) {
+              this.__functionInCall7018__ = true;
+              this.performUpdate();
+              this.__functionInCall7018__ = false;
+            }
+          });
+        } else {
+          // not used
+          if (!this.__functionInCall7018__) {
+            this.__functionInCall7018__ = true;
+            this.performUpdate();
+            this.__functionInCall7018__ = false;
+          }
+        }
+      }
+    } else {
+      console.warn("[yt-js-engine-tamer] Patch Failed on tp-yt-app-header-layout::_updateLayoutStates");
+    }
+
+  });
+
+  // ----------------------------
+
   const nativeNow = Reflect.getPrototypeOf(performance).now.bind(performance);
 
   const queueMicrotask_ = typeof queueMicrotask === 'function' ? queueMicrotask : (f) => (Promise.resolve().then(f), void 0);
@@ -6626,7 +6765,7 @@
 
     const s52 = Symbol();
 
-    const deferRenderStamperBinding_ = function (component, typeOrConfig, data) {
+    const deferRenderStamperBinding_ = function (component, typeOrConfig, data, containerId) {
 
       // if(component.querySelectorAll('dom-if').length > 0){
 
@@ -6650,7 +6789,7 @@
         component[s52] = null;
       }
 
-      return this.deferRenderStamperBinding7409_(component, typeOrConfig, data);
+      return this.deferRenderStamperBinding7409_(component, typeOrConfig, data, containerId);
 
     }
 
@@ -8005,16 +8144,7 @@
 
   const dmf = new WeakMap();
 
-
   let nativeHTMLElement = Reflect.getPrototypeOf(HTMLFontElement);
-
-  try {
-
-    const q = document.createElement('template');
-    q.innerHTML = '<ytz-null361></ytz-null361>';
-    nativeHTMLElement = q.content.firstChild.constructor
-
-  } catch (e) { }
 
   if (!nativeHTMLElement.prototype.connectedCallback) {
     nativeHTMLElement.prototype.connectedCallback79 = nativeHTMLElement.prototype.connectedCallback;
@@ -8036,13 +8166,19 @@
     if (FIX_stampDomArray && !(cProto[pvr] & 1) && 'stampDomArray_' in cProto) {
       cProto[pvr] |= 1;
 
-
-
       if (FIX_stampDomArray && !location.pathname.startsWith('/live_chat') && cProto.stampDomArray_) {
+
+        propChecker(cProto, {
+          "getStampContainer_": 1,
+          "getComponentName_": 2,
+          "deferRenderStamperBinding_": [3, 4],
+          "flushRenderStamperComponentBindings_": 0,
+        });
+
         const b = cProto.stampDomArray_.length === 6
           && cProto.getStampContainer_ && cProto.getStampContainer_.length === 1
           && cProto.createComponent_ && (cProto.createComponent_.length === 4 || cProto.createComponent_.length === 3)
-          && cProto.deferRenderStamperBinding_ && cProto.deferRenderStamperBinding_.length === 3
+          && cProto.deferRenderStamperBinding_ && (cProto.deferRenderStamperBinding_.length === 4 || cProto.deferRenderStamperBinding_.length === 3)
           && cProto.flushRenderStamperComponentBindings_ && cProto.flushRenderStamperComponentBindings_.length === 0
           && cProto.deferRenderStamperBinding_ === cnt.deferRenderStamperBinding_
         if (!b) {
@@ -8112,14 +8248,6 @@
     enumerable: false,
     configurable: true
 
-  });
-
-  const pLoad = new Promise(resolve => {
-    if (document.readyState !== 'loading') {
-      resolve();
-    } else {
-      window.addEventListener("DOMContentLoaded", resolve, false);
-    }
   });
 
   if (FIX_ACTIONS_TOOLTIPS) {
@@ -8339,10 +8467,12 @@
   const PERF_471489_ = true;
   // PERF_471489_ is not exactly the same to Youtube Player perf v0.7
   // This script uses a much gentle way to tamer the JS engine instead.
+  const PREF_COLLECT_CSS_TRANSFORMS = false;
+  const PREF_COARSE_CSS_TRANSFORM = true;
 
   // << end >>
 
-  const steppingScaleN = 200; // transform: scaleX(k/N); 0<k<N
+  // const steppingScaleN = 200; // transform: scaleX(k/N); 0<k<N
 
 
 
@@ -10074,7 +10204,7 @@
 
     FIX_yt_player && !isChatRoomURL && (async () => {
 
-      const fOption = 1 | 2 | 4;
+      const fOption = 1 | 0 | 4 | 8; // See PR#105
 
       const _yt_player = await _yt_player_observable.obtain();
 
@@ -10202,283 +10332,283 @@
         */
       }
 
-      if (fOption & 2) {
-        const keyzo = PERF_471489_ ? getzo(_yt_player) : null;
+      // if (fOption & 2) {
+      //   const keyzo = PERF_471489_ ? getzo(_yt_player) : null;
 
-        if (keyzo) {
+      //   if (keyzo) {
 
-          k = keyzo;
+      //     k = keyzo;
 
-          const attrUpdateFn = g[k];
-          // console.log(5992, attrUpdateFn)
-          g['$$original$$' + k] = attrUpdateFn;
-          const zoTransform = async (a, c) => {
+      //     const attrUpdateFn = g[k];
+      //     // console.log(5992, attrUpdateFn)
+      //     g['$$original$$' + k] = attrUpdateFn;
+      //     const zoTransform = async (a, c) => {
 
-            let transformType = '';
-            let transformValue = 0;
-            let transformUnit = '';
-            let transformTypeI = 0;
+      //       let transformType = '';
+      //       let transformValue = 0;
+      //       let transformUnit = '';
+      //       let transformTypeI = 0;
 
-            const aStyle = a.style;
+      //       const aStyle = a.style;
 
-            let cType = 0;
+      //       let cType = 0;
 
-            const cl = c.length;
+      //       const cl = c.length;
 
-            if (cl >= 8) {
-              // scale(1)
-              if (c.startsWith('scale') && c.charCodeAt(6) === 40 && c.charCodeAt(cl - 1) === 41) {
-                cType = 1;
-                let t = c.charCodeAt(5);
-                if (t === 88 || t === 120) cType = 1 | 4;
-                if (t === 89 || t === 121) cType = 1 | 8;
-              } else if (c.startsWith('translate') && c.charCodeAt(10) === 40 && c.charCodeAt(cl - 1) === 41) {
-                cType = 2;
-                let t = c.charCodeAt(9);
-                if (t === 88 || t === 120) cType = 2 | 4;
-                if (t === 89 || t === 121) cType = 2 | 8;
-              }
-              let w = 0;
-              if (w = (cType === 5) ? 1 : (cType === 9) ? 2 : 0) {
-                let p = c.substring(7, cl - 1);
-                let q = p.length >= 1 ? parseFloat(p) : NaN;
-                if (typeof q === 'number' && !isNaNx(q)) {
-                  transformType = w === 1 ? 'scaleX' : 'scaleY';
-                  transformValue = q;
-                  transformUnit = '';
-                  transformTypeI = 1;
-                } else {
-                  cType = 256;
-                }
-              } else if (w = (cType === 6) ? 1 : (cType === 10) ? 2 : 0) {
-                if (c.endsWith('px)')) {
-                  let p = c.substring(11, cl - 3);
-                  let q = p.length >= 1 ? parseFloat(p) : NaN;
-                  if (typeof q === 'number' && !isNaNx(q)) {
-                    transformType = w === 1 ? 'translateX' : 'translateY';
-                    transformValue = q;
-                    transformUnit = 'px';
-                    transformTypeI = 2;
-                  } else if (p === 'NaN') {
-                    return;
-                  }
-                } else {
-                  cType = 256;
-                }
-              } else if (cType > 0) {
-                cType = 256;
-              }
-            }
-
-
-            if (cType === 256) {
-              console.log('[yt-js-engine-tamer] zoTransform undefined', c);
-            }
-
-            if (transformTypeI === 1) {
-              const q = Math.round(transformValue * steppingScaleN) / steppingScaleN;
-              const vz = toFixed2(q, 3);
-              c = `${transformType}(${vz})`;
-              const cv = aStyle.transform;
-              if (c === cv) return;
-              aStyle.transform = c;
-            } else if (transformTypeI === 2) {
-              const q = transformValue;
-              const vz = toFixed2(q, 1);
-              c = `${transformType}(${vz}${transformUnit})`;
-              const cv = aStyle.transform;
-              if (c === cv) return;
-              aStyle.transform = c;
-            } else { // eg empty
-              const cv = aStyle.transform;
-              if (!c && !cv) return;
-              else if (c === cv) return;
-              aStyle.transform = c;
-            }
-
-          };
-
-          const elmTransformTemp = new WeakMap();
-          const elmPropTemps = {
-            'display': new WeakMap(),
-            'width': new WeakMap(),
-            'height': new WeakMap(),
-            'outlineWidth': new WeakMap(),
-            'position': new WeakMap(),
-            'padding': new WeakMap(),
-            "cssText": new WeakMap(),
-            "right": new WeakMap(),
-            "left": new WeakMap(),
-            "top": new WeakMap(),
-            "bottom": new WeakMap(),
-            "transitionDelay": new WeakMap(),
-            "marginLeft": new WeakMap(),
-            "marginTop": new WeakMap(),
-            "marginRight": new WeakMap(),
-            "marginBottom": new WeakMap(),
-          }
-
-          const ns5 = Symbol();
-          const nextModify = (a, c, m, f, immediate) => {
-            const a_ = a;
-            const m_ = m;
-            const noKey = !m_.has(a_);
-            if (immediate || noKey) {
-              m_.set(a_, ns5);
-              f(a_, c);
-              noKey && nextBrowserTick_(() => {
-                const d = m_.get(a_);
-                if (d === undefined) return;
-                m_.delete(a_);
-                if (d !== ns5) f(a_, d);
-              });
-            } else {
-              m_.set(a_, c);
-            }
-          };
-
-          const set66 = new Set();
-          const log77 = new Map();
-          // const set77 = new Set(['top', 'left', 'bottom', 'right']); // caption positioning - immediate change
-
-          const modifiedFn = function (a, b, c, immediateChange = false) { // arrow function does not have function.prototype
-
-            // console.log(140000, a, b, c);
-            if (typeof c === 'number' && typeof b === 'string' && a instanceof HTMLElement_) {
-              const num = c;
-              c = `${num}`;
-              if (c.length > 5) c = (num < 10 && num > -10) ? toFixed2(num, 3) : toFixed2(num, 1);
-            }
-
-            if (typeof b === 'string' && typeof c === 'string' && a instanceof HTMLElement_) {
-
-              let elmPropTemp = null;
-
-              if (b === "transform") {
-                // div.ytp-hover-progress.ytp-hover-progress-light
-                // div.ytp-play-progress.ytp-swatch-background-color
-
-                nextModify(a, c, elmTransformTemp, zoTransform, immediateChange);
-                return;
-
-              } else if (elmPropTemp = elmPropTemps[b]) {
-
-                // if (c.length > 5 && c.includes('.')) {
-                //   console.log(123213, c)
-                // }
-
-                const b_ = b;
-                nextModify(a, c, elmPropTemp, (a, c) => {
-                  const style = a.style;
-                  const cv = style[b_];
-                  if (!cv && !c) return;
-                  if (cv === c) return;
-                  style[b_] = c;
-                }, immediateChange);
-                return;
-
-              } else if (b === "outline-width") {
-
-                const b_ = 'outlineWidth';
-                elmPropTemp = elmPropTemps[b_];
-                nextModify(a, c, elmPropTemp, (a, c) => {
-                  const style = a.style;
-                  const cv = style[b_];
-                  if (!cv && !c) return;
-                  if (cv === c) return;
-                  style[b_] = c;
-                }, immediateChange);
-                return;
-
-              } else if (b === 'maxWidth' || b === 'maxHeight') {
-                // I think these can be directly assigned.
-
-                const b_ = b;
-                const style = a.style;
-                const cv = style[b_];
-                if (!cv && !c) return;
-                if (cv === c) return;
-                style[b_] = c;
-                return;
-
-              } else {
-                // if(immediate && elmPropTemps[b]){
-                //   console.log(5191, b)
-                // }
-                // caption-window
-                // margin-left max-height max-width font-family fill color font-size background white-space margin
-                // text-align background-color
-                // console.log(27304, a, b, c)
-                if (!set66.has(b)) {
-                  set66.add(b);
-                  nextBrowserTick_(() => {
-                    if (!a.classList.contains('caption-window') && !a.classList.contains('ytp-caption-segment')) {
-                      console.log(27304, a, b, c)
-                    }
-                  })
-                }
-              }
-
-              attrUpdateFn.call(this, a, b, c);
-              return;
-            } else if (typeof (b || 0) === 'object') {
-
-              // this is to fix caption positioning
-              // const immediate = (a.id || 0).length > 14 && (('top' in b) || ('left' in b) || ('right' in b) || ('bottom' in b));
-              const immediate = (a.id || 0).length > 14;
-              for (const [k, v] of Object.entries(b)) {
-                modifiedFn.call(this, a, k, v, immediate);
-              }
-
-            } else {
-
-              // a = circle, b = stroke-dasharray, c= "1.8422857142857143 32"
-              // ytp-ad-timed-pie-countdown-inner
-
-              if (typeof b === 'string') {
-
-                let m = log77.get(b);
-                if (!m) {
-                  m = [];
-                  console.log('attrUpdateFn.debug.27304', m);
-                  log77.set(b, m);
-                }
-                m.push([a, b, c]);
-
-              } else {
-                console.log('attrUpdateFn.debug.27306', a, b, c);
-              }
-
-              attrUpdateFn.call(this, a, b, c);
-              return;
-            }
-
-            // console.log(130000, a, b, c);
-
-          };
-          g[k] = modifiedFn;
+      //       if (cl >= 8) {
+      //         // scale(1)
+      //         if (c.startsWith('scale') && c.charCodeAt(6) === 40 && c.charCodeAt(cl - 1) === 41) {
+      //           cType = 1;
+      //           let t = c.charCodeAt(5);
+      //           if (t === 88 || t === 120) cType = 1 | 4;
+      //           if (t === 89 || t === 121) cType = 1 | 8;
+      //         } else if (c.startsWith('translate') && c.charCodeAt(10) === 40 && c.charCodeAt(cl - 1) === 41) {
+      //           cType = 2;
+      //           let t = c.charCodeAt(9);
+      //           if (t === 88 || t === 120) cType = 2 | 4;
+      //           if (t === 89 || t === 121) cType = 2 | 8;
+      //         }
+      //         let w = 0;
+      //         if (w = (cType === 5) ? 1 : (cType === 9) ? 2 : 0) {
+      //           let p = c.substring(7, cl - 1);
+      //           let q = p.length >= 1 ? parseFloat(p) : NaN;
+      //           if (typeof q === 'number' && !isNaNx(q)) {
+      //             transformType = w === 1 ? 'scaleX' : 'scaleY';
+      //             transformValue = q;
+      //             transformUnit = '';
+      //             transformTypeI = 1;
+      //           } else {
+      //             cType = 256;
+      //           }
+      //         } else if (w = (cType === 6) ? 1 : (cType === 10) ? 2 : 0) {
+      //           if (c.endsWith('px)')) {
+      //             let p = c.substring(11, cl - 3);
+      //             let q = p.length >= 1 ? parseFloat(p) : NaN;
+      //             if (typeof q === 'number' && !isNaNx(q)) {
+      //               transformType = w === 1 ? 'translateX' : 'translateY';
+      //               transformValue = q;
+      //               transformUnit = 'px';
+      //               transformTypeI = 2;
+      //             } else if (p === 'NaN') {
+      //               return;
+      //             }
+      //           } else {
+      //             cType = 256;
+      //           }
+      //         } else if (cType > 0) {
+      //           cType = 256;
+      //         }
+      //       }
 
 
-          /*
+      //       if (cType === 256) {
+      //         console.log('[yt-js-engine-tamer] zoTransform undefined', c);
+      //       }
 
-              g.zo = function(a, b, c) {
-                  if ("string" === typeof b)
-                      (b = yo(a, b)) && (a.style[b] = c);
-                  else
-                      for (var d in b) {
-                          c = a;
-                          var e = b[d]
-                            , f = yo(c, d);
-                          f && (c.style[f] = e)
-                      }
-              }
+      //       if (transformTypeI === 1) {
+      //         const q = Math.round(transformValue * steppingScaleN) / steppingScaleN;
+      //         const vz = toFixed2(q, 3);
+      //         c = `${transformType}(${vz})`;
+      //         const cv = aStyle.transform;
+      //         if (c === cv) return;
+      //         aStyle.transform = c;
+      //       } else if (transformTypeI === 2) {
+      //         const q = transformValue;
+      //         const vz = toFixed2(q, 1);
+      //         c = `${transformType}(${vz}${transformUnit})`;
+      //         const cv = aStyle.transform;
+      //         if (c === cv) return;
+      //         aStyle.transform = c;
+      //       } else { // eg empty
+      //         const cv = aStyle.transform;
+      //         if (!c && !cv) return;
+      //         else if (c === cv) return;
+      //         aStyle.transform = c;
+      //       }
+
+      //     };
+
+      //     const elmTransformTemp = new WeakMap();
+      //     const elmPropTemps = {
+      //       'display': new WeakMap(),
+      //       'width': new WeakMap(),
+      //       'height': new WeakMap(),
+      //       'outlineWidth': new WeakMap(),
+      //       'position': new WeakMap(),
+      //       'padding': new WeakMap(),
+      //       "cssText": new WeakMap(),
+      //       "right": new WeakMap(),
+      //       "left": new WeakMap(),
+      //       "top": new WeakMap(),
+      //       "bottom": new WeakMap(),
+      //       "transitionDelay": new WeakMap(),
+      //       "marginLeft": new WeakMap(),
+      //       "marginTop": new WeakMap(),
+      //       "marginRight": new WeakMap(),
+      //       "marginBottom": new WeakMap(),
+      //     }
+
+      //     const ns5 = Symbol();
+      //     const nextModify = (a, c, m, f, immediate) => {
+      //       const a_ = a;
+      //       const m_ = m;
+      //       const noKey = !m_.has(a_);
+      //       if (immediate || noKey) {
+      //         m_.set(a_, ns5);
+      //         f(a_, c);
+      //         noKey && nextBrowserTick_(() => {
+      //           const d = m_.get(a_);
+      //           if (d === undefined) return;
+      //           m_.delete(a_);
+      //           if (d !== ns5) f(a_, d);
+      //         });
+      //       } else {
+      //         m_.set(a_, c);
+      //       }
+      //     };
+
+      //     const set66 = new Set();
+      //     const log77 = new Map();
+      //     // const set77 = new Set(['top', 'left', 'bottom', 'right']); // caption positioning - immediate change
+
+      //     const modifiedFn = function (a, b, c, immediateChange = false) { // arrow function does not have function.prototype
+
+      //       // console.log(140000, a, b, c);
+      //       if (typeof c === 'number' && typeof b === 'string' && a instanceof HTMLElement_) {
+      //         const num = c;
+      //         c = `${num}`;
+      //         if (c.length > 5) c = (num < 10 && num > -10) ? toFixed2(num, 3) : toFixed2(num, 1);
+      //       }
+
+      //       if (typeof b === 'string' && typeof c === 'string' && a instanceof HTMLElement_) {
+
+      //         let elmPropTemp = null;
+
+      //         if (b === "transform") {
+      //           // div.ytp-hover-progress.ytp-hover-progress-light
+      //           // div.ytp-play-progress.ytp-swatch-background-color
+
+      //           nextModify(a, c, elmTransformTemp, zoTransform, immediateChange);
+      //           return;
+
+      //         } else if (elmPropTemp = elmPropTemps[b]) {
+
+      //           // if (c.length > 5 && c.includes('.')) {
+      //           //   console.log(123213, c)
+      //           // }
+
+      //           const b_ = b;
+      //           nextModify(a, c, elmPropTemp, (a, c) => {
+      //             const style = a.style;
+      //             const cv = style[b_];
+      //             if (!cv && !c) return;
+      //             if (cv === c) return;
+      //             style[b_] = c;
+      //           }, immediateChange);
+      //           return;
+
+      //         } else if (b === "outline-width") {
+
+      //           const b_ = 'outlineWidth';
+      //           elmPropTemp = elmPropTemps[b_];
+      //           nextModify(a, c, elmPropTemp, (a, c) => {
+      //             const style = a.style;
+      //             const cv = style[b_];
+      //             if (!cv && !c) return;
+      //             if (cv === c) return;
+      //             style[b_] = c;
+      //           }, immediateChange);
+      //           return;
+
+      //         } else if (b === 'maxWidth' || b === 'maxHeight') {
+      //           // I think these can be directly assigned.
+
+      //           const b_ = b;
+      //           const style = a.style;
+      //           const cv = style[b_];
+      //           if (!cv && !c) return;
+      //           if (cv === c) return;
+      //           style[b_] = c;
+      //           return;
+
+      //         } else {
+      //           // if(immediate && elmPropTemps[b]){
+      //           //   console.log(5191, b)
+      //           // }
+      //           // caption-window
+      //           // margin-left max-height max-width font-family fill color font-size background white-space margin
+      //           // text-align background-color
+      //           // console.log(27304, a, b, c)
+      //           if (!set66.has(b)) {
+      //             set66.add(b);
+      //             nextBrowserTick_(() => {
+      //               if (!a.classList.contains('caption-window') && !a.classList.contains('ytp-caption-segment')) {
+      //                 console.log(27304, a, b, c)
+      //               }
+      //             })
+      //           }
+      //         }
+
+      //         attrUpdateFn.call(this, a, b, c);
+      //         return;
+      //       } else if (typeof (b || 0) === 'object') {
+
+      //         // this is to fix caption positioning
+      //         // const immediate = (a.id || 0).length > 14 && (('top' in b) || ('left' in b) || ('right' in b) || ('bottom' in b));
+      //         const immediate = (a.id || 0).length > 14;
+      //         for (const [k, v] of Object.entries(b)) {
+      //           modifiedFn.call(this, a, k, v, immediate);
+      //         }
+
+      //       } else {
+
+      //         // a = circle, b = stroke-dasharray, c= "1.8422857142857143 32"
+      //         // ytp-ad-timed-pie-countdown-inner
+
+      //         if (typeof b === 'string') {
+
+      //           let m = log77.get(b);
+      //           if (!m) {
+      //             m = [];
+      //             console.log('attrUpdateFn.debug.27304', m);
+      //             log77.set(b, m);
+      //           }
+      //           m.push([a, b, c]);
+
+      //         } else {
+      //           console.log('attrUpdateFn.debug.27306', a, b, c);
+      //         }
+
+      //         attrUpdateFn.call(this, a, b, c);
+      //         return;
+      //       }
+
+      //       // console.log(130000, a, b, c);
+
+      //     };
+      //     g[k] = modifiedFn;
 
 
-          */
+      //     /*
+
+      //         g.zo = function(a, b, c) {
+      //             if ("string" === typeof b)
+      //                 (b = yo(a, b)) && (a.style[b] = c);
+      //             else
+      //                 for (var d in b) {
+      //                     c = a;
+      //                     var e = b[d]
+      //                       , f = yo(c, d);
+      //                     f && (c.style[f] = e)
+      //                 }
+      //         }
 
 
-        }
-      }
+      //     */
+
+
+      //   }
+      // }
 
       if (fOption & 4) {
         const keyuG = PERF_471489_ ? getuG(_yt_player) : null;
@@ -10539,7 +10669,169 @@
         }
       }
 
+      if (fOption & 8) {
 
+        /*
+
+          g.JL = function(y, X, l) {
+              if (typeof X === "string")
+                  si(y, l, X);
+              else
+                  for (const a in X)
+                      si(y, X[a], a)
+          }
+          ;
+        */
+
+        let arr = [];
+
+        for (const [k, v] of Object.entries(_yt_player)) {
+
+          if (
+            typeof v === 'function' && v.length === 3 && k.length < 3
+          ) {
+            const vt = `${v}`;
+            if (vt.length < 94 && vt.length > 74 && vt.includes("string") && vt.includes("typeof ") && vt.includes(" in ")) {
+              arr.push(k);
+            }
+          }
+
+        }
+
+        // https://www.youtube.com/s/player/8456c9de/player_es6.vflset/ja_JP/base.js
+        console.log(`[yt-js-engine-tamer] (key-extraction) [JL]`, arr);
+        if (arr.length !== 1) {
+          console.warn("[yt-js-engine-tamer]", "Code Difference in g.JL");
+        } else {
+          let digit = 4;
+
+          const sw = screen.width;
+          const sh = screen.height;
+          const sz = Math.hypot(sw, sh); // diagonal distance
+          const kz = sz * 1.05 + 100; // calc tol
+
+          if (kz * 0.0001 < 0.45) {
+            // digit = 4;
+          } else if (kz * 0.00001 < 0.45) {
+            digit = 5;
+          } else if (kz * 0.000001 < 0.45) {
+            digit = 6;
+          } else if (kz * 0.0000001 < 0.45) {
+            digit = 7;
+            console.warn("g.JL optimzation might not work for screen > 1km long");
+          }
+
+          const isEqualTransform = (v, u) => {
+            v = v.toLowerCase();
+            u = u.toLowerCase();
+            if (u.includes("e-0")) {
+              const m = (/\d[.\d]*e-\d+/.exec(u) || 0)[0];
+              const d = +m;
+              if (d > 0) {
+                u = u.replace(m, d);
+              }
+            }
+            if (v.endsWith("(nanpx)")) v = "";
+            return v === u;
+          }
+
+          const u = (a, b, r, coarse) => {
+            let c = r[1];
+            if (b === "transform" && typeof c === "string" && typeof a === "object" && a.nodeType === 1) {
+              if (c.length > 16 && c.includes(".")) {
+                r[1] = c = c.replace(/\d*\.\d{8,}/g, (a) => {
+                  let p = +a;
+                  if (p > 0) {
+                    const h = `${p.toFixed(digit)}`;
+                    const k = `${p.toPrecision(digit)}`;
+                    let w = h.length > k.length ? +h : +k;
+                    if (coarse === 1) w = +w.toFixed(1);
+                    else if (coarse === 2) w = +w.toPrecision(3);
+                    return `${w}`;
+                  }
+                  return a;
+                });
+              }
+              if (r[0] === 0 && isEqualTransform(c, (a.style || 0).transform || "")) {
+                r[0] = 1;
+              }
+            }
+          };
+
+          const subTransform = async (m, x, a, b, c) => {
+            const t = a.__transformCount801__ = (a.__transformCount801__ & 1073741823) + 1;
+            await new Promise(resolve => nextBrowserTick_(resolve));
+            if (t !== a.__transformCount801__) return;
+            m[x](a, b, c);
+          }
+
+          const k1 = arr[0];
+          const k2 = `__${k1}__e03__`;
+
+          _yt_player[k2] = _yt_player[k1];
+          _yt_player[k1] = function (a, b, c) {
+            let q = c;
+            const r = [0, c];
+            if (b === "transform") {
+              let coarse = 0;
+              if (PREF_COARSE_CSS_TRANSFORM && q.length > 18 && a.nodeName === "DIV") {
+                if (q.length > 22 && q.includes("translate")) {
+                  if (a._transformTarget801__ === undefined) {
+                    a._transformTarget801__ = a.classList.contains("ytp-scrubber-container") ? 1 : 0;
+                  }
+                  coarse = a._transformTarget801__;
+                } else if (q.length > 18 && q.includes("scale")) {
+                  if (a._transformTarget801__ === undefined) {
+                    a._transformTarget801__ = (a.classList.contains("ytp-play-progress") || a.classList.contains("ytp-load-progress")) ? 2 : 0;
+                  }
+                  coarse = a._transformTarget801__;
+                }
+              }
+              u(a, b, r, coarse);
+              // if (r[0] !== 1) {
+              //   console.log("DEBUG_PREF_COARSE_TRANSFORM", b, r, coarse);
+              // }
+              c = r[1];
+            } else if (typeof b === "object") {
+              for (const t in b) {
+                if (t === "transform") {
+                  r[1] = u[t];
+                  u(a, t, r, 0);
+                  u[t] = r[1];
+                } else {
+                  r[0] = 2;
+                }
+              }
+            }
+            if (r[0] === 1) return;
+            if (PREF_COLLECT_CSS_TRANSFORMS && b === "transform") {
+              // for onProgress
+              // collect all inline CSS changes into one marco event tick
+              let bool = false;
+              if (q.length > 18 && a.nodeName === "DIV") {
+                if (q.length > 22 && q.includes("translate")) {
+                  if (a._transformTarget801__ === undefined) {
+                    a._transformTarget801__ = a.classList.contains("ytp-scrubber-container") ? 1 : 0;
+                  }
+                  bool = a._transformTarget801__ > 0;
+                } else if (q.length > 18 && q.includes("scale")) {
+                  if (a._transformTarget801__ === undefined) {
+                    a._transformTarget801__ = (a.classList.contains("ytp-play-progress") || a.classList.contains("ytp-load-progress")) ? 2 : 0;
+                  }
+                  bool = a._transformTarget801__ > 0;
+                }
+              }
+              if (bool) {
+                subTransform(this, k2, a, b, c);
+                return;
+              }
+            }
+            return this[k2](a, b, c);
+          };          
+
+        }
+
+      }
 
     })();
 
@@ -11573,7 +11865,7 @@
           //   return this.handleServiceRequest717_(a,b,c,d);
           // }
 
-          function extraArguments322(a, b, c) {
+          const extraArguments322 = (a, b, c) => {
             let is = (a || 0).is;
             let videoId = ((b || 0).updatedMetadataEndpoint || 0).videoId;
             let continuation = (c || 0).continuation;
@@ -11581,7 +11873,7 @@
             if (typeof videoId !== 'string') videoId = null;
             if (typeof continuation !== 'string') continuation = null;
             return { is, videoId, continuation };
-          }
+          };
 
           cProto.sendServiceAjax717_ = cProto.sendServiceAjax_;
           cProto.sendServiceAjax_ = function (a, b, c, d) {
@@ -12010,13 +12302,13 @@
         cProto = insp(popupContainer).constructor.prototype;
 
 
-        if (!cProto || typeof cProto.handleOpenPopupAction !== 'function' || cProto.handleOpenPopupAction3868 || cProto.handleOpenPopupAction.length !== 2) {
+        if (!cProto || typeof cProto.handleOpenPopupAction !== 'function' || cProto.handleOpenPopupAction3868 || (cProto.handleOpenPopupAction.length !== 2 && cProto.handleOpenPopupAction.length !== 3)) {
           console.log('FIX_POPUP_UNIQUE_ID NG')
           return;
         }
         cProto.handleOpenPopupAction3868 = cProto.handleOpenPopupAction;
 
-        cProto.handleOpenPopupAction = function (a, b) {
+        cProto.handleOpenPopupAction = function (a, b, bq) {
 
           if (typeof (a || 0) === 'object' && !a.__jOdQA__) {
 
@@ -12118,6 +12410,51 @@
 
       });
 
+      if (DISABLE_MODERN_TRANSCRIPT && !isChatRoomURL) {
+        observablePromise(() => {
+          const config = (win.yt || 0).config_ || (win.ytcfg || 0).data_ || 0;
+          if (config && config.EXPERIMENT_FLAGS) {
+            config.EXPERIMENT_FLAGS.web_video_companion_modern_transcript = false;
+            return true;
+          }
+        }).obtain();
+        let collection = document.getElementsByTagName("ytd-button-renderer");
+        let ow = new WeakSet();
+        const loopSet = (o, parents) => {
+          if (!o || typeof o !== "object") return;
+          if (ow.has(o)) return;
+          ow.add(o);
+          const pds = Object.getOwnPropertyDescriptors(o);
+          for (const [key, pd] of Object.entries(pds)) {
+            const val = pd.value;
+            if (pd.writable === true && pd.configurable && pd.enumerable && val && typeof val === "object") {
+              if (val.targetId === "PAmodern_transcript_view") {
+                if (o[key].targetId === "PAmodern_transcript_view") {
+                  o[key].targetId = "engagement-panel-searchable-transcript";
+                }
+              } else if (val.tag === "PAmodern_transcript_view") {
+                if (o[key].tag === "PAmodern_transcript_view" && parents.includes("showEngagementPanelEndpoint")) {
+                  o[key].tag = "engagement-panel-searchable-transcript";
+                }
+              } else {
+                if (!ow.has(val)) loopSet(val, [...parents, key]);
+              }
+            }
+          }
+        };
+
+        new MutationObserver(() => {
+          for (const e of collection) {
+            if ((e.className || "").includes("-transcript-")) {
+              const cnt = insp(e);
+              const command = (cnt.data || 0).command;
+              if (command && !ow.has(command)) {
+                loopSet(command, []);
+              }
+            }
+          }
+        }).observe(document, { subtree: true, childList: true });
+      }
 
       FIX_TRANSCRIPT_SEGMENTS && !isChatRoomURL && whenCEDefined('yt-formatted-string').then(async () => {
 

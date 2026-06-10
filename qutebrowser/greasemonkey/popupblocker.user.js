@@ -98,6 +98,7 @@
 // @resource ./assets/fonts/semibold/OpenSans-Semibold.woff https://userscripts.adtidy.org/release/popup-blocker/2.5/assets/fonts/semibold/OpenSans-Semibold.woff
 // @resource ./assets/fonts/semibold/OpenSans-Semibold.woff2 https://userscripts.adtidy.org/release/popup-blocker/2.5/assets/fonts/semibold/OpenSans-Semibold.woff2
 // @run-at document-start
+// @exclude *://chatgpt.com/*
 // @exclude         https://*.lan/*
 // @exclude         http://*.lan/*
 // @exclude https://www.linkedin.com/*
