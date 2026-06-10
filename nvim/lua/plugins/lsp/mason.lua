@@ -4,6 +4,7 @@ return { -- MASON, formatter/linter, debugger, lsp
   dependencies = {
     --{ "mhartington/formatter.nvim" },
     { "nvimtools/none-ls.nvim" },
+    --{ "nvimtools/none-ls-extras.nvim" },
     { "jay-babu/mason-null-ls.nvim" },
     { "mfussenegger/nvim-dap" },
     { "jay-babu/mason-nvim-dap.nvim" },
@@ -38,32 +39,6 @@ return { -- MASON, formatter/linter, debugger, lsp
         --pip=,
       },
     })
-
-    -- Trying conform.nvim maybe switch from none-ls to nvim-lint as well
-    --local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-    --local function autoformat_quit(client, bufnr)
-    --  if vim.b[bufnr].bigfile then
-    --    vim.b.completion = false
-    --    return
-    --  end
-    --  if client:supports_method("textDocument/formatting") then
-    --    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-    --    vim.api.nvim_create_autocmd("BufWritePre", {
-    --      group = augroup,
-    --      buffer = bufnr,
-    --      callback = function()
-    --        vim.lsp.buf.code_action({
-    --          context = {
-    --            only = { "source.organizeImports" },
-    --            diagnostics = {},
-    --          },
-    --          apply = true,
-    --        })
-    --        vim.lsp.buf.format({ async = false, timeout_ms = 5000 })
-    --      end,
-    --    })
-    --  end
-    --end
 
     --https://github.com/neovim/nvim-lspconfig/wiki/Understanding-setup-%7B%7D
     -- lsphandlers were disabled in nvim0.11+ use vim.lsp.config() instead
@@ -188,34 +163,8 @@ return { -- MASON, formatter/linter, debugger, lsp
       handlers = {},
     })
 
-    null_ls.setup({
-      sources = {
-        null_ls.builtins.formatting.shfmt.with({
-          extra_args = function(params)
-            local editorconfig = vim.fs.find(".editorconfig", { upward = true, path = vim.fs.dirname(params.bufname) })
-            if #editorconfig > 0 then
-              return { "--filename", params.bufname }
-            end
-            return { "-i", "2" }
-          end,
-          cwd = function(params)
-            return vim.fs.dirname(params.bufname)
-          end,
-        }),
-        null_ls.builtins.formatting.stylua.with({
-          extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
-          cwd = function(params)
-            return vim.fs.dirname(params.bufname)
-          end,
-        }),
-      },
-      -- you can reuse a shared lspconfig on_attach callback here
-      on_attach = function(client, bufnr)
-        client.server_capabilities.documentFormattingProvider = true
-        client.server_capabilities.documentRangeFormattingProvider = true
-        --autoformat_quit(client, bufnr)
-      end,
-    })
+    -- maybe want some customization in future
+    --null_ls.setup({sources = {null_ls.builtins.} })
 
     -- don't use Wiki on git repo for lspconfig rather use :help lspconfig or :help lsp
 

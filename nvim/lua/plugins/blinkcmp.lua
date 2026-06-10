@@ -133,7 +133,7 @@ return {
   ---@type blink.cmp.Config
   opts = {
     keymap = keymaps(),
-    snippets = { preset = "luasnip" },
+    snippets = { preset = "luasnip" }, -- disables friendly snippets
     signature = {
       enabled = true,
       window = { border = "single" },
@@ -291,27 +291,17 @@ return {
           name = "Dict",
           min_keyword_length = 0,
           opts = {
-            -- dictionary_files = {}
+            --dictionary_files = {}
             --force_fallback = false,
           },
         },
         snippets = {
           opts = {
-            extended_filetypes = {
-              python = { "pydoc" },
-              typescript = { "tsdoc" },
-              javascript = { "jsdoc" },
-              lua = { "luadoc" },
-              rust = { "rustdoc" },
-              cs = { "csharpdoc" },
-              java = { "javadoc" },
-              c = { "cdoc" },
-              cpp = { "cppdoc" },
-              php = { "phpdoc" },
-              kotlin = { "kdoc" },
-              ruby = { "rdoc" },
-              sh = { "shelldoc" },
-            },
+            --friendly_snippets = true,
+            --extended_filetypes = {
+            --  -- See: https://github.com/rafamadriz/friendly-snippets/tree/main/snippets/frameworks
+            --  -- rest should be enabled by default
+            --},
           },
         },
         path = {

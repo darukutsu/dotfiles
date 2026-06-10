@@ -9,6 +9,13 @@ return {
           backend = "zellij",
           enabled = true,
         },
+        tools = {
+          opencode = {
+            env = {
+              --OPENCODE_THEME = "system",
+            },
+          },
+        },
         --my_tool = {
         --  cmd = { "my-ai-cli", "--flag" },
         --  keys = {

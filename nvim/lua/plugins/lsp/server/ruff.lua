@@ -1,70 +1,46 @@
---local on_attach = function(client, bufnr)
---  if client.name == 'ruff_lsp' then
---    --client.server_capabilities.hoverProvider = true
---  end
---end
-
--- Configure `ruff-lsp`.
--- See: https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#ruff_lsp
--- For the default config, along with instructions on how to customize the settings
---vim.lsp.config("ruff_ls", {
+-- See: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#ruff
+-- for settings see https://docs.astral.sh/ruff/editors/settings
 vim.lsp.config("ruff", {
-  --on_attach = on_attach,
   filetypes = { "python", "py", "py3" },
 
-  settings = {
-    configuration = {
-      --lint = {
-      --  enable = false,
-      --},
-      --format = {
-      --  enable = false,
-      --},
+  init_options = {
+    settings = {
+      configurationPreference = "filesystemFirst",
+      fixAll = false,
       organizeImports = true,
-      fixAll = true,
+      configuration = {
+        lint = {
+          ["extend-select"] = { "I" },
+        },
+        format = {
+          -- this is not necessary for my unix setup, not sure if it works
+          ["docstring-code-format"] = true,
+          ["indent-style"] = "space",
+          ["line-ending"] = "lf",
+          ["quote-style"] = "double",
+          ["skip-magic-trailing-comma"] = false,
+        },
+      },
     },
   },
-  --init_options = {
-  --  settings = {
-  --    -- Any extra CLI arguments for `ruff` go here
-  --    args = {
-  --      "--select=ALL",
-  --    },
-  --    format = {
-  --      args = {
-  --        --"--config",
-  --        --"indent-width = 2",
-  --      },
-  --    },
-  --    showNotification = true,
-  --    --organizeImports = true,
-  --    source = {
-  --      organizeImports = true,
-  --      --fixAll = true,
-  --    },
-  --  },
+
+  -- See vim.lsp.commands
+  -- Note this is not replacement for vscode autocommands
   --commands = {
+  --	{
+  --	title = "Ruff: Fix all problems",
+  --	command = "ruff check --fix",
+  --	},
   --  RuffAutofix = {
   --    function()
   --      vim.lsp.buf.execute_command({
-  --        command = "ruff.applyAutofix",
+  --        command = "ruff check --fix",
   --        arguments = {
   --          { uri = vim.uri_from_bufnr(0) },
   --        },
   --      })
   --    end,
-  --    description = "Ruff: Fix all auto-fixable problems",
+  --    description = "Ruff: Fix all problems",
   --  },
-  --  RuffOrganizeImports = {
-  --    function()
-  --      vim.lsp.buf.execute_command({
-  --        command = "ruff.applyOrganizeImports",
-  --        arguments = {
-  --          { uri = vim.uri_from_bufnr(0) },
-  --        },
-  --      })
-  --    end,
-  --    description = "Ruff: Format imports",
-  --  },
-  --},
+  --}
 })

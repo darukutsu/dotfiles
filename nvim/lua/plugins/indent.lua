@@ -16,7 +16,7 @@ return {
       buftype_exclude = {},
       on_tab_options = {},
       on_space_options = {
-        ["expandtab"] = "detected",
+        ["expandtab"] = true,
         ["tabstop"] = "detected",
         ["softtabstop"] = "detected",
         ["shiftwidth"] = "detected",
