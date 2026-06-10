@@ -1,3 +1,6 @@
+# ruff: noqa: F821
+# ty: ignore[unresolved-reference]
+
 #:set -u example.com content.images false.
 
 # config.set('content.images', False, '*://example.com/')

@@ -12,6 +12,9 @@
 ##   qute://help/configuring.html
 ##   qute://help/settings.html
 
+# ruff: noqa: F821
+# ty: ignore[unresolved-reference]
+
 ## This is here so configs done via the GUI are still loaded.
 ## Remove it to not load settings done via the GUI.
 config.load_autoconfig(False)
@@ -271,7 +274,7 @@ c.content.blocking.hosts.block_subdomains = False
 ##   - adblock: Use Brave's ABP-style adblocker
 ##   - hosts: Use hosts blocking
 ##   - both: Use both hosts blocking and Brave's ABP-style adblocker
-# c.content.blocking.method = 'adblock'
+c.content.blocking.method = "auto"
 
 ## A list of patterns that should always be loaded, despite being blocked
 ## by the ad-/host-blocker. Local domains are always exempt from
@@ -312,7 +315,9 @@ c.content.blocking.whitelist = [
 # c.content.cache.size = None
 
 ## Allow websites to read canvas elements. Note this is needed for some
-## websites to work properly.
+## websites to work properly. On QtWebEngine < 6.6, this setting requires
+## a restart and does not support URL patterns, only the global setting
+## is applied.
 ## Type: Bool
 # c.content.canvas_reading = True
 
@@ -406,7 +411,7 @@ c.content.default_encoding = "utf-8"
 ## the full referer. No restart is needed with QtWebKit.
 ## Type: String
 ## Valid values:
-##   - always: Always send the Referer.
+##   - always: Always send the Referer. With QtWebEngine 6.2+, this value is unavailable and will act like `same-domain`.
 ##   - never: Never send the Referer. This is not recommended, as some sites may break.
 ##   - same-domain: Only send the Referer for the same domain. This will still protect your privacy, but shouldn't break any sites. With QtWebEngine, the referer will still be sent for other domains, but with stripped path information.
 # c.content.headers.referer = 'same-domain'
@@ -418,12 +423,13 @@ c.content.default_encoding = "utf-8"
 ## QtWebEngine. * `{qt_version}`: The underlying Qt version. *
 ## `{upstream_browser_key}`: "Version" for QtWebKit, "Chrome" for
 ## QtWebEngine. * `{upstream_browser_version}`: The corresponding
-## Safari/Chrome version. * `{qutebrowser_version}`: The currently
-## running qutebrowser version.  The default value is equal to the
-## unchanged user agent of QtWebKit/QtWebEngine.  Note that the value
-## read from JavaScript is always the global value. With QtWebEngine
-## between 5.12 and 5.14 (inclusive), changing the value exposed to
-## JavaScript requires a restart.
+## Safari/Chrome version. * `{upstream_browser_version_short}`: The
+## corresponding Safari/Chrome   version, but only with its major
+## version. * `{qutebrowser_version}`: The currently running qutebrowser
+## version.  The default value is equal to the default user agent of
+## QtWebKit/QtWebEngine, but with the `QtWebEngine/...` part removed for
+## increased compatibility.  Note that the value read from JavaScript is
+## always the global value.
 ## Type: FormatString
 # c.content.headers.user_agent = 'Mozilla/5.0 ({os_info}) AppleWebKit/{webkit_version} (KHTML, like Gecko) {qt_key}/{qt_version} {upstream_browser_key}/{upstream_browser_version} Safari/{webkit_version}'
 
@@ -439,12 +445,6 @@ c.content.default_encoding = "utf-8"
 ## Type: Bool
 # c.content.javascript.alert = True
 
-## Allow JavaScript to read from or write to the clipboard. With
-## QtWebEngine, writing the clipboard as response to a user interaction
-## is always allowed.
-## Type: Bool
-c.content.javascript.clipboard = "access-paste"
-
 ## Allow JavaScript to close tabs.
 ## Type: Bool
 # c.content.javascript.can_close_tabs = False
@@ -453,9 +453,35 @@ c.content.javascript.clipboard = "access-paste"
 ## Type: Bool
 # c.content.javascript.can_open_tabs_automatically = False
 
+## Allow JavaScript to read from or write to the clipboard. With
+## QtWebEngine, writing the clipboard as response to a user interaction
+## is always allowed. On Qt < 6.8, the `ask` setting is equivalent to
+## `none` and permission needs to be granted manually via this setting.
+## Type: JSClipboardPermission
+## Valid values:
+##   - none: Disable access to clipboard.
+##   - access: Allow reading from and writing to the clipboard.
+##   - access-paste: Allow accessing the clipboard and pasting clipboard content.
+##   - ask: Prompt when requested (grants 'access-paste' permission).
+c.content.javascript.clipboard = "access-paste"
+
 ## Enable JavaScript.
 ## Type: Bool
 # c.content.javascript.enabled = True
+
+## Enables the legacy touch event feature. This affects JS APIs such as:
+## - ontouch* members on window, document, Element -
+## document.createTouch, document.createTouchList -
+## document.createEvent("TouchEvent") Newer Chromium versions have those
+## disabled by default:
+## https://bugs.chromium.org/p/chromium/issues/detail?id=392584
+## https://groups.google.com/a/chromium.org/g/blink-dev/c/KV6kqDJpYiE
+## Type: String
+## Valid values:
+##   - always: Legacy touch events are always enabled. This might cause some websites to assume a mobile device.
+##   - auto: Legacy touch events are only enabled if a touch screen was detected on startup.
+##   - never: Legacy touch events are always disabled.
+c.content.javascript.legacy_touch_events = "auto"
 
 ## Log levels to use for JavaScript console logging messages. When a
 ## JavaScript message with the level given in the dictionary key is
@@ -466,12 +492,28 @@ c.content.javascript.clipboard = "access-paste"
 ## Type: Dict
 # c.content.javascript.log = {'unknown': 'debug', 'info': 'debug', 'warning': 'debug', 'error': 'debug'}
 
+## Javascript messages to *not* show in the UI, despite a corresponding
+## `content.javascript.log_message.levels` setting. Both keys and values
+## are glob patterns, with the key matching the location of the error,
+## and the value matching the error message. By default, the
+## https://web.dev/csp/[Content security policy] violations triggered by
+## qutebrowser's stylesheet handling are excluded, as those errors are to
+## be expected and can't be easily handled by the underlying code.
+## Type: Dict
 c.content.javascript.log_message.excludes = {
     "userscript:_qute_stylesheet": [
         "*Refused to apply inline style because it violates the following Content Security Policy directive: *"
     ],
     "userscript:_qute_js": ["*TrustedHTML*"],
 }
+
+## Javascript message sources/levels to show in the qutebrowser UI. When
+## a JavaScript message is logged from a location matching the glob
+## pattern given in the key, and is from one of the levels listed as
+## value, it's surfaced as a message in the qutebrowser UI. By default,
+## errors happening in qutebrowser internally are shown to the user.
+## Type: Dict
+# c.content.javascript.log_message.levels = {'qute:*': ['error'], 'userscript:GM-*': [], 'userscript:*': ['error']}
 
 ## Use the standard JavaScript modal dialog for `alert()` and
 ## `confirm()`.
@@ -524,7 +566,7 @@ c.content.javascript.log_message.excludes = {
 ##   - true
 ##   - false
 ##   - ask
-# c.content.mouse_lock = 'ask'
+c.content.mouse_lock = True
 
 ## Automatically mute tabs. Note that if the `:tab-mute` command is used,
 ## the mute status for the affected tab is now controlled manually, and
@@ -545,19 +587,17 @@ c.content.javascript.log_message.excludes = {
 # c.content.notifications.enabled = 'ask'
 
 ## What notification presenter to use for web notifications. Note that
-## not all implementations support all features of notifications: - With
-## PyQt 5.14, any setting other than `qt` does not support  the `click`
-## and   `close` events, as well as the `tag` option to replace existing
-## notifications. - The `qt` and `systray` options only support showing
-## one notification at the time   and ignore the `tag` option to replace
-## existing notifications. - The `herbe` option only supports showing one
+## not all implementations support all features of notifications: - The
+## `qt` and `systray` options only support showing one notification at
+## the time   and ignore the `tag` option to replace existing
+## notifications. - The `herbe` option only supports showing one
 ## notification at the time and doesn't   show icons. - The `messages`
 ## option doesn't show icons and doesn't support the `click` and
 ## `close` events.
 ## Type: String
 ## Valid values:
 ##   - auto: Tries `libnotify`, `systray` and `messages`, uses the first one available without showing error messages.
-##   - qt: Use Qt's native notification presenter, based on a system tray icon. Switching from or to this value requires a restart of qutebrowser. Recommended over `systray` on PyQt 5.14.
+##   - qt: Use Qt's native notification presenter, based on a system tray icon. Switching from or to this value requires a restart of qutebrowser.
 ##   - libnotify: Shows messages via DBus in a libnotify-compatible way. If DBus isn't available, falls back to `systray` or `messages`, but shows an error message.
 ##   - systray: Use a notification presenter based on a systray icon. Falls back to `libnotify` or `messages` if not systray is available. This is a reimplementation of the `qt` setting value, but with the possibility to switch to it at runtime.
 ##   - messages: Show notifications as qutebrowser messages. Most notification features aren't available.
@@ -638,25 +678,19 @@ c.content.prefers_reduced_motion = True
 ## Type: Bool
 # c.content.site_specific_quirks.enabled = True
 
-## Disable a list of named quirks. The js-string-replaceall quirk is
-## needed for Nextcloud Calendar < 2.2.0 with QtWebEngine < 5.15.3.
-## However, the workaround is not fully compliant to the ECMAScript spec
-## and might cause issues on other websites, so it's disabled by default.
+## Disable a list of named quirks.
 ## Type: FlagList
 ## Valid values:
-##   - ua-whatsapp
 ##   - ua-google
-##   - ua-slack
 ##   - ua-googledocs
+##   - ua-gnome-gitlab
 ##   - js-whatsapp-web
 ##   - js-discord
 ##   - js-string-replaceall
-##   - js-globalthis
-##   - js-object-fromentries
 ##   - js-array-at
 ##   - misc-krunker
 ##   - misc-mathml-darkmode
-# c.content.site_specific_quirks.skip = ['js-string-replaceall']
+# c.content.site_specific_quirks.skip = []
 
 ## How to proceed on TLS certificate errors.
 ## Type: String
@@ -790,9 +824,10 @@ c.fileselect.folder.command = [
 ]
 
 ## Handler for selecting file(s) in forms. If `external`, then the
-## commands specified by `fileselect.single_file.command` and
-## `fileselect.multiple_files.command` are used to select one or multiple
-## files respectively.
+## commands specified by `fileselect.single_file.command`,
+## `fileselect.multiple_files.command` and `fileselect.folder.command`
+## are used to select one file, multiple files, and folders,
+## respectively.
 ## Type: String
 ## Valid values:
 ##   - default: Use the default file selector.
@@ -915,6 +950,10 @@ c.fileselect.single_file.command = [
 ## Font used for unselected tabs.
 ## Type: Font
 # c.fonts.tabs.unselected = 'default_size default_family'
+
+## Font used for tooltips. If set to null, the Qt default is used.
+## Type: Font
+# c.fonts.tooltip = None
 
 ## Font family for cursive fonts.
 ## Type: FontFamily
@@ -1173,12 +1212,12 @@ c.input.media_keys = True
 
 ## Enable back and forward buttons on the mouse.
 ## Type: Bool
-# c.input.mouse.back_forward_buttons = True
+c.input.mouse.back_forward_buttons = True
 
 ## Enable Opera-like mouse rocker gestures. This disables the context
 ## menu.
 ## Type: Bool
-# c.input.mouse.rocker_gestures = False
+# c.input.mouse.rocker_gestures = True
 
 ## Timeout (in milliseconds) for partially typed key bindings. If the
 ## current input forms only partial matches, the keystring will be
@@ -1279,9 +1318,21 @@ c.new_instance_open_target_window = "last-focused"
 # c.qt.args = [ "autoplay-policy=no-user-gesture-required", ""]
 c.qt.args = [
     "enable-quic",
+    "enable-pinch",
     "enable-lazy-image-loading",
     "disable-renderer-accessibility",
 ]
+
+## Enables Web Platform features that are in development. This passes the
+## `--enable-experimental-web-platform-features` flag to Chromium. By
+## default, this is enabled with Qt 5 to maximize compatibility despite
+## an aging Chromium base.
+## Type: String
+## Valid values:
+##   - always: Enable experimental web platform features.
+##   - auto: Enable experimental web platform features when using Qt 5.
+##   - never: Disable experimental web platform features.
+# c.qt.chromium.experimental_web_platform_features = 'auto'
 
 ## When to use Chromium's low-end device mode. This improves the RAM
 ## usage of renderer processes, at the expense of performance.
@@ -1296,7 +1347,7 @@ c.qt.args = [
 ## less resources, but decrease security and robustness. See the
 ## following pages for more details:    -
 ## https://www.chromium.org/developers/design-documents/process-models
-## - https://doc.qt.io/qt-5/qtwebengine-features.html#process-models
+## - https://doc.qt.io/qt-6/qtwebengine-features.html#process-models
 ## Type: String
 ## Valid values:
 ##   - process-per-site-instance: Pages from separate sites are put into separate processes and separate visits to the same site are also isolated.
@@ -1313,10 +1364,12 @@ c.qt.args = [
 ## Chromium's security layers**. To avoid sandboxing being accidentally
 ## disabled persistently, this setting can only be set via `config.py`,
 ## not via `:set`. See the Chromium documentation for more details: - htt
-## ps://chromium.googlesource.com/chromium/src/\+/HEAD/docs/linux/sandbox
-## ing.md[Linux] - https://chromium.googlesource.com/chromium/src/\+/HEAD
-## /docs/design/sandbox.md[Windows] - https://chromium.googlesource.com/c
-## hromium/src/\+/HEAD/docs/design/sandbox_faq.md[FAQ (Windows-centric)]
+## ps://chromium.googlesource.com/chromium/src/\+/HEAD/sandbox/linux/READ
+## ME.md[Linux] - https://chromium.googlesource.com/chromium/src/\+/HEAD/
+## docs/design/sandbox.md[Windows] - https://chromium.googlesource.com/ch
+## romium/src/\+/HEAD/sandbox/mac/README.md[Mac] - https://chromium.googl
+## esource.com/chromium/src/\+/HEAD/docs/design/sandbox_faq.md[FAQ
+## (Windows-centric)]
 ## Type: String
 ## Valid values:
 ##   - enable-all: Enable all available sandboxing mechanisms.
@@ -1354,23 +1407,41 @@ c.qt.args = [
 # c.qt.force_software_rendering = 'none'
 
 ## Turn on Qt HighDPI scaling. This is equivalent to setting
-## QT_AUTO_SCREEN_SCALE_FACTOR=1 or QT_ENABLE_HIGHDPI_SCALING=1 (Qt >=
-## 5.14) in the environment. It's off by default as it can cause issues
-## with some bitmap fonts. As an alternative to this, it's possible to
-## set font sizes and the `zoom.default` setting.
+## QT_ENABLE_HIGHDPI_SCALING=1 (Qt >= 5.14) in the environment. It's off
+## by default as it can cause issues with some bitmap fonts. As an
+## alternative to this, it's possible to set font sizes and the
+## `zoom.default` setting.
 ## Type: Bool
-# c.qt.highdpi = False
+c.qt.highdpi = True
 
-## On some setups graphical issues can occur on sites like Google
-## sheets and PDF.js. These don't occur when accelerated 2d canvas
-## is turned off, so we do that by default.
-## So far these glitches only occur on some Intel graphics devices.
+## Disable accelerated 2d canvas to avoid graphical glitches. On some
+## setups graphical issues can occur on sites like Google sheets and
+## PDF.js. These don't occur when accelerated 2d canvas is turned off, so
+## we do that by default. So far these glitches only occur on some Intel
+## graphics devices.
 ## Type: String
 ## Valid values:
-## - always:
-## - auto:
-## - never:
-c.qt.workarounds.disable_accelerated_2d_canvas = "never"
+##   - always: Disable accelerated 2d canvas
+##   - auto: Disable on Qt versions with known issues, enable otherwise
+##   - never: Enable accelerated 2d canvas
+c.qt.workarounds.disable_accelerated_2d_canvas = "auto"
+
+## Disable accessibility to avoid crashes on Qt 6.10.1.
+## Type: String
+## Valid values:
+##   - always: Disable renderer accessibility
+##   - auto: Disable on Qt versions with known issues, enable otherwise
+##   - never: Enable renderer accessibility
+# c.qt.workarounds.disable_accessibility = 'auto'
+
+## Disable the Hangouts extension. The Hangouts extension provides
+## additional APIs for Google domains only. Hangouts has been replaced
+## with Meet, which appears to work without this extension. Note this
+## setting gets ignored and the Hangouts extension is always disabled to
+## avoid crashes on Qt 6.5.0 to 6.5.3 if dark mode is enabled, as well as
+## on Qt 6.6.0 and Qt 6.11.0.
+## Type: Bool
+# c.qt.workarounds.disable_hangouts_extension = False
 
 ## Work around locale parsing issues in QtWebEngine 5.15.3. With some
 ## locales, QtWebEngine 5.15.3 is unusable without this workaround. In
@@ -1422,6 +1493,11 @@ c.search.incremental = False
 ## text matches using `:search-next` and `:search-prev`.
 ## Type: Bool
 # c.search.wrap = True
+
+## Display messages when advancing through text matches at the top and
+## bottom of the page, e.g. `Search hit TOP`.
+## Type: Bool
+# c.search.wrap_messages = True
 
 ## Name of the session to save by default. If this is set to null, the
 ## session which was last loaded is saved.
@@ -1508,11 +1584,13 @@ c.spellcheck.languages = ["en-US", "sk-SK"]
 ##   - scroll: Percentage of the current page position like `10%`.
 ##   - scroll_raw: Raw percentage of the current page position like `10`.
 ##   - history: Display an arrow when possible to go back/forward in history.
+##   - search_match: A match count when searching, e.g. `Match [2/10]`.
 ##   - tabs: Current active tab, e.g. `2`.
 ##   - keypress: Display pressed keys when composing a vi command.
 ##   - progress: Progress bar for the current page loading.
 ##   - text:foo: Display the static text after the colon, `foo` in the example.
-# c.statusbar.widgets = ['keypress', 'url', 'scroll', 'history', 'tabs', 'progress']
+##   - clock: Display current time. The format can be changed by adding a format string via `clock:...`. For supported format strings, see https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes[the Python datetime documentation].
+# c.statusbar.widgets = ['keypress', 'search_match', 'url', 'scroll', 'history', 'tabs', 'progress']
 
 ## Open new tabs (middleclick/ctrl+click) in the background.
 ## Type: Bool
@@ -1682,6 +1760,15 @@ c.tabs.show_switching_delay = 2000
 ##   - center
 # c.tabs.title.alignment = 'left'
 
+## Position of ellipsis in truncated title of tabs.
+## Type: ElidePosition
+## Valid values:
+##   - left
+##   - right
+##   - middle
+##   - none
+# c.tabs.title.elide = 'right'
+
 ## Format to use for the tab title. The following placeholders are
 ## defined:  * `{perc}`: Percentage as a string like `[10%]`. *
 ## `{perc_raw}`: Raw percentage, e.g. `10`. * `{current_title}`: Title of
@@ -1789,9 +1876,9 @@ c.url.searchengines = {
 ## Type: List of FuzzyUrl, or FuzzyUrl
 # c.url.start_pages = ['https://start.duckduckgo.com']
 
-## URL parameters to strip with `:yank url`.
+## URL parameters to strip when yanking a URL.
 ## Type: List of String
-# c.url.yank_ignored_parameters = ['ref', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
+# c.url.yank_ignored_parameters = ['ref', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_name']
 
 ## Hide the window decoration.  This setting requires a restart on
 ## Wayland.
@@ -1822,7 +1909,7 @@ c.url.searchengines = {
 
 ## Number of zoom increments to divide the mouse wheel movements to.
 ## Type: Int
-# c.zoom.mouse_divider = 512
+c.zoom.mouse_divider = 512
 
 ## Apply the zoom factor on a frame only to the text or to all content.
 ## Type: Bool

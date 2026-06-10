@@ -380,7 +380,7 @@ super + @button2
 
 # NOTE: notification can be cut due animation speed... find way to overlay notifications in front of boomer
 # cursor zoom
-super + @button3
+super + {@button6,@button7}
 	notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-system-windows "sxhkd" "boomer activated: zoom"; \
         boomer
 

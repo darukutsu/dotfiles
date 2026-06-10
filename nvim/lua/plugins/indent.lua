@@ -11,10 +11,14 @@ return {
     lazy = false,
     opts = {
       auto_cmd = true,
+      override_editorconfig = false,
       filetype_exclude = {},
       buftype_exclude = {},
       on_tab_options = {},
       on_space_options = {
+        ["expandtab"] = "detected",
+        ["tabstop"] = "detected",
+        ["softtabstop"] = "detected",
         ["shiftwidth"] = "detected",
       },
     },

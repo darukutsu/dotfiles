@@ -191,10 +191,22 @@ return { -- MASON, formatter/linter, debugger, lsp
     null_ls.setup({
       sources = {
         null_ls.builtins.formatting.shfmt.with({
-          extra_args = { "-i", "2" },
+          extra_args = function(params)
+            local editorconfig = vim.fs.find(".editorconfig", { upward = true, path = vim.fs.dirname(params.bufname) })
+            if #editorconfig > 0 then
+              return { "--filename", params.bufname }
+            end
+            return { "-i", "2" }
+          end,
+          cwd = function(params)
+            return vim.fs.dirname(params.bufname)
+          end,
         }),
         null_ls.builtins.formatting.stylua.with({
           extra_args = { "--indent-type", "Spaces", "--indent-width", "2" },
+          cwd = function(params)
+            return vim.fs.dirname(params.bufname)
+          end,
         }),
       },
       -- you can reuse a shared lspconfig on_attach callback here

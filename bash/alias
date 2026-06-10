@@ -150,7 +150,33 @@ qr() {
 }
 alias qrdecode='zbarimg'
 alias qrwifi='nmcli device wifi show-password'
-alias weather='curl wttr.in'
+weather() {
+  city="${1:-}"
+
+  curl -s "https://wttr.in/${city}?format=j1" | jq -r '
+        .current_condition[0] as $c |
+        "  \($c.weatherDesc[0].value) — \($c.observation_time)",
+        "  Temp       \($c.temp_C)°C  (feels like \($c.FeelsLikeC)°C)",
+        "  Humidity   \($c.humidity)%",
+        "  Wind       \($c.windspeedKmph) km/h \($c.winddir16Point)",
+        "  Pressure   \($c.pressure) hPa",
+        "  UV index   \($c.uvIndex)",
+        "  Visibility \($c.visibility) km",
+        "  Precip     \($c.precipMM) mm",
+        "",
+        "  Forecast:",
+        (.weather | to_entries[] | [
+            "Today","Tomorrow","Day after"
+        ][.key] as $label | .value as $day |
+        "  \($label)",
+        "    \($day.hourly[0].weatherDesc[0].value) → \($day.hourly[-1].weatherDesc[0].value)",
+        "    Temp       \($day.mintempC)°C – \($day.maxtempC)°C",
+        "    Wind       \([.value.hourly[].windspeedKmph | tonumber] | max) km/h max",
+        "    Precip     \([.value.hourly[].precipMM | tonumber] | add) mm"
+        )
+    '
+}
+alias wttr='weather'
 #alias xev2=xev | awk -F'[ )]+' '/^KeyPress/ { a[NR+2] } NR in a { printf "%-3s %s\n", $5, $8 }
 
 alias urlsed='sed "s#[@/\^.$|()[*+?{}\#,&=:~]\|-\|\]#\\\&#g"'

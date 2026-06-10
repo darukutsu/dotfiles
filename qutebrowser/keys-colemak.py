@@ -1,3 +1,6 @@
+# ruff: noqa: F821
+# ty: ignore[unresolved-reference]
+
 ## Characters used for hint strings.
 ## Type: UniqueCharString
 c.hints.chars = "arstgmneio"
