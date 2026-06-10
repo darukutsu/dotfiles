@@ -1,0 +1,11 @@
+[main]
+color-tsharks = ['/usr/bin/tshark']
+column-format-bak = []
+conv-absolute-time = false
+conv-resolve-names = false
+conv-use-filter = false
+last-used-tshark = '/usr/bin/tshark'
+packet-colors = true
+recent-filters = ['quic and ip.dst_host contains google', 'quic and ip.dst_host contains youtube', 'quic and ip.src_host contains google', 'quic and ip.src_host contains youtube', 'quic', 'quic and ip.src_host contains "google"', 'quic and ip.src_host contains "youtube"', 'quic and dns.cname contains "youtube"', 'dns.cname contains "youtube"', 'http.host contains "youtube"', 'http.host contains "youtube.com"', 'http.host contains ".*youtube.com"', 'http.host == ".*youtube.com"', 'dns.cname == ".*youtube.com"', 'dns.cname == "youtube.com"', 'dns.cname == youtube.com', 'dns.cname == youtube', 'http.host == youtube', ' http.host == youtube', 'quic and http.host == youtube', 'quic and dns.cname == youtube.com', 'quic and dns.cname == youtube', 'ip.proto == udp.stream']
+theme-truecolor = 'tokyo'
+validated-tsharks = ['/usr/bin/tshark']
