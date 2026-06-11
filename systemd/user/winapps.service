@@ -1,0 +1,16 @@
+[Unit]
+Description=Docker Compose WinApps Service
+After=docker.service
+
+[Service]
+# Where the docker-compose file is located
+WorkingDirectory=%h/.docker/winapps
+ExecStart=%h/.docker/docker-start.sh winapps
+ExecStop=/usr/bin/docker stop -t 10 winapps
+ExecReload=/usr/bin/docker restart -t 10 winapps
+TimeoutStartSec=0
+Restart=on-failure
+StartLimitBurst=3
+
+[Install]
+WantedBy=default.target

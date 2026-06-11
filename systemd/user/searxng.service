@@ -4,10 +4,10 @@ After=docker.service
 
 [Service]
 # Where the docker-compose file is located
-#WorkingDirectory=/srv/atuin-server
 WorkingDirectory=%h/.docker/searxng
 ExecStart=%h/.docker/docker-start.sh searxng
-ExecStop=/usr/bin/docker stop -t 2 searxng
+ExecStop=/usr/bin/docker stop -t 10 searxng
+ExecReload=/usr/bin/docker restart -t 10 searxng
 TimeoutStartSec=0
 Restart=on-failure
 StartLimitBurst=3
