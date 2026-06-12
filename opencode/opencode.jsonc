@@ -31,7 +31,20 @@
 			"npm": "@ai-sdk/openai-compatible",
 			"name": "Ollama (local)",
 			"options": {
-				"baseURL": "http://ollama.ai.lan/v1"
+				"baseURL": "http://ollama.ai.lan/v1",
+				"modelsDiscovery": {
+					"enabled": true,
+					//see https://github.com/yuhp/opencode-models-discovery/blob/main/docs/configuration.md
+
+					// NOTE: for versions older than 0.9
+					//"models": {
+					//	"excludeRegex": [
+					//		"qwen3-embedding"
+					//	]
+					//},
+
+					"smartModelName": false
+				}
 			}
 		}
 	},

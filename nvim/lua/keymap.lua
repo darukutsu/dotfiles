@@ -221,7 +221,7 @@ map({ "n" }, "x", '"_x', {})
 map({ "n" }, "X", '"_X', {})
 
 map({ "n" }, "<leader>f", function()
-  vim.find_files_from_project_git_root()
+  Find_files_from_project_git_root()
 end, { desc = "jump files" })
 map({ "n" }, "<leader>?a", function()
   vim.lsp.buf.code_action()
@@ -303,7 +303,8 @@ end
 --  end,
 --})
 
-map({ "n", "o", "x" }, "<F1>", vim.lsp.buf.hover, { desc = "LSP help" })
+map({ "n", "o", "x" }, "<leader>??", vim.lsp.buf.hover, { desc = "LSP help/info" })
+map({ "n", "o", "x" }, "<F1>", vim.lsp.buf.hover, { desc = "LSP help/info" })
 map({ "n", "o", "x" }, "<F2>", vim.diagnostic.open_float, { desc = "LSP diagnostic err" })
 --map({ "n", "o", "x" }, "<F10>", function()
 --  vim.diagnostic.jump({ count = -1, float = true })

@@ -32,6 +32,7 @@ comfy_stop() {
 }
 alias downgrade='downgrade --git --pacman-cache ~/.cache/yay --maxdepth 2'
 alias downgrade-aur='downgrade --git --pacman-cache ~/.cache/yay --maxdepth 2'
+alias e='exit'
 alias emacs='emacs -nw'
 alias find-cursor='sxcs'
 alias firefox='firefox-developer-edition'

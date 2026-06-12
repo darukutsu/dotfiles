@@ -155,38 +155,14 @@ return {
             end
           end
 
-          --local function setup_diag_highlights()
-          --  local bg = vim.api.nvim_get_hl(0, { name = "MiniStatuslineDevinfo" }).bg or "NONE"
-
-          --  local diags = {
-          --    Error = "StatuslineDiagError",
-          --    Warn = "StatuslineDiagWarn",
-          --    Info = "StatuslineDiagInfo",
-          --    Hint = "StatuslineDiagHint",
-          --  }
-
-          --  for diag, target in pairs(diags) do
-          --    local fg = vim.api.nvim_get_hl(0, { name = "Diagnostic" .. diag }).fg
-          --    vim.api.nvim_set_hl(0, target, { fg = fg, bg = bg })
-          --  end
-          --end
-
-          --setup_diag_highlights()
-          --vim.api.nvim_create_autocmd("ColorScheme", { callback = setup_diag_highlights })
-          --local diag_hl = {
-          --  E = "%#StatuslineDiagError#",
-          --  W = "%#StatuslineDiagWarn#",
-          --  I = "%#StatuslineDiagInfo#",
-          --  H = "%#StatuslineDiagHint#",
-          --}
-          local diag_hl = {
-            E = "%#DiagnosticError#",
-            W = "%#DiagnosticWarn#",
-            I = "%#DiagnosticInfo#",
-            H = "%#DiagnosticHint#",
-          }
-
           local function diagnostics(args)
+            local diag_hl = {
+              E = "%#DiagnosticError#",
+              W = "%#DiagnosticWarn#",
+              I = "%#DiagnosticInfo#",
+              H = "%#DiagnosticHint#",
+            }
+
             local diag = MiniStatusline.section_diagnostics(args)
             if diag == "" then
               return ""
@@ -199,6 +175,15 @@ return {
 
             return result
           end
+          local function ai()
+            local status = require("sidekick.status").cli()
+            return "%#StdoutMsg#" .. "" .. #status
+          end
+
+          --
+          -- Line config
+          --
+
           local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
           local git = MiniStatusline.section_git({ trunc_width = 40 })
           local diff = MiniStatusline.section_diff({ trunc_width = 75 })
@@ -222,6 +207,7 @@ return {
           local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
           local selection_count = selection_count()
           local perms = perms()
+          local ai = ai()
 
           return MiniStatusline.combine_groups({
             { hl = mode_hl, strings = { mode, selection_count, search, "|", location } },
@@ -230,7 +216,7 @@ return {
             "%<",
             { hl = "MiniStatuslineFilename", strings = { filename } },
             "%=",
-            { hl = "NONE", strings = { diagnostics } },
+            { hl = "NONE", strings = { diagnostics, ai } },
             { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
             --{ hl = mode_hl, strings = { perms } },
           })
@@ -271,7 +257,6 @@ return {
     })
 
     require("mini.snippets").setup({
-      -- define your snippets here
       snippets = {},
     })
   end,

@@ -3,7 +3,7 @@ return {
     "folke/sidekick.nvim",
     cmd = "Sidekick",
     opts = {
-      nes = { enabled = false },
+      nes = { enabled = true },
       cli = {
         mux = {
           backend = "zellij",
@@ -15,16 +15,18 @@ return {
               --OPENCODE_THEME = "system",
             },
           },
+          --my_tool = {
+          --  cmd = { "my-ai-cli", "--flag" },
+          --  keys = {
+          --    submit = { "<c-s>", function(t) t:send("\n") end, },
+          --  },
+          --},
         },
-        --my_tool = {
-        --  cmd = { "my-ai-cli", "--flag" },
-        --  keys = {
-        --    submit = { "<c-s>", function(t) t:send("\n") end, },
-        --  },
-        --},
         prompts = {
           simplify = "Simplify {this}",
-          security = "Review {file} for security vulnerabilities",
+          audit = "Review {file} for security vulnerabilities",
+          gitaudit = "Review this project for security vulnerabilities",
+          gitsec = "Check this project if malicious in any way",
           short = "Make {this} shorter if possible",
           --custom = function(ctx)
           --  return "Current file: " .. ctx.buf .. " at line " .. ctx.row
@@ -62,26 +64,52 @@ return {
         desc = "Select CLI",
       },
       {
-        "<leader>ad",
+        "<leader>ap",
         function()
-          require("sidekick.cli").close()
+          require("sidekick.cli").prompt()
         end,
-        desc = "Detach a CLI Session",
+        mode = { "n", "x" },
+        desc = "Sidekick Select Prompt",
       },
       {
-        "<leader>al",
+        "<leader>an",
+        function()
+          require("sidekick.nes").toggle()
+        end,
+        mode = { "n", "x" },
+        desc = "Sidekick NES Toggle",
+      },
+      {
+        "<leader>a?",
+        function()
+          require("sidekick.nes").have()
+        end,
+        mode = { "n", "x" },
+        desc = "Sidekick NES Check",
+      },
+      {
+        "<leader>a!",
+        function()
+          require("sidekick.nes").clear()
+        end,
+        mode = { "n", "x" },
+        desc = "Sidekick NES Stop/Clear",
+      },
+      {
+        "<leader>au",
+        function()
+          require("sidekick.nes").update()
+        end,
+        mode = { "n", "x" },
+        desc = "Sidekick NES Update",
+      },
+      {
+        "<leader>at",
         function()
           require("sidekick.cli").send({ msg = "{this}" })
         end,
         mode = { "x", "n" },
         desc = "Send This",
-      },
-      {
-        "<leader>af",
-        function()
-          require("sidekick.cli").send({ msg = "{file}" })
-        end,
-        desc = "Send File",
       },
       {
         "<leader>av",
@@ -92,31 +120,51 @@ return {
         desc = "Send Visual Selection",
       },
       {
-        "<leader>ap",
+        "<leader>ab",
         function()
-          require("sidekick.cli").prompt()
+          require("sidekick.cli").send({ msg = "{buffers}" })
         end,
-        mode = { "n", "x" },
-        desc = "Sidekick Select Prompt",
+        desc = "Send List of Buffers",
+      },
+      {
+        "<leader>af",
+        function()
+          require("sidekick.cli").send({ msg = "{file}" })
+        end,
+        desc = "Send File",
+      },
+      {
+        "<leader>ad",
+        function()
+          require("sidekick.cli").send({ msg = "{diagnostics}" })
+        end,
+        desc = "Send Buffer Diagnostics",
+      },
+      {
+        "<leader>aD",
+        function()
+          require("sidekick.cli").send({ msg = "{diagnostics_all}" })
+        end,
+        desc = "Send Workspace Diagnostics",
       },
 
-      -- Custom ai binds
+      -- Provider binds
       {
-        "<leader>ao",
+        "<leader>aO",
         function()
           require("sidekick.cli").toggle({ name = "opencode", focus = true })
         end,
         desc = "Sidekick Toggle Opencode",
       },
       {
-        "<leader>at",
+        "<leader>aC",
         function()
           require("sidekick.cli").toggle({ name = "copilot", focus = true })
         end,
         desc = "Sidekick Toggle Copilot",
       },
       {
-        "<leader>ac",
+        "<leader>aA",
         function()
           require("sidekick.cli").toggle({ name = "claude", focus = true })
         end,

@@ -63,8 +63,8 @@ return {
     formatters_by_ft = {
       lua = { "stylua" },
       sh = { "shfmt" },
-      json = { "jq" },
-      jsonc = { "jq" },
+      json = { "biome" },
+      jsonc = { "biome" },
       markdown = { "mdsf" },
     },
     formatters = {

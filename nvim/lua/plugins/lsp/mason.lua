@@ -144,7 +144,6 @@ return { -- MASON, formatter/linter, debugger, lsp
         "mdformat", -- some codeblock and rest of markdown
         -- "miss_hit", -- formatter/linter matlab i don't need rn
         "pyproject-fmt",
-        "jq",
         "shfmt",
         "sqruff",
         "stylua", -- one day discuss with someone whether this is needed since lua_ls does formatting

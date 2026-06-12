@@ -31,13 +31,11 @@ local function keymaps()
     ["<cr>"] = { "accept", "fallback" },
     ["<tab>"] = {
       "select_next",
-      function() -- sidekick next edit suggestion
-        return require("sidekick").nes_jump_or_apply()
-      end,
-      "snippet_forward",
-      --function() -- if you are using Neovim's native inline completions
-      --  return vim.lsp.inline_completion.get()
+      -- don't use this rather dedicated <C-tab> set in sidekick
+      --function()
+      --  return require("sidekick").nes_jump_or_apply()
       --end,
+      "snippet_forward",
       "fallback",
     },
     ["<S-tab>"] = {
@@ -128,6 +126,36 @@ return {
         --auto_refresh = false,
       },
     },
+    --{
+    --  "BlinkResearchLabs/blink-edit.nvim",
+    --  config = function()
+    --    require("blink-edit").setup({
+    --      llm = {
+    --        backend = "ollama",
+    --        url = "http://ollama.ai.lan",
+    --        provider = "sweep",
+    --        model = "sweepai/sweep-next-edit",
+    --        --provider = "generic",
+    --        --model = "qwen3-embedding",
+    --        --model = "gemma4",
+    --      },
+    --      normal_mode = {
+    --        enabled = true,
+    --      },
+    --      keymaps = {
+    --        insert = {
+    --          -- rebinding does not work
+    --          accept = "<C-tab>",
+    --          accept_line = nil,
+    --          clear = nil,
+    --        },
+    --        normal = {
+    --          accept = "<C-tab>",
+    --        },
+    --      },
+    --    })
+    --  end,
+    --},
   },
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
@@ -264,6 +292,13 @@ return {
             return vim.fn.getcmdtype() ~= ":" or not vim.fn.getcmdline():match("^[%%0-9,'<>%-]*!")
           end,
         },
+        --cursortab = {
+        --  module = "cursortab.blink",
+        --  name = "cursortab",
+        --  timeout_ms = 5000,
+        --  score_offset = 100,
+        --  async = true,
+        --},
         copilot = {
           name = "copilot",
           module = "blink-copilot",

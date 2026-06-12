@@ -27,6 +27,14 @@ return {
       { "<leader>l", ":Telescope luasnip<cr>", { desc = "notification history" } },
       { "<leader>q", ":Telescope macros<cr>", { desc = "neocomposer macros" } },
       { "<leader>p", ":Telescope neoclip<cr>", { desc = "neoclip history" } },
+      -- Very Slow
+      --{
+      --  "<leader>F",
+      --  function()
+      --    require("telescope.builtin").find_files({ cwd = "/" })
+      --  end,
+      --  { desc = "jump files root" },
+      --},
     }
   end,
   dependencies = {
@@ -360,7 +368,7 @@ return {
     -- adds linenumber in preview window
     vim.cmd("autocmd User TelescopePreviewerLoaded setlocal number")
 
-    function vim.find_files_from_project_git_root()
+    function Find_files_from_project_git_root()
       local function is_git_repo()
         vim.fn.system("git rev-parse --is-inside-work-tree")
         return vim.v.shell_error == 0
