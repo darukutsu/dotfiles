@@ -1,0 +1,11 @@
+[Unit]
+Description=udiskie daemon
+After=graphical-session.target
+
+[Service]
+ExecStart=/usr/bin/env bash -l -c '/usr/bin/udiskie -s'
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=graphical-session.target
