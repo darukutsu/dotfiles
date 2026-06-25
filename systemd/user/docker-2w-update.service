@@ -4,8 +4,7 @@ After=docker.service
 
 [Service]
 Type=oneshot
-ExecStart=%h/.docker/docker-start.sh update all
-#ExecStart=/bin/find /docker -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | xargs -I{} /docker/docker-start.sh {} update
+ExecStart=/docker/docker-start.sh update-all-running
 
 [Install]
 WantedBy=timers.target
