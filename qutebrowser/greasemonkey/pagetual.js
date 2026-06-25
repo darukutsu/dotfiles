@@ -31,6 +31,7 @@
 // @name:da      Pagetual
 // @name:fr-CA   Pagetual
 // @namespace    hoothin
+// @version      1.9.37.132
 // @description  Perpetual pages - powerful auto-pager script. Auto fetching next paginated web pages and inserting into current page for infinite scroll. Support thousands of web sites without any rule.
 // @description:zh-CN  终极自动翻页 - 加载并拼接下一分页内容至当前页尾，智能适配任意网页
 // @description:zh-TW  終極自動翻頁 - 加載並拼接下一分頁內容至當前頁尾，智能適配任意網頁
@@ -65,7 +66,6 @@
 // @author       hoothin
 // @license      MPL-2.0
 // @match        *://*/*
-// @exclude      *://chatgpt.com/*
 // @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAdVBMVEUAAAD3VU33VU32VEz8U073VU32VU33VU32VUz0Uk/3VE32VU32VUz2VU32VU32VU32VU33VU33U0z2VU34Wkv3VE32VUz/mpj/nJj2VUz2VU32VE33VEz2VU32VU32VUz3VE32VEz3VE3/mZf2Vkz2VU3/mpilFFolAAAAJXRSTlMA3Lp/GvTBT5YQLuawZ/DOyZwlPQeKc21N04+FX1bqpm9DNoB4T68ePwAAAitJREFUWMPt1tuasiAUBuCFCG5Rs3QybTPV1/1f4v/3PDkyIojn8x5qBrI+ltAfh32/yysmBKvyXb+njb6bDL9kzTd5SzjDAsYT8nFoGSxYe6BVqoNDp2jFDit25BRgVUAODB4YWcETWVTwVNGiGN5iWtBgg4YMCpsoI38dNunmmWyxUTvbPwwbsYR0fIzZLQ0pTG8eieRmBLMmpdH9uimQEf6TNRnXXKLZHixpJtywLzOgMHtFCqdM64DahHRnOE1dsrekm9wr2WtLcAlpdHwcp1pAJySXYnERclzp4+v19jXdmcTvQUJtz+ZaI4i05/V/UGYrCxbaAsOYoNfIKEQxpqQuzCgJJJ/3f42O8ywEZuMVWi/8hODxGj3GW2b0udkbGULLDOjimAG0S3fLGlBnXQM9irG1CiQdVQi0dqQsOSDlyEEz7Vy9OxxfR71VCXsSB23jMrKJYZXSjw57sqgLn5Z0wolsOCz0RyJkyeYjgz7pwwVq20eboZwtVUl2EnN5gJ50dQZFdryATvABRTr/tJXkUMdaAK5pwtCapwtFLskguwuyMh/Sd9WChQ4sIvIUYSk3PYqQvCQlOC04IfN7PkdjOyRKWhdKXMmiAFt9i3sJ5jxoRuR0vqAghxxwHuqfQE5OHGDKOrwEnqs1DgAZ2e4Eev1d45TN7JfhrQLKgfwMFYAsvp33dXII073aVQLI2gN5S58lfmGnKKFtah7nkgnBZB7zlP7Y/QNiTM6sYNzawwAAAABJRU5ErkJggg==
 // @grant        GM_xmlhttpRequest
 // @grant        GM_registerMenuCommand
@@ -98,8 +98,6 @@
 // @connect      *
 // @contributionURL      https://ko-fi.com/hoothin
 // @contributionAmount   1
-// @downloadURL https://update.greasyfork.org/scripts/438684/Pagetual.user.js
-// @updateURL https://update.greasyfork.org/scripts/438684/Pagetual.meta.js
 // ==/UserScript==
 
 (function() {
@@ -4171,12 +4169,199 @@
         }
     }
 
+    function requestWithFetch(f, onFetchError) {
+        function getHeaderValue(headers, name) {
+            if (!headers || !name) return "";
+            let lowerName = String(name).toLowerCase();
+            if (typeof Headers !== "undefined" && headers instanceof Headers) {
+                return headers.get(lowerName) || "";
+            }
+            if (typeof headers === "object") {
+                for (let key in headers) {
+                    if (Object.prototype.hasOwnProperty.call(headers, key) && String(key).toLowerCase() === lowerName) {
+                        return headers[key] || "";
+                    }
+                }
+            }
+            return "";
+        }
+        function extractCharsetFromContentType(contentType) {
+            if (!contentType || typeof contentType !== "string") return "";
+            let match = contentType.match(/charset\s*=\s*["']?([^;"'\s]+)/i);
+            return match && match[1] ? match[1].trim() : "";
+        }
+        function decodeArrayBufferByCharset(buffer, preferredCharset) {
+            let bytes = new Uint8Array(buffer);
+            let decoderList = [];
+            let normalize = label => String(label || "").trim().toLowerCase();
+            let addAlias = (name, aliases) => {
+                if (aliases.indexOf(normalizedPreferred) !== -1) {
+                    pushDecoder(name);
+                    for (let i = 0; i < aliases.length; i++) {
+                        pushDecoder(aliases[i]);
+                    }
+                }
+            };
+            let pushDecoder = label => {
+                let raw = String(label || "").trim();
+                if (raw && decoderList.indexOf(raw) === -1) {
+                    decoderList.push(raw);
+                }
+            };
+            let normalizedPreferred = normalize(preferredCharset).replace(/["']/g, "");
+            pushDecoder(preferredCharset);
+            pushDecoder(normalizedPreferred);
+            pushDecoder(normalizedPreferred.replace(/_/g, "-"));
+            pushDecoder(normalizedPreferred.replace(/-/g, "_"));
+            addAlias("shift_jis", ["shiftjis", "shift-jis", "sjis", "ms_kanji", "windows-31j", "cp932", "ms932"]);
+            addAlias("euc-jp", ["eucjp"]);
+            addAlias("iso-2022-jp", ["iso2022jp", "jis"]);
+            addAlias("gb18030", ["gbk", "gb2312", "x-gbk", "cp936", "ms936", "windows-936"]);
+            addAlias("big5", ["big-5", "cn-big5", "x-x-big5"]);
+            addAlias("euc-kr", ["euckr", "ks_c_5601-1987", "ksc5601", "windows-949", "cp949"]);
+            addAlias("windows-1251", ["cp1251"]);
+            addAlias("windows-1252", ["cp1252", "iso-8859-1", "latin1", "latin-1"]);
+            pushDecoder("utf-8");
+            for (let i = 0; i < decoderList.length; i++) {
+                try {
+                    return new TextDecoder(decoderList[i]).decode(bytes);
+                } catch (e) {}
+            }
+            try {
+                return new TextDecoder().decode(bytes);
+            } catch (e) {
+                return "";
+            }
+        }
+        function detectCharsetFromHtmlHead(buffer) {
+            if (!buffer || !buffer.byteLength) return "";
+            let scanLen = Math.min(buffer.byteLength, 16384);
+            let bytes = new Uint8Array(buffer, 0, scanLen);
+            let ascii = "";
+            for (let i = 0; i < bytes.length; i++) {
+                let code = bytes[i];
+                ascii += code < 128 ? String.fromCharCode(code) : " ";
+            }
+            let charsetMatch = ascii.match(/<meta[^>]*charset\s*=\s*["']?\s*([a-zA-Z0-9._-]+)/i);
+            if (!charsetMatch) {
+                charsetMatch = ascii.match(/<meta[^>]*content\s*=\s*["'][^"']*charset\s*=\s*([a-zA-Z0-9._-]+)/i);
+            }
+            return charsetMatch && charsetMatch[1] ? charsetMatch[1].trim() : "";
+        }
+        function isUtf8Charset(label) {
+            let normalized = String(label || "").trim().toLowerCase().replace(/_/g, "-");
+            return !normalized || normalized === "utf-8" || normalized === "utf8";
+        }
+        if (!f || !f.url || typeof fetch === "undefined") {
+            if (onFetchError) {
+                onFetchError({error: "Fetch not available"});
+            } else if (f && f.onerror) {
+                f.onerror({error: "Fetch not available"});
+            }
+            return;
+        }
+        let method = (f.method || "GET").toUpperCase();
+        let timeoutId = null;
+        let controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+        if (f.timeout > 0 && controller) {
+            timeoutId = setTimeout(() => {
+                controller.abort();
+            }, f.timeout);
+        }
+        let options = {
+            method: method,
+            headers: f.headers || {}
+        };
+        if (controller) options.signal = controller.signal;
+        if (method !== "GET" && method !== "HEAD" && typeof f.data !== "undefined") {
+            options.body = f.data;
+        }
+        fetch(f.url, options).then(async response => {
+            if (timeoutId) clearTimeout(timeoutId);
+            let responseCharset = extractCharsetFromContentType(response.headers.get("content-type") || "");
+            let overrideCharset = extractCharsetFromContentType(f.overrideMimeType || "");
+            let requestCharset = extractCharsetFromContentType(getHeaderValue(options.headers, "content-type"));
+            let text;
+            let charsetFromHeaders = responseCharset || overrideCharset || requestCharset;
+            if (charsetFromHeaders) {
+                if (isUtf8Charset(charsetFromHeaders)) {
+                    text = await response.text();
+                } else {
+                    text = decodeArrayBufferByCharset(await response.arrayBuffer(), charsetFromHeaders);
+                }
+            } else {
+                let rawBuffer = await response.arrayBuffer();
+                let metaCharset = detectCharsetFromHtmlHead(rawBuffer);
+                let targetCharset = metaCharset || charset || "utf-8";
+                if (isUtf8Charset(targetCharset)) {
+                    text = new TextDecoder("utf-8").decode(new Uint8Array(rawBuffer));
+                } else {
+                    text = decodeArrayBufferByCharset(rawBuffer, targetCharset);
+                }
+            }
+            let headers = "";
+            response.headers.forEach((value, key) => {
+                headers += key + ": " + value + "\r\n";
+            });
+            if (f.onload) {
+                f.onload({
+                    response: text,
+                    responseText: text,
+                    status: response.status,
+                    statusText: response.statusText,
+                    finalUrl: response.url,
+                    responseHeaders: headers
+                });
+            }
+        }).catch(error => {
+            if (timeoutId) clearTimeout(timeoutId);
+            if (error && error.name === "AbortError" && f.ontimeout) {
+                f.ontimeout(error);
+                return;
+            }
+            if (onFetchError) {
+                onFetchError(error);
+            } else if (f.onerror) {
+                f.onerror(error);
+            }
+        });
+    }
+    function isSameOriginRequest(f) {
+        if (!f || !f.url || typeof location === "undefined") return false;
+        try {
+            return new URL(f.url, location.href).origin === location.origin;
+        } catch (e) {
+            return false;
+        }
+    }
+    let nativeGMRequest = null;
     if (typeof GM_xmlhttpRequest !== 'undefined') {
-        _GM_xmlhttpRequest = GM_xmlhttpRequest;
+        nativeGMRequest = GM_xmlhttpRequest;
     } else if (typeof GM !== 'undefined' && typeof GM.xmlHttpRequest !== 'undefined') {
-        _GM_xmlhttpRequest = GM.xmlHttpRequest;
+        nativeGMRequest = GM.xmlHttpRequest;
+    }
+    if (nativeGMRequest) {
+        _GM_xmlhttpRequest = function(f) {
+            if (!f) return nativeGMRequest(f);
+            if (isSameOriginRequest(f)) {
+                requestWithFetch(f);
+                return;
+            }
+            let originalOnerror = f.onerror;
+            let request = Object.assign({}, f);
+            request.onerror = function(gmError) {
+                requestWithFetch(f, function(fetchError) {
+                    if (originalOnerror) {
+                        originalOnerror(fetchError || gmError || {error: "Request failed"});
+                    }
+                });
+            };
+            return nativeGMRequest(request);
+        };
     } else {
-        _GM_xmlhttpRequest = (f) => {fetch(f.url, {method: f.method || 'GET', body: f.data, headers: f.headers}).then(response => response.text()).then(data => {f.onload && f.onload({response: data})}).catch(f.onerror && f.onerror())};
+        _GM_xmlhttpRequest = function(f) {
+            requestWithFetch(f);
+        };
     }
     if (typeof GM_registerMenuCommand !== 'undefined') {
         _GM_registerMenuCommand = GM_registerMenuCommand;
@@ -4213,7 +4398,7 @@
     } else {
         _GM_addStyle = cssStr => {
             let styleEle = document.createElement("style");
-            styleEle.innerHTML = cssStr;
+            setHTML(styleEle, cssStr);
             document.head.appendChild(styleEle);
             return styleEle;
         };
@@ -4325,8 +4510,10 @@
                         "https://github.com/hoothin/UserScripts/tree/master/Pagetual",
                         "https://hoothin.github.io/UserScripts/Pagetual/"];
     const firstRunPage = "https://pagetual.hoothin.com/firstRun";
+    const wedataRulesUrl = "http://wedata.net/databases/AutoPagerize/items_all.json";
+    const wedataMirrorRulesUrl = "https://hoothin.github.io/UserScripts/Pagetual/items_all.json";
     const guidePage = /^https?:\/\/.*pagetual.*rule\.html/i;
-    const ruleImportUrlReg = /greasyfork\.org\/.*scripts\/438684(\-[^\/]*)?(\/discussions|\/?$|\/feedback)|github\.com\/hoothin\/UserScripts\/(tree\/master\/Pagetual|issues)|^https:\/\/pagetual\.hoothin\.com\/.*firstRun\.html/i;
+    const ruleImportUrlReg = /greasyfork\.org\/.*scripts\/438684(\-[^\/]*)?(\/discussions|\/?$|\/feedback)|github\.com\/hoothin\/UserScripts\/(tree\/master\/Pagetual|issues)|^https:\/\/pagetual\.hoothin\.com\/.*first(Run|-run)\.html/i;
     const allOfBody = "body>*";
     const mainSel = ["article,.article","[role=main],main,.main,#main","#results"];
     const nextTextReg1 = new RegExp("\u005e\u7ffb\u003f\u005b\u4e0b\u540e\u5f8c\u6b21\u005d\u005b\u4e00\u30fc\u2500\u0031\u005d\u003f\u005b\u9875\u9801\u5f20\u5f35\u005d\u007c\u005e\u006e\u0065\u0078\u0074\u005b\u005c\u0073\u005f\u002d\u005d\u003f\u0070\u0061\u0067\u0065\u005c\u0073\u002a\u005b\u203a\u003e\u2192\u00bb\u005d\u003f\u0024\u007c\u6b21\u306e\u30da\u30fc\u30b8\u007c\u005e\u6b21\u3078\u0024\u007c\u0412\u043f\u0435\u0440\u0435\u0434\u007c\u005e\u0441\u043b\u0435\u0434\u0443\u044e\u0449\u0438\u0435", "i");
@@ -4567,139 +4754,211 @@
         return segs.length ? '/' + segs.join('/') : null;
     }
 
-    function parseTrustedTypes(cspString) {
-        const policies = new Set();
-        let allowDuplicates = false;
-        let ttDirectiveFound = false;
-        const ttRegex = /trusted-types\s+([^;]+)/gi;
-        let match;
-
-        while ((match = ttRegex.exec(cspString)) !== null) {
-            ttDirectiveFound = true;
-
-            const policyNames = match[1].trim().split(/\s+/);
-            for (const name of policyNames) {
-                if (name === "'allow-duplicates'") {
-                    allowDuplicates = true;
-                } else if (name !== "'none'") {
-                    policies.add(name.replace(/'/g, ''));
-                }
-            }
-        }
-        return { names: policies, allowDuplicates: allowDuplicates, ttDirectiveFound: ttDirectiveFound };
+    function createHTML(html, doc) {
+        const targetDoc = doc || document;
+        const fragment = targetDoc.createDocumentFragment();
+        if (html === null || html === undefined || html === '') return fragment;
+        parseHTMLToFragment(String(html), fragment, targetDoc);
+        return fragment;
     }
-
-    async function getCspTrustedTypesInfo() {
-        const combinedPolicies = new Set();
-        let combinedAllowDuplicates = false;
-        let combinedTtDirectiveFound = false;
-
-        const meta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
-        if (meta) {
-            const metaResult = parseTrustedTypes(meta.content);
-            metaResult.names.forEach(name => combinedPolicies.add(name));
-            if (metaResult.allowDuplicates) {
-                combinedAllowDuplicates = true;
-            }
-            if (metaResult.ttDirectiveFound) {
-                combinedTtDirectiveFound = true;
-            }
-        }
-
-        return new Promise((resolve) => {
-            GM_xmlhttpRequest({
-                method: "HEAD",
-                url: window.location.href,
-                onload: function(response) {
-                    const cspHeader = response.responseHeaders.split('\r\n')
-                    .filter(h => h.toLowerCase().startsWith('content-security-policy:'))
-                    .map(h => h.substring(26).trim())
-                    .join('; ');
-
-                    const headerResult = parseTrustedTypes(cspHeader);
-                    headerResult.names.forEach(name => combinedPolicies.add(name));
-                    if (headerResult.allowDuplicates) {
-                        combinedAllowDuplicates = true;
-                    }
-                    if (headerResult.ttDirectiveFound) {
-                        combinedTtDirectiveFound = true;
-                    }
-
-                    resolve({
-                        names: combinedPolicies,
-                        allowDuplicates: combinedAllowDuplicates,
-                        ttDirectiveFound: combinedTtDirectiveFound
-                    });
-                },
-                onerror: function(error) {
-                    resolve({
-                        names: combinedPolicies,
-                        allowDuplicates: combinedAllowDuplicates,
-                        ttDirectiveFound: combinedTtDirectiveFound
-                    });
+    let canDirectSetHTML = true;
+    let canPolicySetHTML = true;
+    let escapeHTMLPolicy;
+    let escapeHTMLCreator;
+    const MY_POLICY_NAME = 'pagetual_default';
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    const VOID_TAGS = {
+        area: true,
+        base: true,
+        br: true,
+        col: true,
+        embed: true,
+        hr: true,
+        img: true,
+        input: true,
+        link: true,
+        meta: true,
+        param: true,
+        source: true,
+        track: true,
+        wbr: true
+    };
+    const RAW_TEXT_TAGS = {
+        script: true,
+        style: true,
+        textarea: true,
+        title: true,
+        xmp: true,
+        plaintext: true,
+        noscript: true
+    };
+    const HTML_ENTITIES = {
+        amp: '&',
+        lt: '<',
+        gt: '>',
+        quot: '"',
+        apos: "'",
+        nbsp: '\u00A0'
+    };
+    function decodeEntities(text) {
+        return text.replace(/&(#x?[0-9a-fA-F]+|[a-zA-Z]+);/g, function(_, code) {
+            if (code[0] === '#') {
+                const isHex = code[1] === 'x' || code[1] === 'X';
+                const num = parseInt(code.slice(isHex ? 2 : 1), isHex ? 16 : 10);
+                if (!isNaN(num)) {
+                    try { return String.fromCodePoint(num); } catch(e) {}
                 }
-            });
+                return '&' + code + ';';
+            }
+            const key = code.toLowerCase();
+            return (key in HTML_ENTITIES) ? HTML_ENTITIES[key] : '&' + code + ';';
         });
     }
-
-    function isTrustedTypesEnforced() {
+    function parseHTMLToFragment(html, fragment, doc) {
+        const stack = [fragment];
+        const tokenRe = /<!--[\s\S]*?-->|<!doctype[^>]*>|<\/?[a-zA-Z][^>]*>|[^<]+/gi;
+        let match;
+        while ((match = tokenRe.exec(html))) {
+            const token = match[0];
+            if (token[0] !== '<') {
+                const text = decodeEntities(token);
+                if (text) stack[stack.length - 1].appendChild(doc.createTextNode(text));
+                continue;
+            }
+            if (token.indexOf('<!--') === 0) {
+                continue;
+            }
+            if (/^<!doctype/i.test(token)) {
+                continue;
+            }
+            if (token[1] === '/') {
+                const tag = token.slice(2, -1).trim().toLowerCase();
+                for (let i = stack.length - 1; i > 0; i--) {
+                    const node = stack[i];
+                    if (node.nodeType === 1 && node.nodeName.toLowerCase() === tag) {
+                        stack.length = i;
+                        break;
+                    }
+                }
+                continue;
+            }
+            const tagMatch = /^<\s*([^\s/>]+)/.exec(token);
+            if (!tagMatch) continue;
+            const rawName = tagMatch[1];
+            const tagName = rawName.toLowerCase();
+            const parent = stack[stack.length - 1];
+            const parentIsSvg = parent.nodeType === 1 && parent.namespaceURI === SVG_NS;
+            const isSvg = parentIsSvg || tagName === 'svg';
+            const el = isSvg ? doc.createElementNS(SVG_NS, rawName) : doc.createElement(tagName);
+            const attrPart = token.replace(/^<\s*[^\s/>]+/, '').replace(/\/?>$/, '');
+            if (attrPart) {
+                const attrRe = /([^\s=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g;
+                let attrMatch;
+                while ((attrMatch = attrRe.exec(attrPart))) {
+                    const name = attrMatch[1];
+                    const value = decodeEntities(attrMatch[2] || attrMatch[3] || attrMatch[4] || '');
+                    el.setAttribute(name, value);
+                }
+            }
+            parent.appendChild(el);
+            const selfClosing = token.endsWith('/>');
+            if (!selfClosing && !VOID_TAGS[tagName]) {
+                stack.push(el);
+                if (RAW_TEXT_TAGS[tagName]) {
+                    const closeRe = new RegExp('<\\/\\s*' + tagName + '\\s*>', 'ig');
+                    closeRe.lastIndex = tokenRe.lastIndex;
+                    const closeMatch = closeRe.exec(html);
+                    if (closeMatch) {
+                        const rawText = html.slice(tokenRe.lastIndex, closeMatch.index);
+                        if (rawText) el.appendChild(doc.createTextNode(rawText));
+                        tokenRe.lastIndex = closeMatch.index + closeMatch[0].length;
+                        stack.pop();
+                    }
+                }
+            }
+        }
+    }
+    function tryDirectSetHTML(target, htmlStr) {
+        if (!canDirectSetHTML) return false;
         try {
-            document.createElement('div').innerHTML = '';
-            return false;
-        } catch (e) {
+            target.innerHTML = htmlStr;
             return true;
+        } catch (e) {
+            canDirectSetHTML = false;
+            return false;
         }
     }
 
-    async function createPolicy() {
-        if (!(_unsafeWindow.trustedTypes && _unsafeWindow.trustedTypes.createPolicy && isTrustedTypesEnforced())) {
-            return;
-        }
-
-        const { names: allowedNames, allowDuplicates, ttDirectiveFound } = await getCspTrustedTypesInfo();
-
-        if (ttDirectiveFound && !allowDuplicates) {
-            debug("CSP Trusted Types is enforced without 'allow-duplicates'. " +
-                         "Skipping policy creation to avoid conflicts with the page.");
-            return;
-        }
-
-        const MY_POLICY_NAME = 'pvcep_default';
-
+    function ensureEscapeHTMLPolicy() {
+        if (!canPolicySetHTML) return null;
+        if (escapeHTMLCreator) return escapeHTMLPolicy;
+        const createPolicy = _unsafeWindow && _unsafeWindow.trustedTypes && _unsafeWindow.trustedTypes.createPolicy;
+        if (typeof createPolicy !== "function") return (canPolicySetHTML = false, null);
         try {
-            escapeHTMLPolicy = _unsafeWindow.trustedTypes.createPolicy(MY_POLICY_NAME, {
+            escapeHTMLPolicy = createPolicy(MY_POLICY_NAME, {
                 createHTML: (string, sink) => string,
                 createScriptURL: string => string,
                 createScript: string => string
             });
-            return;
-        } catch (e) {
-        }
-
-        const existingPolicies = new Set(_unsafeWindow.trustedTypes.getPolicyNames());
-        for (const name of allowedNames) {
-            if (name === '*' || existingPolicies.has(name)) {
-                continue;
-            }
-
-            try {
-                escapeHTMLPolicy = _unsafeWindow.trustedTypes.createPolicy(name, {
-                    createHTML: (string, sink) => string,
-                    createScriptURL: string => string,
-                    createScript: string => string
-                });
-                return;
-            } catch (e) {
-                debug(`create '${name}' failed, trying next...`);
-            }
-        }
-        debug("Could not create any trusted types policy.");
+        } catch (e) {}
+        escapeHTMLCreator = escapeHTMLPolicy && escapeHTMLPolicy.createHTML;
+        if (!escapeHTMLCreator) canPolicySetHTML = false;
+        return escapeHTMLPolicy;
     }
 
-    let escapeHTMLPolicy = null;
+    function tryPolicySetHTML(target, htmlStr) {
+        if (!canPolicySetHTML) return false;
+        ensureEscapeHTMLPolicy();
+        if (!escapeHTMLCreator) return false;
+        try {
+            target.innerHTML = escapeHTMLCreator(htmlStr);
+            return true;
+        } catch (e) {
+            canPolicySetHTML = false;
+            return false;
+        }
+    }
 
-    function createHTML(html) {
-        return escapeHTMLPolicy ? escapeHTMLPolicy.createHTML(html) : html;
+    function setHTML(target, html, doc) {
+        if (!target) return;
+        const htmlStr = html === null || html === undefined ? '' : String(html);
+        if (tryDirectSetHTML(target, htmlStr) || tryPolicySetHTML(target, htmlStr)) return;
+        const targetDoc = doc || target.ownerDocument || document;
+        const fragment = createHTML(htmlStr, targetDoc);
+        const targetIsHtml = target.nodeType === 1 && target.nodeName.toLowerCase() === 'html';
+        if (targetIsHtml) {
+            let htmlNode = null;
+            const fragChildren = fragment.childNodes;
+            for (let i = 0; i < fragChildren.length; i++) {
+                const child = fragChildren[i];
+                if (child.nodeType === 1 && child.nodeName.toLowerCase() === 'html') {
+                    htmlNode = child;
+                    break;
+                }
+            }
+            if (htmlNode) {
+                const attrs = target.attributes;
+                for (let i = attrs.length - 1; i >= 0; i--) {
+                    target.removeAttribute(attrs[i].name);
+                }
+                const srcAttrs = htmlNode.attributes;
+                for (let i = 0; i < srcAttrs.length; i++) {
+                    target.setAttribute(srcAttrs[i].name, srcAttrs[i].value);
+                }
+                while (target.firstChild) {
+                    target.removeChild(target.firstChild);
+                }
+                const htmlChildren = Array.from(htmlNode.childNodes);
+                for (let i = 0; i < htmlChildren.length; i++) {
+                    target.appendChild(htmlChildren[i]);
+                }
+                return;
+            }
+        }
+        while (target.firstChild) {
+            target.removeChild(target.firstChild);
+        }
+        target.appendChild(fragment);
     }
 
     const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
@@ -6120,9 +6379,9 @@
             }
             if (!next) {
                 await sleep(1);
-                let pageDiv = body.querySelector(".pagination,.pagination-list");
+                let pageDiv = body.querySelector("[class*=paging],.pagination,.pagination-list");
                 if (pageDiv) {
-                    cur = pageDiv.querySelector("[class*=current],.page-selected,[aria-current]");
+                    cur = pageDiv.querySelector("[class*=current],[class*=active],.page-selected,[aria-current]");
                     if (cur) {
                         if (cur.parentNode == pageDiv) {
                             next = cur.nextElementSibling;
@@ -6932,7 +7191,7 @@
                 var doc = null;
                 try {
                     doc = document.implementation.createHTMLDocument('');
-                    doc.documentElement.innerHTML = createHTML(data);
+                    setHTML(doc.documentElement, data, doc);
                     var body = getBody(doc);
                     if (!self.preloadDiv) {
                         self.preloadDiv = document.createElement('div');
@@ -7365,7 +7624,7 @@
                 let initRun = typeof self.curSiteRule.initRun == 'undefined' ? rulesData.initRun : self.curSiteRule.initRun;
                 if (self.nextLinkHref) {
                     sideController.setup();
-                    if (initRun && initRun != false) {
+                    if (initRun && initRun != false && (self.nextLinkHref != '#' || !self.curSiteRule.smart)) {
                         setTimeout(() => {
                             nextPage();
                         }, 300);
@@ -7580,7 +7839,7 @@
                         let cssArr = css.split("inIframe:");
                         if (cssArr && cssArr.length == 2) {
                             let styleEle = document.createElement("style");
-                            styleEle.innerHTML = cssArr[1];
+                            setHTML(styleEle, cssArr[1]);
                             parent.appendChild(styleEle);
                         }
                     }
@@ -7827,7 +8086,7 @@
             `;
             let frame = document.createElement("div");
             frame.id = "pagetual-sideController";
-            frame.innerHTML = createHTML(`
+            setHTML(frame, `
                 <div class="extra">
                   <svg id="loadNow" class="pagetual" viewBox="0 0 1030 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><title>${i18n("loadNow")}</title><path d="M712.106667 525.653333l-291.413334 247.893334a21.333333 21.333333 0 0 1-14.506666 5.546666 20.053333 20.053333 0 0 1-22.186667-19.2V264.106667a20.053333 20.053333 0 0 1 20.906667-19.2 20.906667 20.906667 0 0 1 14.506666 5.546666l291.413334 247.893334a17.92 17.92 0 0 1 1.28 27.306666zM512 0a512 512 0 1 0 512 512A512 512 0 0 0 512 0z" fill="#5E5C5C"></path></svg>
                   <svg id="scroll" class="pagetual" viewBox="0 0 1030 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><title>${i18n("sideControllerScroll")}</title><path d="M912 544v82.64C912 846.096 732.912 1024 512 1024S112 846.096 112 626.64V544h800z" fill="#5E5C5C"></path><path d="M478.656 0v43.328a96 96 0 0 1-32.48 71.952c-27.68 24.448-41.968 48.128-42.896 71.04l-0.096 4.352v104c0 24.224 14.512 49.344 43.52 75.312a96 96 0 0 1 31.952 71.52V496H112.032L112 393.712C112 181.648 264.848 8.72 472.352 0.208L478.656 0z" fill="#999999"></path><path d="M534.24 0C747.584 5.232 912 179.504 912 393.728v102.256L534.208 496v-52.912a96 96 0 0 1 33.536-72.88c28.48-24.416 43.2-48.16 44.16-71.2l0.096-4.336v-104c0-24.352-14.928-49.52-44.784-75.488a96 96 0 0 1-33.008-72.432V0z" fill="#5E5C5C"></path></svg>
@@ -7855,7 +8114,7 @@
             if (rulesData.sideControllerLoadNow === false) {
                 loadNow.style.display = "none";
             }
-            if (sideControllerIcon) move.innerHTML = sideControllerIcon;
+            if (sideControllerIcon) setHTML(move, sideControllerIcon);
 
             frame.addEventListener("dblclick", e => {
                 e.preventDefault();
@@ -8077,7 +8336,7 @@
             if (!isPause) {
                 this.frame.classList.remove("stop");
             }
-            this.pagenum.innerHTML = createHTML(curPage);
+            setHTML(this.pagenum, curPage);
             this.frame.title = i18n("page") + curPage;
             if (!this.validPage) {
                 if (curPage === 1) {
@@ -8186,7 +8445,7 @@
             `;
             let frame = document.createElement("div");
             frame.id = "pagetual-nextSwitch";
-            frame.innerHTML = createHTML(`
+            setHTML(frame, `
                 <div class="title">${i18n("nextSwitch")}</div>
                 <button type="button" class="closeSwitch">
                   <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2754">
@@ -8209,9 +8468,9 @@
                 let index = "<b>" + (i + 1) + "</b>: ";
                 if (target) {
                     let targetInner = target.innerText.trim();
-                    span.innerHTML = index + (targetInner || link);
+                    setHTML(span, index + (targetInner || link));
                 } else {
-                    span.innerHTML = index + "Not Found";
+                    setHTML(span, index + "Not Found");
                 }
                 span.title = link;
                 span.addEventListener("click", e => {
@@ -8561,7 +8820,7 @@
             this.allSignDiv = [];
             let frame = document.createElement("div");
             frame.id = "pagetual-picker";
-            frame.innerHTML = createHTML(`
+            setHTML(frame, `
                 <button title="Pagetual" type="button" class="logoIcon">
                   <svg width="30" height="30" class="upSvg pagetual" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M296 440c-44.1 0-80 35.9-80 80s35.9 80 80 80 80-35.9 80-80-35.9-80-80-80z" style="fill: #604b4a;" fill="#604b4a"></path><path d="M960 512c0-247-201-448-448-448S64 265 64 512c0 1.8 0.1 3.5 0.1 5.3 0 0.9-0.1 1.8-0.1 2.7h0.2C68.5 763.3 267.7 960 512 960c236.2 0 430.1-183.7 446.7-415.7 0.1-0.8 0.1-1.6 0.2-2.3 0.4-4.6 0.5-9.3 0.7-13.9 0.1-2.7 0.4-5.3 0.4-8h-0.2c0-2.8 0.2-5.4 0.2-8.1z m-152 8c0 44.1-35.9 80-80 80s-80-35.9-80-80 35.9-80 80-80 80 35.9 80 80zM512 928C284.4 928 99 744.3 96.1 517.3 97.6 408.3 186.6 320 296 320c110.3 0 200 89.7 200 200 0 127.9 104.1 232 232 232 62.9 0 119.9-25.2 161.7-66-66 142.7-210.4 242-377.7 242z" style="fill: #604b4a;" fill="#604b4a"></path></svg>
                 </button>
@@ -9016,7 +9275,7 @@
 
         setSelectorDiv(selector) {
             let self = this;
-            this.allpath.innerHTML = createHTML("");
+            setHTML(this.allpath, "");
             if (selector) {
                 if (this.xpath.checked) {
                     let span = document.createElement("span");
@@ -9127,7 +9386,7 @@
     }
     const picker = new Picker();
 
-    var editor, editorChanged = false, customRulesInput;
+    var editor, editorChanged = false, customRulesInput, wedata2githubInputRef;
     function createEdit() {
         var options = {
             mode: 'code',
@@ -9182,7 +9441,7 @@
                 configCon.appendChild(container);
             }
             container.style.height = '800px';
-            container.innerHTML = "";
+            setHTML(container, "");
             try {
                 editor = new _unsafeWindow.JSONEditor(container, options);
                 editor.set(ruleParser.customRules);
@@ -9274,7 +9533,7 @@
                 let starButton = document.createElement("a");
                 starButton.href = "https://github.com/hoothin/UserScripts#star";
                 starButton.className = "js-toggler-target rounded-left-2 btn-with-aria-count btn-sm btn";
-                starButton.innerHTML = createHTML('<svg height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-star d-inline-block mr-2"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"></path></svg><span class="d-inline">Star</span>');
+                setHTML(starButton, '<svg height="16" viewBox="0 0 16 16" version="1.1" width="16" class="octicon octicon-star d-inline-block mr-2"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Zm0 2.445L6.615 5.5a.75.75 0 0 1-.564.41l-3.097.45 2.24 2.184a.75.75 0 0 1 .216.664l-.528 3.084 2.769-1.456a.75.75 0 0 1 .698 0l2.77 1.456-.53-3.084a.75.75 0 0 1 .216-.664l2.24-2.183-3.096-.45a.75.75 0 0 1-.564-.41L8 2.694Z"></path></svg><span class="d-inline">Star</span>');
                 starButton.style.float = "right";
                 document.querySelector(".Layout-main>h2").appendChild(starButton);
                 return true;
@@ -9330,7 +9589,7 @@
                 importBtn.style.fontSize = "20px";
                 importBtn.addEventListener("click", e => {
                     let parentNode = importBtn.parentNode;
-                    if (!parentNode) return;
+                    if (!parentNode || !e.isTrusted) return;
                     parentNode.removeChild(importBtn);
                     try {
                         let rules = parentNode.innerText.trim();
@@ -9524,11 +9783,11 @@
                   padding: 0!important;
                  }
                  #saveBtn {
-                  width: 60vw;
+                  width: var(--config-width, 60vw);
                   position: fixed;
                   z-index: 999;
                   bottom: 0;
-                  left: 20vw;
+                  left: var(--config-left, 20vw);
                   font-size: xx-large;
                   opacity: 0.6;
                   cursor: pointer;
@@ -9602,16 +9861,16 @@
                 this.item.dataset.id = id;
                 let url = document.createElement("a");
                 url.href = ruleUrl.url;
-                url.innerHTML = ruleUrl.url;
+                setHTML(url, ruleUrl.url);
                 url.title = ruleUrl.url;
                 let up = document.createElement("span");
-                up.innerHTML = "↑ ";
+                setHTML(up, "↑ ");
                 up.title = i18n("sortTitle");
                 let down = document.createElement("span");
-                down.innerHTML = "↓ ";
+                setHTML(down, "↓ ");
                 down.title = i18n("sortTitle");
                 let del = document.createElement("span");
-                del.innerHTML = "× ";
+                setHTML(del, "× ");
                 up.onclick = e => {
                     this.moveUp();
                 };
@@ -9635,7 +9894,7 @@
                     let rulesLength = ruleParser.rules.reduce((acc, cur) => acc + (cur.from == id ? 1 : 0), 0);
                     let idSpan = document.createElement("span");
                     idSpan.style.float = "right";
-                    idSpan.innerHTML = `[rules: ${rulesLength}]`;
+                    setHTML(idSpan, `[rules: ${rulesLength}]`);
                     this.item.appendChild(idSpan);
                     this.idSpan = idSpan;
                 }
@@ -9644,7 +9903,7 @@
             updateNum() {
                 if (ruleParser.rules) {
                     let rulesLength = ruleParser.rules.reduce((acc, cur) => acc + (cur.from == this.item.dataset.id ? 1 : 0), 0);
-                    this.idSpan.innerHTML = `[rules: ${rulesLength}]`;
+                    setHTML(this.idSpan, `[rules: ${rulesLength}]`);
                 }
             }
             saveSort() {
@@ -9751,7 +10010,7 @@
 
         let rulebarList = [], updateFail = false;
         updateP.className = "updateDate";
-        updateP.innerHTML = passStr;
+        setHTML(updateP, passStr);
         updateP.title = i18n("update") + " - " + pastDate;
         configCon.appendChild(updateP);
         if (ruleUrls) {
@@ -9762,7 +10021,7 @@
             });
         }
         let customUrlsTitle = document.createElement("h2");
-        customUrlsTitle.innerHTML = i18n("customUrls");
+        setHTML(customUrlsTitle, i18n("customUrls"));
         configCon.appendChild(customUrlsTitle);
         let customUrlsInput = document.createElement("textarea");
         customUrlsInput.style.width = "100%";
@@ -9779,7 +10038,7 @@
         let upBtnImgTitle = document.createElement("h2");
         upBtnImgTitle.style.whiteSpace = "nowrap";
         upBtnImgTitle.style.overflow = "auto";
-        upBtnImgTitle.innerHTML = i18n("upBtnImg");
+        setHTML(upBtnImgTitle, i18n("upBtnImg"));
         upBtnImg.appendChild(upBtnImgTitle);
         let upBtnImgInput = document.createElement("input");
         upBtnImgInput.style.width = "100%";
@@ -9795,7 +10054,7 @@
         let downBtnImgTitle = document.createElement("h2");
         downBtnImgTitle.style.whiteSpace = "nowrap";
         downBtnImgTitle.style.overflow = "auto";
-        downBtnImgTitle.innerHTML = i18n("downBtnImg");
+        setHTML(downBtnImgTitle, i18n("downBtnImg"));
         downBtnImg.appendChild(downBtnImgTitle);
         let downBtnImgInput = document.createElement("input");
         downBtnImgInput.style.width = "100%";
@@ -9811,7 +10070,7 @@
         let sideControllerIconTitle = document.createElement("h2");
         sideControllerIconTitle.style.whiteSpace = "nowrap";
         sideControllerIconTitle.style.overflow = "auto";
-        sideControllerIconTitle.innerHTML = i18n("sideControllerIcon");
+        setHTML(sideControllerIconTitle, i18n("sideControllerIcon"));
         sideControllerIconDiv.appendChild(sideControllerIconTitle);
         let sideControllerIconInput = document.createElement("input");
         sideControllerIconInput.style.width = "100%";
@@ -9830,7 +10089,7 @@
         let loadingTextTitle = document.createElement("h2");
         loadingTextTitle.style.whiteSpace = "nowrap";
         loadingTextTitle.style.overflow = "auto";
-        loadingTextTitle.innerHTML = i18n("loadingTextTitle");
+        setHTML(loadingTextTitle, i18n("loadingTextTitle"));
         loadingText.appendChild(loadingTextTitle);
         let loadingTextInput = document.createElement("input");
         loadingTextInput.value = rulesData.loadingText || '';
@@ -9846,7 +10105,7 @@
         let opacityTitle = document.createElement("h2");
         opacityTitle.style.whiteSpace = "nowrap";
         opacityTitle.style.overflow = "visible";
-        opacityTitle.innerHTML = i18n("opacity");
+        setHTML(opacityTitle, i18n("opacity"));
         opacity.appendChild(opacityTitle);
         let opacityInput = document.createElement("input");
         opacityInput.value = rulesData.opacity * 100;
@@ -9868,7 +10127,7 @@
         let pageElementCss = document.createElement("div");
         pageElementCss.style.marginBottom = "30px";
         let pageElementCssTitle = document.createElement("h2");
-        pageElementCssTitle.innerHTML = i18n("pageElementCss");
+        setHTML(pageElementCssTitle, i18n("pageElementCss"));
         pageElementCss.appendChild(pageElementCssTitle);
         let pageElementCssInput = document.createElement("input");
         pageElementCssInput.value = rulesData.pageElementCss || '';
@@ -9883,7 +10142,7 @@
         let customCss = document.createElement("div");
         customCss.style.marginBottom = "50px";
         let customCssTitle = document.createElement("h2");
-        customCssTitle.innerHTML = i18n("customCss");
+        setHTML(customCssTitle, i18n("customCss"));
         customCss.appendChild(customCssTitle);
         let customCssInput = document.createElement("textarea");
         customCssInput.value = rulesData.customCss || '';
@@ -9905,7 +10164,7 @@
         function createCheckbox(innerText, val, tag, parentCheck, otherType, alwaysShow) {
             if (typeof val == 'undefined') val = "";
             let title = document.createElement(tag || "h3");
-            title.innerHTML = innerText;
+            setHTML(title, innerText);
             title.style.overflowWrap = "normal";
             let input = document.createElement("input");
             if (otherType === 'key') {
@@ -9967,10 +10226,8 @@
 
         let setConfigPageInput = createCheckbox(i18n("setConfigPage"), false);
         let enableWhiteListInput = createCheckbox(i18n("autoRun"), rulesData.enableWhiteList != true);
-        //let sideControllerInput = createCheckbox(i18n("sideController"), rulesData.sideController);
-        let sideControllerInput = createCheckbox(i18n("sideController"), true);
-        //let sideControllerAlwaysInput = createCheckbox(i18n("sideControllerAlways"), rulesData.sideControllerAlways, "h4", sideControllerInput);
-        let sideControllerAlwaysInput = createCheckbox(i18n("sideControllerAlways"), true, "h4", sideControllerInput);
+        let sideControllerInput = createCheckbox(i18n("sideController"), rulesData.sideController);
+        let sideControllerAlwaysInput = createCheckbox(i18n("sideControllerAlways"), rulesData.sideControllerAlways, "h4", sideControllerInput);
         let sideControllerScrollInput = createCheckbox(i18n("sideControllerScroll"), rulesData.sideControllerScroll !== false, "h4", sideControllerInput);
         let sideControllerLoadNowInput = createCheckbox(i18n("loadNow"), rulesData.sideControllerLoadNow !== false, "h4", sideControllerInput);
         let enableDebugInput = createCheckbox(i18n("enableDebug"), rulesData.enableDebug != false);
@@ -9990,8 +10247,8 @@
         let pageBarMenuInput = createCheckbox(i18n("pageBarMenu"), rulesData.pageBarMenu != false);
         let arrowToScrollInput = createCheckbox(i18n("arrowToScroll"), rulesData.arrowToScroll);
         let contentVisibilityInput = createCheckbox(i18n("contentVisibility"), rulesData.contentVisibility);
-        //let wedata2githubInput = createCheckbox(i18n("wedata2github"), rulesData.wedata2github);
-        let wedata2githubInput = createCheckbox(i18n("wedata2github"), true);
+        let wedata2githubInput = createCheckbox(i18n("wedata2github"), rulesData.wedata2github);
+        wedata2githubInputRef = wedata2githubInput;
         let customFirstInput = createCheckbox(i18n("customFirst"), rulesData.customFirst);
         let lastPageTipsInput = createCheckbox(i18n("lastPageTips"), rulesData.lastPageTips);
         let updateNotificationInput = createCheckbox(i18n("updateNotification"), rulesData.updateNotification != false);
@@ -10026,6 +10283,7 @@
         }
 
         updateP.onclick = e => {
+            if (!e.isTrusted) return;
             updateFail = false;
             //ruleParser.rules = [];
             showTips(i18n("beginUpdate"), "", 30000);
@@ -10039,7 +10297,7 @@
                     }
                     if (click2import) click2import.style.display = "none";
                 }
-                updateP.innerHTML = i18n("passSec", 0);
+                setHTML(updateP, i18n("passSec", 0));
                 updateP.title = i18n("update");
                 rulebarList.forEach(rulebar => {
                     rulebar.updateNum();
@@ -10047,16 +10305,16 @@
             }, (rule, err) => {
                 if (rule.id == 1) {
                     showTips(`Failed to update wedata rules! Try to switch to wedata mirror!`);
-                    wedata2githubInput.scrollIntoView({ behavior: "smooth" });
+                    wedata2githubInput.scrollIntoView({ behavior: "smooth", block: "center", inline: "center" });
                 } else {
                     showTips(`Failed to update ${rule.url} rules!`);
                 }
                 debug(err);
                 updateFail = true;
-            });
+            }, false, true);
         };
         let customRulesTitle = document.createElement("h2");
-        customRulesTitle.innerHTML = i18n("customRules", /tree/.test(location.href) ? location.href.replace('tree', 'edit').replace(/\/$/, '') + '/pagetualRules.json' : 'https://github.com/hoothin/UserScripts/edit/master/Pagetual/pagetualRules.json');
+        setHTML(customRulesTitle, i18n("customRules", /tree/.test(location.href) ? location.href.replace('tree', 'edit').replace(/\/$/, '') + '/pagetualRules.json' : 'https://github.com/hoothin/UserScripts/edit/master/Pagetual/pagetualRules.json'));
         configCon.appendChild(customRulesTitle);
         customRulesInput = document.createElement("textarea");
         customRulesInput.spellcheck = false;
@@ -10102,16 +10360,38 @@
         configCon.appendChild(blacklistInput);
         let saveBtn = document.createElement("button");
         langSelect.onchange = e => {
-            saveBtn.click();
+            rulesData.lang = langSelect.value || "";
+            storage.setItem("rulesData", rulesData);
             setTimeout(() => {
                 location.reload();
             }, 500);
         };
-        saveBtn.innerHTML = i18n("save");
+        setHTML(saveBtn, i18n("save"));
         saveBtn.id = "saveBtn";
         configCon.appendChild(saveBtn);
+        saveBtn.style.display = "none";
+        const syncSaveBtnLayout = () => {
+            if (!configCon || !saveBtn) return;
+            const rect = configCon.getBoundingClientRect();
+            if (rect.width > 0) {
+                document.documentElement.style.setProperty("--config-left", `${rect.left}px`);
+                document.documentElement.style.setProperty("--config-width", `${rect.width}px`);
+                saveBtn.style.display = "";
+            } else {
+                saveBtn.style.display = "none";
+            }
+        };
+        syncSaveBtnLayout();
+        window.addEventListener("resize", syncSaveBtnLayout);
+        if (window.ResizeObserver) {
+            const saveBtnResizeObserver = new ResizeObserver(() => {
+                syncSaveBtnLayout();
+            });
+            saveBtnResizeObserver.observe(configCon);
+        }
         saveBtn.onclick = e => {
             try {
+                if (!e.isTrusted) return;
                 let customRules;
                 if (editor) {
                     if (editorChanged) {
@@ -10159,7 +10439,6 @@
             rulesData.lang = langSelect.value || "";
             if (setConfigPageInput.checked) rulesData.configPage = location.href;
             rulesData.wedata2github = wedata2githubInput.checked;
-            //rulesData.wedata2github = true
             let opacity = parseInt(opacityInput.value) || 0;
             if (opacity > 100) opacity = 100;
             else if (opacity < 0) opacity = 0;
@@ -10190,13 +10469,10 @@
             if (rulesData.sideController != sideControllerInput.checked) {
                 rulesData.sideControllerPos = false;
             }
-	    //rulesData.sideController = true;
-	    //rulesData.sideControllerPos = true;
             rulesData.sideController = sideControllerInput.checked;
             rulesData.sideControllerScroll = sideControllerScrollInput.checked;
             rulesData.sideControllerLoadNow = sideControllerLoadNowInput.checked;
             rulesData.sideControllerAlways = sideControllerAlwaysInput.checked;
-            //rulesData.sideControllerAlways = true;
             rulesData.pageElementCss = pageElementCssInput.value;
             rulesData.customCss = customCssInput.value;
             rulesData.upBtnImg = upBtnImgInput.value;
@@ -10256,7 +10532,7 @@
         return true;
     }
 
-    function updateRules (success, fail, keepCache) {
+    function updateRules (success, fail, keepCache, forceWedataMirrorFallback) {
         if (!storage.supportCrossSave()) {
             fail({url:''}, "Not support cross storage");
             showTips("Current platform do not support cross storage!");
@@ -10272,6 +10548,27 @@
         let allOk = true;
         let preLength = ruleParser.rules.length;
         let fetchVersion = -1;
+        let triedWedataMirrorFallback = false;
+        function switchToWedataMirrorOnFail(rule) {
+            if (!rule || rule.id !== 1 || rulesData.wedata2github || (updateDate && !forceWedataMirrorFallback)) {
+                return false;
+            }
+            rulesData.wedata2github = true;
+            storage.setItem("rulesData", rulesData);
+            if (wedata2githubInputRef) {
+                wedata2githubInputRef.checked = true;
+            }
+            if (ruleUrls && ruleUrls.length > 0) {
+                for (let i = 0; i < ruleUrls.length; i++) {
+                    if (ruleUrls[i].id === 1) {
+                        ruleUrls[i].url = wedataMirrorRulesUrl;
+                        break;
+                    }
+                }
+            }
+            rule.url = wedataMirrorRulesUrl;
+            return true;
+        }
         async function needUpdate(url, id) {
             if (!/^https:\/\/hoothin\.github\.io\/|\/hoothin\/UserScripts\/.*\/Pagetual\/pagetualRules\.json/i.test(url)) {
                 return true;
@@ -10338,6 +10635,17 @@
                 if (await needUpdate(rule.url, rule.id)) {
                     ruleParser.addRuleByUrl(rule.url, rule.id, (json, err) => {
                         if (!json) {
+                            if (!triedWedataMirrorFallback && switchToWedataMirrorOnFail(rule)) {
+                                triedWedataMirrorFallback = true;
+                                ruleParser.addRuleByUrl(rule.url, rule.id, (retryJson, retryErr) => {
+                                    if (!retryJson) {
+                                        allOk = false;
+                                        fail(rule, retryErr);
+                                    }
+                                    addNextRule();
+                                });
+                                return;
+                            }
                             allOk = false;
                             fail(rule, err);
                         }
@@ -10441,7 +10749,6 @@
 
     let pageReady = false;
     async function initRules(callback) {
-        await createPolicy();
         charset = (document.characterSet || document.charset || document.inputEncoding);
         let equiv = document.querySelector('[http-equiv="Content-Type"]');
         if (equiv && equiv.content) {
@@ -10456,7 +10763,7 @@
             /*0 wedata格式，1 pagetual格式*/
             ruleUrls = [{
                 id: 1,
-                url: data && data.wedata2github ? 'https://hoothin.github.io/UserScripts/Pagetual/items_all.json' : 'http://wedata.net/databases/AutoPagerize/items_all.json',
+                url: data && data.wedata2github ? wedataMirrorRulesUrl : wedataRulesUrl,
                 type: 0
             }];
             if (data) {
@@ -10791,7 +11098,7 @@
                 var doc = null, response = res.response;
                 try {
                     doc = document.implementation.createHTMLDocument('');
-                    doc.documentElement.innerHTML = response;
+                    setHTML(doc.documentElement, response, doc);
                 } catch (e) {
                     debug('parse error:' + e.toString());
                 }
@@ -10809,7 +11116,7 @@
                         }
                         if (typeof preResult !== "undefined") {
                             if (typeof preResult === "string") {
-                                doc.documentElement.innerHTML = preResult;
+                                setHTML(doc.documentElement, preResult, doc);
                             } else pageElement = preResult;
                         }
                     } catch(e) {
@@ -11164,7 +11471,7 @@
 
     const loadingCSS = `font-size: initial; text-indent: unset; display: block; position: initial; margin: auto auto 5px auto; shape-rendering: auto; vertical-align: middle; visibility: visible; width: initial; height: initial; text-align: center; color: #6e6e6e; flex: 0;`;
     function setLoadingDiv(loadingText) {
-        loadingDiv.innerHTML = createHTML(`<p class="pagetual_loading_text" style="${loadingCSS}display: inline-block;width: 100%;">${loadingText}</p>${rulesData.hideLoadingIcon ? "" : `<div class="pagetual_loading"><svg width="50" height="50" style="position:relative;cursor: pointer;width: 50px;height: 50px;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M296 440c-44.1 0-80 35.9-80 80s35.9 80 80 80 80-35.9 80-80-35.9-80-80-80z" style="fill: #6e6e6e;" fill="#6e6e6e"></path><path d="M960 512c0-247-201-448-448-448S64 265 64 512c0 1.8 0.1 3.5 0.1 5.3 0 0.9-0.1 1.8-0.1 2.7h0.2C68.5 763.3 267.7 960 512 960c236.2 0 430.1-183.7 446.7-415.7 0.1-0.8 0.1-1.6 0.2-2.3 0.4-4.6 0.5-9.3 0.7-13.9 0.1-2.7 0.4-5.3 0.4-8h-0.2c0-2.8 0.2-5.4 0.2-8.1z m-152 8c0 44.1-35.9 80-80 80s-80-35.9-80-80 35.9-80 80-80 80 35.9 80 80zM512 928C284.4 928 99 744.3 96.1 517.3 97.6 408.3 186.6 320 296 320c110.3 0 200 89.7 200 200 0 127.9 104.1 232 232 232 62.9 0 119.9-25.2 161.7-66-66 142.7-210.4 242-377.7 242z" style="fill: #6e6e6e;" fill="#6e6e6e"></path></svg></div>`}`);
+        setHTML(loadingDiv, `<p class="pagetual_loading_text" style="${loadingCSS}display: inline-block;width: 100%;">${loadingText}</p>${rulesData.hideLoadingIcon ? "" : `<div class="pagetual_loading"><svg width="50" height="50" style="position:relative;cursor: pointer;width: 50px;height: 50px;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M296 440c-44.1 0-80 35.9-80 80s35.9 80 80 80 80-35.9 80-80-35.9-80-80-80z" style="fill: #6e6e6e;" fill="#6e6e6e"></path><path d="M960 512c0-247-201-448-448-448S64 265 64 512c0 1.8 0.1 3.5 0.1 5.3 0 0.9-0.1 1.8-0.1 2.7h0.2C68.5 763.3 267.7 960 512 960c236.2 0 430.1-183.7 446.7-415.7 0.1-0.8 0.1-1.6 0.2-2.3 0.4-4.6 0.5-9.3 0.7-13.9 0.1-2.7 0.4-5.3 0.4-8h-0.2c0-2.8 0.2-5.4 0.2-8.1z m-152 8c0 44.1-35.9 80-80 80s-80-35.9-80-80 35.9-80 80-80 80 35.9 80 80zM512 928C284.4 928 99 744.3 96.1 517.3 97.6 408.3 186.6 320 296 320c110.3 0 200 89.7 200 200 0 127.9 104.1 232 232 232 62.9 0 119.9-25.2 161.7-66-66 142.7-210.4 242-377.7 242z" style="fill: #6e6e6e;" fill="#6e6e6e"></path></svg></div>`}`);
     }
 
     var upSvg = `<svg width="30" height="30" class="upSvg pagetual" style="display:initial;position:relative;cursor: pointer;margin: 0 8px;width: 30px;height: 30px;vertical-align: baseline;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M296 440c-44.1 0-80 35.9-80 80s35.9 80 80 80 80-35.9 80-80-35.9-80-80-80z" style="fill: #604b4a;" fill="#604b4a"></path><path d="M960 512c0-247-201-448-448-448S64 265 64 512c0 1.8 0.1 3.5 0.1 5.3 0 0.9-0.1 1.8-0.1 2.7h0.2C68.5 763.3 267.7 960 512 960c236.2 0 430.1-183.7 446.7-415.7 0.1-0.8 0.1-1.6 0.2-2.3 0.4-4.6 0.5-9.3 0.7-13.9 0.1-2.7 0.4-5.3 0.4-8h-0.2c0-2.8 0.2-5.4 0.2-8.1z m-152 8c0 44.1-35.9 80-80 80s-80-35.9-80-80 35.9-80 80-80 80 35.9 80 80zM512 928C284.4 928 99 744.3 96.1 517.3 97.6 408.3 186.6 320 296 320c110.3 0 200 89.7 200 200 0 127.9 104.1 232 232 232 62.9 0 119.9-25.2 161.7-66-66 142.7-210.4 242-377.7 242z" style="fill: #604b4a;" fill="#604b4a"></path></svg>`;
@@ -11503,7 +11810,7 @@
                 let scrollH = Math.max(document.documentElement.scrollHeight, getBody(document).scrollHeight);
                 if (scrollH && curScroll <= 60) {
                     if (sideController.inited && sideController.pagenum.innerHTML !== "1") {
-                        sideController.pagenum.innerHTML = createHTML("1");
+                        setHTML(sideController.pagenum, "1");
                     }
                 }
                 if (ruleParser.curSiteRule.lockScroll) {
@@ -11677,10 +11984,10 @@
         let _time = 1500;
         if (href) {
             _time = 3500;
-            tipsWords.innerHTML = createHTML(`<a href='${href}' target='_blank'>${content}</a>`);
+            setHTML(tipsWords, `<a href='${href}' target='_blank'>${content}</a>`);
             tipsWords.style.pointerEvents = 'all';
         } else {
-            tipsWords.innerHTML = createHTML(content);
+            setHTML(tipsWords, content);
         }
         tipsWords.style.marginLeft = -tipsWords.offsetWidth / 2 + "px";
         setTimeout(() => {
@@ -11696,8 +12003,8 @@
         }, 1);
     }
 
-    const loadmoreReg = /^\s*((点击?)?(这里)?((看|加载|展开)(更多|剩余)|继续加载)|(點擊?)?(這裡)?((看|加載|展開)(更多|剩餘)|繼續加載)|load\s*more|もっと読み込む)[\.…▼\s\d%]*$/i;
-    const defaultLoadmoreSel = ".loadMore,.LoadMore,[class^='load-more'],[class*=' load-more'],.show-more,button.show_more,button[data-testid='more-results-button'],#btn_preview_remain,.view-more-btn";
+    const loadmoreReg = /^\s*((点击?)?(这里)?((看|显示|加载|展开)(更多|剩余)|继续加载)|(點擊?)?(這裡)?((看|顯示|加載|展開)(更多|剩餘)|繼續加載)|load\s*more|もっと読み込む)[\.…▼\s\d%]*$/i;
+    const defaultLoadmoreSel = ".loadMore,.LoadMore,[class^='load-more'],[class*=' load-more'],.show-more,button.show_more,button[data-testid='more-results-button'],#dataMoreBtn,#btn_preview_remain,.view-more-btn";
     function getLoadMore(doc, loadmoreBtn) {
         if (!loadmoreBtn || !getBody(doc).contains(loadmoreBtn) || /less/.test(loadmoreBtn.innerText)) loadmoreBtn = null;
         let loadMoreSel = ruleParser.curSiteRule.loadMore;
@@ -11814,11 +12121,11 @@
             pageBar.style.order = exampleStyle.order;
         }
         pageBar.title = i18n(isPause ? "enable" : "disable");
-        upSpan.innerHTML = createHTML(upSvg);
+        setHTML(upSpan, upSvg);
         upSpan.children[0].style.cssText = upSvgCSS;
         upSpan.title = i18n("toTop");
         upSpan.href = ruleParser.initUrl || '';
-        downSpan.innerHTML = createHTML(downSvg);
+        setHTML(downSpan, downSvg);
         downSpan.children[0].style.cssText = downSvgCSS;
         downSpan.title = i18n("toBottom");
         upSpan.style.cssText = initStyle;
@@ -11836,15 +12143,15 @@
             getBody(document).removeEventListener('touchstart', touchBodyHandler, { passive: false, capture: false });
         };
         if (ruleParser.nextTitle) {
-            pageText.innerHTML = createHTML(ruleParser.nextTitle + " ");
+            setHTML(pageText, ruleParser.nextTitle + " ");
             pageText.title = ruleParser.nextTitle;
         }
         if (ruleParser.curSiteRule.pageNum || pageNumReg.test(url)) {
-            pageText.innerHTML = createHTML(pageText.innerHTML + i18n("page"));
+            setHTML(pageText, pageText.innerHTML + i18n("page"));
             pageNum = document.createElement("span");
             let num = ruleParser.getPageNumFromUrl(url, curPage);
             localPage = num;
-            pageNum.innerHTML = createHTML(num + "<i style='font-size: 0;'>&nbsp;</i>");
+            setHTML(pageNum, num + "<i style='font-size: 0;'>&nbsp;</i>");
             pageNum.className = "pagetual_pageNum";
             pageNum.title = i18n("inputPageNum");
             pageNum.style.cssText = pageTextStyle;
@@ -11869,16 +12176,16 @@
             });
             pageBar.appendChild(pageNum);
         } else {
-            pageText.innerHTML = createHTML(pageText.innerHTML + i18n("page") + curPage + "<i style='font-size: 0;'>&nbsp;</i>");
+            setHTML(pageText, pageText.innerHTML + i18n("page") + curPage + "<i style='font-size: 0;'>&nbsp;</i>");
         }
         pageBar.id = "pagetual_pageBar" + localPage;
         let preBtn = document.createElement("span");
-        preBtn.innerHTML = createHTML("∧");
+        setHTML(preBtn, "∧");
         preBtn.title = i18n("prevPage");
         preBtn.className = "prevScreen";
         preBtn.style.cssText = "display: none;text-align: center;right: unset; float: left; width: 40px; background: rgba(240, 240, 240, 0.8); position: absolute; z-index: 9999999; box-shadow: rgb(0 0 0 / 50%) 0px -5px 5px; border-radius: 20px 20px 0 0; margin-top: -30px; ";
         let nextBtn = document.createElement("span");
-        nextBtn.innerHTML = createHTML("∨");
+        setHTML(nextBtn, "∨");
         nextBtn.title = i18n("nextPage");
         nextBtn.className = "nextScreen";
         nextBtn.style.cssText = "display: none;text-align: center;right: unset; float: left; width: 40px; background: rgba(240, 240, 240, 0.8); position: absolute; z-index: 9999999; box-shadow: rgb(0 0 0 / 50%) 0px 5px 5px; border-radius: 0 0 20px 20px; margin-top: 30px; ";
@@ -11914,7 +12221,7 @@
             let bgRing = document.createElement("span");
             bgRing.className = "refreshRing";
             bgRing.style.display = "none";
-            bgRing.innerHTML = createHTML(upSvg);
+            setHTML(bgRing, upSvg);
             pageText.title = "Refresh";
             pageText.appendChild(bgRing);
             pageText.addEventListener("click", e => {
@@ -12075,7 +12382,7 @@
             try {
                 let observer = new IntersectionObserver(entries => {
                     if (entries[0].intersectionRatio > 0 && sideController.pagenum.innerHTML != localPage) {
-                        sideController.pagenum.innerHTML = createHTML(localPage);
+                        setHTML(sideController.pagenum, localPage);
                     }
                 });
                 observer.observe(pageBar);
@@ -12152,7 +12459,7 @@
             var nativeTextareaValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value").set;
             nativeTextareaValueSetter.call(input, v);
         } else {
-            input.innerHTML = createHTML(v);
+            setHTML(input, v);
         }
         event = new Event('input', { bubbles: true });
         let tracker = input._valueTracker;
@@ -12286,7 +12593,7 @@
             var nativeTextareaValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, "value").set;
             nativeTextareaValueSetter.call(input, v);
         } else {
-            input.innerHTML = createHTML(v);
+            setHTML(input, v);
         }
         event = new Event('input', { bubbles: true });
         let tracker = input._valueTracker;
@@ -12384,7 +12691,7 @@
                                 }
                                 if (typeof preResult !== "undefined") {
                                     if (typeof preResult === "string") {
-                                        doc.documentElement.innerHTML = preResult;
+                                        setHTML(doc.documentElement, preResult, doc);
                                     } else eles = preResult;
                                 }
                             } catch(e) {
@@ -13049,7 +13356,7 @@
                 let cssArr = css.split("inIframe:");
                 if (cssArr && cssArr.length > 1) {
                     let styleEle = iframeDoc.createElement("style");
-                    styleEle.innerHTML = cssArr[1];
+                    setHTML(styleEle, cssArr[1]);
                     iframeDoc.head.appendChild(styleEle);
                 }
             }
