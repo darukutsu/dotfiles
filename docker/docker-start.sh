@@ -20,7 +20,6 @@ fi
 
 # Use docker compose instead
 root=/home/daru/.docker
-path="$root/$1/docker-compose.yml"
 
 update_container() {
   # NOTE: updates and runs container
@@ -32,13 +31,19 @@ update_container() {
   #docker-compose -f "$path" pull && docker image prune -af && docker-compose -f "$path" up -d
 }
 
-case "$2" in
+case "$1" in
 update-all)
   find "$root" -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | xargs -I{} "$root"/docker-start.sh {} update-force
   ;;
 update-all-running)
   find "$root" -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | xargs -I{} "$root"/docker-start.sh {} update
   ;;
+*)
+  path="$root/$1/docker-compose.yml"
+  ;;
+esac
+
+case "$2" in
 update)
   #if docker ps | grep -i "$1" ||
   state=$(systemctl --user show --property=ActiveState --no-pager --value "$1")

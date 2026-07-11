@@ -11,7 +11,7 @@ pkgs_chaotic_upgradable=$(printf "%s\n%s" "$pkgs_native_stripped" "$pkgs_chaotic
 #if ! updates_arch=$(checkupdates 2>/dev/null | wc -l); then updates_arch=0; fi
 updates_arch=$(printf "%s" "$pkgs_native_upgradable" 2>/dev/null | grep -cE '.+$')
 updates_aur=$(printf "%s\n%s" "$pkgs_aur_upgradable" "$pkgs_chaotic_upgradable" 2>/dev/null | grep -cE '.+$')
-updates_zfs=$(printf "%s" "$pkgs_aur_upgradable" 2>/dev/null | grep -c 'zfs-linux')
+updates_zfs=$(yay -Qu 2>/dev/null | grep -c 'zfs-linux')
 
 #if ! updates_flatpak=$(flatpak remote-ls --updates); then
 #  updates_flatpak=0

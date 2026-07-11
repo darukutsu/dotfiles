@@ -9,7 +9,9 @@
 		"opencode-notify",
 		//remove this once opencode releases official local discovery
 		"opencode-models-discovery"
+		//"JuliusBrussee/caveman"
 		//"github:JuliusBrussee/caveman"
+		//"@juliusbrussee/caveman-code"
 		//"opencode-pty",
 		//"opencode-websearch-cited",
 		//"opencode-jfrog-plugin",
@@ -128,6 +130,12 @@
 			"tail *": "allow",
 			"tr *": "allow"
 			//"xargs": "allow",
+		}
+	},
+	"references": {
+		"nvim": {
+			"path": "~/.config/nvim",
+			"description": "nvim config path"
 		}
 	}
 }

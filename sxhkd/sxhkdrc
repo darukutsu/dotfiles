@@ -384,6 +384,9 @@ super + {@button6,@button7}
 	notify-send -e -u low -a "system-sxhkd" -t 3000 --hint int:transient:1 --icon=preferences-system-windows "sxhkd" "boomer activated: zoom"; \
         boomer
 
+super + {@button4,@button5}
+	bspc desktop -f {next,prev}
+
 #super + button{4,5}
 #	pamixer {-i,-d} 5 ; "$XDG_CONFIG_HOME"/sxhkd/volume_notify.sh
 

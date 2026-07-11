@@ -30,8 +30,7 @@ alias clamstart='sudo systemctl start clamav-clamonacc && sudo systemctl start c
 comfy_stop() {
   curl -X POST http://gen.ai.lan/free -d '{"unload_models": true, "free_memory": true}'
 }
-alias downgrade='downgrade --git --pacman-cache ~/.cache/yay --maxdepth 2'
-alias downgrade-aur='downgrade --git --pacman-cache ~/.cache/yay --maxdepth 2'
+alias downgrade='downgrade --pacman-cache ~/.cache/yay'
 alias e='exit'
 alias emacs='emacs -nw'
 alias find-cursor='sxcs'
@@ -92,7 +91,7 @@ ollama_set_alive() {
 #alias page='$PAGER'
 alias pingg='ping google.com'
 alias pc='pacseek -u'
-alias rollback='downgrade --git --pacman-cache ~/.cache/yay --maxdepth 2'
+alias rollback='downgrade --pacman-cache ~/.cache/yay'
 #alias rsyn='rsync -AaPhxz --size-only'
 alias rsyn='rsync -aPh --size-only'
 alias shazam='$XDG_CONFIG_HOME/bash/songrec-fix.sh'

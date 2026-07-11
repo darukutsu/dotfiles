@@ -1,30 +1,26 @@
 return {
   "ms-jpq/coq_nvim",
-  event = "InsertEnter",
-  --lazy = false,
-  --branch = "coq",
-  cmd = { "COQdeps", "COQsnips" },
-  build = ":COQdeps",
+  --event = "InsertEnter",
+  lazy = false,
+  branch = "coq",
   dependencies = {
-    { "ms-jpq/coq.artifacts" },
-    { "ms-jpq/coq.thirdparty" },
+    { "neovim/nvim-lspconfig" },
+    { "ms-jpq/coq.artifacts", branch = "artifacts" },
+    { "ms-jpq/coq.thirdparty", branch = "3p" },
   },
   init = function()
     vim.g.coq_settings = {
-      auto_start = "shut-up",
-      xdg = true,
       keymap = {
         recommended = false,
         eval_snips = "<c-e>",
         bigger_preview = "<c-w>",
-        jump_to_mark = "<c-h>",
         --pre_select = false,
         --manual_complete = ,
         --repeat = ".",
       },
       display = {
         --mark_applied_notify = false,
-        statusline = { helo = false },
+        ghost_text = { enabled = false },
       },
     }
   end,
@@ -84,6 +80,9 @@ return {
       [[pumvisible() ? (complete_info().selected != -1 ? "<c-y>" : "<c-k><esc><cr>") : "<c-k><esc><cr>"]],
       { expr = true, noremap = true }
     )
+    vim.keymap.set({ "i", "s" }, "<c-h>", function()
+      vim.snippet.jump(1)
+    end)
 
     -- TODO: we don't need this if coq ever implements what blink.cmp does
     local keys = "?!@#$%^&*+-=`\"',./\\:;<>()[]{} "
