@@ -66,6 +66,7 @@ return {
       json = { "biome" },
       jsonc = { "biome" },
       markdown = { "mdsf" },
+      go = { "gofumpt" },
     },
     formatters = {
       shfmt = {

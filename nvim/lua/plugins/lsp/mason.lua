@@ -49,6 +49,7 @@ return { -- MASON, formatter/linter, debugger, lsp
       zig = "zls",
       jdtls = "jdtls",
       clangd = "clangd",
+      gopls = "gopls",
       --matlab = "matlab",
       --ltex = "ltex",
       --kotlin = "kotlin",
@@ -133,14 +134,18 @@ return { -- MASON, formatter/linter, debugger, lsp
         "actionlint",
         "codespell",
         "detekt",
+        "golangci-lint",
         "htmlhint",
         --"markdownlint", -- linter and formatter
+        "revive",
         "shellcheck",
+        "staticcheck",
         "textlint", -- markdown/txt linter
         "yamllint",
         -- Formatter
         "asmfmt",
         "clang_format",
+        "gofumpt",
         "mdsf", -- codeblock only, probably needs setup
         "mdformat", -- some codeblock and rest of markdown
         -- "miss_hit", -- formatter/linter matlab i don't need rn
@@ -160,7 +165,13 @@ return { -- MASON, formatter/linter, debugger, lsp
       --},
 
       -- implicit automatic setup when empty
-      handlers = {},
+      handlers = {
+        revive = null_ls.register(null_ls.builtins.diagnostics.revive.with({
+          filter = function(diagnostic)
+            return false
+          end,
+        })),
+      },
     })
 
     -- maybe want some customization in future
