@@ -134,18 +134,15 @@ return { -- MASON, formatter/linter, debugger, lsp
         "actionlint",
         "codespell",
         "detekt",
-        "golangci-lint",
+        "golangci-lint", -- includes all go formatters and linters
         "htmlhint",
         --"markdownlint", -- linter and formatter
-        "revive",
         "shellcheck",
-        "staticcheck",
         "textlint", -- markdown/txt linter
         "yamllint",
         -- Formatter
         "asmfmt",
         "clang_format",
-        "gofumpt",
         "mdsf", -- codeblock only, probably needs setup
         "mdformat", -- some codeblock and rest of markdown
         -- "miss_hit", -- formatter/linter matlab i don't need rn
@@ -165,13 +162,7 @@ return { -- MASON, formatter/linter, debugger, lsp
       --},
 
       -- implicit automatic setup when empty
-      handlers = {
-        revive = null_ls.register(null_ls.builtins.diagnostics.revive.with({
-          filter = function(diagnostic)
-            return false
-          end,
-        })),
-      },
+      handlers = {},
     })
 
     -- maybe want some customization in future
@@ -184,8 +175,9 @@ return { -- MASON, formatter/linter, debugger, lsp
     --vim.cmd [[autocmd CursorHold,CursorHoldI * lua vim.diagnostic.open_float(nil, {focus=false})]]
 
     vim.diagnostic.config({
-      --virtual_lines = { current_line = true },
+      --virtual_lines = { current_line = true, source = true },
       --virtual_text = false,
+      float = { source = true },
 
       signs = {
         text = {
