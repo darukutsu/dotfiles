@@ -198,8 +198,8 @@ map({ "n", "v", "o" }, "'[a-z]", "'[a-z]zz", {})
 --map({ "n", "v", "o" }, "N", "<C-d>Nzzzv", {})
 
 -- Scrolling content
-map({ "n", "v", "o" }, "<C-e>", "jzz", {})
-map({ "n", "v", "o" }, "<C-y>", "kzz", {})
+--map({ "n", "v", "o" }, "<C-e>", "jzz", {})
+--map({ "n", "v", "o" }, "<C-y>", "kzz", {})
 
 -- Remap defaults
 map({ "n" }, "O", "O<Esc>", {})
