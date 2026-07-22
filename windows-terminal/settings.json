@@ -15,7 +15,7 @@
 				"size": 11
 			},
 			"historySize": 50000,
-			"bellStyle": ["audible", "visual"],
+			"bellStyle": ["audible", "visual", "window", "taskbar"],
 			"intenseTextStyle": "all"
 		}
 	},
@@ -182,6 +182,14 @@
 		{
 			"id": null,
 			"keys": "ctrl+c"
+		},
+		{
+			"id": null,
+			"keys": "ctrl+tab"
+		},
+		{
+			"id": null,
+			"keys": "ctrl+shift+tab"
 		},
 		{
 			"keys": "ctrl+k",
