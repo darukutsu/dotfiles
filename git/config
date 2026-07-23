@@ -40,9 +40,12 @@
     cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
 [alias]
 	#lol = log --oneline --decorate --format="%h%ch %d %s"
-	lol = log --oneline --decorate --format=\"%h %cs %d %s\"
-	graph = log --oneline --graph --decorate
-	logg = log --oneline --graph --decorate
-	reflog = reflog --date=iso --pretty
 	diff = diff --word-diff
-	unadd = reset
+	graph = log --oneline --graph --decorate
+	lol = log --oneline --decorate --format=\"%h %cs %d %s\"
+	logg = log --oneline --graph --decorate
+	logau = log --author
+	numstat = diff --shortstat HEAD HEAD~1
+	parent = "!git show-branch | grep '*' | grep -v \"$(git rev-parse --abbrev-ref HEAD)\" | head -n1 | sed 's/.*\\[\\(.*\\)\\].*/\\1/' | sed 's/[\\^~].*//'"
+	reflog = reflog --date=iso --pretty
+	unadd = reset HEAD

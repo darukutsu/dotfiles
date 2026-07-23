@@ -50,6 +50,7 @@ return { -- MASON, formatter/linter, debugger, lsp
       jdtls = "jdtls",
       clangd = "clangd",
       gopls = "gopls",
+      yamlls = "yaml-language-server",
       --matlab = "matlab",
       --ltex = "ltex",
       --kotlin = "kotlin",
