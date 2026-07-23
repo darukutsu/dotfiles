@@ -11,4 +11,5 @@ ip=$(ip addr | grep 192.168 | sed "s/\/.*//;s/inet//;s/ //g")
 
 qrencode -m 2 -t utf8 <<< "http://$ip:$port"
 
-simple-http-server --ip $ip -p $port "$(pwd)"
+#simple-http-server --ip $ip -p $port "$(pwd)"
+python -m http.server -b $ip $port
