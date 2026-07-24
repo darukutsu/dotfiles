@@ -1,41 +1,99 @@
-#DIRS
-#
-# MOVED TO /etc/security/pam_env.conf
-#
-
-# unsuported for adb tools
-##export ANDROID_HOME="$XDG_DATA_HOME/android"
-#export QMK_HOME="$XDG_CONFIG_HOME/qmk_firmware"
-#export XINITRC="$XDG_CONFIG_HOME/X11/xinitrc"
-#export WINEPREFIX="$XDG_DATA_HOME/wine"
-#export INPUTRC="$XDG_CONFIG_HOME/readline/inputrc"
-#export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
-##export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
-#export TERMINFO="$XDG_DATA_HOME/terminfo"                                
-#export TERMINFO_DIRS="$XDG_DATA_HOME/terminfo:/usr/share/terminfo"
-#export LESSHISTFILE="$XDG_CACHE_HOME/less/history"
-#export GOPATH="$XDG_DATA_HOME/go"
-#export GNUPGHOME="$XDG_DATA_HOME/gnupg"
-##export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority"
-##export TASKRC="$XDG_DATA_HOME/task"
-#export VIT_DIR="$XDG_CONFIG_HOME/vit"
-#export GRADLE_USER_HOME="$XDG_DATA_HOME/gradle"
-#export CARGO_HOME="$XDG_DATA_HOME/cargo"
-#export LEIN_HOME="$XDG_DATA_HOME/lein"
-#export NPM_CONFIG_USERCONFIG="$XDG_CONFIG_HOME/npm/npmrc"
-#export STEAM_APP_DIR="$HOME/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common/"
-#export STACK_ROOT='"$XDG_DATA_HOME"/stack' 
-#export PYLINTHOME='"$XDG_CACHE_HOME"/pylint'                        
-#export PARALLEL_HOME='"$XDG_CONFIG_HOME"/parallel' 
-#export CGDB_DIR='"$XDG_CONFIG_HOME"/cgdb'
-#export NIMBLE_DIR="$XDG_DATA_HOME/nimble" 
-##export HISTFILE='"$XDG_STATE_HOME"/bash/history'
-#export MBSYNCRC='"$XDG_CONFIG_HOME"/isync/mbsyncrc'
-#export W3M_DIR='"$XDG_DATA_HOME"/w3m'
-
 ## XDG_FOLLOW_CORRECT_DIR
 alias dosbox='dosbox -conf "$XDG_CONFIG_HOME"/dosbox/dosbox.conf'
 alias mbsync='mbsync -c "$XDG_CONFIG_HOME"/isync/mbsyncrc'
 alias wget='wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'
 alias yarn='yarn --use-yarnrc "$XDG_CONFIG_HOME/yarn/config"'
 alias lmms='lmms -c "$XDG_CONFIG_HOME/lmms/lmmsrc.xml"'
+
+#DIRS
+#
+# MOVED TO /etc/security/pam_env.conf
+#
+#XDG_DATA_HOME=@{HOME}/.local/share
+#XDG_CONFIG_HOME=@{HOME}/.config
+#XDG_STATE_HOME=@{HOME}/.local/state
+#XDG_CACHE_HOME=@{HOME}/.cache
+#XDG_DOWNLOAD_DIR=@{HOME}/Downloads
+
+#GOPATH=${XDG_DATA_HOME}/go
+#PATH=${GOPATH}/bin:${XDG_DATA_HOME}/cargo/bin:${XDG_CONFIG_HOME}/rofi/scripts:@{HOME}/.local/bin
+
+#EDITOR=nvim
+#CLIPBOARD_HISTORY=1gb
+#CLIPBOARD_NOAUDIO=1
+##CLIPBOARD_NOGUI=1
+##GTK_USE_PORTAL=1
+##GDK_CORE_DEVICE_EVENTS=1
+#GDK_DEBUG=portals
+##SDL_JOYSTICK_HIDAPI=0
+#STACK_XDG=1
+##QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+##QTWEBENGINE_CHROMIUM_FLAGS="--enable-quic"
+
+## XDG_DIRS FOR OTHER SOFTWARE
+#ANDROID_USER_HOME=${XDG_DATA_HOME}/android
+#ANDROID_HOME=${XDG_DATA_HOME}/android/sdk
+### NOTE: NEVER PUBLISH THIS
+###BW_SESSION=""
+#CARGO_HOME=${XDG_DATA_HOME}/cargo
+##CGDB_DIR=${XDG_CONFIG_HOME}/cgdb
+##CCACHE_DIR=/tmp/ccache
+##CCACHE_DIR=${XDG_CACHE_HOME}/ccache
+##DOCKER_CONFIG=${XDG_CONFIG_HOME}/docker
+#DOTNET_CLI_HOME=${XDG_DATA_HOME}/dotnet
+#DUB_HOME=${XDG_DATA_HOME}/dub
+#GTK2_RC_FILES=${XDG_CONFIG_HOME}/gtk-2.0/gtkrc
+#GNUPGHOME=${XDG_DATA_HOME}/gnupg
+#GRADLE_USER_HOME=${XDG_DATA_HOME}/gradle
+##HISTFILE=${XDG_STATE_HOME}/bash/history
+#INPUTRC=${XDG_CONFIG_HOME}/readline/inputrc
+#ICEAUTHORITY=${XDG_CACHE_HOME}/ICEauthority
+##_JAVA_OPTIONS="-Djava.util.prefs.userRoot=${XDG_CONFIG_HOME}/java - Djavafx.cachedir=${XDG_CACHE_HOME}/openjfx"
+#LEIN_HOME=${XDG_DATA_HOME}/lein
+#LESSHISTFILE=${XDG_CACHE_HOME}/less/history
+#MBSYNCRC=${XDG_CONFIG_HOME}/isync/mbsyncrc
+#MYPY_CACHE_DIR=${XDG_CACHE_HOME}/mypy
+#NIMBLE_DIR=${XDG_DATA_HOME}/nimble
+#NPM_CONFIG_USERCONFIG=${XDG_CONFIG_HOME}/npm/npmrc
+#NPM_CONFIG_INIT_MODULE=${XDG_CONFIG_HOME}/npm/config/npm-init.js
+#NPM_CONFIG_CACHE=${XDG_CACHE_HOME}/npm
+#NPM_CONFIG_TMP=${XDG_RUNTIME_DIR}/npm
+#NUGET_PACKAGES=${{XDG_CACHE_HOME}/NuGetPackages
+#OPAMROOT=${XDG_DATA_HOME}/opam
+#PARALLEL_HOME=${XDG_CONFIG_HOME}/parallel
+#PASSWORD_STORE_DIR=${XDG_DATA_HOME}/pass
+#PSQL_HISTORY=${XDG_STATE_HOME}/psql_history
+#PYLINTHOME=${XDG_CACHE_HOME}/pylint
+#PYTHONSTARTUP=${XDG_CONFIG_HOME}/python/pythonrc
+#QMK_HOME=${XDG_CONFIG_HOME}/qmk_firmware
+#RUSTUP_HOME=${XDG_DATA_HOME}/rustup
+#RUFF_CACHE_DIR=${XDG_CACHE_HOME}/ruff
+#STACK_ROOT=${XDG_DATA_HOME}/stack
+#STEAM_APP_DIR=@{HOME}/.var/app/com.valvesoftware.Steam/data/Steam/steamapps/common/
+#TASKRC=${XDG_CONFIG_HOME}/task/taskrc
+#TERMINFO=${XDG_DATA_HOME}/terminfo
+#TERMINFO_DIRS=${XDG_DATA_HOME}/terminfo:/usr/share/terminfo
+#TEXMFVAR=${XDG_CACHE_HOME}/texlive/texmf-var
+#TS3_CONFIG_DIR=${XDG_CONFIG_HOME}/ts3client
+#VIT_DIR=${XDG_CONFIG_HOME}/vit
+#WINEPREFIX=${XDG_DATA_HOME}/wine
+#W3M_DIR=${XDG_DATA_HOME}/w3m
+#XAUTHORITY=${XDG_RUNTIME_DIR}/Xauthority
+#XCURSOR_PATH=/usr/share/icons:${XDG_DATA_HOME}/icons
+#XINITRC=${XDG_CONFIG_HOME}/X11/xinitrc
+
+## NOTE: AI NEVER PUBLISH THIS
+#GROQ_API_KEY=""
+#DEEPSEEK_API_KEY=""
+#MISTRAL_API_KEY=""
+#CLAUDE_API_KEY=""
+#OPENAI_API_KEY=""
+#GEMINI_API_KEY=""
+#AI_KEY_MISTRAL=${MISTRAL_API_KEY}
+#AI_KEY_DEEPSEEK=${DEEPSEEK_API_KEY}
+#AI_KEY_OPENAI=${OPENAI_API_KEY}
+#AI_KEY_OLLAMA=""
+#AI_KEY_GEMINI=${GEMINI_API_KEY}
+#AI_KEY_GROQ=${GROQ_API_KEY}
+#AI_KEY_CLAUDE=${CLAUDE_API_KEY}
+#HF_TOKEN=""
