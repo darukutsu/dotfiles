@@ -6,9 +6,10 @@ percent=$(shuf -i 20-100 -n1)
 colors="r y g c b m"
 color=$(printf "$colors" | cut -d' ' -f$(shuf -i 1-6 -n1))
 
+infile=~/Pictures/wallpapers/arch1-gray.png
 outfile=~/Pictures/wallpapers/current-wallpaper.png
 
-./colorbalance2 -c $color -a $percent ~/Pictures/wallpapers/arch1-gray.png "$outfile"
+./colorbalance2 -c $color -a $percent "$infile" "$outfile"
 
 ./colortemp -t $temp "$outfile" "$outfile"
 
