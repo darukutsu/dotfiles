@@ -1,0 +1,15 @@
+#!/bin/sh
+set -x
+
+temp=$(shuf -i 2000-30000 -n1)
+percent=$(shuf -i 20-100 -n1)
+colors="r y g c b m"
+color=$(printf "$colors" | cut -d' ' -f$(shuf -i 1-6 -n1))
+
+outfile=~/Pictures/wallpapers/current-wallpaper.png
+
+./colorbalance2 -c $color -a $percent ~/Pictures/wallpapers/arch1-gray.png "$outfile"
+
+./colortemp -t $temp "$outfile" "$outfile"
+
+feh --bg-fill --no-fehbg --xinerama-index 0 "$outfile"
