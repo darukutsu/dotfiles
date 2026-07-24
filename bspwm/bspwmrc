@@ -16,12 +16,13 @@ if [ $(bspc query -M --names | wc -l) -gt 1 ]; then
   #bspc monitor HDMI-1 -d I II III IV V VI VII VIII IX X
   #bspc monitor DP-1 -d   II III IV V VI     
   #bspc monitor DP-1 -d  II III IV V VI VII   
-  bspc monitor eDP1 -r
-  xrandr --output eDP1 --off
+  mon_laptop=$(bspc query -M --names | grep -o 'eDP.*')
+  bspc monitor "$mon_laptop" -r
+  xrandr --output "$mon_laptop" --off
   bspc config remove_unplugged_monitors true
   bspc config remove_disabled_monitors true
 else
-  brightnessctl set 1000
+  brightnessctl set "$(brightnessctl max)"
 fi
 bspc monitor -d I II III IV V VI VII VIII IX X
 
