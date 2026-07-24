@@ -11,6 +11,10 @@ export SXHKD_MODE_FILE="$HOME/.config/sxhkd/zscroll-polybar"
 #################################
 #         MONITOR SETUP         #
 #################################
+
+# try to set secondary display only if possible
+mons -s
+
 if [ $(bspc query -M --names | wc -l) -gt 1 ]; then
   #bspc monitor DP-1 -d I II III IV V VI VII VIII IX X
   #bspc monitor HDMI-1 -d I II III IV V VI VII VIII IX X
