@@ -1,14 +1,62 @@
 export EDITOR=nvim
+
+# scrollback capture via script - enables kitty-like "send buffer to pager"
+# only when NOT running inside kitty (kitty has its own scrollback pager)
+if [ -z "$TERMINAL_SCROLLBACK" ] && [ -t 0 ] && [ -z "$KITTY_WINDOW_ID" ]; then
+  export TERMINAL_SCROLLBACK="/tmp/scrollback-$$.log"
+  exec script -q "$TERMINAL_SCROLLBACK"
+fi
+
 # don't forget to install `pacman -Syu mesa vulkan-tools vulkan-icd-loader libcanberra pulseaudio`
-export KITTY_DISABLE_WAYLAND=1
+# let kitty use native wayland (faster), other apps stay on x11
+# let kitty use native wayland (faster), other apps stay on x11
+#export KITTY_DISABLE_WAYLAND=1
+# WSLg-specific kitty perf tweaks (loaded via envinclude KITTY_CONF_*)
+export KITTY_CONF_WSL="sync_to_monitor no
+input_delay 0
+repaint_delay 2
+linux_display_server x11
+wayland_enable_ime no
+cursor_trail 0"
+
+# X11 has no DRI3 in WSLg, so d3d12 is useless — use optimized llvmpipe
+export GALLIUM_DRIVER=llvmpipe
+export LP_NUM_THREADS=4
+export MESA_NO_ERROR=1
+export MESA_GLSL_CACHE_DISABLE=0
+
+# Fix X11 key repeat rate (200ms delay, 40 keys/sec)
+xset r rate 200 40 2>/dev/null
 #export GDK_SCALE=2
 #export QT_SCALE_FACTOR=2
 export GDK_BACKEND=x11
 export QT_QPA_PLATFORM=xcb
-unset WAYLAND_DISPLAY
+#unset WAYLAND_DISPLAY
+export WAYLAND_DISPLAY=wayland-0
+export XDG_RUNTIME_DIR=/mnt/wslg/runtime-dir
 
 # unnecessary since selfhosting server
 #if ! pgrep --quiet -U "$USER" atuin; then
 #	rm /atuin/$USER/atuin.sock
 #	atuin daemon &
 #fi 
+#
+
+# clipboard daemon
+# has its own issues
+#prev=""
+#while true; do
+#    curr=$(wl-paste 2>/dev/null)
+#    if [ "$curr" != "$prev" ]; then
+#        echo -n "$curr" | clip.exe
+#        prev="$curr"
+#    fi
+#    sleep 0.5
+#done &
+#
+export PATH=/opt/clang/:${PATH}
+
+# Remove Windows Python (scoop app + shims) from PATH — prevents VS Code Python extension
+# from scanning Windows filesystem (~5 min startup delay)
+PATH=$(echo "$PATH" | tr ':' '\n' | grep -v '/mnt/c/.*[Pp]ython\|/mnt/c/.*[Ss]coup.*[Pp]ython\|/mnt/c/Users/.*/scoop/shims' | tr '\n' ':' | sed 's/:$//')
+export PATH
