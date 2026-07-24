@@ -29,12 +29,26 @@ alias lmms='lmms -c "$XDG_CONFIG_HOME/lmms/lmmsrc.xml"'
 #STACK_XDG=1
 ##QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 ##QTWEBENGINE_CHROMIUM_FLAGS="--enable-quic"
+#
+## /etc/environment
+#GTK_IM_MODULE=fcitx
+#QT_IM_MODULE=fcitx
+#QT_IM_MODULES="wayland;fcitx;ibus"
+#XMODIFIERS=@im=fcitx
+#GLFW_IM_MODULE=ibus
+#SDL_IM_MODULE=fcitx
+#QT_QPA_PLATFORM=xcb
+#QT_QPA_PLATFORMTHEME=qt6ct
+#QT_STYLE_OVERRIDE=kvantum
+
+## NOTE: never publish this
+#GITHUB_ACCESS_TOKEN=
+#DISCORD_TOKEN=
+#BW_SESSION=
 
 ## XDG_DIRS FOR OTHER SOFTWARE
 #ANDROID_USER_HOME=${XDG_DATA_HOME}/android
 #ANDROID_HOME=${XDG_DATA_HOME}/android/sdk
-### NOTE: NEVER PUBLISH THIS
-###BW_SESSION=""
 #CARGO_HOME=${XDG_DATA_HOME}/cargo
 ##CGDB_DIR=${XDG_CONFIG_HOME}/cgdb
 ##CCACHE_DIR=/tmp/ccache
