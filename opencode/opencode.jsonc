@@ -50,6 +50,16 @@
 			}
 		}
 	},
+	"mcp": {
+		"LibreTranslate": {
+			"type": "local",
+			"command": ["npx", "-y", "@libretranslate/mcp"],
+			"environment": {
+				"LIBRETRANSLATE_API_URL": "https://translate.hento.org",
+				"LIBRETRANSLATE_API_KEY": "your-api-key"
+			}
+		}
+	},
 	"agent": {
 		"build": {
 			"mode": "primary",
