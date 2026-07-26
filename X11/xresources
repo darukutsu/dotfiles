@@ -1,21 +1,3 @@
-Nsxiv.window.background: #24283B
-Nsxiv.window.foreground: #7AA2F7
-Nsxiv.bar.foreground: #7AA2F7
-Nsxiv.mark.foreground: #FFA000
-Nsxiv.bar.font: monospace:size=11:style=Book
-//Nsxiv.bar.font: xft:Mononoki:size=9
-//Nsxiv.bar.font: xft:DejaVuSansMono:size=10:style=bold
-
-*.foreground:    #A9B1D6
-*.background:    #1A1B26
-*.cursorColor:   #A9B1D6
-*.highlightColor:#3A3F4B
-
-!*fading:                  40
-!*fadeColor:               S_base03
-!*pointerColorBackground:  S_base01
-!*pointerColorForeground:  S_base1
-
 ! Normal      Bright
 ! --------    -------
 ! 0 Black      8 Black
@@ -45,15 +27,43 @@ Nsxiv.bar.font: monospace:size=11:style=Book
 *color13: #bb9af7
 *color14: #7dcfff
 *color15: #c0caf5
+
+*.foreground:    #A9B1D6
+*.background:    #1A1B26
+*.cursorColor:   #A9B1D6
+*.highlightColor:#3A3F4B
  
+! Tokyo storm colors I believe
+Nsxiv.window.background: #24283B
+Nsxiv.window.foreground: #7AA2F7
+Nsxiv.bar.foreground: #7AA2F7
+Nsxiv.mark.foreground: #FFA000
+Nsxiv.bar.font: monospace:size=11:style=Book
+!Nsxiv.bar.font: xft:Mononoki:size=9
+!Nsxiv.bar.font: xft:DejaVuSansMono:size=10:style=bold
 
-! xterm.vt100.faceName:           Terminus:style=Regular:size=10
-! xterm.vt100.faceNameDoublesize: Cyberbit:style=Regular:size=10
+Xcursor.theme: Borealis-cursors
+Xcursor.size: 24
 
+!*fading:                  40
+!*fadeColor:               S_base03
+!*pointerColorBackground:  S_base01
+!*pointerColorForeground:  S_base1
+
+!! Xapplication config
+!Xft.dpi: 96
+!Xft.Hinting: 1
+!Xft.RGBA: rgb
+!Xft.HintStyle: hintslight
+!Xft.Antialias: 1
+
+!! TERMINAL configs
+!XTerm.vt100.faceName:           Terminus:style=Regular:size=10
+!XTerm.vt100.faceNameDoublesize: Cyberbit:style=Regular:size=10
 !XTerm.vt100.bellIsUrgent:          true
 !XTerm.vt100.alternateScroll: true
 !XTerm.vt100.selectToClipboard: true
-!
+
 !URxvt.scrollBar: false
 !URxvt.perl-ext-common: default,selection-to-clipboard
 !URxvt.clipboard.autocopy: true  ! sync primary and clipboard buffers
@@ -67,16 +77,8 @@ Nsxiv.bar.font: monospace:size=11:style=Book
 !URxvt.font: xft:Consolas:pixelsize=12, xft:Segoe UI Symbol:style=Regular:pixelsize=12, xft:Unifont:pixelsize=12
 !URxvt.letterSpace : -2 ! Put characters slightly closer together
 !URxvt.termName : rxvt-unicode-256color
-!!Urxvt*termName:  screen-256color
 !URxvt.iso14755 : false
 !URxvt.iso14755_52: false
-
-! transparency in i3
+!! transparency in i3
 !URxvt.transparent: true
 !URxvt.shading:20
-
-!Xft.dpi: 96
-!Xft.Hinting: 1
-!Xft.RGBA: rgb
-!Xft.HintStyle: hintslight
-!Xft.Antialias: 1
