@@ -28,7 +28,10 @@ sudo dbus-uuidgen | sudo tee /etc/machine-id >/dev/null
 sudo rm -f /run/dbus/pid
 sudo mkdir -p /run/dbus
 sudo dbus-daemon --system --fork
-export DBUS_SESSION_BUS_ADDRESS=$(dbus-launch --sh-syntax | grep DBUS_SESSION_BUS_ADDRESS | cut -d= -f2-)
+export DBUS_SESSION_BUS_ADDRESS=$(
+  dbus-launch --sh-syntax |
+    sed -n "s/^DBUS_SESSION_BUS_ADDRESS='\(.*\)';$/\1/p"
+)
 
 sudo chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.config/pulse
 
