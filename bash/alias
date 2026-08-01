@@ -1,6 +1,18 @@
 #!/bin/sh
 alias testalias="pkexec env DISPLAY=$DISPLAY  XAUTHORITY=$XAUTHORITY notify-send DISPLAY=$DISPLAY  XAUTHORITY=$XAUTHORITY"
 alias a='ani-cli'
+au() {
+  SINK_A="alsa_output.usb-K66_K66_20190805V001-00.analog-stereo"
+  SINK_B="alsa_output.pci-0000_00_1f.3.hdmi-stereo"
+
+  current=$(pactl get-default-sink)
+
+  if [ "$current" = "$SINK_A" ]; then
+    pactl set-default-sink "$SINK_B"
+  else
+    pactl set-default-sink "$SINK_A"
+  fi
+}
 alias adb='HOME="$XDG_DATA_HOME"/android adb'
 #alias a='adl -r'
 # NOTE: if one day stops working try wiremix
