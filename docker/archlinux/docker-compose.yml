@@ -1,5 +1,6 @@
 services:
   archlinux:
+    container_name: archlinux
     build:
       context: .
       args:
