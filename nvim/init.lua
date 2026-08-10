@@ -167,7 +167,7 @@ vim.cmd([[
   "set statuscolumn=%@SignCb@%=%T%@NumCb@%l%s%r│%T
 
   set wildmode=longest:full,list,full
-  set spelllang=en_us,techjargon
+  set spelllang=en_us
 
   set cursorline
   "set spell
@@ -181,6 +181,8 @@ vim.cmd([[
   set cmdheight=0
   "set nowrap
 ]])
+
+vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/techjargon.utf-8.add"
 
 -- Commands I tend to forgot
 -- :noa wq >>> ignore autocommand for following commands
