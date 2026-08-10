@@ -10,6 +10,7 @@ vim.g.neovide_scroll_animation_length = 0
 -- fixes man page bindings
 vim.g.no_man_maps = 1
 vim.o.winborder = "bold"
+vim.wo.spell = true
 
 -- without this autocmd startup is around 2700ms see approx. times in plugins.lua
 local aug = vim.api.nvim_create_augroup("BigFileDisable", {})
@@ -22,6 +23,7 @@ vim.api.nvim_create_autocmd("BufReadPre", {
       --vim.cmd("syntax off") -- enable in future if big c file encountered or smth
       vim.opt_local.foldmethod = "manual"
       vim.opt_local.spell = false
+      vim.wo.spell = false
     end
   end,
 })
