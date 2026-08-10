@@ -66,7 +66,9 @@ SnackMap({
 })
 
 map({ "n" }, "<leader><leader>s", function()
+  vim.wo.spell = true
   require("telescope.builtin").spell_suggest()
+  vim.wo.spell = false
 end, { desc = "spell suggest" })
 --map({ "n" }, "<leader>s", "z=", {})
 
