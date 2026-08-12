@@ -145,7 +145,8 @@ return { -- MASON, formatter/linter, debugger, lsp
         "asmfmt",
         "clang_format",
         "mdsf", -- codeblock only, probably needs setup
-        "mdformat", -- some codeblock and rest of markdown
+        "rumdl", -- markdown lint and format
+        --"mdformat", -- some codeblock and rest of markdown
         -- "miss_hit", -- formatter/linter matlab i don't need rn
         "pyproject-fmt",
         "shfmt",
