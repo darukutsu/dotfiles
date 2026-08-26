@@ -58,6 +58,13 @@
 				"LIBRETRANSLATE_API_URL": "https://translate.hento.org",
 				"LIBRETRANSLATE_API_KEY": "your-api-key"
 			}
+		},
+		"SearXNG": {
+			"type": "local",
+			"command": ["npx", "-y", "mcp-searxng"],
+			"environment": {
+				"SEARXNG_URL": "https://search.hento.org"
+			}
 		}
 	},
 	"agent": {
