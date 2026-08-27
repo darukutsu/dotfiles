@@ -8,20 +8,28 @@
 		// add here custom formatters for stuff like fstab...
 	},
 	"disabled_providers": [],
+	// External programs that would be cool to integrate as plugin
+	//"@th0rgal/ralph-wiggum"
+	//"JuliusBrussee/caveman"
+	//"graphifyy"
+	//"darrenhinde/OpenAgentsControl" opencode-mem + oh-my-openagent simple-manual
+	// NOTE: opencode as of 1.18.23 doesn't have auto update mechanism,
+	// manually remove cache and pin version
 	"plugin": [
-		//"oh-my-openagent", // configure first
-		"@tarquinen/opencode-dcp@latest",
+		// need better hardware or structure preplaned for these
+		//"oh-my-openagent",
+		//"oh-my-opencode-slim@latest", // simpler to setup
+		"@tarquinen/opencode-dcp@3.1.15",
 		//"opencode-notify", // disable once they create better internal notifier
-		"opencode-models-discovery" //remove this once opencode releases official local discovery
-		//"JuliusBrussee/caveman"
-		//"github:JuliusBrussee/caveman"
-		//"@juliusbrussee/caveman-code"
-		//"opencode-pty",
-		//"opencode-websearch-cited",
-		//"opencode-jfrog-plugin",
-		//"opencode-antigravity-auth",
-		//"opencode-gemini-auth",
+		"opencode-models-discovery@1.5.1", // remove this once opencode releases official local discovery
+		//"opencode-mem", // interesting idea but not sure if worth
+		"opencode-pty@0.3.6",
+		//"opencode-plugin-auto-update" // look for integrated solution
+		"@jfrog/opencode-jfrog-plugin@0.3.0"
 		//"opencode-firecrawl",
+		//"opencode-worktree" maybe if automation is preferred
+		// NOTE: create/look4 skill/mcp/agent for citing
+		//"opencode-websearch-cited@1.2.0", // trash because uses internal opencode search and not custom searxng
 	],
 	"provider": {
 		// single model server, figure out deployment & distribution
