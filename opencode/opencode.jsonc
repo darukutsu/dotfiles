@@ -1,14 +1,18 @@
 {
 	"$schema": "https://opencode.ai/config.json",
-	"lsp": true,
-	"formatter": true,
+	"share": "disabled",
+	"lsp": {
+		// add here custom lsps...
+	},
+	"formatter": {
+		// add here custom formatters for stuff like fstab...
+	},
 	"disabled_providers": [],
 	"plugin": [
 		//"oh-my-openagent", // configure first
 		"@tarquinen/opencode-dcp@latest",
-		"opencode-notify",
-		//remove this once opencode releases official local discovery
-		"opencode-models-discovery"
+		//"opencode-notify", // disable once they create better internal notifier
+		"opencode-models-discovery" //remove this once opencode releases official local discovery
 		//"JuliusBrussee/caveman"
 		//"github:JuliusBrussee/caveman"
 		//"@juliusbrussee/caveman-code"
@@ -51,25 +55,33 @@
 		}
 	},
 	"mcp": {
-		"LibreTranslate": {
+		"libretranslate": {
 			"type": "local",
+			"enabled": true,
 			"command": ["npx", "-y", "@libretranslate/mcp"],
 			"environment": {
 				"LIBRETRANSLATE_API_URL": "https://translate.hento.org",
 				"LIBRETRANSLATE_API_KEY": "your-api-key"
 			}
 		},
-		"SearXNG": {
+		"searxng": {
 			"type": "local",
+			"enabled": true,
 			"command": ["npx", "-y", "mcp-searxng"],
 			"environment": {
 				"SEARXNG_URL": "https://search.hento.org"
+				//"SEARXNG_HTML_FALLBACK": true,
+				//"USER_AGENT": "",
+				//"AUTH_USERNAME": "",
+				//"AUTH_PASSWORD": "",
+				//"HTTPS_PROXY": "",
 			}
 		},
 		"cloudflare": {
 			"type": "remote",
 			"url": "https://mcp.cloudflare.com/mcp",
 			"enabled": true,
+			// cloudflare doesn't support header bearer token
 			"oauth": {}
 		},
 		"cloudflare-docs": {
@@ -96,18 +108,26 @@
 			"oauth": {}
 		}
 	},
+	// permissions are merged with global ones
 	"agent": {
 		"build": {
 			"mode": "primary",
 			"permission": {
-				"read": "allow",
-				"edit": "allow",
+				"edit": "allow"
+			}
+		},
+		"plan": {
+			"mode": "primary",
+			"permission": {
+				"edit": "deny",
+				// TODO: why do i need to be verbose here?
+				// Cannot mention variable @permission to inherit for shorter config.
 				"bash": {
 					"*": "ask",
 					"awk *": "allow",
 					"basename *": "allow",
-					//"bash *": "allow",
 					"cat *": "allow",
+					"curl *": "allow",
 					"cut *": "allow",
 					"df *": "allow",
 					"diff *": "allow",
@@ -121,33 +141,49 @@
 					"head *": "allow",
 					"ls *": "allow",
 					"printf *": "allow",
-					"sed *": "allow",
 					"seq *": "allow",
-					//"sh *": "allow",
 					"sleep *": "allow",
 					"sort *": "allow",
 					"tail *": "allow",
 					"tr *": "allow",
 					"wc *": "allow"
-					//"xargs *": "allow",
-				},
-				"grep": "allow",
-				"glob": "allow",
-				"list": "allow",
-				"lsp": "allow",
-				"question": "allow",
-				"skill": "allow",
-				"webfetch": "allow"
+				}
 			}
 		},
+		// NOTE: I should create specific subagents running on certain models
+		// that will be specialized on tasks with skills and permissions
+		// preferably small 7B and less. This way I can omit stuff like `amplifier`.
+		// This way we can disable built in subagents and specify ours in /agents directory.
+		//
+		// NOTE: some repetitive tasks could be made into command instead of subagent,
+		// but i find skill more suitable for this since llm can decide when to run it
+		// Maybe have both.
+		//
+		//"explore": {
+		//	"mode": "subagent",
+		//	"permission": {
+		//		"edit": "deny"
+		//	}
+		//},
+		//"scout": {
+		//	"mode": "subagent",
+		//	"disable": true,
+		//},
 		"review": {
 			"temperature": 0.2,
+			"top_p": 1.0,
 			//"model": "deepseek-coder",
 			"description": "Reviews code for best practices and potential issues",
-			"disable": true
+			"disable": true,
+			"permission": {
+				"edit": "ask"
+			}
 		}
 	},
 	"permission": {
+		"*": "ask",
+		"read": "allow",
+		"edit": "ask", // all 3 edit, write, patch
 		"bash": {
 			"*": "ask",
 			"awk *": "allow",
@@ -174,10 +210,24 @@
 			"sleep *": "allow",
 			"sort *": "allow",
 			"tail *": "allow",
-			"tr *": "allow"
+			"tr *": "allow",
+			"wc *": "allow"
 			//"xargs": "allow",
-		}
+		},
+		"grep": "allow",
+		"glob": "allow",
+		"list": "allow",
+		"lsp": "allow",
+		"skill": "allow",
+		//"task": {},
+		"todowrite": "allow",
+		"webfetch": "allow",
+		"question": "allow"
+		// MCPs allows, doesn't do probably what i think it does
+		//"libretranslate": "allow",
+		//"searxng": "allow"
 	},
+	//"instructions": ["CONTRIBUTING.md", "some-general-stuff-i-can-reuse", "https://url..."],
 	"references": {
 		"nvim": {
 			"path": "~/.config/nvim",
