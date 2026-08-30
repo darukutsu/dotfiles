@@ -10,7 +10,7 @@
 	"disabled_providers": [],
 	// External programs that would be cool to integrate as plugin
 	//"@th0rgal/ralph-wiggum"
-	//"JuliusBrussee/caveman"
+	//"JuliusBrussee/caveman" -- git clone official repo and then install it manually however it mangles with comments
 	//"graphifyy"
 	//"darrenhinde/OpenAgentsControl" opencode-mem + oh-my-openagent simple-manual
 	// NOTE: opencode as of 1.18.23 doesn't have auto update mechanism,
@@ -25,11 +25,12 @@
 		//"opencode-mem", // interesting idea but not sure if worth
 		"opencode-pty@0.3.6",
 		//"opencode-plugin-auto-update" // look for integrated solution
-		"@jfrog/opencode-jfrog-plugin@0.3.0"
+		"@jfrog/opencode-jfrog-plugin@0.3.0",
 		//"opencode-firecrawl",
 		//"opencode-worktree" maybe if automation is preferred
 		// NOTE: create/look4 skill/mcp/agent for citing
 		//"opencode-websearch-cited@1.2.0", // trash because uses internal opencode search and not custom searxng
+		"./plugins/caveman/plugin.js"
 	],
 	"provider": {
 		// single model server, figure out deployment & distribution
