@@ -15,6 +15,7 @@ vars:
   # when specified here its understood as global for everykeyboard
   keymap-drawer: true
   keymap-drawer-conf: ~/.config/zmk/config/keymap-drawer-conf.yaml
+  cmake-version: 3.28.4
 include:
   - board: nice_nano
     name: corne_nice_dongleless

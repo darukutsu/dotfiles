@@ -7,6 +7,7 @@ ZMK_CONFIG_DIR=${ZMK_CONFIG_DIR:-"$HOME/.config/zmk/config"}
 export ZEPHYR_BASE=${ZEPHYR_BASE:-"$HOME/.config/zmk/zephyr"}
 ZMK_APP_DIR=${ZMK_APP_DIR:-"$HOME/.config/zmk/zmk/app"}
 ZMK_PYTHON_DIR=${ZMK_PYTHON_DIR:-"$HOME"/.config/zmk/python-dep/bin/activate}
+export ZEPHYR_TOOLCHAIN_VARIANT=zephyr
 
 if [ -n "$ZMK_PYTHON_DIR" ]; then
   . "$ZMK_PYTHON_DIR"
@@ -80,10 +81,7 @@ while [ $# -gt 0 ]; do
   #  exit $?
   #  ;;
   *)
-    if [ "$1" = '-' ]; then
-      shift
-      return
-    elif ! [ -f "$1" ]; then
+    if ! [ -f "$1" ]; then
       print_help
       exit 1
     fi
@@ -98,6 +96,21 @@ if ! [ -f "$build_file" ]; then
   echo "No $build_file found!"
   exit 1
 fi
+
+install_cmake() {
+  cmake_req_version=$(yq .vars.cmake-version "$build_file")
+
+  if [ -z "$cmake_req_version" ]; then
+    return 0
+  fi
+  cmake_ver="$(cmake --version 2>/dev/null | head -1 | grep -o '[0-9.]*')" || true
+  if [ "$cmake_ver" = "$cmake_req_version" ] && [ -n "$VIRTUAL_ENV" ]; then
+    printf "\033[33m[INFO]\033[0m cmake %s already installed in venv, skipping\n" "$cmake_ver"
+    return 0
+  fi
+  printf "Installing cmake==%s in virtualenv...\n" "$cmake_req_version"
+  pip install --quiet "cmake==$cmake_req_version"
+}
 
 _zmkbuild() {
   i=0
@@ -220,8 +233,13 @@ if [ "$onlyflash" = true ]; then
   exit $?
 fi
 
-# update tooling
+# install/update tooling
+install_cmake || true
 pip install update
+
+cd "$ZEPHYR_BASE" || exit
+west sdk install
+cd - || exit
 west update
 
 _zmkbuild "$@"
