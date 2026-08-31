@@ -24,7 +24,8 @@ list_row='5'
 layout=$(cat ${theme} | grep 'USE_ICON' | cut -d'=' -f2)
 if [[ "$layout" == 'NO' ]]; then
   option_1=" Capture Desktop"
-  option_2=" Capture Area"
+  #option_2=" Capture Area"
+  option_2=" Capture Area"
   option_3=" Capture Window"
   #option_4=" Capture in 5s"
   #option_5=" Capture in 10s"
@@ -32,7 +33,8 @@ if [[ "$layout" == 'NO' ]]; then
   option_5=" Record Windwow"
 else
   option_1=""
-  option_2=""
+  #option_2=""
+  option_2=""
   option_3=""
   #option_4=""
   #option_5=""
@@ -117,6 +119,15 @@ countdown() {
     sleep 1
   done
 }
+
+## take shots of whole monitor (optionally can resize)
+#shotnow() {
+#  cd ${dir} && menyoki -q capture --root --select png save "-" | copy_shot && notify_view
+#}
+#
+#shotarea() {
+#  cd ${dir} && menyoki -q capture --root --select -s 300x100 png save "-" | copy_shot && notify_view
+#}
 
 # take shots
 shotnow() {

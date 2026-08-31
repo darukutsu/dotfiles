@@ -7,6 +7,7 @@
  *
  **/
 
+// unicodes in my rofi use feather font
 * {
     /*font: "Iosevka Nerd Font 10";*/
     /*font: "JetBrains Mono Nerd Font 10";*/

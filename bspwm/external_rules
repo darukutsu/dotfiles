@@ -76,6 +76,7 @@ fi
 
 if [[ "$class" =~ kitty\-cal ]]; then
   echo center=off
+  echo sticky=on
   monitor=$(xrandr --listmonitors | awk 'NR>1 { gsub(/\+/, "", $2); print $2 }')
   if xrandr | grep "^$monitor" | grep "2560x1440"; then
     echo rectangle=200x190+1175+20
@@ -90,9 +91,10 @@ if [[ "$class" =~ rofi.* ]]; then
   #echo "manage=off" #this will break rofi don't use this
   #echo "layer=above"
   #echo "focus=on"
-  echo "border=off"
-  echo "state=floating"
-  echo "layer=above"
+  echo border=off
+  echo state=floating
+  echo layer=above
+  echo sticky=on
   xprop -id "$wid" \
     -f _NET_WM_WINDOW_TYPE 32a \
     -set _NET_WM_WINDOW_TYPE _NET_WM_WINDOW_TYPE_DROPDOWN_MENU
