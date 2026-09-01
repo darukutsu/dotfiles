@@ -21,6 +21,7 @@
 		//"oh-my-opencode-slim@latest", // simpler to setup
 		"@tarquinen/opencode-dcp@3.1.15",
 		//"opencode-notify", // disable once they create better internal notifier
+		"opencode-ntfy.sh",
 		"opencode-models-discovery@1.5.1", // remove this once opencode releases official local discovery
 		//"opencode-mem", // interesting idea but not sure if worth
 		"opencode-pty@0.3.6",

@@ -1,0 +1,8 @@
+{
+	"$schema": "node_modules/opencode-ntfy.sh/notification-ntfy.schema.json",
+	"backend": {
+		"server": "https://ntfy.hento.org",
+		"topic": "opencode",
+		"token": "{file:~/.config/ntfy-token}"
+	}
+}
