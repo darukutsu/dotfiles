@@ -98,6 +98,8 @@
 // @connect      *
 // @contributionURL      https://ko-fi.com/hoothin
 // @contributionAmount   1
+// @exclude             https://*.hento.org/*
+// @exclude             http://*.hento.org/*
 // ==/UserScript==
 
 (function() {

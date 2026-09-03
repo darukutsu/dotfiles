@@ -101,6 +101,8 @@
 // @exclude *://chatgpt.com/*
 // @exclude         https://*.lan/*
 // @exclude         http://*.lan/*
+// @exclude             https://*.hento.org/*
+// @exclude             http://*.hento.org/*
 // @exclude https://www.linkedin.com/*
 // @exclude https://*.facebook.com/*
 // @exclude https://*.google.com/*

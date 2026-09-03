@@ -9,6 +9,8 @@
 // @match               https://*/*
 // @match               http://*/*
 // @exclude             /^https?://\S+\.(txt|png|jpg|jpeg|gif|xml|svg|manifest|log|ini)[^\/]*$/
+// @exclude             https://*.hento.org/*
+// @exclude             http://*.hento.org/*
 // @icon                https://raw.githubusercontent.com/cyfung1031/userscript-supports/7b34986ad9cdf3af8766e54b0aecb394b036e970/icons/web-cpu-tamer.svg
 // @supportURL          https://github.com/cyfung1031/userscript-supports
 

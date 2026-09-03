@@ -7,6 +7,8 @@
 // @match        https://old.reddit.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=reddit.com
 // @grant        none
+// @exclude             https://*.hento.org/*
+// @exclude             http://*.hento.org/*
 // @license MIT
 // @downloadURL https://update.greasyfork.org/scripts/440160/Remove%20Cookie%20Banner%20from%20Reddit.user.js
 // @updateURL https://update.greasyfork.org/scripts/440160/Remove%20Cookie%20Banner%20from%20Reddit.meta.js

@@ -1,3 +1,8 @@
+project ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  i Biome found the configuration file /home/daru/.config/biome/biome.json outside of the current working directory /home/daru/.config. If the configuration enables the scanner, Biome might scan the whole file system. This behaviour will be fixed in the next major version.
+  
+
 // ==UserScript==
 // @name        Redirect webpages
 // @version     1.0.0
@@ -25,7 +30,7 @@
 	) {
 		location.href = url.replace(
 			/(?:twitter|fixupx|xeezz|x)\.com/,
-			"nitter.net",
+			"nitter.kareem.one",
 		);
 		return;
 	}
