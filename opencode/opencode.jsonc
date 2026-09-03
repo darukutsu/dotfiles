@@ -21,12 +21,12 @@
 		//"oh-my-opencode-slim@latest", // simpler to setup
 		"@tarquinen/opencode-dcp@3.1.15",
 		//"opencode-notify", // disable once they create better internal notifier
-		"opencode-ntfy.sh",
-		"opencode-models-discovery@1.5.1", // remove this once opencode releases official local discovery
+		"opencode-ntfy.sh@1.1.0",
+		"opencode-models-discovery@1.5.3", // remove this once opencode releases official local discovery
 		//"opencode-mem", // interesting idea but not sure if worth
 		"opencode-pty@0.3.6",
 		//"opencode-plugin-auto-update" // look for integrated solution
-		"@jfrog/opencode-jfrog-plugin@0.3.0",
+		//"@jfrog/opencode-jfrog-plugin@0.3.0", // causes duplication of .opencode
 		//"opencode-firecrawl",
 		//"opencode-worktree" maybe if automation is preferred
 		// NOTE: create/look4 skill/mcp/agent for citing
@@ -34,15 +34,6 @@
 		"./plugins/caveman/plugin.js"
 	],
 	"provider": {
-		// single model server, figure out deployment & distribution
-		// benefit of huggingface models
-		//"vllm": {
-		//	"npm": "@ai-sdk/openai-compatible",
-		//	"name": "vLLM (local)",
-		//	"options": {
-		//		"baseURL": "http://vllm.ai.lan/v1"
-		//	}
-		//},
 		"ollama": {
 			"npm": "@ai-sdk/openai-compatible",
 			"name": "Ollama (local)",
@@ -59,6 +50,19 @@
 					//	]
 					//},
 
+					"smartModelName": false
+				}
+			}
+		},
+		"hento": {
+			"npm": "@ai-sdk/openai-compatible",
+			"name": "hento.org",
+			"options": {
+				// have to put it here because otherwise it won't recognize as provider
+				"apiKey": "{env:HENTO_AI_API_KEY}",
+				"baseURL": "https://ai.hento.org/v1",
+				"modelsDiscovery": {
+					"enabled": true,
 					"smartModelName": false
 				}
 			}
@@ -87,6 +91,9 @@
 				//"HTTPS_PROXY": "",
 			}
 		},
+		//"comfy": {
+		//	"url": "https://cloud.comfy.org/mcp"
+		//},
 		"cloudflare": {
 			"type": "remote",
 			"url": "https://mcp.cloudflare.com/mcp",
