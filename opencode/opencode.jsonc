@@ -1,254 +1,264 @@
 {
-	"$schema": "https://opencode.ai/config.json",
-	"share": "disabled",
-	"lsp": {
-		// add here custom lsps...
-	},
-	"formatter": {
-		// add here custom formatters for stuff like fstab...
-	},
-	"disabled_providers": [],
-	// External programs that would be cool to integrate as plugin
-	//"@th0rgal/ralph-wiggum"
-	//"JuliusBrussee/caveman" -- git clone official repo and then install it manually however it mangles with comments
-	//"graphifyy"
-	//"darrenhinde/OpenAgentsControl" opencode-mem + oh-my-openagent simple-manual
-	// NOTE: opencode as of 1.18.23 doesn't have auto update mechanism,
-	// manually remove cache and pin version
-	"plugin": [
-		// need better hardware or structure preplaned for these
-		//"oh-my-openagent",
-		//"oh-my-opencode-slim@latest", // simpler to setup
-		"@tarquinen/opencode-dcp@3.1.15",
-		//"opencode-notify", // disable once they create better internal notifier
-		"opencode-ntfy.sh@1.1.0",
-		"opencode-models-discovery@1.5.3", // remove this once opencode releases official local discovery
-		//"opencode-mem", // interesting idea but not sure if worth
-		"opencode-pty@0.3.6",
-		//"opencode-plugin-auto-update" // look for integrated solution
-		//"@jfrog/opencode-jfrog-plugin@0.3.0", // causes duplication of .opencode
-		//"opencode-firecrawl",
-		//"opencode-worktree" maybe if automation is preferred
-		// NOTE: create/look4 skill/mcp/agent for citing
-		//"opencode-websearch-cited@1.2.0", // trash because uses internal opencode search and not custom searxng
-		"./plugins/caveman/plugin.js"
-	],
-	"provider": {
-		"ollama": {
-			"npm": "@ai-sdk/openai-compatible",
-			"name": "Ollama (local)",
-			"options": {
-				"baseURL": "http://ollama.ai.lan/v1",
-				"modelsDiscovery": {
-					"enabled": true,
-					//see https://github.com/yuhp/opencode-models-discovery/blob/main/docs/configuration.md
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "lsp": {
+    // add here custom lsps...
+  },
+  "formatter": {
+    // add here custom formatters for stuff like fstab...
+  },
+  "disabled_providers": [],
+  // External programs that would be cool to integrate as plugin
+  //"@th0rgal/ralph-wiggum"
+  //"JuliusBrussee/caveman" -- git clone official repo and then install it manually however it mangles with comments
+  //"graphifyy"
+  //"darrenhinde/OpenAgentsControl" opencode-mem + oh-my-openagent simple-manual
+  // NOTE: opencode as of 1.18.23 doesn't have auto update mechanism,
+  // manually remove cache and pin version
+  "plugin": [
+    // need better hardware or structure preplaned for these
+    //"oh-my-openagent",
+    //"oh-my-opencode-slim@latest", // simpler to setup
+    "@tarquinen/opencode-dcp@3.1.15",
+    //"opencode-notify", // disable once they create better internal notifier
+    "opencode-ntfy.sh@1.1.0",
+    "opencode-models-discovery@1.5.3", // remove this once opencode releases official local discovery
+    //"opencode-mem", // interesting idea but not sure if worth
+    "opencode-pty@0.3.6",
+    //"opencode-plugin-auto-update" // look for integrated solution
+    //"@jfrog/opencode-jfrog-plugin@0.3.0", // causes duplication of .opencode
+    //"opencode-firecrawl", // essentially same as mcp
+    //"opencode-worktree" maybe if automation is preferred
+    // NOTE: create/look4 skill/mcp/agent for citing
+    //"opencode-websearch-cited@1.2.0", // trash because uses internal opencode search and not custom searxng
+    "./plugins/caveman/plugin.js"
+  ],
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://ollama.ai.lan/v1",
+        "modelsDiscovery": {
+          "enabled": true,
+          //see https://github.com/yuhp/opencode-models-discovery/blob/main/docs/configuration.md
 
-					// NOTE: for versions older than 0.9
-					//"models": {
-					//	"excludeRegex": [
-					//		"qwen3-embedding"
-					//	]
-					//},
+          // NOTE: for versions older than 0.9
+          //"models": {
+          //	"excludeRegex": [
+          //		"qwen3-embedding"
+          //	]
+          //},
 
-					"smartModelName": false
-				}
-			}
-		},
-		"hento": {
-			"npm": "@ai-sdk/openai-compatible",
-			"name": "hento.org",
-			"options": {
-				// have to put it here because otherwise it won't recognize as provider
-				"apiKey": "{env:HENTO_AI_API_KEY}",
-				"baseURL": "https://ai.hento.org/v1",
-				"modelsDiscovery": {
-					"enabled": true,
-					"smartModelName": false
-				}
-			}
-		}
-	},
-	"mcp": {
-		"libretranslate": {
-			"type": "local",
-			"enabled": true,
-			"command": ["npx", "-y", "@libretranslate/mcp"],
-			"environment": {
-				"LIBRETRANSLATE_API_URL": "https://translate.hento.org",
-				"LIBRETRANSLATE_API_KEY": "your-api-key"
-			}
-		},
-		"searxng": {
-			"type": "local",
-			"enabled": true,
-			"command": ["npx", "-y", "mcp-searxng"],
-			"environment": {
-				"SEARXNG_URL": "https://search.hento.org"
-				//"SEARXNG_HTML_FALLBACK": true,
-				//"USER_AGENT": "",
-				//"AUTH_USERNAME": "",
-				//"AUTH_PASSWORD": "",
-				//"HTTPS_PROXY": "",
-			}
-		},
-		//"comfy": {
-		//	"url": "https://cloud.comfy.org/mcp"
-		//},
-		"cloudflare": {
-			"type": "remote",
-			"url": "https://mcp.cloudflare.com/mcp",
-			"enabled": true,
-			// cloudflare doesn't support header bearer token
-			"oauth": {}
-		},
-		"cloudflare-docs": {
-			"type": "remote",
-			"url": "https://docs.mcp.cloudflare.com/mcp",
-			"enabled": true
-		},
-		"cloudflare-bindings": {
-			"type": "remote",
-			"url": "https://bindings.mcp.cloudflare.com/mcp",
-			"enabled": true,
-			"oauth": {}
-		},
-		"cloudflare-builds": {
-			"type": "remote",
-			"url": "https://builds.mcp.cloudflare.com/mcp",
-			"enabled": true,
-			"oauth": {}
-		},
-		"cloudflare-observability": {
-			"type": "remote",
-			"url": "https://observability.mcp.cloudflare.com/mcp",
-			"enabled": true,
-			"oauth": {}
-		}
-	},
-	// permissions are merged with global ones
-	"agent": {
-		"build": {
-			"mode": "primary",
-			"permission": {
-				"edit": "allow"
-			}
-		},
-		"plan": {
-			"mode": "primary",
-			"permission": {
-				"edit": "deny",
-				// TODO: why do i need to be verbose here?
-				// Cannot mention variable @permission to inherit for shorter config.
-				"bash": {
-					"*": "ask",
-					"awk *": "allow",
-					"basename *": "allow",
-					"cat *": "allow",
-					"curl *": "allow",
-					"cut *": "allow",
-					"df *": "allow",
-					"diff *": "allow",
-					"dirname *": "allow",
-					"echo *": "allow",
-					"find *": "allow",
-					"git diff *": "allow",
-					"git log *": "allow",
-					"git status *": "allow",
-					"grep *": "allow",
-					"head *": "allow",
-					"ls *": "allow",
-					"printf *": "allow",
-					"seq *": "allow",
-					"sleep *": "allow",
-					"sort *": "allow",
-					"tail *": "allow",
-					"tr *": "allow",
-					"wc *": "allow"
-				}
-			}
-		},
-		// NOTE: I should create specific subagents running on certain models
-		// that will be specialized on tasks with skills and permissions
-		// preferably small 7B and less. This way I can omit stuff like `amplifier`.
-		// This way we can disable built in subagents and specify ours in /agents directory.
-		//
-		// NOTE: some repetitive tasks could be made into command instead of subagent,
-		// but i find skill more suitable for this since llm can decide when to run it
-		// Maybe have both.
-		//
-		//"explore": {
-		//	"mode": "subagent",
-		//	"permission": {
-		//		"edit": "deny"
-		//	}
-		//},
-		//"scout": {
-		//	"mode": "subagent",
-		//	"disable": true,
-		//},
-		"review": {
-			"temperature": 0.2,
-			"top_p": 1.0,
-			//"model": "deepseek-coder",
-			"description": "Reviews code for best practices and potential issues",
-			"disable": true,
-			"permission": {
-				"edit": "ask"
-			}
-		}
-	},
-	"permission": {
-		"*": "ask",
-		"read": "allow",
-		"edit": "ask", // all 3 edit, write, patch
-		"bash": {
-			"*": "ask",
-			"awk *": "allow",
-			"basename *": "allow",
-			//"bash *": "allow",
-			"cat *": "allow",
-			"curl *": "allow",
-			"cut *": "allow",
-			"df *": "allow",
-			"diff *": "allow",
-			"dirname *": "allow",
-			"echo *": "allow",
-			"find *": "allow",
-			"git diff *": "allow",
-			"git log *": "allow",
-			"git status *": "allow",
-			"grep *": "allow",
-			"head *": "allow",
-			"ls *": "allow",
-			"printf *": "allow",
-			"sed *": "allow",
-			"seq *": "allow",
-			//"sh": "allow",
-			"sleep *": "allow",
-			"sort *": "allow",
-			"tail *": "allow",
-			"tr *": "allow",
-			"wc *": "allow"
-			//"xargs": "allow",
-		},
-		"grep": "allow",
-		"glob": "allow",
-		"list": "allow",
-		"lsp": "allow",
-		"skill": "allow",
-		//"task": {},
-		"todowrite": "allow",
-		"webfetch": "allow",
-		"question": "allow"
-		// MCPs allows, doesn't do probably what i think it does
-		//"libretranslate": "allow",
-		//"searxng": "allow"
-	},
-	//"instructions": ["CONTRIBUTING.md", "some-general-stuff-i-can-reuse", "https://url..."],
-	"references": {
-		"nvim": {
-			"path": "~/.config/nvim",
-			"description": "nvim config path"
-		}
-	}
+          "smartModelName": false
+        }
+      }
+    },
+    "hento": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "hento.org",
+      "options": {
+        // have to put it here because otherwise it won't recognize as provider
+        "apiKey": "{env:HENTO_AI_API_KEY}",
+        "baseURL": "https://ai.hento.org/v1",
+        "modelsDiscovery": {
+          "enabled": true,
+          "smartModelName": false
+        }
+      }
+    }
+  },
+  "mcp": {
+    "libretranslate": {
+      "type": "local",
+      "command": ["npx", "-y", "@libretranslate/mcp"],
+      "environment": {
+        "LIBRETRANSLATE_API_URL": "https://translate.hento.org",
+        "LIBRETRANSLATE_API_KEY": "your-api-key"
+      },
+      "enabled": true
+    },
+    "searxng": {
+      "type": "local",
+      "command": ["npx", "-y", "mcp-searxng"],
+      "environment": {
+        "SEARXNG_URL": "https://search.hento.org"
+      },
+      "enabled": true
+    },
+    //"comfy": {
+    //	"url": "https://cloud.comfy.org/mcp"
+    //},
+    "mcphub-firecrawl": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/firecrawl",
+      "enabled": true
+    },
+    "mcphub-searxng": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/searxng",
+      "enabled": false
+    },
+    "mcphub-libretranslate": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/libretranslate",
+      "enabled": false
+    },
+    "cloudflare": {
+      "type": "remote",
+      "url": "https://mcp.cloudflare.com/mcp",
+      "enabled": true,
+      // cloudflare doesn't support header bearer token
+      "oauth": {}
+    },
+    "cloudflare-docs": {
+      "type": "remote",
+      "url": "https://docs.mcp.cloudflare.com/mcp",
+      "enabled": true
+    },
+    "cloudflare-bindings": {
+      "type": "remote",
+      "url": "https://bindings.mcp.cloudflare.com/mcp",
+      "enabled": true,
+      "oauth": {}
+    },
+    "cloudflare-builds": {
+      "type": "remote",
+      "url": "https://builds.mcp.cloudflare.com/mcp",
+      "enabled": true,
+      "oauth": {}
+    },
+    "cloudflare-observability": {
+      "type": "remote",
+      "url": "https://observability.mcp.cloudflare.com/mcp",
+      "enabled": true,
+      "oauth": {}
+    }
+  },
+  // permissions are merged with global ones
+  "agent": {
+    "build": {
+      "mode": "primary",
+      "permission": {
+        "edit": "allow"
+      }
+    },
+    "plan": {
+      "mode": "primary",
+      "permission": {
+        "edit": "deny",
+        // TODO: why do i need to be verbose here?
+        // Cannot mention variable @permission to inherit for shorter config.
+        "bash": {
+          "*": "ask",
+          "awk *": "allow",
+          "basename *": "allow",
+          "cat *": "allow",
+          "curl *": "allow",
+          "cut *": "allow",
+          "df *": "allow",
+          "diff *": "allow",
+          "dirname *": "allow",
+          "echo *": "allow",
+          "find *": "allow",
+          "git diff *": "allow",
+          "git log *": "allow",
+          "git status *": "allow",
+          "grep *": "allow",
+          "head *": "allow",
+          "ls *": "allow",
+          "printf *": "allow",
+          "seq *": "allow",
+          "sleep *": "allow",
+          "sort *": "allow",
+          "tail *": "allow",
+          "tr *": "allow",
+          "wc *": "allow"
+        }
+      }
+    },
+    // NOTE: I should create specific subagents running on certain models
+    // that will be specialized on tasks with skills and permissions
+    // preferably small 7B and less. This way I can omit stuff like `amplifier`.
+    // This way we can disable built in subagents and specify ours in /agents directory.
+    //
+    // NOTE: some repetitive tasks could be made into command instead of subagent,
+    // but i find skill more suitable for this since llm can decide when to run it
+    // Maybe have both.
+    //
+    //"explore": {
+    //	"mode": "subagent",
+    //	"permission": {
+    //		"edit": "deny"
+    //	}
+    //},
+    //"scout": {
+    //	"mode": "subagent",
+    //	"disable": true,
+    //},
+    "review": {
+      "temperature": 0.2,
+      "top_p": 1.0,
+      //"model": "deepseek-coder",
+      "description": "Reviews code for best practices and potential issues",
+      "disable": true,
+      "permission": {
+        "edit": "ask"
+      }
+    }
+  },
+  "permission": {
+    "*": "ask",
+    "read": "allow",
+    "edit": "ask", // all 3 edit, write, patch
+    "bash": {
+      "*": "ask",
+      "awk *": "allow",
+      "basename *": "allow",
+      //"bash *": "allow",
+      "cat *": "allow",
+      "curl *": "allow",
+      "cut *": "allow",
+      "df *": "allow",
+      "diff *": "allow",
+      "dirname *": "allow",
+      "echo *": "allow",
+      "find *": "allow",
+      "git diff *": "allow",
+      "git log *": "allow",
+      "git status *": "allow",
+      "grep *": "allow",
+      "head *": "allow",
+      "ls *": "allow",
+      "printf *": "allow",
+      "sed *": "allow",
+      "seq *": "allow",
+      //"sh": "allow",
+      "sleep *": "allow",
+      "sort *": "allow",
+      "tail *": "allow",
+      "tr *": "allow",
+      "wc *": "allow"
+      //"xargs": "allow",
+    },
+    "grep": "allow",
+    "glob": "allow",
+    "list": "allow",
+    "lsp": "allow",
+    "skill": "allow",
+    //"task": {},
+    "todowrite": "allow",
+    "webfetch": "allow",
+    "question": "allow"
+    // MCPs allows, doesn't do probably what i think it does
+    //"libretranslate": "allow",
+    //"searxng": "allow"
+  },
+  //"instructions": ["CONTRIBUTING.md", "some-general-stuff-i-can-reuse", "https://url..."],
+  "references": {
+    "nvim": {
+      "path": "~/.config/nvim",
+      "description": "nvim config path"
+    }
+  }
 }
