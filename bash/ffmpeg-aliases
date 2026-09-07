@@ -1,0 +1,123 @@
+#!/bin/sh
+# Extract audio → MP3
+to_mp3() {
+  ffmpeg -i "$1" -vn -codec:a libmp3lame -q:a 2 "${2:-${1%.*}.mp3}"
+}
+
+# Extract audio → AAC
+to_aac() {
+  ffmpeg -i "$1" -vn -codec:a aac -b:a 192k "${2:-${1%.*}.m4a}"
+}
+
+# Extract audio → FLAC
+to_flac() {
+  ffmpeg -i "$1" -vn -codec:a flac "${2:-${1%.*}.flac}"
+}
+
+# Video → MP4 (H.264, web-friendly)
+to_mp4() {
+  ffmpeg -i "$1" -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k "${2:-${1%.*}.mp4}"
+}
+
+# Video → WebM (VP9)
+to_webm() {
+  ffmpeg -i "$1" -c:v libvpx-vp9 -crf 32 -b:v 0 -c:a libopus -b:a 96k "${2:-${1%.*}.webm}"
+}
+
+# Video → WebM AV1 (smaller, slower)
+to_av1() {
+  ffmpeg -i "$1" -c:v libsvtav1 -crf 35 -preset 6 -c:a libopus -b:a 96k "${2:-${1%.*}.webm}"
+}
+
+# Video → GIF
+to_gif() {
+  ffmpeg -i "$1" -vf "fps=15,scale=640:-1:flags=lanczos" "${2:-${1%.*}.gif}"
+}
+
+# Video → small animated WebP
+to_webp() {
+  ffmpeg -i "$1" -vf "fps=15,scale=640:-1:flags=lanczos" -c:v libwebp -loop 0 "${2:-${1%.*}.webp}"
+}
+
+# Video → thumbnail
+to_thumb() {
+  ffmpeg -i "$1" -ss "${2:-00:00:01}" -frames:v 1 "${3:-${1%.*}.jpg}"
+}
+
+# Video → thumbnail WebP
+to_thumb_webp() {
+  ffmpeg -i "$1" -ss "${2:-00:00:01}" -frames:v 1 -c:v libwebp -quality 85 "${3:-${1%.*}.webp}"
+}
+
+# Audio → AAC/M4A
+to_m4a() {
+  ffmpeg -i "$1" -vn -c:a aac -b:a 192k "${2:-${1%.*}.m4a}"
+}
+
+# Audio → Opus
+to_opus() {
+  ffmpeg -i "$1" -vn -c:a libopus -b:a 128k "${2:-${1%.*}.opus}"
+}
+
+# Image → WebP
+to_webp_image() {
+  ffmpeg -i "$1" -c:v libwebp -quality 85 "${2:-${1%.*}.webp}"
+}
+
+# Image → AVIF
+to_avif() {
+  ffmpeg -i "$1" -c:v libaom-av1 -crf 30 -still-picture 1 "${2:-${1%.*}.avif}"
+}
+
+# Extract video only, no audio (copy video stream)
+ffmpeg_video_only() {
+  ffmpeg -i "$1" -an -c:v copy "${2:-${1%.*}_video.mkv}"
+}
+
+# Extract audio only, stream-copy when possible
+ffmpeg_audio_only() {
+  ffmpeg -i "$1" -vn -c:a copy "${2:-${1%.*}_audio.mka}"
+}
+
+# Remux/change container without re-encoding
+ffmpeg_remux() {
+  ffmpeg -i "$1" -map 0 -c copy "$2"
+}
+
+# Convert video, optionally specifying codec
+ffmpeg_convert_video() {
+  ffmpeg -i "$1" -c:v libx264 -c:a aac "${2:-${1%.*}.mp4}"
+}
+
+# Pick a specific video stream
+ffmpeg_pick_video() {
+  ffmpeg -i "$1" -map 0:v:"${3:-0}" -c copy "$2"
+}
+
+# Pick a specific audio stream
+ffmpeg_pick_audio() {
+  ffmpeg -i "$1" -map 0:a:"${3:-0}" -c copy "$2"
+}
+
+ffmpeg_video_range() {
+  ffmpeg -ss "$3" -i "$1" -t "$4" -map 0:v:"${5:-0}" -c copy "$2"
+}
+
+ffmpeg_audio_range() {
+  ffmpeg -ss "$3" -i "$1" -t "$4" -map 0:a:"${5:-0}" -c copy "$2"
+}
+
+alias ffmpeg_to_mp3=to_mp3
+alias ffmpeg_to_aac=to_aac
+alias ffmpeg_to_flac=to_flac
+alias ffmpeg_to_mp4=to_mp4
+alias ffmpeg_to_webm=to_webm
+alias ffmpeg_to_av1=to_av1
+alias ffmpeg_to_gif=to_gif
+alias ffmpeg_to_webp=to_webp
+alias ffmpeg_to_thumb=to_thumb
+alias ffmpeg_to_thumb_webp=to_thumb_webp
+alias ffmpeg_to_m4a=to_m4a
+alias ffmpeg_to_opus=to_opus
+alias ffmpeg_to_webp_image=to_webp_image
+alias ffmpeg_to_avif=to_avif

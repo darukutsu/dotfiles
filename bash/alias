@@ -100,6 +100,16 @@ ollama_stop() {
 ollama_set_alive() {
   curl http://ollama.ai.lan/api/generate -d "{\"model\": \"$1\", \"keep_alive\": \"$2\"}"
 }
+opencode_minimal() {
+  # shellcheck disable=2098,2097
+  OPENCODE_CONFIG="$XDG_CONFIG_HOME/opencode/opencode-minimal.jsonc" \
+    XDG_CONFIG_HOME="$PWD/.opencode" \
+    XDG_DATA_HOME="$PWD/.opencode/data" \
+    opencode
+
+  echo "don't forget to clean .opencode directory afterwards"
+}
+alias ocmin=opencode_minimal
 #alias page='$PAGER'
 alias pingg='ping google.com'
 alias pc='pacseek -u'
@@ -193,8 +203,4 @@ alias wttr='weather'
 
 alias urlsed='sed "s#[@/\^.$|()[*+?{}\#,&=:~]\|-\|\]#\\\&#g"'
 
-#alias gib='git branch'
-#alias gic='git commit'
-#alias gich='git checkout'
-#alias gis='git status'
-#alias gia='git add'
+. "$XDG_CONFIG_HOME/bash/ffmpeg-aliases"
