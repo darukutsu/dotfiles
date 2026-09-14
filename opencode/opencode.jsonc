@@ -1,4 +1,8 @@
 {
+  // around 8k context - default
+  // around 44k context - with mcps
+  // around 34k context - with mcphubonly
+  // around 14k context - without mcps
   "$schema": "https://opencode.ai/config.json",
   "share": "disabled",
   "lsp": {
@@ -13,6 +17,7 @@
   //"JuliusBrussee/caveman" -- git clone official repo and then install it manually however it mangles with comments
   //"graphifyy"
   //"darrenhinde/OpenAgentsControl" opencode-mem + oh-my-openagent simple-manual
+  // https://github.com/Randroids-Dojo/ManageSkills
   // NOTE: opencode as of 1.18.23 doesn't have auto update mechanism,
   // manually remove cache and pin version
   "plugin": [
@@ -25,6 +30,7 @@
     "opencode-models-discovery@1.5.3", // remove this once opencode releases official local discovery
     //"opencode-mem", // interesting idea but not sure if worth
     "opencode-pty@0.3.6",
+    //"opencode-skills-sync", # ai generated
     //"opencode-plugin-auto-update" // look for integrated solution
     //"@jfrog/opencode-jfrog-plugin@0.3.0", // causes duplication of .opencode
     //"opencode-firecrawl", // essentially same as mcp
@@ -33,6 +39,21 @@
     //"opencode-websearch-cited@1.2.0", // trash because uses internal opencode search and not custom searxng
     "./plugins/caveman/plugin.js"
   ],
+  "skillSources": [
+    "https://github.com/mattpocock/skills"
+    //"https://github.com/garrytan/gstack",
+    //"https://github.com/mukul975/anthropic-cybersecurity-skills",
+    //"https://github.com/anthropics/skills"
+  ],
+  // these skills must sit on disk somewhere
+  //"skills": {
+  //  "urls": [
+  //    "https://github.com/mattpocock/skills",
+  //    "https://github.com/garrytan/gstack",
+  //    "https://github.com/mukul975/anthropic-cybersecurity-skills",
+  //    "https://github.com/anthropics/skills"
+  //  ]
+  //},
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
@@ -63,32 +84,26 @@
         "baseURL": "https://ai.hento.org/v1",
         "modelsDiscovery": {
           "enabled": true,
+          // NOTE doesn't seem to filter
+          //"modelInfoFormat": "litellm",
+          //"modelInfoEndpoint": "/v1/models/capabilities",
+          //"filterNonChat": true,
           "smartModelName": false
         }
       }
     }
   },
   "mcp": {
-    "libretranslate": {
-      "type": "local",
-      "command": ["npx", "-y", "@libretranslate/mcp"],
-      "environment": {
-        "LIBRETRANSLATE_API_URL": "https://translate.hento.org",
-        "LIBRETRANSLATE_API_KEY": "your-api-key"
-      },
-      "enabled": true
-    },
-    "searxng": {
-      "type": "local",
-      "command": ["npx", "-y", "mcp-searxng"],
-      "environment": {
-        "SEARXNG_URL": "https://search.hento.org"
-      },
-      "enabled": true
-    },
     //"comfy": {
     //	"url": "https://cloud.comfy.org/mcp"
     //},
+    //
+    // NOTE doesn't seem to work, besides using other ai to reduce context not sure
+    //"mcphub-smart": {
+    //  "type": "remote",
+    //  "url": "https://mcp.hento.org/mcp/$smart",
+    //  "enabled": true
+    //}
     "mcphub-firecrawl": {
       "type": "remote",
       "url": "https://mcp.hento.org/mcp/firecrawl",
@@ -104,34 +119,85 @@
       "url": "https://mcp.hento.org/mcp/libretranslate",
       "enabled": false
     },
+    "mcphub-context7": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/context7",
+      "enabled": true
+    },
+    "mcphub-whois": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/whois-mcp",
+      "enabled": false
+    },
+    "mcphub-mem": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/basic-memory",
+      "enabled": true
+    },
+    "mcphub-diff": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/diff-mcp",
+      "enabled": false
+    },
+    "mcphub-kubernetes": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/kubernetes",
+      "enabled": false
+    },
+    "mcphub-neovim": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/nvim",
+      //"headers": {
+      //  "Authorization": "Bearer {env:SOME_API_TOKEN}"
+      //},
+      "enabled": false
+    },
+    "mcphub-blender": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/blender",
+      "enabled": false
+    },
+    "mcphub-playwright": {
+      "type": "remote",
+      "url": "https://mcp.hento.org/mcp/playwright",
+      "enabled": false
+    },
+    //"github": {
+    //  "type": "remote",
+    //  "url": "https://api.githubcopilot.com/mcp/",
+    //  "oauth": false,
+    //  "headers": {
+    //    "Authorization": "Bearer YOUR_GITHUB_PAT"
+    //  }
+    //},
     "cloudflare": {
       "type": "remote",
       "url": "https://mcp.cloudflare.com/mcp",
-      "enabled": true,
+      "enabled": false,
       // cloudflare doesn't support header bearer token
       "oauth": {}
     },
     "cloudflare-docs": {
       "type": "remote",
       "url": "https://docs.mcp.cloudflare.com/mcp",
-      "enabled": true
+      "enabled": false
     },
     "cloudflare-bindings": {
       "type": "remote",
       "url": "https://bindings.mcp.cloudflare.com/mcp",
-      "enabled": true,
+      "enabled": false,
       "oauth": {}
     },
     "cloudflare-builds": {
       "type": "remote",
       "url": "https://builds.mcp.cloudflare.com/mcp",
-      "enabled": true,
+      "enabled": false,
       "oauth": {}
     },
     "cloudflare-observability": {
       "type": "remote",
       "url": "https://observability.mcp.cloudflare.com/mcp",
-      "enabled": true,
+      "enabled": false,
       "oauth": {}
     }
   },
@@ -186,15 +252,13 @@
     // but i find skill more suitable for this since llm can decide when to run it
     // Maybe have both.
     //
-    //"explore": {
-    //	"mode": "subagent",
-    //	"permission": {
-    //		"edit": "deny"
-    //	}
-    //},
-    //"scout": {
-    //	"mode": "subagent",
-    //	"disable": true,
+    // NOTE: custom agents doesn't seem to save context probably needs better setup
+    // to strip default 8k
+    //
+    //"test": {
+    //  "mode": "primary",
+    //  "description": "Answer questions, use mcps if needed. Never use Webfetch",
+    //  "disable": false
     //},
     "review": {
       "temperature": 0.2,
@@ -259,6 +323,14 @@
     "nvim": {
       "path": "~/.config/nvim",
       "description": "nvim config path"
+    },
+    "opencode": {
+      "path": "~/.config/opencode",
+      "description": "opencode config path"
+    },
+    "cfg": {
+      "path": "~/.config/",
+      "description": "config path"
     }
   }
 }

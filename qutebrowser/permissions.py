@@ -58,6 +58,9 @@ with config.pattern("*://mail.google.com") as gm:
     gm.content.register_protocol_handler = False
     gm.content.notifications.enabled = False
 
+with config.pattern("*://ntfy.hento.org") as ntfy:
+    ntfy.content.notifications.enabled = True
+
 with config.pattern("*://*.aternos.org") as aternos:
     aternos.content.notifications.enabled = True
 
