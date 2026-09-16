@@ -4,14 +4,75 @@
   // around 34k context - with mcphubonly
   // around 14k context - without mcps
   "$schema": "https://opencode.ai/config.json",
+  "default_agent": "plan",
+  "update": "notify",
   "share": "disabled",
-  "lsp": {
-    // add here custom lsps...
-  },
   "formatter": {
     // add here custom formatters for stuff like fstab...
   },
-  "disabled_providers": [],
+  "websearch": false,
+  //"websearch": {
+  //  "provider": "random",
+  //},
+  //"media": {
+  //  "image": {
+  //    "max_height": 1000,
+  //    "max_width": 1000,
+  //  },
+  //},
+  "permissions": [
+    { "action": "*", "resource": "*", "effect": "ask" },
+    { "action": "read", "resource": "*", "effect": "allow" },
+    { "action": "edit", "resource": "*", "effect": "ask" },
+    { "action": "grep", "resource": "*", "effect": "allow" },
+    { "action": "glob", "resource": "*", "effect": "allow" },
+    { "action": "list", "resource": "*", "effect": "allow" },
+    { "action": "lsp", "resource": "*", "effect": "allow" },
+    { "action": "skill", "resource": "*", "effect": "allow" },
+    { "action": "todowrite", "resource": "*", "effect": "allow" },
+    { "action": "webfetch", "resource": "*", "effect": "allow" },
+    { "action": "question", "resource": "*", "effect": "allow" },
+    //"subagent": {},
+
+    // SHELL
+    { "action": "shell", "resource": "*", "effect": "ask" },
+    { "action": "shell", "resource": "awk *", "effect": "allow" },
+    { "action": "shell", "resource": "basename *", "effect": "allow" },
+    //{ "action": "shell", "resource": "bash *", "effect": "allow"},
+    { "action": "shell", "resource": "cat *", "effect": "allow" },
+    { "action": "shell", "resource": "curl *", "effect": "allow" },
+    { "action": "shell", "resource": "cut *", "effect": "allow" },
+    { "action": "shell", "resource": "df *", "effect": "allow" },
+    { "action": "shell", "resource": "diff *", "effect": "allow" },
+    { "action": "shell", "resource": "dirname *", "effect": "allow" },
+    { "action": "shell", "resource": "echo *", "effect": "allow" },
+    { "action": "shell", "resource": "find *", "effect": "allow" },
+    { "action": "shell", "resource": "git diff *", "effect": "allow" },
+    { "action": "shell", "resource": "git log *", "effect": "allow" },
+    { "action": "shell", "resource": "git status *", "effect": "allow" },
+    { "action": "shell", "resource": "grep *", "effect": "allow" },
+    { "action": "shell", "resource": "head *", "effect": "allow" },
+    { "action": "shell", "resource": "ls *", "effect": "allow" },
+    { "action": "shell", "resource": "printf *", "effect": "allow" },
+    { "action": "shell", "resource": "sed *", "effect": "allow" },
+    { "action": "shell", "resource": "seq *", "effect": "allow" },
+    //{ "action": "shell", "resource": "sh", "effect": "allow"},
+    { "action": "shell", "resource": "sleep *", "effect": "allow" },
+    { "action": "shell", "resource": "sort *", "effect": "allow" },
+    { "action": "shell", "resource": "tail *", "effect": "allow" },
+    { "action": "shell", "resource": "tr *", "effect": "allow" },
+    { "action": "shell", "resource": "wc *", "effect": "allow" },
+    //{ "action": "shell", "resource": "xargs", "effect": "allow"},
+
+    // MCPs allows
+    { "action": "mcphub_smart", "resource": "*", "effect": "allow" },
+    { "action": "mcphub_firecrawl", "resource": "*", "effect": "allow" },
+    { "action": "mcphub_searxng", "resource": "*", "effect": "allow" },
+    { "action": "mcphub_context7", "resource": "*", "effect": "allow" },
+    { "action": "mcphub_whois", "resource": "*", "effect": "allow" },
+    { "action": "mcphub_translate", "resource": "*", "effect": "allow" },
+    { "action": "cloudflare*", "resource": "*", "effect": "ask" }
+  ],
   // External programs that would be cool to integrate as plugin
   //"@th0rgal/ralph-wiggum"
   //"JuliusBrussee/caveman" -- git clone official repo and then install it manually however it mangles with comments
@@ -20,65 +81,66 @@
   // https://github.com/Randroids-Dojo/ManageSkills
   // NOTE: opencode as of 1.18.23 doesn't have auto update mechanism,
   // manually remove cache and pin version
-  "plugin": [
+  "plugins": [
     // need better hardware or structure preplaned for these
     //"oh-my-openagent",
     //"oh-my-opencode-slim@latest", // simpler to setup
     "@tarquinen/opencode-dcp@3.1.15",
     //"opencode-notify", // disable once they create better internal notifier
     "opencode-ntfy.sh@1.1.0",
-    "opencode-models-discovery@1.5.3", // remove this once opencode releases official local discovery
+    "opencode-models-discovery@1.5.5", // remove this once opencode releases official local discovery
     //"opencode-mem", // interesting idea but not sure if worth
     "opencode-pty@0.3.6",
-    //"opencode-skills-sync", # ai generated
     //"opencode-plugin-auto-update" // look for integrated solution
     //"@jfrog/opencode-jfrog-plugin@0.3.0", // causes duplication of .opencode
     //"opencode-firecrawl", // essentially same as mcp
     //"opencode-worktree" maybe if automation is preferred
-    // NOTE: create/look4 skill/mcp/agent for citing
+    // NOTE create/look4 skill/mcp/agent for citing
     //"opencode-websearch-cited@1.2.0", // trash because uses internal opencode search and not custom searxng
     "./plugins/caveman/plugin.js"
   ],
-  "skillSources": [
-    "https://github.com/mattpocock/skills"
-    //"https://github.com/garrytan/gstack",
-    //"https://github.com/mukul975/anthropic-cybersecurity-skills",
-    //"https://github.com/anthropics/skills"
+  // NOTE because we use dcp we dont need this
+  "compaction": {
+    "auto": false
+    //   "keep": {
+    //     "tokens": 64000,
+    //   },
+    //   "buffer": 100000,
+  },
+  "skills": [
+    "https://github.com/mattpocock/skills",
+    "https://github.com/garrytan/gstack",
+    "https://github.com/mukul975/anthropic-cybersecurity-skills",
+    "https://github.com/anthropics/skills"
   ],
-  // these skills must sit on disk somewhere
-  //"skills": {
-  //  "urls": [
-  //    "https://github.com/mattpocock/skills",
-  //    "https://github.com/garrytan/gstack",
-  //    "https://github.com/mukul975/anthropic-cybersecurity-skills",
-  //    "https://github.com/anthropics/skills"
-  //  ]
-  //},
-  "provider": {
+  "disabled_providers": ["opencode"],
+  "providers": {
     "ollama": {
-      "npm": "@ai-sdk/openai-compatible",
+      "package": "@opencode/ai/providers/openai-compatible",
       "name": "Ollama (local)",
-      "options": {
+      // try this when v2 to compare between ollama vs localai
+      //"models": {
+      //  "deepseek-ocr": {
+      //    "capabilities": {
+      //      "tools": false,
+      //      "input": ["text", "image"],
+      //      "output": ["text"]
+      //    },
+      //  }
+      //},
+      "settings": {
         "baseURL": "http://ollama.ai.lan/v1",
         "modelsDiscovery": {
           "enabled": true,
           //see https://github.com/yuhp/opencode-models-discovery/blob/main/docs/configuration.md
-
-          // NOTE: for versions older than 0.9
-          //"models": {
-          //	"excludeRegex": [
-          //		"qwen3-embedding"
-          //	]
-          //},
-
           "smartModelName": false
         }
       }
     },
     "hento": {
-      "npm": "@ai-sdk/openai-compatible",
+      "package": "@opencode/ai/providers/openai-compatible",
       "name": "hento.org",
-      "options": {
+      "settings": {
         // have to put it here because otherwise it won't recognize as provider
         "apiKey": "{env:HENTO_AI_API_KEY}",
         "baseURL": "https://ai.hento.org/v1",
@@ -94,155 +156,149 @@
     }
   },
   "mcp": {
-    //"comfy": {
-    //	"url": "https://cloud.comfy.org/mcp"
-    //},
-    //
-    // NOTE doesn't seem to work, besides using other ai to reduce context not sure
-    //"mcphub-smart": {
-    //  "type": "remote",
-    //  "url": "https://mcp.hento.org/mcp/$smart",
-    //  "enabled": true
-    //}
-    "mcphub-firecrawl": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/firecrawl",
-      "enabled": true
+    "timeout": {
+      "execution": 600000
     },
-    "mcphub-searxng": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/searxng",
-      "enabled": false
-    },
-    "mcphub-libretranslate": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/libretranslate",
-      "enabled": false
-    },
-    "mcphub-context7": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/context7",
-      "enabled": true
-    },
-    "mcphub-whois": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/whois-mcp",
-      "enabled": false
-    },
-    "mcphub-mem": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/basic-memory",
-      "enabled": true
-    },
-    "mcphub-diff": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/diff-mcp",
-      "enabled": false
-    },
-    "mcphub-kubernetes": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/kubernetes",
-      "enabled": false
-    },
-    "mcphub-neovim": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/nvim",
-      //"headers": {
-      //  "Authorization": "Bearer {env:SOME_API_TOKEN}"
+    "servers": {
+      //"comfy": {
+      //	"url": "https://cloud.comfy.org/mcp"
       //},
-      "enabled": false
-    },
-    "mcphub-blender": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/blender",
-      "enabled": false
-    },
-    "mcphub-playwright": {
-      "type": "remote",
-      "url": "https://mcp.hento.org/mcp/playwright",
-      "enabled": false
-    },
-    //"github": {
-    //  "type": "remote",
-    //  "url": "https://api.githubcopilot.com/mcp/",
-    //  "oauth": false,
-    //  "headers": {
-    //    "Authorization": "Bearer YOUR_GITHUB_PAT"
-    //  }
-    //},
-    "cloudflare": {
-      "type": "remote",
-      "url": "https://mcp.cloudflare.com/mcp",
-      "enabled": false,
-      // cloudflare doesn't support header bearer token
-      "oauth": {}
-    },
-    "cloudflare-docs": {
-      "type": "remote",
-      "url": "https://docs.mcp.cloudflare.com/mcp",
-      "enabled": false
-    },
-    "cloudflare-bindings": {
-      "type": "remote",
-      "url": "https://bindings.mcp.cloudflare.com/mcp",
-      "enabled": false,
-      "oauth": {}
-    },
-    "cloudflare-builds": {
-      "type": "remote",
-      "url": "https://builds.mcp.cloudflare.com/mcp",
-      "enabled": false,
-      "oauth": {}
-    },
-    "cloudflare-observability": {
-      "type": "remote",
-      "url": "https://observability.mcp.cloudflare.com/mcp",
-      "enabled": false,
-      "oauth": {}
+
+      // NOTE doesn't seem to work
+      //"mcphub-smart": {
+      //  "type": "remote",
+      //  "url": "https://mcp.hento.org/mcp/$smart",
+      //},
+      "mcphub-firecrawl": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/firecrawl"
+      },
+      "mcphub-searxng": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/searxng",
+        "disabled": true
+      },
+      "mcphub-libretranslate": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/libretranslate",
+        "disabled": true
+      },
+      "mcphub-context7": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/context7"
+      },
+      "mcphub-whois": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/whois-mcp",
+        "disabled": true
+      },
+      "mcphub-mem": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/basic-memory",
+        "disabled": true
+      },
+      "mcphub-diff": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/diff-mcp",
+        "disabled": true
+      },
+      "mcphub-kubernetes": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/kubernetes",
+        "disabled": true
+      },
+      "mcphub-neovim": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/nvim",
+        //"headers": {
+        //  "Authorization": "Bearer {env:SOME_API_TOKEN}"
+        //},
+        "disabled": true
+      },
+      "mcphub-blender": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/blender",
+        "disabled": true
+      },
+      "mcphub-playwright": {
+        "type": "remote",
+        "url": "https://mcp.hento.org/mcp/playwright",
+        "disabled": true
+      },
+      //"github": {
+      //  "type": "remote",
+      //  "url": "https://api.githubcopilot.com/mcp/",
+      //  "oauth": false,
+      //  "headers": {
+      //    "Authorization": "Bearer YOUR_GITHUB_PAT"
+      //  }
+      //},
+      "cloudflare": {
+        "type": "remote",
+        "url": "https://mcp.cloudflare.com/mcp",
+        // cloudflare doesn't support header bearer token
+        "disabled": true
+      },
+      "cloudflare-docs": {
+        "type": "remote",
+        "url": "https://docs.mcp.cloudflare.com/mcp",
+        "disabled": true
+      },
+      "cloudflare-bindings": {
+        "type": "remote",
+        "url": "https://bindings.mcp.cloudflare.com/mcp",
+        "disabled": true
+      },
+      "cloudflare-builds": {
+        "type": "remote",
+        "url": "https://builds.mcp.cloudflare.com/mcp",
+        "disabled": true
+      },
+      "cloudflare-observability": {
+        "type": "remote",
+        "url": "https://observability.mcp.cloudflare.com/mcp",
+        "disabled": true
+      }
     }
   },
-  // permissions are merged with global ones
-  "agent": {
-    "build": {
-      "mode": "primary",
-      "permission": {
-        "edit": "allow"
-      }
-    },
-    "plan": {
-      "mode": "primary",
-      "permission": {
-        "edit": "deny",
-        // TODO: why do i need to be verbose here?
-        // Cannot mention variable @permission to inherit for shorter config.
-        "bash": {
-          "*": "ask",
-          "awk *": "allow",
-          "basename *": "allow",
-          "cat *": "allow",
-          "curl *": "allow",
-          "cut *": "allow",
-          "df *": "allow",
-          "diff *": "allow",
-          "dirname *": "allow",
-          "echo *": "allow",
-          "find *": "allow",
-          "git diff *": "allow",
-          "git log *": "allow",
-          "git status *": "allow",
-          "grep *": "allow",
-          "head *": "allow",
-          "ls *": "allow",
-          "printf *": "allow",
-          "seq *": "allow",
-          "sleep *": "allow",
-          "sort *": "allow",
-          "tail *": "allow",
-          "tr *": "allow",
-          "wc *": "allow"
-        }
-      }
-    },
+  "agents": {
+    // NOTE: permissions are merged with global ones
+    //
+    // TODO see if in opencode v2 it inherits properly permissions from above
+    // if yes then remove
+    //
+    //"plan": {
+    //  "mode": "primary",
+    //  "permission": {
+    //    "edit": "deny",
+    //    "shell": {
+    //      "*": "ask",
+    //      "awk *": "allow",
+    //      "basename *": "allow",
+    //      "cat *": "allow",
+    //      "curl *": "allow",
+    //      "cut *": "allow",
+    //      "df *": "allow",
+    //      "diff *": "allow",
+    //      "dirname *": "allow",
+    //      "echo *": "allow",
+    //      "find *": "allow",
+    //      "git diff *": "allow",
+    //      "git log *": "allow",
+    //      "git status *": "allow",
+    //      "grep *": "allow",
+    //      "head *": "allow",
+    //      "ls *": "allow",
+    //      "printf *": "allow",
+    //      "seq *": "allow",
+    //      "sleep *": "allow",
+    //      "sort *": "allow",
+    //      "tail *": "allow",
+    //      "tr *": "allow",
+    //      "wc *": "allow"
+    //    }
+    //  }
+    //},
     // NOTE: I should create specific subagents running on certain models
     // that will be specialized on tasks with skills and permissions
     // preferably small 7B and less. This way I can omit stuff like `amplifier`.
@@ -260,63 +316,18 @@
     //  "description": "Answer questions, use mcps if needed. Never use Webfetch",
     //  "disable": false
     //},
-    "review": {
-      "temperature": 0.2,
-      "top_p": 1.0,
-      //"model": "deepseek-coder",
-      "description": "Reviews code for best practices and potential issues",
-      "disable": true,
-      "permission": {
-        "edit": "ask"
-      }
-    }
-  },
-  "permission": {
-    "*": "ask",
-    "read": "allow",
-    "edit": "ask", // all 3 edit, write, patch
-    "bash": {
-      "*": "ask",
-      "awk *": "allow",
-      "basename *": "allow",
-      //"bash *": "allow",
-      "cat *": "allow",
-      "curl *": "allow",
-      "cut *": "allow",
-      "df *": "allow",
-      "diff *": "allow",
-      "dirname *": "allow",
-      "echo *": "allow",
-      "find *": "allow",
-      "git diff *": "allow",
-      "git log *": "allow",
-      "git status *": "allow",
-      "grep *": "allow",
-      "head *": "allow",
-      "ls *": "allow",
-      "printf *": "allow",
-      "sed *": "allow",
-      "seq *": "allow",
-      //"sh": "allow",
-      "sleep *": "allow",
-      "sort *": "allow",
-      "tail *": "allow",
-      "tr *": "allow",
-      "wc *": "allow"
-      //"xargs": "allow",
-    },
-    "grep": "allow",
-    "glob": "allow",
-    "list": "allow",
-    "lsp": "allow",
-    "skill": "allow",
-    //"task": {},
-    "todowrite": "allow",
-    "webfetch": "allow",
-    "question": "allow"
-    // MCPs allows, doesn't do probably what i think it does
-    //"libretranslate": "allow",
-    //"searxng": "allow"
+    //"review": {
+    //  //"request": {
+    //  //  "temperature": 0.2,
+    //  //  "top_p": 1.0,
+    //  //},
+    //  //"model": "deepseek-coder",
+    //  "description": "Reviews code for best practices and potential issues",
+    //  "disable": true,
+    //  "permissions": [
+    //       {"action": "edit", "resource": "*", "effect": "ask"}
+    //  ]
+    //}
   },
   //"instructions": ["CONTRIBUTING.md", "some-general-stuff-i-can-reuse", "https://url..."],
   "references": {
