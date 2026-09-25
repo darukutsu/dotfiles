@@ -85,12 +85,12 @@
     // need better hardware or structure preplaned for these
     //"oh-my-openagent",
     //"oh-my-opencode-slim@latest", // simpler to setup
-    "@tarquinen/opencode-dcp@3.1.15",
+    "@tarquinen/opencode-dcp@3.2.0",
     //"opencode-notify", // disable once they create better internal notifier
     "opencode-ntfy.sh@1.1.0",
-    "opencode-models-discovery@1.5.5", // remove this once opencode releases official local discovery
+    "opencode-models-discovery@1.6.1", // remove this once opencode releases official local discovery
     //"opencode-mem", // interesting idea but not sure if worth
-    "opencode-pty@0.3.6",
+    "opencode-pty@0.4.0", // TODO anomalyco has its own version of this investigate
     //"opencode-plugin-auto-update" // look for integrated solution
     //"@jfrog/opencode-jfrog-plugin@0.3.0", // causes duplication of .opencode
     //"opencode-firecrawl", // essentially same as mcp
