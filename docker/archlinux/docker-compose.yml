@@ -1,6 +1,8 @@
 services:
   archlinux:
     container_name: archlinux
+    image: archlinux:darudesktop
+    restart: unless-stopped
     build:
       context: .
       args:
@@ -8,9 +10,26 @@ services:
         USERNAME: ${USERNAME}
         HOME: ${HOME}
     gpus: all
-    devices:
-      - /dev/dxg
-      - /dev/uinput
+    user: 1000:1000
+    network_mode: host
+    privileged: true
+    #devices:
+    #  - /dev/dxg
+    #  - /dev/dri
+    #  - /dev/uinput
+    #  - /dev/input:/dev/input
+    #- /dev/uhid
+    # uncomment if INTEL/AMD
+    #  - /dev/kfd
+    cap_add:
+      - SYS_ADMIN
+      - SYS_NICE
+    group_add:
+      - wheel
+      - render
+      - video
+      - audio
+      - input
     device_cgroup_rules:
       - "c 13:* rmw"
     ports:
@@ -19,42 +38,50 @@ services:
       - "47998-48000:47998-48000/udp"
       - "47999:47999/udp"
     volumes:
+      - /dev:/dev:rslave
       - /usr/lib/wsl:/usr/lib/wsl:ro
-      - /mnt/wslg:/mnt/wslg
-      - /mnt/wsl:/mnt/wsl
-      - /mnt/c:/mnt/c
-      - /dev:/dev:rw
+      - /mnt/:/mnt/
       - /run/udev:/run/udev:ro
-      # this is needed because storage in docker is not persistent
       - ${HOME}:/home/${USERNAME} # maybe change this later to symlink to ./home
-      - arch_usr:/usr
-      - arch_etc:/etc
-      # this does not work as expected need to find workaround
-      #- ./usr:/usr
-      #- ./etc:/etc
+      - arch_etc:/etc-override
+      #- arch_usr:/usr
+      #- arch_var:/var
       # We define entrypoint.sh here cuz use might want to do init changes on the fly.
-      # Would be easier if we had systemd, but sadly i'm stupid.
       - ./entrypoint.sh:/entrypoint.sh
     #tmpfs:
     #  - /run
     #  - /tmp
     #  - /run/lock
-    #stop_signal: SIGRTMIN+3
-    #entrypoint: ["/lib/systemd/systemd"]
     environment:
       - USERNAME=${USERNAME}
       - DISPLAY=:1
       # comment these two when using GLX uncomment d3d12
-      - LIBGL_ALWAYS_SOFTWARE=1
-      - GALLIUM_DRIVER=llvmpipe
-      #- GALLIUM_DRIVER=d3d12
+      #- LIBGL_ALWAYS_SOFTWARE=1
+      #- GALLIUM_DRIVER=llvmpipe
+      - GALLIUM_DRIVER=d3d12
+      - LIBGL_ALWAYS_SOFTWARE=0
+      - MESA_D3D12_DEFAULT_ADAPTER_NAME=NVIDIA
       - LD_LIBRARY_PATH=/usr/lib/wsl/lib
-      - NVIDIA_DRIVER_CAPABILITIES=all
       - GLYCIN_SANDBOX_POLICY=unsafe
       - KITTY_DISABLE_WAYLAND=1
-    network_mode: host
-    privileged: true
+
+      # uncomment rest if nvidia
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - NVIDIA_VISIBLE_DEVICES=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
 volumes:
-  arch_usr:
   arch_etc:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./etc
+  #arch_usr:
+  #arch_var:

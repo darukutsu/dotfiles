@@ -5,6 +5,14 @@ if ! [ -e ~/.bashrc ]; then
   ln -s /home/${USERNAME}/.config/bash/.bashrc /home/${USERNAME}/.bashrc
 fi
 
+if [ -d /etc-override ]; then
+  find /etc-override -type f | while read -r filepath; do
+    relpath="${filepath#/etc-override/}"
+    sudo mkdir -p "/etc/$(dirname "$relpath")"
+    sudo ln -sf "$filepath" "/etc/$relpath"
+  done
+fi
+
 # maybe should be moved to compose
 export KITTY_DISABLE_WAYLAND=1
 export XDG_DATA_HOME=${HOME}/.local/share
@@ -42,7 +50,17 @@ sudo chown -R ${USERNAME}:${USERNAME} /home/${USERNAME}/.config/pulse
 # you don't need to do this move if you don't install nvidia-open but in case you did uncomment
 #sudo mv /usr/lib/libEGL_nvidia.so* /usr/lib/libnvidia-egl-*.so* /home/${USERNAME}/ 2>/dev/null || true
 #sudo ldconfig
-sudo chmod 660 /dev/uinput
+sudo mkdir -p /dev/input
+sudo chmod 666 /dev/dxg 2>/dev/null || true
+sudo chmod -R 777 /dev/input /dev/uinput /dev/dri 2>/dev/null || true
+
+# 1. Symlink WSL NVIDIA & DirectX libraries directly into /usr/lib
+if [ -d /usr/lib/wsl/lib ]; then
+  sudo ln -sf /usr/lib/wsl/lib/lib*.so* /usr/lib/ 2>/dev/null || true
+  echo "/usr/lib/wsl/lib" | sudo tee /etc/ld.so.conf.d/wsl.conf >/dev/null
+  sudo ldconfig
+fi
+
 sudo LD_PRELOAD="" LD_LIBRARY_PATH="" Xorg ${DISPLAY} -noreset &
 
 # alternative way of doing if opengl not needed
@@ -58,12 +76,13 @@ sudo LD_PRELOAD="" LD_LIBRARY_PATH="" Xorg ${DISPLAY} -noreset &
 #  Xvfb ${DISPLAY} -screen 0 1920x1080x24 &
 sleep 1
 
+# use wsl's ip address when adding session in config
 sunshine &
 SUNSHINE_PID=$!
 
 # YOUR DESKTOP CONFIG
 bspwm &
-#sxhkd &
+sxhkd &
 
 # if you remove this container will stop
 wait $SUNSHINE_PID

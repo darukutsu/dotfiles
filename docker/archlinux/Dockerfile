@@ -2,15 +2,30 @@ FROM archlinux:latest
 
 ARG USERNAME
 
+## Host pacman config (repos + mirrorlist) copied in BEFORE the first sync so
+## the image builds against the same repos/mirrors (e.g. LizardByte/Sunshine).
+COPY etc/pacman.conf /etc/pacman.conf
+COPY etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist
+
+## WSL/Docker: Landlock isn't available in the build sandbox, so pacman's
+## sandbox (DownloadUser=alpm + Landlock) fails. Disable it for the build.
+RUN sed -i -e 's/^DownloadUser/#DownloadUser/' \
+	-e 's/^#\?DisableSandbox$/DisableSandbox/' \
+	-e 's/^#\?DisableSandboxFilesystem$/DisableSandboxFilesystem/' /etc/pacman.conf
+
 ##INITIAL SETUP...
 RUN pacman -Syu --noconfirm base base-devel git sudo ca-certificates go dbus
 
 ## THIS IS IMPORTANT CUZ CORPORATE SHIT CERTIFICATES BLOCKING
-## FIRSTLY COPY STUFF FROM WINDONS (TODO)
-## THEN MOVE YOUR CERTS to this directory
-COPY etc /etc
+## Only the corporate trust anchors are copied in (seeded from the host by
+## build.sh into ./etc/ca-certificates/trust-source/anchors). update-ca-trust
+## then MERGES them with the distro certs instead of clobbering /etc/ssl.
+COPY etc/ca-certificates/trust-source/anchors /etc/ca-certificates/trust-source/anchors
 
 RUN update-ca-trust
+
+## Host X11 config (xorg.conf.d, xinit) so Xorg starts with the same setup.
+COPY etc/X11 /etc/X11
 
 RUN sed -i '/^OPTIONS/ s/debug/!debug/' /etc/makepkg.conf
 
@@ -53,6 +68,7 @@ RUN git clone https://aur.archlinux.org/yay.git /tmp/yay && \
 
 COPY dependencies /home/${USERNAME}/dependencies
 RUN sudo chmod 755 /home/${USERNAME}/dependencies
+## make this use pacman not everyone wants needs aur
 RUN sed '/^#/d' /home/${USERNAME}/dependencies | xargs yay -Syu --noconfirm
 
 ENTRYPOINT ["/entrypoint.sh"]
