@@ -47,8 +47,10 @@
     { "action": "shell", "resource": "dirname *", "effect": "allow" },
     { "action": "shell", "resource": "echo *", "effect": "allow" },
     { "action": "shell", "resource": "find *", "effect": "allow" },
+    { "action": "shell", "resource": "file *", "effect": "allow" },
     { "action": "shell", "resource": "git diff *", "effect": "allow" },
     { "action": "shell", "resource": "git log *", "effect": "allow" },
+    { "action": "shell", "resource": "git show *", "effect": "allow" },
     { "action": "shell", "resource": "git status *", "effect": "allow" },
     { "action": "shell", "resource": "grep *", "effect": "allow" },
     { "action": "shell", "resource": "head *", "effect": "allow" },
@@ -88,7 +90,7 @@
     "@tarquinen/opencode-dcp@3.2.0",
     //"opencode-notify", // disable once they create better internal notifier
     "opencode-ntfy.sh@1.1.0",
-    "opencode-models-discovery@1.6.1", // remove this once opencode releases official local discovery
+    "opencode-models-discovery@1.7.1", // remove this once opencode releases official local discovery
     //"opencode-mem", // interesting idea but not sure if worth
     "opencode-pty@0.4.0", // TODO anomalyco has its own version of this investigate
     //"opencode-plugin-auto-update" // look for integrated solution
@@ -263,42 +265,11 @@
   },
   "agents": {
     // NOTE: permissions are merged with global ones
-    //
-    // TODO see if in opencode v2 it inherits properly permissions from above
-    // if yes then remove
-    //
-    //"plan": {
-    //  "mode": "primary",
-    //  "permission": {
-    //    "edit": "deny",
-    //    "shell": {
-    //      "*": "ask",
-    //      "awk *": "allow",
-    //      "basename *": "allow",
-    //      "cat *": "allow",
-    //      "curl *": "allow",
-    //      "cut *": "allow",
-    //      "df *": "allow",
-    //      "diff *": "allow",
-    //      "dirname *": "allow",
-    //      "echo *": "allow",
-    //      "find *": "allow",
-    //      "git diff *": "allow",
-    //      "git log *": "allow",
-    //      "git status *": "allow",
-    //      "grep *": "allow",
-    //      "head *": "allow",
-    //      "ls *": "allow",
-    //      "printf *": "allow",
-    //      "seq *": "allow",
-    //      "sleep *": "allow",
-    //      "sort *": "allow",
-    //      "tail *": "allow",
-    //      "tr *": "allow",
-    //      "wc *": "allow"
-    //    }
-    //  }
-    //},
+    "plan": {
+      "permissions": [
+        { "action": "shell", "resource": "sed -i *", "effect": "deny" }
+      ]
+    }
     // NOTE: I should create specific subagents running on certain models
     // that will be specialized on tasks with skills and permissions
     // preferably small 7B and less. This way I can omit stuff like `amplifier`.
