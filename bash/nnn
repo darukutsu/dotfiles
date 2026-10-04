@@ -72,7 +72,9 @@ p:$HOME/Pictures/;
 P:$HOME/Public;
 q:$HOME/.config/qutebrowser/;
 s:$HOME/Public/server.lan;
-t:$HOME/Public/GitTuke/4LS;
+S:$HOME/Public/public.lan;
+D:$HOME/Public/docker.lan;
+t:$HOME/Public/GitTuke/5ZS;
 v:$HOME/Videos/;
 z:$HOME/.config/zmk/config/;
 "

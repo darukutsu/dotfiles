@@ -33,6 +33,11 @@ to_av1() {
 to_gif() {
   ffmpeg -i "$1" -vf "fps=15,scale=640:-1:flags=lanczos" "${2:-${1%.*}.gif}"
 }
+#
+# Image → GIF
+to_gif_image() {
+  ffmpeg -i "$1" -frames:v 1 "${2:-${1%.*}.gif}"
+}
 
 # Video → small animated WebP
 to_webp() {
@@ -67,6 +72,31 @@ to_webp_image() {
 # Image → AVIF
 to_avif() {
   ffmpeg -i "$1" -c:v libaom-av1 -crf 30 -still-picture 1 "${2:-${1%.*}.avif}"
+}
+
+# Image → PNG
+to_png() {
+  ffmpeg -i "$1" -frames:v 1 "${2:-${1%.*}.png}"
+}
+
+# Image → JPEG
+to_jpg() {
+  ffmpeg -i "$1" -frames:v 1 -q:v 2 "${2:-${1%.*}.jpg}"
+}
+
+# Image → JPEG (quality 0–100)
+to_jpeg() {
+  ffmpeg -i "$1" -frames:v 1 -q:v 2 "${2:-${1%.*}.jpeg}"
+}
+
+# Image → BMP
+to_bmp() {
+  ffmpeg -i "$1" -frames:v 1 "${2:-${1%.*}.bmp}"
+}
+
+# Image → TIFF
+to_tiff() {
+  ffmpeg -i "$1" -frames:v 1 -c:v tiff "${2:-${1%.*}.tiff}"
 }
 
 # Extract video only, no audio (copy video stream)
@@ -121,3 +151,9 @@ alias ffmpeg_to_m4a=to_m4a
 alias ffmpeg_to_opus=to_opus
 alias ffmpeg_to_webp_image=to_webp_image
 alias ffmpeg_to_avif=to_avif
+alias ffmpeg_to_png=to_png
+alias ffmpeg_to_jpg=to_jpg
+alias ffmpeg_to_jpeg=to_jpeg
+alias ffmpeg_to_bmp=to_bmp
+alias ffmpeg_to_tiff=to_tiff
+alias ffmpeg_to_gif_image=to_gif_image
