@@ -164,7 +164,17 @@ return { -- MASON, formatter/linter, debugger, lsp
       --},
 
       -- implicit automatic setup when empty
-      handlers = {},
+      handlers = {
+        -- codespell: keep it as a LINTER only. The default handler registers
+        -- both diagnostics.codespell AND formatting.codespell; the formatting
+        -- source runs `codespell --write-changes` on save (via conform's
+        -- lsp_format = "fallback") and rewrites words it wrongly flags as
+        -- typos, mangling code identifiers/domain terms. Register diagnostics
+        -- only so it warns but never writes changes.
+        codespell = function()
+          null_ls.register(null_ls.builtins.diagnostics.codespell)
+        end,
+      },
     })
 
     -- maybe want some customization in future
