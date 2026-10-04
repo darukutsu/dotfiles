@@ -36,6 +36,8 @@
 	diff = never
 [diff]
     tool = nvim_difftool
+    #renames = true
+    #renamesLimit = 0
 [difftool "nvim_difftool"]
     cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
 [alias]
@@ -46,9 +48,21 @@
 	logg = log --oneline --graph --decorate
 	logau = log --author
 	shortstat = diff --shortstat
+	cachestat = diff --shortstat --cached
 	prevstat = diff --shortstat HEAD~1 HEAD
 	numstat = diff --shortstat origin/master HEAD
 	mergestat = diff --shortstat origin/master...HEAD
 	parent = "!git show-branch | grep '*' | grep -v \"$(git rev-parse --abbrev-ref HEAD)\" | head -n1 | sed 's/.*\\[\\(.*\\)\\].*/\\1/' | sed 's/[\\^~].*//'"
 	reflog = reflog --date=iso --pretty
 	unadd = reset HEAD
+	diffsimple = diff --name-status -M10% -l0
+	# one by one in nvim
+	difftool = difftool --dir-diff --no-symlinks -M10% -l0
+	
+	# Windows specific
+	# one by one
+	wm = "!f() { git -c diff.tool=winmerge -c difftool.winmerge.cmd='\"/mnt/c/Program Files/WinMerge/WinMergeU.exe\" \"$(wslpath -w \"$LOCAL\")\" \"$(wslpath -w \"$REMOTE\")\"' difftool -M10% -l0 \"$1\" \"$2\"; }; f"
+	# directory comparison
+	wmd = "!f() { git -c diff.tool=winmerge -c difftool.winmerge.cmd='\"/mnt/c/Program Files/WinMerge/WinMergeU.exe\" \"$(wslpath -w \"$LOCAL\")\" \"$(wslpath -w \"$REMOTE\")\"' difftool --dir-diff --no-symlinks -M10% -l0 \"$1\" \"$2\"; }; f"
+	# directory comparison with renamed files paired at their new paths
+	wma = "!f() { base=\"$1\"; target=\"$2\"; test -n \"$base\" && test -n \"$target\" || { echo \"usage: git wma <base> <target>\" >&2; return 2; }; tmp=\"$(mktemp -d \"${TMPDIR:-/tmp}/git-winmerge.XXXXXX\")\" || return; left=\"$tmp/left\"; right=\"$tmp/right\"; mkdir \"$left\" \"$right\" || return; git archive \"$base\" | tar -x -C \"$left\" && git archive \"$target\" | tar -x -C \"$right\" || return; git diff --name-status -z -M10% -l0 \"$base\" \"$target\" | bash -c 'left=\"$1\"; while IFS= read -r -d \"\" status; do case \"$status\" in R*) IFS= read -r -d \"\" old && IFS= read -r -d \"\" new || exit; mkdir -p \"$left/$(dirname \"$new\")\" && mv \"$left/$old\" \"$left/$new\";; C*) IFS= read -r -d \"\" old && IFS= read -r -d \"\" new || exit; mkdir -p \"$left/$(dirname \"$new\")\" && cp -p \"$left/$old\" \"$left/$new\";; *) IFS= read -r -d \"\" path || exit;; esac; done' bash \"$left\"; \"/mnt/c/Program Files/WinMerge/WinMergeU.exe\" \"$(wslpath -w \"$left\")\" \"$(wslpath -w \"$right\")\"; }; f"
