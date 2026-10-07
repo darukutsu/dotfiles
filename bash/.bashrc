@@ -12,6 +12,8 @@ if [ -z "$XDG_CONFIG_HOME" ] || [ "$XDG_CONFIG_HOME" != "$HOME/.config" ]; then
   export XDG_DOWNLOAD_DIR=${HOME}/Downloads
 fi
 
+export PATH=${PATH}:${XDG_CONFIG_HOME:-${HOME}/.config}/rofi/scripts
+
 if [ -z "$EDITOR" ]; then
   export EDITOR=nvim
 fi
