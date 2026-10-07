@@ -55,6 +55,7 @@ services:
     environment:
       - USERNAME=${USERNAME}
       - DISPLAY=:1
+      - PULSE_SERVER=/mnt/wslg/PulseServer
       # comment these two when using GLX uncomment d3d12
       #- LIBGL_ALWAYS_SOFTWARE=1
       #- GALLIUM_DRIVER=llvmpipe

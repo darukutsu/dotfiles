@@ -24,6 +24,7 @@ go
 inotify-tools
 intel-media-driver
 julia
+keepassxc
 kitty
 shader-slang
 libva-intel-driver
@@ -39,14 +40,17 @@ mesa
 mesa-utils
 moonlight-qt
 neovim
+nnn
 npm
 nvidia-container-toolkit
 #nvidia-open
+opencode
 #picom
 polkit
 polkit-qt6
 polybar
 pulseaudio
+pulsemixer
 #pyrefly
 python-toml
 #rustup
@@ -59,6 +63,7 @@ termshark
 thunar-volman
 translate-shell
 ripgrep
+tmux
 ttc-iosevka
 tumbler
 usbutils
