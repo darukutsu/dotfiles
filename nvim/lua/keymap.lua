@@ -231,6 +231,8 @@ end, { desc = "code actions" })
 
 -- Mathematic functions / operations
 -- Count time values together HH:map:SS in visual block
+
+map({ "v" }, "<leader><leader>=", ":MathEval<cr>", { desc = "Evaluate selected math expression" })
 map({ "v" }, "<leader><leader>c", ":MathTimeSum<cr>", { desc = "SUM time values visual" })
 map({ "n" }, "<leader><leader>+", ":MathSum<cr>", { desc = "SUM col - yank to register first" })
 map({ "n" }, "<leader><leader>*", ":MathMul<cr>", { desc = "MUL col - yank to register first" })
