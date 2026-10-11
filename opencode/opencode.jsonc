@@ -120,23 +120,8 @@
     "ollama": {
       "package": "@opencode/ai/providers/openai-compatible",
       "name": "Ollama (local)",
-      // try this when v2 to compare between ollama vs localai
-      //"models": {
-      //  "deepseek-ocr": {
-      //    "capabilities": {
-      //      "tools": false,
-      //      "input": ["text", "image"],
-      //      "output": ["text"]
-      //    },
-      //  }
-      //},
       "settings": {
-        "baseURL": "http://ollama.ai.lan/v1",
-        "modelsDiscovery": {
-          "enabled": true,
-          //see https://github.com/yuhp/opencode-models-discovery/blob/main/docs/configuration.md
-          "smartModelName": false
-        }
+        "baseURL": "http://ollama.ai.lan/v1"
       }
     },
     "hento": {
