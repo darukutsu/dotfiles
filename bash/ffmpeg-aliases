@@ -1,139 +1,350 @@
 #!/bin/sh
+
+show_help() {
+  local name="$1"
+  local usage="$2"
+  local description="$3"
+  local defaults="${4:-}"
+
+  printf 'Usage: %s\n\n%s\n' "$usage" "$description"
+
+  if [[ -n "$defaults" ]]; then
+    printf '\nDefaults:\n%s\n' "$defaults"
+  fi
+}
+
 # Extract audio → MP3
 to_mp3() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_mp3" \
+      "to_mp3 INPUT [OUTPUT.mp3]" \
+      "Extract audio from a media file and encode it as MP3." \
+      "OUTPUT defaults to INPUT without its extension + .mp3"
+    return 0
+  fi
   ffmpeg -i "$1" -vn -codec:a libmp3lame -q:a 2 "${2:-${1%.*}.mp3}"
 }
 
 # Extract audio → AAC
 to_aac() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_aac" \
+      "to_aac INPUT [OUTPUT.m4a]" \
+      "Extract audio and encode it as AAC at 192 kbps." \
+      "OUTPUT defaults to INPUT without its extension + .m4a"
+    return 0
+  fi
   ffmpeg -i "$1" -vn -codec:a aac -b:a 192k "${2:-${1%.*}.m4a}"
 }
 
 # Extract audio → FLAC
 to_flac() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_flac" \
+      "to_flac INPUT [OUTPUT.flac]" \
+      "Extract audio and encode it as lossless FLAC." \
+      "OUTPUT defaults to INPUT without its extension + .flac"
+    return 0
+  fi
   ffmpeg -i "$1" -vn -codec:a flac "${2:-${1%.*}.flac}"
 }
 
-# Video → MP4 (H.264, web-friendly)
+# Video → MP4 (H.264)
 to_mp4() {
-  ffmpeg -i "$1" -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k "${2:-${1%.*}.mp4}"
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_mp4" \
+      "to_mp4 INPUT [OUTPUT.mp4]" \
+      "Convert video to MP4 using H.264 and AAC audio." \
+      "Video CRF: 23; preset: medium; audio: 128 kbps"
+    return 0
+  fi
+  ffmpeg -i "$1" -c:v libx264 -crf 23 -preset medium \
+    -c:a aac -b:a 128k "${2:-${1%.*}.mp4}"
 }
 
 # Video → WebM (VP9)
 to_webm() {
-  ffmpeg -i "$1" -c:v libvpx-vp9 -crf 32 -b:v 0 -c:a libopus -b:a 96k "${2:-${1%.*}.webm}"
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_webm" \
+      "to_webm INPUT [OUTPUT.webm]" \
+      "Convert video to WebM using VP9 and Opus audio." \
+      "Video CRF: 32; audio: 96 kbps"
+    return 0
+  fi
+  ffmpeg -i "$1" -c:v libvpx-vp9 -crf 32 -b:v 0 \
+    -c:a libopus -b:a 96k "${2:-${1%.*}.webm}"
 }
 
-# Video → WebM AV1 (smaller, slower)
+# Video → WebM AV1
 to_av1() {
-  ffmpeg -i "$1" -c:v libsvtav1 -crf 35 -preset 6 -c:a libopus -b:a 96k "${2:-${1%.*}.webm}"
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_av1" \
+      "to_av1 INPUT [OUTPUT.webm]" \
+      "Convert video to AV1 using SVT-AV1 and Opus audio." \
+      "Video CRF: 35; preset: 6; audio: 96 kbps"
+    return 0
+  fi
+  ffmpeg -i "$1" -c:v libsvtav1 -crf 35 -preset 6 \
+    -c:a libopus -b:a 96k "${2:-${1%.*}.webm}"
 }
 
 # Video → GIF
 to_gif() {
-  ffmpeg -i "$1" -vf "fps=15,scale=640:-1:flags=lanczos" "${2:-${1%.*}.gif}"
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_gif" \
+      "to_gif INPUT [OUTPUT.gif]" \
+      "Convert video to an animated GIF." \
+      "Frame rate: 15 fps; width: 640 px"
+    return 0
+  fi
+  ffmpeg -i "$1" -vf "fps=15,scale=640:-1:flags=lanczos" \
+    "${2:-${1%.*}.gif}"
 }
-#
-# Image → GIF
+
+# Image → GIF (single frame)
 to_gif_image() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_gif_image" \
+      "to_gif_image INPUT [OUTPUT.gif]" \
+      "Convert an image into a single-frame GIF." \
+      "OUTPUT defaults to INPUT without its extension + .gif"
+    return 0
+  fi
   ffmpeg -i "$1" -frames:v 1 "${2:-${1%.*}.gif}"
 }
 
-# Video → small animated WebP
+# Video → animated WebP
 to_webp() {
-  ffmpeg -i "$1" -vf "fps=15,scale=640:-1:flags=lanczos" -c:v libwebp -loop 0 "${2:-${1%.*}.webp}"
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_webp" \
+      "to_webp INPUT [OUTPUT.webp]" \
+      "Convert video to an animated WebP." \
+      "Frame rate: 15 fps; width: 640 px; loops forever"
+    return 0
+  fi
+  ffmpeg -i "$1" -vf "fps=15,scale=640:-1:flags=lanczos" \
+    -c:v libwebp -loop 0 "${2:-${1%.*}.webp}"
 }
 
 # Video → thumbnail
 to_thumb() {
-  ffmpeg -i "$1" -ss "${2:-00:00:01}" -frames:v 1 "${3:-${1%.*}.jpg}"
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_thumb" \
+      "to_thumb INPUT [TIME] [OUTPUT.jpg]" \
+      "Extract a video frame as a JPEG thumbnail." \
+      "TIME defaults to 00:00:01; OUTPUT defaults to INPUT without its extension + .jpg"
+    return 0
+  fi
+  ffmpeg -i "$1" -ss "${2:-00:00:01}" -frames:v 1 \
+    "${3:-${1%.*}.jpg}"
 }
 
 # Video → thumbnail WebP
 to_thumb_webp() {
-  ffmpeg -i "$1" -ss "${2:-00:00:01}" -frames:v 1 -c:v libwebp -quality 85 "${3:-${1%.*}.webp}"
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_thumb_webp" \
+      "to_thumb_webp INPUT [TIME] [OUTPUT.webp]" \
+      "Extract a video frame as a WebP thumbnail." \
+      "TIME defaults to 00:00:01; quality: 85"
+    return 0
+  fi
+  ffmpeg -i "$1" -ss "${2:-00:00:01}" -frames:v 1 \
+    -c:v libwebp -quality 85 "${3:-${1%.*}.webp}"
 }
 
 # Audio → AAC/M4A
 to_m4a() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_m4a" \
+      "to_m4a INPUT [OUTPUT.m4a]" \
+      "Convert audio to AAC in an M4A container at 192 kbps."
+    return 0
+  fi
   ffmpeg -i "$1" -vn -c:a aac -b:a 192k "${2:-${1%.*}.m4a}"
 }
 
 # Audio → Opus
 to_opus() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_opus" \
+      "to_opus INPUT [OUTPUT.opus]" \
+      "Convert audio to Opus at 128 kbps."
+    return 0
+  fi
   ffmpeg -i "$1" -vn -c:a libopus -b:a 128k "${2:-${1%.*}.opus}"
 }
 
 # Image → WebP
 to_webp_image() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_webp_image" \
+      "to_webp_image INPUT [OUTPUT.webp]" \
+      "Convert an image to WebP at quality 85."
+    return 0
+  fi
   ffmpeg -i "$1" -c:v libwebp -quality 85 "${2:-${1%.*}.webp}"
 }
 
 # Image → AVIF
 to_avif() {
-  ffmpeg -i "$1" -c:v libaom-av1 -crf 30 -still-picture 1 "${2:-${1%.*}.avif}"
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_avif" \
+      "to_avif INPUT [OUTPUT.avif]" \
+      "Convert an image to AVIF using AV1 encoding."
+    return 0
+  fi
+  ffmpeg -i "$1" -c:v libaom-av1 -crf 30 -still-picture 1 \
+    "${2:-${1%.*}.avif}"
 }
 
 # Image → PNG
 to_png() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_png" \
+      "to_png INPUT [OUTPUT.png]" \
+      "Extract or convert the first image frame to PNG."
+    return 0
+  fi
   ffmpeg -i "$1" -frames:v 1 "${2:-${1%.*}.png}"
 }
 
 # Image → JPEG
 to_jpg() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_jpg" \
+      "to_jpg INPUT [OUTPUT.jpg]" \
+      "Extract or convert the first image frame to JPEG."
+    return 0
+  fi
   ffmpeg -i "$1" -frames:v 1 -q:v 2 "${2:-${1%.*}.jpg}"
 }
 
-# Image → JPEG (quality 0–100)
+# Image → JPEG (.jpeg extension)
 to_jpeg() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_jpeg" \
+      "to_jpeg INPUT [OUTPUT.jpeg]" \
+      "Extract or convert the first image frame to JPEG."
+    return 0
+  fi
   ffmpeg -i "$1" -frames:v 1 -q:v 2 "${2:-${1%.*}.jpeg}"
 }
 
 # Image → BMP
 to_bmp() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_bmp" \
+      "to_bmp INPUT [OUTPUT.bmp]" \
+      "Extract or convert the first image frame to BMP."
+    return 0
+  fi
   ffmpeg -i "$1" -frames:v 1 "${2:-${1%.*}.bmp}"
 }
 
 # Image → TIFF
 to_tiff() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "to_tiff" \
+      "to_tiff INPUT [OUTPUT.tiff]" \
+      "Extract or convert the first image frame to TIFF."
+    return 0
+  fi
   ffmpeg -i "$1" -frames:v 1 -c:v tiff "${2:-${1%.*}.tiff}"
 }
 
-# Extract video only, no audio (copy video stream)
+# Extract video only (copy stream)
 ffmpeg_video_only() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "ffmpeg_video_only" \
+      "ffmpeg_video_only INPUT [OUTPUT.mkv]" \
+      "Copy the video stream without audio, without re-encoding."
+    return 0
+  fi
   ffmpeg -i "$1" -an -c:v copy "${2:-${1%.*}_video.mkv}"
 }
 
-# Extract audio only, stream-copy when possible
+# Extract audio only (copy stream)
 ffmpeg_audio_only() {
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "ffmpeg_audio_only" \
+      "ffmpeg_audio_only INPUT [OUTPUT.mka]" \
+      "Copy the audio stream without re-encoding."
+    return 0
+  fi
   ffmpeg -i "$1" -vn -c:a copy "${2:-${1%.*}_audio.mka}"
 }
 
-# Remux/change container without re-encoding
+# Remux without re-encoding
 ffmpeg_remux() {
+  if [[ $# -lt 2 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "ffmpeg_remux" \
+      "ffmpeg_remux INPUT OUTPUT" \
+      "Change the container without re-encoding streams."
+    return 0
+  fi
   ffmpeg -i "$1" -map 0 -c copy "$2"
 }
 
-# Convert video, optionally specifying codec
+# Convert video using H.264/AAC
 ffmpeg_convert_video() {
-  ffmpeg -i "$1" -c:v libx264 -c:a aac "${2:-${1%.*}.mp4}"
+  if [[ $# -eq 0 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "ffmpeg_convert_video" \
+      "ffmpeg_convert_video INPUT [OUTPUT.mp4]" \
+      "Convert video using H.264 video and AAC audio."
+    return 0
+  fi
+  ffmpeg -i "$1" -c:v libx264 -c:a aac \
+    "${2:-${1%.*}.mp4}"
 }
 
 # Pick a specific video stream
 ffmpeg_pick_video() {
+  if [[ $# -lt 2 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "ffmpeg_pick_video" \
+      "ffmpeg_pick_video INPUT OUTPUT [STREAM_INDEX]" \
+      "Copy a selected video stream. Indexing starts at 0." \
+      "STREAM_INDEX defaults to 0"
+    return 0
+  fi
   ffmpeg -i "$1" -map 0:v:"${3:-0}" -c copy "$2"
 }
 
 # Pick a specific audio stream
 ffmpeg_pick_audio() {
+  if [[ $# -lt 2 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "ffmpeg_pick_audio" \
+      "ffmpeg_pick_audio INPUT OUTPUT [STREAM_INDEX]" \
+      "Copy a selected audio stream. Indexing starts at 0." \
+      "STREAM_INDEX defaults to 0"
+    return 0
+  fi
   ffmpeg -i "$1" -map 0:a:"${3:-0}" -c copy "$2"
 }
 
-ffmpeg_video_range() {
-  ffmpeg -ss "$3" -i "$1" -t "$4" -map 0:v:"${5:-0}" -c copy "$2"
+# Extract video range
+ffmpeg_audio_range() {
+  if [[ $# -lt 4 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "ffmpeg_audio_range" \
+      "ffmpeg_audio_range INPUT OUTPUT START DURATION [STREAM_INDEX]" \
+      "Extract an audio segment. Converts to match the output format." \
+      "START: start time; DURATION: length; STREAM_INDEX defaults to 0"
+    return 0
+  fi
+
+  ffmpeg -ss "$3" -i "$1" -t "$4" \
+    -map "0:a:${5:-0}" \
+    -vn -c:a libmp3lame -q:a 2 "$2"
 }
 
+# Extract audio range
 ffmpeg_audio_range() {
+  if [[ $# -lt 4 || "$1" == "-h" || "$1" == "--help" ]]; then
+    show_help "ffmpeg_audio_range" \
+      "ffmpeg_audio_range INPUT OUTPUT START DURATION [STREAM_INDEX]" \
+      "Extract an audio segment without re-encoding." \
+      "STREAM_INDEX defaults to 0; START and DURATION use FFmpeg time syntax"
+    return 0
+  fi
   ffmpeg -ss "$3" -i "$1" -t "$4" -map 0:a:"${5:-0}" -c copy "$2"
 }
 
